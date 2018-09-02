@@ -315,7 +315,7 @@ client.bot.on("ready", async () => { // Starts the event "ready", this is execut
         });
     }, 600000); // 10 minutes
 
-    let rows = await sql.query('SELECT * FROM mute');
+    let rows = await sql.all('SELECT * FROM mute');
     rows.forEach(() => {
         sql.run('DELETE FROM mute');
     });
