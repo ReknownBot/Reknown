@@ -1,11 +1,15 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-const { Client } = require("pg");
+/*const { Client } = require("pg");
 const sql = new Client({
     connectionString: process.env.DATABASE_URL
 });
 sql.connect();
 require("dotenv").config();
+
+^ postgres WIP*/
+const sql = require("sqlite");
+sql.open("./sqlitefile.sqlite");
 const HypixelAPI = require("hypixel-api");
 require("array-utility"); // More useful array methods
 let emojis = [
@@ -311,7 +315,7 @@ client.bot.on("ready", async () => { // Starts the event "ready", this is execut
         });
     }, 600000); // 10 minutes
 
-    let rows = await sql.query('SELECT * FROM mute');
+    let rows = await sql.all('SELECT * FROM mute');
     rows.forEach(() => {
         sql.run('DELETE FROM mute');
     });
