@@ -1,9 +1,13 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-const sql = require("sqlite");
+const { Client } = require("pg");
+const sql = new Client({
+    connectionString: process.env.DATABASE_URL
+});
+sql.connect();
+require("dotenv").config();
 const HypixelAPI = require("hypixel-api");
 require("array-utility"); // More useful array methods
-sql.open("./sqlitefile.sqlite"); // Opens the file sqlitefile.sqlite
 let emojis = [
     "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "⏹"
 ];
@@ -33,119 +37,119 @@ let client = { // Creates an object client
     guilds: {},
     mBool: {},
     skip_song: async function (message) {
-            this.guilds[message.guild.id].dispatcher.end();
-        },
-        playMusic: async function (id, message, connection) {
-                if (!message.member.voice.channel) return;
-                let guild = this.guilds[message.guild.id];
+        this.guilds[message.guild.id].dispatcher.end();
+    },
+    playMusic: async function (id, message, connection) {
+        if (!message.member.voice.channel) return;
+        let guild = this.guilds[message.guild.id];
 
-                stream = this.ytdl("https://www.youtube.com/watch?v=" + id, {
-                    filter: 'audioonly'
-                });
-                guild.skipReq = 0;
-                guild.skippers = [];
-                guild.isPlaying = true;
+        stream = this.ytdl("https://www.youtube.com/watch?v=" + id, {
+            filter: 'audioonly'
+        });
+        guild.skipReq = 0;
+        guild.skippers = [];
+        guild.isPlaying = true;
 
-                guild.dispatcher = connection.play(stream);
-                guild.dispatcher.setVolumeLogarithmic(guild.volume / 180);
-                guild.dispatcher.on('finish', function () {
-                    guild.skipReq = 0;
-                    guild.skippers = [];
-                    guild.queue.shift();
-                    guild.queueNames.shift();
-                    if (guild.queue.length === 0) {
-                        guild.queue = [];
-                        guild.queueNames = [];
-                        guild.isPlaying = false;
-                    } else {
-                        setTimeout(() => {
-                            client.playMusic(guild.queue[0], message, connection);
-                        }, 500);
-                    }
+        guild.dispatcher = connection.play(stream);
+        guild.dispatcher.setVolumeLogarithmic(guild.volume / 180);
+        guild.dispatcher.on('finish', function () {
+            guild.skipReq = 0;
+            guild.skippers = [];
+            guild.queue.shift();
+            guild.queueNames.shift();
+            if (guild.queue.length === 0) {
+                guild.queue = [];
+                guild.queueNames = [];
+                guild.isPlaying = false;
+            } else {
+                setTimeout(() => {
+                    client.playMusic(guild.queue[0], message, connection);
+                }, 500);
+            }
+        });
+    },
+    add_to_queue: async function (strID, message) {
+        if (!message.member.voice.channel) return;
+        if (this.isYoutube(strID)) {
+            this.guilds[message.guild.id].queue.push(this.getYouTubeID(strID));
+        } else {
+            this.guilds[message.guild.id].queue.push(strID);
+        }
+    },
+    isYoutube: function (str) {
+        return str.toLowerCase().indexOf("youtube.com") > -1;
+    },
+    isAFK: {},
+    editMsg: async function (msg, content, msg3) {
+        if (!msg.id)
+            msg = null;
+        if (!msg || msg.author.id !== this.bot.user.id) {
+            let msg2 = await msg3.channel.send(content);
+            this.msgEdit[msg3.id] = msg2.id;
+            return msg2;
+        } else {
+            let msg2 = await msg.edit(content.files ? '' : content, content.files ? {
+                embed: content
+            } : {
+                    embed: null
                 });
-            },
-            add_to_queue: async function (strID, message) {
-                    if (!message.member.voice.channel) return;
-                    if (this.isYoutube(strID)) {
-                        this.guilds[message.guild.id].queue.push(this.getYouTubeID(strID));
-                    } else {
-                        this.guilds[message.guild.id].queue.push(strID);
-                    }
-                },
-                isYoutube: function (str) {
-                    return str.toLowerCase().indexOf("youtube.com") > -1;
-                },
-                isAFK: {},
-                editMsg: async function (msg, content, msg3) {
-                        if (!msg.id)
-                            msg = null;
-                        if (!msg || msg.author.id !== this.bot.user.id) {
-                            let msg2 = await msg3.channel.send(content);
-                            this.msgEdit[msg3.id] = msg2.id;
-                            return msg2;
-                        } else {
-                            let msg2 = await msg.edit(content.files ? '' : content, content.files ? {
-                                embed: content
-                            } : {
-                                embed: null
-                            });
-                            this.msgEdit[msg3.id] = msg2.id;
-                            return msg2;
-                        }
-                    },
-                    randFromArr: (array) => array[Math.floor(Math.random() * array.length)],
-                    capitalizeFirstLetter: (string) => {
-                        return string.charAt(0).toUpperCase() + string.slice(1);
-                    },
-                    permissions: {
-                        mod: [
-                            "ban",
-                            "softban",
-                            "unban",
-                            "kick",
-                            "mute",
-                            "unmute",
-                            "warn",
-                            "unwarn",
-                            'nick',
-                            'log',
-                            "purge",
-                            "blacklist",
-                            "unblacklist",
-                            "ccreate",
-                            "cdelete"
-                        ],
-                        tag: [
-                            "edit",
-                            "view"
-                        ],
-                        music: [
-                            'fskip',
-                            'clear',
-                            'resume',
-                            'pause'
-                        ],
-                        level: [
-                            'role',
-                            'options',
-                            "set"
-                        ],
-                        slowmode: [
-                            "set",
-                            "bypass"
-                        ],
-                        misc: [
-                            "setperm",
-                            "rules",
-                            "star",
-                            "prefix",
-                            "togglemsg",
-                            "welcome",
-                            "update",
-                            "autorole",
-                            "invite"
-                        ]
-                    }
+            this.msgEdit[msg3.id] = msg2.id;
+            return msg2;
+        }
+    },
+    randFromArr: (array) => array[Math.floor(Math.random() * array.length)],
+    capitalizeFirstLetter: (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+    permissions: {
+        mod: [
+            "ban",
+            "softban",
+            "unban",
+            "kick",
+            "mute",
+            "unmute",
+            "warn",
+            "unwarn",
+            'nick',
+            'log',
+            "purge",
+            "blacklist",
+            "unblacklist",
+            "ccreate",
+            "cdelete"
+        ],
+        tag: [
+            "edit",
+            "view"
+        ],
+        music: [
+            'fskip',
+            'clear',
+            'resume',
+            'pause'
+        ],
+        level: [
+            'role',
+            'options',
+            "set"
+        ],
+        slowmode: [
+            "set",
+            "bypass"
+        ],
+        misc: [
+            "setperm",
+            "rules",
+            "star",
+            "prefix",
+            "togglemsg",
+            "welcome",
+            "update",
+            "autorole",
+            "invite"
+        ]
+    }
 }
 
 const Youtube = require("simple-youtube-api");
@@ -187,7 +191,7 @@ client.getID = async function (str, cb, message) {
                 const video2 = await this.youtube.getVideoByID(video.id);
                 if (!this.guilds[message.guild.id].thingy)
                     done2 = false,
-                    this.guilds[message.guild.id].thingy = true;
+                        this.guilds[message.guild.id].thingy = true;
                 else
                     done2 = true;
                 if (i === 0) {
@@ -274,8 +278,8 @@ client.search_video = async function (query, callback, message) {
 
 Object.filter = (obj, predicate) =>
     Object.keys(obj)
-    .filter(key => predicate(obj[key]))
-    .reduce((res, key) => (res[key] = obj[key], res), {});
+        .filter(key => predicate(obj[key]))
+        .reduce((res, key) => (res[key] = obj[key], res), {});
 
 let rollbar = new client.Rollbar(client.rollbarKey);
 
@@ -307,9 +311,9 @@ client.bot.on("ready", async () => { // Starts the event "ready", this is execut
         });
     }, 600000); // 10 minutes
 
-    let rows = await sql.all(`SELECT * FROM mute`);
+    let rows = await sql.query('SELECT * FROM mute');
     rows.forEach(() => {
-        sql.run(`DELETE FROM mute`);
+        sql.run('DELETE FROM mute');
     });
 });
 
@@ -388,7 +392,7 @@ client.bot.on("message", async message => { // Starts the event "message", this 
                 channels[message.channel.id] = new Set();
             let row = await sql.get(`SELECT * FROM slowmode WHERE guildId = ${message.guild.id} AND channelId = ${message.channel.id}`);
             if (row) {
-                if (channels[message.channel.id].has(message.author.id)) return message.delete().catch(O_o => {});
+                if (channels[message.channel.id].has(message.author.id)) return message.delete().catch(O_o => { });
                 channels[message.channel.id].add(message.author.id);
                 setTimeout(() => {
                     channels[message.channel.id].delete(message.author.id);

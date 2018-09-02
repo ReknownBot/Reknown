@@ -46,8 +46,8 @@ module.exports = {
                             }
                             if (e.key === 'permissions') { // Permission Change
                                 if (oldRole.permissions !== newRole.permissions) {
-                                    embed.addField("Old Permission Number", oldRole.permissions)
-                                        .addField("New Permission Number", newRole.permissions)
+                                    embed.addField("Old Permission Number", oldRole.permissions.bitfield)
+                                        .addField("New Permission Number", newRole.permissions.bitfield)
                                         .setDescription("[What is a permission number?](https://discordapi.com/permissions.html)");
                                 }
                             }
