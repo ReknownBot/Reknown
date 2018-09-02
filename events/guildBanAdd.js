@@ -2,6 +2,7 @@ module.exports = {
     func: async (client, sql, Discord) => {
         client.bot.on("guildBanAdd", async function (guild, user) {
             try {
+                if (user === client.bot.user) return;
                 // If the bot has no perms then return
                 if (!guild.me.hasPermission("SEND_MESSAGES")) return;
                 if (!guild.me.hasPermission("VIEW_CHANNEL")) return;
