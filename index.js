@@ -8,8 +8,8 @@ sql.connect();
 require("dotenv").config();
 
 ^ postgres WIP*/
-const sqlite = require("sqlite");
-const sql = sqlite.open("./sqlitefile.sqlite");
+const sql = require("sqlite");
+sql.open("./sqlitefile.sqlite");
 const HypixelAPI = require("hypixel-api");
 require("array-utility"); // More useful array methods
 let emojis = [
