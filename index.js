@@ -8,7 +8,6 @@ let emojis = [
     "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "⏹"
 ];
 let client = { // Creates an object client
-    config: require("./config.json"), // defines config inside the client object, which requires the json file config, which includes extra things
     bot: new Discord.Client({
         disableEveryone: true,
         disabledEvents: [
