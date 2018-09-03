@@ -114,7 +114,7 @@ module.exports = {
                             bool = args[2] === "false" ? 0 : 1;
                         }
                         if (!row) {
-                            if (bool === 1) return client.editMsg(sMessage, "The value you inputted is already active!", message);
+                            if (bool === 0) return client.editMsg(sMessage, "The value you inputted is already active!", message);
                             sql.run(`INSERT INTO cmdnotfound (guildId, bool) VALUES (?, ?)`, [message.guild.id, bool]);
                             client.editMsg(sMessage, `Successfully updated \`cmdnotfound\` to \`${bool ? "true" : "false"}\`.`, message);
                         } else {
@@ -296,7 +296,7 @@ module.exports = {
                             bool = args[2] === "false" ? 0 : 1;
                         }
                         if (!row) {
-                            if (bool === 1) return client.editMsg(sMessage, "The value you inputted is already active!", message);
+                            if (bool === 0) return client.editMsg(sMessage, "The value you inputted is already active!", message);
                             sql.run(`INSERT INTO cooldownmsg (guildId, bool) VALUES (?, ?)`, [message.guild.id, bool]);
                             client.editMsg(sMessage, `Successfully updated \`cooldownmsg\` to \`${bool ? "true" : "false"}\`.`, message);
                         } else {
