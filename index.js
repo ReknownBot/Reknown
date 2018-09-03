@@ -1,15 +1,15 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-/*const { Client } = require("pg");
-const sql = new Client({
-    connectionString: process.env.DATABASE_URL
-});
-sql.connect();
+const { Client } = require("pg");
 require("dotenv").config();
-
-^ postgres WIP*/
-const sql = require("sqlite");
-sql.open("./sqlitefile.sqlite");
+const sql = new Client({
+    user: process.env.SQL_USER,
+    password: process.SQL_PASS,
+    database: process.env.SQL_DB,
+    port: process.env.SQL_PORT,
+    host: process.env.SQL_HOST,
+    ssl: true
+});
 const HypixelAPI = require("hypixel-api");
 require("array-utility"); // More useful array methods
 let emojis = [
@@ -36,6 +36,7 @@ let client = { // Creates an object client
     snekfetch: require("snekfetch"),
     dateFormat: require("dateformat"),
     fuzz: require("fuzzball"),
+    escape: require("sqlstring").escape,
     cooldown: new Set(),
     msgEdit: {},
     guilds: {},
@@ -309,16 +310,9 @@ client.bot.on("ready", async () => { // Starts the event "ready", this is execut
         type: "WATCHING"
     });
 
-    setInterval(() => {
-        client.bot.channels.get("447939386743717929").send({
-            files: ['./sqlitefile.sqlite']
-        });
-    }, 600000); // 10 minutes
+    await sql.connect();
 
-    let rows = await sql.all('SELECT * FROM mute');
-    rows.forEach(() => {
-        sql.run('DELETE FROM mute');
-    });
+    sql.query('DELETE FROM mute');
 });
 
 process.on('unhandledRejection', error => {
@@ -382,7 +376,7 @@ client.bot.on("message", async message => { // Starts the event "message", this 
         let i = 0;
         let prom = new Promise(resolve => {
             message.member.roles.forEach(async role => {
-                let row3 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "bypass", "slowmode"]);
+                let row3 = (await sql.query(`SELECT * FROM permissions WHERE roleID = '${role.id}' AND pName = 'bypass' AND pCategory = 'slowmode'`)).rows[0];
                 if ((row3 && row3.bool) || message.member === message.guild.owner)
                     bool2 = true;
                 i++;
@@ -394,13 +388,11 @@ client.bot.on("message", async message => { // Starts the event "message", this 
         if (!bool2) {
             if (!channels[message.channel.id])
                 channels[message.channel.id] = new Set();
-            let row = await sql.get(`SELECT * FROM slowmode WHERE guildId = ${message.guild.id} AND channelId = ${message.channel.id}`);
+            let row = (await sql.query(`SELECT * FROM slowmode WHERE guildId = '${message.guild.id}' AND channelId = '${message.channel.id}'`)).rows[0];
             if (row) {
                 if (channels[message.channel.id].has(message.author.id)) return message.delete().catch(O_o => { });
                 channels[message.channel.id].add(message.author.id);
-                setTimeout(() => {
-                    channels[message.channel.id].delete(message.author.id);
-                }, row.cooldown * 1000);
+                setTimeout(() => channels[message.channel.id].delete(message.author.id), row.cooldown * 1000);
             }
         }
         // End of slowmode
@@ -411,7 +403,7 @@ client.bot.on("message", async message => { // Starts the event "message", this 
     let i = 0;
     let prom = new Promise(resolve => {
         message.member.roles.forEach(async role => {
-            let row4 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "invite", "misc"]);
+            let row4 = (await sql.query(`SELECT * FROM permissions WHERE roleID = '${role.id}' AND pName = 'invite' AND pCategory = 'misc'`)).rows[0];
             if ((row4 && row4.bool) || message.member === message.guild.owner)
                 bool2 = true;
             i++;
@@ -422,7 +414,7 @@ client.bot.on("message", async message => { // Starts the event "message", this 
     });
     await prom;
     if (!bool2) {
-        let row5 = await sql.get("SELECT * FROM deleteinvite WHERE guildId = ?", [message.guild.id]);
+        let row5 = (await sql.query(`SELECT * FROM deleteinvite WHERE guildId = '${message.guild.id}'`)).rows[0];
         if (row5 && row5.bool && message.guild.me.permissionsIn(message.channel).has("MANAGE_MESSAGES") && message.deletable && /(?:https?:\/\/)?discord(?:app.com\/invite|.gg)\/[\w\d]+/gi.test(message.content)) {
             message.delete();
             let m = await message.reply(" No invite links.");
@@ -436,30 +428,29 @@ client.bot.on("message", async message => { // Starts the event "message", this 
     try {
         // Start of levelling system
         async function thingy() {
-            let row = await sql.get('SELECT * FROM scores WHERE userID = ? AND guildID = ?', [message.author.id, message.guild.id]);
+            let row = (await sql.query(`SELECT * FROM scores WHERE userID = '${message.author.id}' AND guildID = '${message.guild.id}'`)).rows[0];
             if (!row) { // If the row is not found
-                sql.run("INSERT INTO scores (userID, points, level, guildID) VALUES (?, ?, ?, ?)", [message.author.id, 1, 0, message.guild.id]);
+                sql.query(`INSERT INTO scores (userID, points, level, guildID) VALUES ('${message.author.id}', 1, 0, '${message.guild.id}')`);
             } else { // If the row is found
                 let curLevel = Math.floor(0.2 * Math.sqrt(row.points + message.content.length));
                 if (curLevel > row.level) {
                     row.level = curLevel;
-                    sql.run('UPDATE scores SET points = ?, level = ? WHERE userID = ? AND guildID = ?', [row.points + message.content.length, curLevel, message.author.id, message.guild.id]);
+                    sql.query(`UPDATE scores SET points = ${row.points + message.content.length}, level = ${curLevel} WHERE userID = '${message.author.id}' AND guildID = '${message.guild.id}'`);
                     let msg = await message.channel.send(`${message.author}, You're now level ${curLevel}! Nice :)`);
                     msg.delete({
                         timeout: 5000
                     }).catch((e) => {
-                        // If the message hasn't been deleted already
-                        if (!e.stack.toString().includes('Unknown Message')) {
+                        if (!e.toString().includes('Unknown Message')) {
                             rollbar.error("Something went wrong in index.js levelling system", e);
-                            console.log(e);
+                            console.error(e);
                         }
                     });
-                    let rows = await sql.all("SELECT * FROM levelrole WHERE guildID = ? AND level <= ?", [message.guild.id, curLevel]);
+                    let { rows } = await sql.query(`SELECT * FROM levelrole WHERE guildID = '${message.guild.id}' AND level <= ${curLevel}`);
                     if (rows[0]) {
                         let roleArr = [];
                         rows.forEach(r => {
                             if (!message.guild.roles.get(r.roleID))
-                                return sql.run("DELETE FROM levelrole WHERE guildID = ? AND roleID = ?", [message.guild.id, r.roleID]);
+                                return sql.query(`DELETE FROM levelrole WHERE guildID = '${message.guild.id}' AND roleID = '${r.roleID}'`);
                             roleArr.push(r.roleID);
                         });
                         if (roleArr.length === 1) {
@@ -475,18 +466,18 @@ client.bot.on("message", async message => { // Starts the event "message", this 
                         }
                     }
                 }
-                sql.run('UPDATE scores SET points = ? WHERE userID = ? AND guildID = ?', [row.points + message.content.length, message.author.id, message.guild.id]);
+                sql.query(`UPDATE scores SET points = ${row.points + message.content.length} WHERE userID = '${message.author.id}' AND guildID = '${message.guild.id}'`);
             }
         }
 
-        let row = await sql.get(`SELECT * FROM toggleLevel WHERE guildId = ${message.guild.id}`);
+        let row = (await sql.query(`SELECT * FROM toggleLevel WHERE guildId = '${message.guild.id}'`)).rows[0];
         if (row && row.bool) {
             thingy();
         }
         // End of levelling system
     } catch (e) {
         rollbar.error("Something went wrong in index.js levelling system", e);
-        console.log(e);
+        console.error(e);
     }
 
     async function commandThingy(customPrefix) {
@@ -499,13 +490,13 @@ client.bot.on("message", async message => { // Starts the event "message", this 
                 for (let i = args.length - 1; i--;)
                     if (args[i] == '')
                         args.splice(i, 1);
-                let r = await sql.get('SELECT * FROM prefix WHERE guildId = ?', [message.guild.id]);
+                let r = (await sql.query(`SELECT * FROM prefix WHERE guildId = '${message.guild.id}'`)).rows[0];
                 async function commandRun() {
                     let unknownCommand = `Invalid command. Use ${customPrefix}help to see the commands!`; // Defines unknownCommand so jyguy doesn't need to type it all the time
                     if (args[0].toLowerCase() in client.commands) { // if there is the command in the command list
                         client.commands[args[0].toLowerCase()].func(client, message, args, unknownCommand, mess, sql, Discord, fs, customPrefix, false); // executes the function of the command (code in separate files in folder commands)
                     } else {
-                        let row = await sql.get('SELECT * FROM cmdnotfound WHERE guildId = ?', [message.guild.id]);
+                        let row = (await sql.query(`SELECT * FROM cmdnotfound WHERE guildId = '${message.guild.id}'`)).rows[0];
                         if (!row || !row.bool) return;
                         let arr = [];
                         client.commandsList.forEach(command => {
@@ -533,15 +524,15 @@ client.bot.on("message", async message => { // Starts the event "message", this 
                     commandRun();
                 }
             }
-            let row = await sql.get(`SELECT * FROM blacklist WHERE userId = ${message.author.id}`);
+            let row = (await sql.query(`SELECT * FROM blacklist WHERE userId = '${message.author.id}'`)).rows[0];
             if (row) {
-                let row2 = await sql.get(`SELECT * FROM blacklistmsg WHERE guildId = ${message.guild.id}`);
+                let row2 = (await sql.query(`SELECT * FROM blacklistmsg WHERE guildId = '${message.guild.id}'`)).rows[0];
                 if (!row2 || row2.bool) {
                     msg = await message.channel.send(`You are blacklisted from me by: \`${row.by}\` and reason: \`${row.reason}\``);
                     client.msgEdit[message.id] = msg.id;
                 }
             } else {
-                let row2 = await sql.get(`SELECT * FROM cooldownmsg WHERE guildId = ${message.guild.id}`);
+                let row2 = (await sql.query(`SELECT * FROM cooldownmsg WHERE guildId = '${message.guild.id}'`)).rows[0];
                 if (client.cooldown.has(message.author.id)) {
                     if (row2 && row2.bool) {
                         msg = await message.channel.send("Please wait 3 seconds before executing a command.");
@@ -558,7 +549,7 @@ client.bot.on("message", async message => { // Starts the event "message", this 
         }
     }
 
-    let r = await sql.get(`SELECT * FROM prefix WHERE guildId = ${message.guild.id}`);
+    let r = (await sql.query(`SELECT * FROM prefix WHERE guildId = '${message.guild.id}'`)).rows[0];
     let regexp = new RegExp(`^<@!?${client.bot.user.id}> `);
     let prefix = message.content.match(regexp) ? message.content.match(regexp)[0] : (r ? r.customPrefix : "?");
     commandThingy(prefix);

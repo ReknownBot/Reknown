@@ -30,7 +30,7 @@ module.exports = {
                         let i = 0;
                         let prom = new Promise(resolve => {
                             message.member.roles.forEach(async role => {
-                                let row2 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "log", "mod"]);
+                                let row2 = await sql.query('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "log", "mod"]).rows[0];
                                 if ((row2 && row2.bool) || message.member === message.guild.owner)
                                     bool2 = true;
                                 i++;
@@ -40,7 +40,7 @@ module.exports = {
                         });
                         await prom;
                         if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `mod.log` permission.", message);
-                        let row = await sql.get('SELECT * FROM actionlog WHERE guildId = ?', [message.guild.id]);
+                        let row = await sql.query('SELECT * FROM actionlog WHERE guildId = ?', [message.guild.id]).rows[0];
                         let bool;
                         if (!args[2]) bool = row ? (row.bool ? 0 : 1) : 1;
                         else {
@@ -49,11 +49,11 @@ module.exports = {
                         }
                         if (!row) {
                             if (bool === 0) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-                            sql.run(`INSERT INTO actionlog (guildId, bool) VALUES (?, ?)`, [message.guild.id, bool]);
+                            sql.query(`INSERT INTO actionlog (guildId, bool) VALUES (?, ?)`, [message.guild.id, bool]);
                             client.editMsg(sMessage, `Successfully updated \`togglelog\` to \`${bool ? "true" : "false"}\`.`, message);
                         } else {
                             if (row.bool === bool) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-                            sql.run(`UPDATE actionlog SET bool = ${bool} WHERE guildId = ${message.guild.id}`);
+                            sql.query(`UPDATE actionlog SET bool = ${bool} WHERE guildId = ${message.guild.id}`);
                             client.editMsg(sMessage, `Successfully updated \`togglelog\` to \`${bool ? "true" : "false"}\`.`, message);
                         }
                     } else if (option === options[1]) { // togglelevel
@@ -62,7 +62,7 @@ module.exports = {
                         let i = 0;
                         let prom = new Promise(resolve => {
                             message.member.roles.forEach(async role => {
-                                let row2 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "options", "level"]);
+                                let row2 = await sql.query('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "options", "level"]).rows[0];
                                 if ((row2 && row2.bool) || message.member === message.guild.owner)
                                     bool2 = true;
                                 i++;
@@ -73,7 +73,7 @@ module.exports = {
                         await prom;
                         if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `level.options` permission.", message);
 
-                        let row = await sql.get(`SELECT * FROM toggleLevel WHERE guildId = ${message.guild.id}`);
+                        let row = await sql.query(`SELECT * FROM toggleLevel WHERE guildId = ${message.guild.id}`).rows[0];
                         let bool;
                         if (!args[2]) bool = row ? (row.bool ? 0 : 1) : 1;
                         else {
@@ -82,11 +82,11 @@ module.exports = {
                         }
                         if (!row) {
                             if (bool === 0) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-                            sql.run(`INSERT INTO toggleLevel (guildId, bool) VALUES (?, ?)`, [message.guild.id, bool]);
+                            sql.query(`INSERT INTO toggleLevel (guildId, bool) VALUES (?, ?)`, [message.guild.id, bool]);
                             client.editMsg(sMessage, `Successfully updated \`togglelevel\` to \`${bool ? "true" : "false"}\`.`, message);
                         } else {
                             if (row.bool === bool) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-                            sql.run(`UPDATE toggleLevel SET bool = ${bool} WHERE guildId = ${message.guild.id}`);
+                            sql.query(`UPDATE toggleLevel SET bool = ${bool} WHERE guildId = ${message.guild.id}`);
                             client.editMsg(sMessage, `Successfully updated \`togglelevel\` to \`${bool ? "true" : "false"}\`.`, message);
                         }
                     } else if (option === options[2]) { // cmdnotfound
@@ -95,7 +95,7 @@ module.exports = {
                         let i = 0;
                         let prom = new Promise(resolve => {
                             message.member.roles.forEach(async role => {
-                                let row2 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "togglemsg", "misc"]);
+                                let row2 = await sql.query('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "togglemsg", "misc"]).rows[0];
                                 if ((row2 && row2.bool) || message.member === message.guild.owner)
                                     bool2 = true;
                                 i++;
@@ -106,7 +106,7 @@ module.exports = {
                         await prom;
                         if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.togglemsg` permission.", message);
 
-                        let row = await sql.get(`SELECT * FROM cmdnotfound WHERE guildId = ${message.guild.id}`);
+                        let row = await sql.query(`SELECT * FROM cmdnotfound WHERE guildId = ${message.guild.id}`);
                         let bool;
                         if (!args[2]) bool = row ? (row.bool ? 0 : 1) : 1;
                         else {
@@ -115,11 +115,11 @@ module.exports = {
                         }
                         if (!row) {
                             if (bool === 1) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-                            sql.run(`INSERT INTO cmdnotfound (guildId, bool) VALUES (?, ?)`, [message.guild.id, bool]);
+                            sql.query(`INSERT INTO cmdnotfound (guildId, bool) VALUES (?, ?)`, [message.guild.id, bool]);
                             client.editMsg(sMessage, `Successfully updated \`cmdnotfound\` to \`${bool ? "true" : "false"}\`.`, message);
                         } else {
                             if (row.bool === bool) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-                            sql.run(`UPDATE cmdnotfound SET bool = ${bool} WHERE guildId = ${message.guild.id}`);
+                            sql.query(`UPDATE cmdnotfound SET bool = ${bool} WHERE guildId = ${message.guild.id}`);
                             client.editMsg(sMessage, `Successfully updated \`cmdnotfound\` to \`${bool ? "true" : "false"}\`.`, message);
                         }
                     } else if (option === options[3]) { // togglewelcome
@@ -128,7 +128,7 @@ module.exports = {
                         let i = 0;
                         let prom = new Promise(resolve => {
                             message.member.roles.forEach(async role => {
-                                let row2 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "welcome", "misc"]);
+                                let row2 = await sql.query('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "welcome", "misc"]).rows[0];
                                 if ((row2 && row2.bool) || message.member === message.guild.owner)
                                     bool2 = true;
                                 i++;
@@ -138,7 +138,7 @@ module.exports = {
                         });
                         await prom;
                         if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.welcome` permission.", message);
-                        let row = await sql.get(`SELECT * FROM toggleWelcome WHERE guildId = ${message.guild.id}`);
+                        let row = await sql.query(`SELECT * FROM toggleWelcome WHERE guildId = ${message.guild.id}`).rows[0];
                         let bool;
                         if (!args[2]) bool = row ? (row.bool ? 0 : 1) : 1;
                         else {
@@ -147,11 +147,11 @@ module.exports = {
                         }
                         if (!row) {
                             if (bool === 0) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-                            sql.run(`INSERT INTO toggleWelcome (guildId, bool) VALUES (?, ?)`, [message.guild.id, bool]);
+                            sql.query(`INSERT INTO toggleWelcome (guildId, bool) VALUES (?, ?)`, [message.guild.id, bool]);
                             client.editMsg(sMessage, `Successfully updated \`togglewelcome\` to \`${bool ? "true" : "false"}\`.`, message);
                         } else {
                             if (row.bool === bool) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-                            sql.run(`UPDATE toggleWelcome SET bool = ${bool} WHERE guildId = ${message.guild.id}`);
+                            sql.query(`UPDATE toggleWelcome SET bool = ${bool} WHERE guildId = ${message.guild.id}`);
                             client.editMsg(sMessage, `Successfully updated \`togglewelcome\` to \`${bool ? "true" : "false"}\`.`, message);
                         }
                     } else if (option === options[4]) { // welcomemsg
@@ -160,7 +160,7 @@ module.exports = {
                         let i = 0;
                         let prom = new Promise(resolve => {
                             message.member.roles.forEach(async role => {
-                                let row2 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "welcome", "misc"]);
+                                let row2 = await sql.query('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "welcome", "misc"]).rows[0];
                                 if ((row2 && row2.bool) || message.member === message.guild.owner)
                                     bool2 = true;
                                 i++;
@@ -170,21 +170,21 @@ module.exports = {
                         });
                         await prom;
                         if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.welcome` permission.", message);
-                        let row = await sql.get(`SELECT * FROM customMessages WHERE guildId = ${message.guild.id}`);
+                        let row = await sql.query(`SELECT * FROM customMessages WHERE guildId = ${message.guild.id}`).rows[0];
                         let msg = args.slice(2).join(' ');
                         if (!msg) return client.editMsg(sMessage, row ? `\`${row.customMessage}\` is the current welcoming message for this server!` : "This server uses the default welcoming message!", message);
                         if (msg.length > 1000) return client.editMsg(sMessage, 'Please keep the length under a thousand characters.', message);
                         if (!row) {
                             if (msg.toLowerCase() === "reset") {
-                                sql.run(`DELETE FROM customMessages WHERE guildId = ?`, [message.guild.id]);
+                                sql.query(`DELETE FROM customMessages WHERE guildId = ?`, [message.guild.id]);
                                 client.editMsg(sMessage, `Successfully reset \`welcomemsg\`.`, message);
                             } else {
-                                sql.run(`INSERT INTO customMessages (guildId, customMessage) VALUES (?, ?)`, [message.guild.id, msg]);
+                                sql.query(`INSERT INTO customMessages (guildId, customMessage) VALUES (?, ?)`, [message.guild.id, msg]);
                                 client.editMsg(sMessage, `Successfully updated \`welcomemsg\` to \`${msg}\`.`, message);
                             }
                         } else {
                             if (row.customMessage === msg) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-                            sql.run('UPDATE customMessages SET customMessage = ? WHERE guildId = ?', [msg, message.guild.id]);
+                            sql.query('UPDATE customMessages SET customMessage = ? WHERE guildId = ?', [msg, message.guild.id]);
                             client.editMsg(sMessage, `Successfully updated \`welcomemsg\` to \`${msg}\`.`, message);
                         }
                     } else if (option === options[5]) { // goodbyemsg
@@ -193,7 +193,7 @@ module.exports = {
                         let i = 0;
                         let prom = new Promise(resolve => {
                             message.member.roles.forEach(async role => {
-                                let row2 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "welcome", "misc"]);
+                                let row2 = await sql.query('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "welcome", "misc"]).rows[0];
                                 if ((row2 && row2.bool) || message.member === message.guild.owner)
                                     bool2 = true;
                                 i++;
@@ -203,16 +203,16 @@ module.exports = {
                         });
                         await prom;
                         if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.welcome` permission.", message);
-                        let row = await sql.get(`SELECT bool FROM goodbyeMessages WHERE guildId = ${message.guild.id}`);
+                        let row = (await sql.query(`SELECT bool FROM goodbyeMessages WHERE guildId = ${message.guild.id}`)).rows[0];
                         let msg = args.slice(2).join(' ');
                         if (!msg) return client.editMsg(sMessage, row ? `\`${row.customMessage}\` is the current goodbye message for this server!` : "This server uses the default goodbye message!", message);
                         if (msg.length > 1000) return client.editMsg(sMessage, 'Please keep the length under a thousand characters.', message);
                         if (!row) {
-                            sql.run(`INSERT INTO goodbyeMessages (guildId, customMessage) VALUES (?, ?)`, [message.guild.id, msg]);
+                            sql.query(`INSERT INTO goodbyeMessages (guildId, customMessage) VALUES (?, ?)`, [message.guild.id, msg]);
                             client.editMsg(sMessage, `Successfully updated \`goodbyemsg\` to \`${msg}\`.`, message);
                         } else {
                             if (row.bool === bool) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-                            sql.run('UPDATE goodbyeMessages SET customMessage = ? WHERE guildId = ?', [msg, message.guild.id]);
+                            sql.query('UPDATE goodbyeMessages SET customMessage = ? WHERE guildId = ?', [msg, message.guild.id]);
                             client.editMsg(sMessage, `Successfully updated \`goodbyemsg\` to \`${msg}\`.`, message);
                         }
                     } else if (option === options[6]) { // welcomechannel
@@ -221,7 +221,7 @@ module.exports = {
                         let i = 0;
                         let prom = new Promise(resolve => {
                             message.member.roles.forEach(async role => {
-                                let row3 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "welcome", "misc"]);
+                                let row3 = (await sql.query('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "welcome", "misc"])).rows[0];
                                 if ((row3 && row3.bool) || message.member === message.guild.owner)
                                     bool2 = true;
                                 i++;

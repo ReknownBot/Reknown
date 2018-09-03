@@ -8,7 +8,7 @@ module.exports = {
                     let i = 0;
                     let prom = new Promise(resolve => {
                         message.member.roles.forEach(async role => {
-                            let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "blacklist", "mod"]);
+                            let row = await sql.query('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "blacklist", "mod"]).rows[0];
                             if ((row && row.bool) || message.member === message.guild.owner)
                                 bool2 = true;
                             i++;
@@ -26,7 +26,7 @@ module.exports = {
                     if (selectedMember === message.member) return client.editMsg(sMessage, "You cannot blacklist yourself!", message);
                     if (selectedMember.roles.highest.position >= message.member.roles.highest.position && message.member.id !== "288831103895076867" && message.mmber !== message.guild.owner) return client.editMsg(sMessage, "You cannot blacklist members that have the same role or above yours!", message);
 
-                    let row = await sql.get(`SELECT * FROM blacklist WHERE guildId = ${message.guild.id} AND userId = ${selectedMember.id}`);
+                    let row = await sql.query(`SELECT * FROM blacklist WHERE guildId = ${message.guild.id} AND userId = ${selectedMember.id}`).rows[0];
                     if (row) {
                         client.editMsg(sMessage, "That user is already blacklisted!", message);
                     } else {
@@ -42,7 +42,7 @@ module.exports = {
                             }
                             collector.stop();
                             let reason = collected.content;
-                            sql.run("INSERT INTO blacklist (userId, guildId, reason, by) VALUES (?, ?, ?, ?)", [selectedMember.id, message.guild.id, reason, `${message.author.tag} (${message.author.id})`]);
+                            sql.query("INSERT INTO blacklist (userId, guildId, reason, by) VALUES (?, ?, ?, ?)", [selectedMember.id, message.guild.id, reason, `${message.author.tag} (${message.author.id})`]);
                             client.editMsg(sMessage, `:+1:, Successfully blacklisted ${selectedMember.user.tag} (${selectedMember.id}) for ${reason}`, message);
                         });
 
