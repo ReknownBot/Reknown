@@ -11,7 +11,7 @@ module.exports = {
             const {
                 d: data
             } = event;
-            if (event.t !== "MESSAGE_REACTION_REMOVE_ALL") {
+            if (event.t === "MESSAGE_REACTION_ADD" || event.t === "MESSAGE_REACTION_REMOVE") {
                 const channel = client.bot.channels.get(data.channel_id);
                 if (!channel.permissionsFor(client.bot.user).has("VIEW_CHANNEL")) return;
                 let message;
@@ -83,7 +83,7 @@ module.exports = {
                         }
                     }
                 }
-            } else {
+            } else if (event.t === "MESSAGE_REACTION_REMOVE_ALL") {
                 // Gets the Channel by ID
                 const channel = client.bot.channels.get(data.channel_id);
                 if (!channel.permissionsFor(client.bot.user).has("VIEW_CHANNEL")) return;

@@ -8,6 +8,7 @@ sql.connect();
 require("dotenv").config();
 
 ^ postgres WIP*/
+require('dotenv').config();
 const sql = require("sqlite");
 sql.open("./sqlitefile.sqlite");
 const HypixelAPI = require("hypixel-api");
@@ -33,7 +34,7 @@ let client = { // Creates an object client
     Rollbar: require("rollbar"),
     osu: require("node-osu"),
     canvas: require("canvas"),
-    snekfetch: require("snekfetch"),
+    fetch: require("node-fetch"),
     dateFormat: require("dateformat"),
     fuzz: require("fuzzball"),
     cooldown: new Set(),
@@ -583,7 +584,7 @@ client.events["channelCreate"].func(client, sql, Discord);
 client.events["channelDelete"].func(client, sql, Discord);
 client.events["voiceStateUpdate"].func(client, sql, Discord);
 //client.events["rateLimit"].func(client, sql, Discord);
-client.events["messageReactionAdd"].func(client, sql, Discord);
+client.events["raw"].func(client, sql, Discord);
 // End of events
 
 client.bot.login(process.env.BOT_TOKEN);
