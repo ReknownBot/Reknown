@@ -68,7 +68,7 @@ module.exports = {
   
                   const {
                     body: buffer
-                  } = await client.snekfetch.get(member.user.displayAvatarURL({ format: "png" }));
+                  } = await client.fetch(member.user.displayAvatarURL({ format: "png" }));
 				  
 				  try {
 					const avatar = await client.canvas.loadImage(buffer);
