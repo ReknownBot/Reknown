@@ -43,6 +43,7 @@ module.exports = {
                     .addField("Plays", user.counts.plays ? user.counts.plays : "Unknown or 0", true)
                     .addField("Country", user.country ? user.country : "Unknown", true)
                     .addField("User ID", user.id ? user.id : "Unknown", true)
+                    .setFooter("Powered by node-osu")
                     .setFooter(`Requested by: ${message.author.tag}`);
                 client.editMsg(sMessage, embed, message);
             }
