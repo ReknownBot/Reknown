@@ -60,14 +60,15 @@ module.exports = {
                         if (message.content.length > 1024) {
                             embed = new Discord.MessageEmbed()
                                 .setTitle("Message Over 1024 characters Deleted")
-                                .addField("Author:", message.author.tag)
+                                .addField("Author", message.author.tag)
+                                .addField("Channel", message.channel.toString())
                                 .setColor(0xFF0000);
                         } else {
                             if (message.embeds.find(e => e.type === 'rich')) {
                                 embed = new Discord.MessageEmbed(message.embeds[0]);
                                 message.embeds[0].image ? embed.setImage(message.embeds[0].image.proxyURL) : null;
                                 message.embeds[0].thumbnail ? embed.setThumbnail(message.embeds[0].thumbnail.proxyURL) : null;
-                                selectedChannel.send(`${message.author.tag}'s (${message.author.id}) Embed Deleted:`, {
+                                selectedChannel.send(`${message.author.tag}'s (${message.author.id}) Embed Deleted at ${message.channel.toString()}:`, {
                                     embed
                                 });
                             } else {
@@ -75,6 +76,7 @@ module.exports = {
                                     .setTitle("Message Deleted")
                                     .addField("Content:", message.content ? message.content : "None")
                                     .addField("Author:", message.author.tag)
+                                    .addField("Channel", message.channel.toString())
                                     .setColor(0xFF0000);
                                 if (message.attachments.size > 0 && message.attachments.first().width) {
                                     embed.setImage(message.attachments.first().proxyURL);
@@ -98,7 +100,7 @@ module.exports = {
             } catch (e) {
                 let rollbar = new client.Rollbar(client.rollbarKey);
                 rollbar.error("Something went wrong in messageDelete.js", e.stack);
-                console.error;
+                console.error(e);
             }
         });
     }
