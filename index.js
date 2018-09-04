@@ -10,16 +10,6 @@ const sql = new Client({
     host: process.env.SQL_HOST,
     ssl: true
 });
-<<<<<<< HEAD
-=======
-sql.connect();
-require("dotenv").config();
-
-^ postgres WIP*/
-require('dotenv').config();
-const sql = require("sqlite");
-sql.open("./sqlitefile.sqlite");
->>>>>>> a6f1bae808958e72d194f24ca9c95874c776ecd2
 const HypixelAPI = require("hypixel-api");
 require("array-utility"); // More useful array methods
 let emojis = [
