@@ -9,13 +9,13 @@ module.exports = {
                             .setTitle("Your Warnings")
                             .setColor(0x00FFFF)
                             .setTimestamp();
-                        let rows = await sql.all(`SELECT warnAmount FROM warnings WHERE userId2 = ? ORDER BY warnAmount DESC`, [message.author.id + message.guild.id]);
+                        let { rows } = await sql.query('SELECT warnAmount FROM warnings WHERE userId2 = $1 ORDER BY warnAmount DESC', [message.author.id + message.guild.id]);
                         let warnAmountThingy = [];
                         rows.forEach(row => {
                             warnAmountThingy.push(row.warnAmount);
                         });
                         embedThingy.addField("Warning Amount:", warnAmountThingy[0] ? warnAmountThingy[0] : "0");
-                        let rows2 = await sql.all(`SELECT * FROM warnings WHERE userId2 = ?`, [message.author.id + message.guild.id]);
+                        let { rows: rows2 } = await sql.query('SELECT * FROM warnings WHERE userId2 = $1', [message.author.id + message.guild.id]);
                         let warnReasonThingy = [];
                         rows2.forEach(row => {
                             warnReasonThingy.push(`${row.warnReason} (${row.warnID})`);
@@ -111,16 +111,16 @@ module.exports = {
                             .setTitle("Their Warnings")
                             .setColor(0x00FFFF)
                             .setTimestamp();
-                        let rows = await sql.all(`SELECT * FROM warnings WHERE userId2 = "${selectedMember.id}${message.guild.id}" ORDER BY warnAmount DESC`);
+                        let { rows } = await sql.query('SELECT * FROM warnings WHERE userId2 = $1 ORDER BY warnAmount DESC', [selectedMember.id + message.guild.id]);
                         let warnAmountThingy = [];
                         rows.forEach(row => {
-                            warnAmountThingy.push(row.warnAmount);
+                            warnAmountThingy.push(row.warnamount);
                         });
                         embedThingy.addField("Warning Amount", warnAmountThingy[0] ? warnAmountThingy[0] : "0");
-                        let rows2 = await sql.all(`SELECT * FROM warnings WHERE userId2 = "${selectedMember.id}${message.guild.id}"`);
+                        let { rows: rows2 } = await sql.query('SELECT * FROM warnings WHERE userId2 = $1', [selectedMember.id + message.guild.id]);
                         let warnReasonThingy = [];
                         rows2.forEach(row => {
-                            warnReasonThingy.push(`${row.warnReason} (${row.warnID})`);
+                            warnReasonThingy.push(`${row.warnreason} (${row.warnid})`);
                         });
                         if (warnReasonThingy.join("\n").length <= 1024) {
                             embedThingy.addField("Warning Informations:", warnReasonThingy[0] ? warnReasonThingy : "None");
@@ -147,7 +147,7 @@ module.exports = {
                                     });
                                     str = '';
                                 }
-                                str += `${row.warnReason} (${row.warnID})`;
+                                str += `${row.warnreason} (${row.warnid})`;
                             });
                             if (str) {
                                 pages.push({
@@ -192,7 +192,7 @@ module.exports = {
                                 })).catch(e => {
                                     if (e != 'DiscordAPIError: Cannot send messages to this user') {
                                         let rollbar = new client.Rollbar(client.rollbarKey);
-                                        rollbar.error("Something went wrong in rules.js", e);
+                                        rollbar.error("Something went wrong in warnings.js", e);
                                     }
                                 });
                                 page++;

@@ -32,12 +32,7 @@
     "prompt": "^1.0.0",
     "rollbar": "^2.4.5",
     "simple-youtube-api": "^5.0.2",
-    "sqlite": "^2.9.3",
-    "sqlite3": "^4.0.2",
-<<<<<<< HEAD
     "sqlstring": "^2.3.1",
-=======
->>>>>>> a6f1bae808958e72d194f24ca9c95874c776ecd2
     "youtube-info": "^1.2.0",
     "ytdl-core": "^0.20.4"
   },

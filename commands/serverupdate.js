@@ -8,7 +8,7 @@ module.exports = {
         let i = 0;
         let prom = new Promise(resolve => {
           message.member.roles.forEach(async role => {
-            let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "update", "misc"]);
+            let row = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, "update", "misc"])).rows[0];
             if ((row && row.bool) || message.member === message.guild.owner)
               bool2 = true;
             i++;
@@ -18,7 +18,7 @@ module.exports = {
         });
         await prom;
         if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.update` permission.", message);
-        let row2 = await sql.get('SELECT * FROM updatechannel WHERE guildID = ?', [message.guild.id]);
+        let row2 = (await sql.query('SELECT * FROM updatechannel WHERE guildID = $1', [message.guild.id])).rows[0];
         if (!row2) return client.editMsg(sMessage, 'This server does not have an update channel set! Use `?config updatechannel <Channel Mention or ID>` to set one.', message);
         let selectedChannel = message.guild.channels.get(row2.channelID);
         if (!selectedChannel) return client.editMsg(sMessage, "Server updates channel not found. Please update it by using `config updatechannel <Channel Mention or ID>`.", message);

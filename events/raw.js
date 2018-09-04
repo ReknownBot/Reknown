@@ -31,9 +31,9 @@ module.exports = {
                 let member = message.guild.members.get(data.user_id);
                 if (!member)
                     member = await message.guild.members.fetch({ user: data.user_id, cache: true });
-                const row = await sql.get(`SELECT * FROM togglestar WHERE guildId = ${message.guild.id}`);
-                const row2 = await sql.get(`SELECT * FROM starchannel WHERE guildId = ${message.guild.id}`);
-                const row3 = await sql.get(`SELECT * FROM star WHERE msgID = ${message.id}`);
+                const row = (await sql.query('SELECT * FROM togglestar WHERE guildId = $1', [message.guild.id])).rows[0];
+                const row2 = (await sql.query('SELECT * FROM starchannel WHERE guildId = $1', [message.guild.id])).rows[0];
+                const row3 = (await sql.query('SELECT * FROM star WHERE msgID = $1', [message.id])).rows[0];
                 // Enabled
                 if (row && row.bool) {
                     const sChannel = message.guild.channels.get(row2 ? row2.channelId : null) || message.guild.channels.find(c => c.name === "starboard");
@@ -61,7 +61,7 @@ module.exports = {
                     embed.setFooter(`⭐${reactionCount} | ID: ${message.id}`);
                     if (!row3) {
                         let msg = await sChannel.send(embed);
-                        sql.run("INSERT INTO star (msgID, editID) VALUES (?, ?)", [message.id, msg.id]);
+                        sql.query("INSERT INTO star (msgID, editID) VALUES ($1, $2)", [message.id, msg.id]);
                     } else {
                         let sMessage;
                         try {
@@ -78,7 +78,7 @@ module.exports = {
                         } else {
                             if (reactionCount !== 0) {
                                 let msg = await sChannel.send(embed);
-                                sql.run("UPDATE star SET editID = ?", [msg.id]);
+                                sql.query("UPDATE star SET editID = $1", [msg.id]);
                             }
                         }
                     }
@@ -92,13 +92,13 @@ module.exports = {
                 // Gets the guild by ID
                 const guild = client.bot.guilds.get(data.guild_id);
                 if (channel.type !== "text") return; // If DM or Group
-                const row = await sql.get(`SELECT * FROM togglestar WHERE guildId = ${guild.id}`);
-                const row2 = await sql.get(`SELECT * FROM starchannel WHERE guildId = ${guild.id}`);
-                const row3 = await sql.get(`SELECT * FROM star WHERE msgID = ${message.id}`);
+                const row = (await sql.query('SELECT * FROM togglestar WHERE guildId = $1', [guild.id])).rows[0];
+                const row2 = (await sql.query('SELECT * FROM starchannel WHERE guildId = $1', [guild.id])).rows[0];
+                const row3 = (await sql.query('SELECT * FROM star WHERE msgID = $1', [message.id])).rows[0];
                 // Enabled
                 if ((row && row.bool) && row3) {
                     const sChannel = guild.channels.get(row2 ? row2.channelId : null) || guild.channels.find(c => c.name === "starboard");
-                    sql.run(`DELETE FROM star WHERE msgID = ${message.id}`);
+                    sql.query('DELETE FROM star WHERE msgID = $1', [message.id]);
                     if (!sChannel) return;
                     // Perm Check (Deleting own message only takes read messages)
                     if (!sChannel.permissionsFor(client.bot.user).has("VIEW_CHANNEL")) return;

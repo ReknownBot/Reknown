@@ -19,13 +19,13 @@ module.exports = {
         if (!member.guild.me.hasPermission("VIEW_CHANNEL")) return;
 
         // Autorole
-        let r3 = await sql.all(`SELECT * FROM autorole WHERE guildId = ${member.guild.id}`);
+        let { rows: r3 } = await sql.query('SELECT * FROM autorole WHERE guildId = $1', [member.guild.id]);
         if (Object.values(r3).length !== 0 && member.guild.me.hasPermission("MANAGE_ROLES")) {
           r3.forEach(r => {
             // Gets the role
             let autoRole = member.guild.roles.get(r.roleId);
             if (!autoRole)
-              sql.run("DELETE FROM autorole WHERE guildId = ? AND roleId = ?", [message.guild.id, r.roleId]);
+              sql.query("DELETE FROM autorole WHERE guildId = $1 AND roleId = $2", [message.guild.id, r.roleId]);
             else if (autoRole && autoRole.position < member.guild.me.roles.highest.position)
               // Adds the role
               member.roles.add(autoRole, "Reknown Autorole");
@@ -34,10 +34,10 @@ module.exports = {
         // End of autorole
 
         // Checks if the guild has welcome messages enabled
-        r3 = await sql.get(`SELECT * FROM toggleWelcome WHERE guildId = ${member.guild.id}`);
+        r3 = (await sql.query('SELECT * FROM toggleWelcome WHERE guildId = $1', [member.guild.id])).rows[0];
         if (r3 && r3.bool) {
           // Gets the welcome channel for the guild
-          let r = await sql.get(`SELECT * FROM welcomeChannel WHERE guildId = ${member.guild.id}`);
+          let r = (await sql.query('SELECT * FROM welcomeChannel WHERE guildId = $1', [member.guild.id])).rows[0];
           // This is for the welcome channel
           async function welcomeChannel(welcomeChannel) {
             // If the channel exists
@@ -51,7 +51,7 @@ module.exports = {
 
               // Function for welcoming messages
               async function welcomeMessages(msg) {
-                let row2 = await sql.get(`SELECT * FROM picwelcome WHERE guildId = ${member.guild.id}`);
+                let row2 = (await sql.query('SELECT * FROM picwelcome WHERE guildId = $1', [member.guild.id])).rows[0];
                 if (!row2 || row2.bool) {
                   const canvas = client.canvas.createCanvas(1600, 600);
                   const ctx = canvas.getContext('2d');
@@ -98,7 +98,7 @@ module.exports = {
               }
 
               // Gets the welcoming message for the guild
-              let r2 = await sql.get(`SELECT * FROM customMessages WHERE guildId = ${member.guild.id}`);
+              let r2 = (await sql.query('SELECT * FROM customMessages WHERE guildId = $1', [member.guild.id])).rows[0];
               if (!r2) { // If the row is not found (i.e no custom welcoming message)
                 welcomeMessages(`${member.user.tag} joined ${member.guild.name}.\n\nThere are *${member.guild.memberCount}* members now.`);
               } else { // Vise versa
@@ -116,7 +116,7 @@ module.exports = {
         }
 
         // Checks if the guild has action log enabled
-        let r = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${member.guild.id}`);
+        let r = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [member.guild.id])).rows[0];
         if (r && r.bool) { // If they have it enabled
           // Creates an embed
           let embed = new Discord.MessageEmbed()
@@ -126,7 +126,7 @@ module.exports = {
             .setDescription(`**Member:** ${member.user.tag} :: ${member.id}`)
             .setTitle("Member Joined");
           // Looks for the log channel selected
-          let r2 = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${member.guild.id}`);
+          let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [member.guild.id])).rows[0];
           if (!r2 || !r2.channelId) { // If it is default
             let selectedChannel = member.guild.channels.find(c => c.name === "action-log");
             if (selectedChannel) {
@@ -152,7 +152,7 @@ module.exports = {
         }
 
         // Checks if the member is muted
-        r = await sql.get(`SELECT * FROM mute WHERE guildId = ${member.guild.id} AND memberId = ${member.id}`);
+        r = (await sql.query('SELECT * FROM mute WHERE guildId = $1 AND memberId = $2', [member.guild.id, member.id])).rows[0];
         if (r) { // If the row is found
           // If the bot has permissions to add a role
           if (member.guild.me.hasPermission("MANAGE_ROLES")) {

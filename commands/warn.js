@@ -8,7 +8,7 @@ module.exports = {
         let i = 0;
         let prom = new Promise(resolve => {
           message.member.roles.forEach(async role => {
-            let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "warn", "mod"]);
+            let row = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, 'warn', 'mod'])).rows[0];
             if ((row && row.bool) || message.member === message.guild.owner)
               bool2 = true;
             i++;
@@ -61,7 +61,7 @@ module.exports = {
                     .addField("Total Warns:", warnAmount.length <= 1024 ? warnAmount.length : "Too long to display")
                     .setColor(0x00FFFF)
                     .setTimestamp();
-                  let embed2 = new Discord.MessageEmbed() // Embed to send to warned user
+                  let embed2 = new Discord.MessageEmbed()
                     .setTitle(`You were warned by: ${message.author.tag} in ${message.guild.name}`)
                     .addField("Reason:", warnReason)
                     .addField("Total Warns:", warnAmount)
@@ -69,18 +69,16 @@ module.exports = {
                     .setTimestamp();
 
                   collector2.stop();
-                  person.user.send("", {
-                    embed: embed2
-                  }).catch(e => {
+                  person.user.send(embed2).catch(e => {
                     if (e != "DiscordAPIError: Cannot send messages to this user") {
                       let rollbar = new client.Rollbar(client.rollbarKey);
                       rollbar.error("Something went wrong in warn.js", e);
                     }
                   });
                   client.editMsg(sMessage, "Ok, warned " + person.user.tag + " (Total " + warnAmount + ") for the reason of: " + warnReason + ".", message);
-                  sql.run("INSERT INTO warnings (userId2, warnAmount, warnReason, warnID) VALUES (?, ?, ?, ?)", [person.id + message.guild.id, warnAmount, warnReason]);
+                  sql.query('INSERT INTO warnings (userId2, warnAmount, warnReason) VALUES ($1, $2, $3)', [person.id + message.guild.id, warnAmount, warnReason]);
 
-                  let r = await sql.get('SELECT * FROM logChannel WHERE guildId = ?', [message.guild.id]);
+                  let r = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [message.guild.id])).rows[0];
                   let selectedChannel;
                   if (!r) {
                     selectedChannel = message.guild.channels.find(c => c.name === "action-log");
@@ -105,8 +103,8 @@ module.exports = {
       if (bool) {
         args = message.content.slice(PREFIX.length).split(' ');
         for (let i = args.length - 1; i--;)
-                    if (args[i] == '')
-                        args.splice(i, 1);
+          if (args[i] == '')
+            args.splice(i, 1);
         let msgToEdit;
         try {
           msgToEdit = await message.channel.messages.fetch(client.msgEdit[message.id]);

@@ -8,7 +8,7 @@ module.exports = {
                 let i = 0;
                 let prom = new Promise(resolve => {
                     message.member.roles.forEach(async role => {
-                        let row2 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "set", "level"]);
+                        let row2 = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, "set", "level"])).rows[0];
                         if ((row2 && row2.bool) || message.member === message.guild.owner)
                             bool2 = true;
                         i++;
@@ -25,16 +25,16 @@ module.exports = {
                     if (selectedMember.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return client.editMsg(sMessage, "Your role position is not high enough!", message);
                     if (!amount) return client.editMsg(sMessage, `Please supply an amount.\n\n\`Eg. ?setpoints ${message.member} 50\``, message);
                     if (isNaN(amount)) return client.editMsg(sMessage, "That is not a number!", message);
-                    let row = await sql.get('SELECT * FROM scores WHERE userID = ? AND guildID = ?', [message.author.id, message.guild.id]);
+                    let row = (await sql.query('SELECT * FROM scores WHERE userID = $1 AND guildID = $2', [message.author.id, message.guild.id])).rows[0];
                     if (!row) {
-                        sql.run("INSERT INTO scores (userID, points, level, guildID) VALUES (?, ?, ?, ?)", [selectedMember.id, amount, Math.floor(0.2 * Math.sqrt(amount)), message.guild.id]);
+                        sql.query("INSERT INTO scores (userID, points, level, guildID) VALUES ($1, $2, $3, $4)", [selectedMember.id, amount, Math.floor(0.2 * Math.sqrt(amount)), message.guild.id]);
                     } else {
-                        sql.run('UPDATE scores SET points = ?, level = ? WHERE userID = ? AND guildID = ?', [amount, Math.floor(0.2 * Math.sqrt(amount)), selectedMember.id, message.guild.id]);
+                        sql.query('UPDATE scores SET points = $1, level = $2 WHERE userID = $3 AND guildID = $4', [amount, Math.floor(0.2 * Math.sqrt(amount)), selectedMember.id, message.guild.id]);
                     }
                     client.editMsg(sMessage, `Successfully changed ${selectedMember.user.tag}'s points to ${amount}, and that resulted in level ${Math.floor(0.2 * Math.sqrt(amount))}!`, message);
                 }
 
-                let row = await sql.get(`SELECT * FROM toggleLevel WHERE guildId = ${message.guild.id}`);
+                let row = (await sql.query('SELECT * FROM toggleLevel WHERE guildId = $1', [message.guild.id])).rows[0];
                 if (row && row.bool)
                     thingy();
                 else

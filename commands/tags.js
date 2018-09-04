@@ -3,12 +3,12 @@ module.exports = {
     func: async (client, message, args, unknownCommand, mess, sql, Discord, fs, PREFIX, bool) => {
             try {
                 async function tagscmd(sMessage) {
-                    let rows1 = await sql.all(`SELECT * FROM usertag WHERE userID = ?`, [message.author.id]);
+                    let { rows: rows1 } = await sql.query('SELECT * FROM usertag WHERE userID = $1', [message.author.id]);
                     let userTags = [];
                     rows1.forEach(row => {
                         userTags.push(row.tagname);
                     });
-                    let rows2 = await sql.all(`SELECT * FROM guildtag WHERE guildID = ?`, [message.guild.id]);
+                    let { rows: rows2 } = await sql.query('SELECT * FROM guildtag WHERE guildID = $1', [message.guild.id]);
                     let guildTags = [];
                     rows2.forEach(row => {
                         guildTags.push(row.tagname);

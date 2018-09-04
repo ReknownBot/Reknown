@@ -8,7 +8,7 @@ module.exports = {
                 let i = 0;
                 let prom = new Promise(resolve => {
                     message.member.roles.forEach(async role => {
-                        let row2 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "unblacklist", "mod"]);
+                        let row2 = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, "unblacklist", "mod"])).rows[0];
                         if ((row2 && row2.bool) || message.member === message.guild.owner)
                             bool2 = true;
                         i++;
@@ -25,9 +25,9 @@ module.exports = {
                 if (selectedMember.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner && message.member.id !== "288831103895076867") return client.editMsg(sMessage, "You cannot unblacklist members that have the same role or above yours!", message);
                 //if (selectedMember.hasPermission("MANAGE_GUILD") && message.member.id !== "288831103895076867") return client.editMsg(sMessage, "You cannot unblacklist admins / mods!");
 
-                let row = await sql.get(`SELECT * FROM blacklist WHERE guildId = ${message.guild.id} AND userId = ${selectedMember.id}`);
+                let row = (await sql.query('SELECT * FROM blacklist WHERE guildId = $1 AND userId = $2', [message.guild.id, selectedMember.id])).rows[0];
                 if (row) {
-                    sql.run(`DELETE FROM blacklist WHERE guildId = ${message.guild.id} AND userId = ${selectedMember.id}`);
+                    sql.query('DELETE FROM blacklist WHERE guildId = $1 AND userId = $2', [message.guild.id, selectedMember.id]);
                     client.editMsg(sMessage, `:+1:, Successfully unblacklisted ${selectedMember.user.tag} (${selectedMember.id}) for ${row.reason} that was blacklisted by ${row.by}`, message);
                 } else {
                     client.editMsg(sMessage, "That user is not blacklisted!", message);

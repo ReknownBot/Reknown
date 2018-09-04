@@ -8,7 +8,7 @@ module.exports = {
                 let i = 0;
                 let prom = new Promise(resolve => {
                     message.member.roles.forEach(async role => {
-                        let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "welcome", "misc"]);
+                        let row = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, "welcome", "misc"])).rows[0];
                         if ((row && row.bool) || message.member === message.guild.owner)
                             bool2 = true;
                         i++;
@@ -18,11 +18,11 @@ module.exports = {
                 });
                 await prom;
                 if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.welcome` permission.", message);
-                let r = await sql.get(`SELECT * FROM customMessages WHERE guildId = ${message.guild.id}`);
+                let r = (await sql.query('SELECT * FROM customMessages WHERE guildId = $1', [message.guild.id])).rows[0];
                 if (!r) {
                     client.editMsg(sMessage, 'You do not have a custom welcoming message!', message);
                 } else {
-                    sql.run('DELETE FROM customMessages WHERE guildId = ?', [message.guild.id]);
+                    sql.query('DELETE FROM customMessages WHERE guildId = $1', [message.guild.id]);
                     client.editMsg(sMessage, "Successfully reset the welcoming message.", message);
                 }
             }

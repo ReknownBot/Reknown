@@ -5,16 +5,16 @@ module.exports = {
                 // If the message was sent in not a guild channel
                 if (message.channel.type !== "text") return;
 
-                let row2 = await sql.get(`SELECT * FROM star WHERE msgID = ${message.id}`);
-                let row3 = await sql.get(`SELECT * FROM togglestar WHERE guildId = ${message.guild.id}`);
-                let row4 = await sql.get(`SELECT * FROM starchannel WHERE guildId = ${message.guild.id}`);
+                let row2 = (await sql.query('SELECT * FROM star WHERE msgID = $1', [message.id])).rows[0];
+                let row3 = (await sql.query('SELECT * FROM togglestar WHERE guildId = $1', [message.guild.id])).rows[0];
+                let row4 = (await sql.query('SELECT * FROM starchannel WHERE guildId = $1', [message.guild.id])).rows[0];
                 let sChannel;
                 if (row4)
                     sChannel = message.guild.channels.get(row4.channelId);
                 else
                     sChannel = message.guild.channels.find(c => c.name === "starboard");
                 if (row2 && (!row3 || row3.bool)) {
-                    sql.run(`DELETE FROM star WHERE msgID = ${message.id}`);
+                    sql.query('DELETE FROM star WHERE msgID = $1', [message.id]);
                     if (sChannel) {
                         let msg = await sChannel.messages.fetch(row2.editID);
                         msg ? msg.delete() : null;
@@ -85,13 +85,13 @@ module.exports = {
                             }
                         }
                     }
-                    let row = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${message.guild.id}`);
+                    let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [message.guild.id])).rows[0];
                     if (row && row.bool) {
                         messageDelete();
                     }
                 }
 
-                let r2 = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${message.guild.id}`);
+                let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [message.guild.id])).rows[0];
                 if (!r2) {
                     logChannel(message.guild.channels.find(c => c.name === "action-log"));
                 } else {

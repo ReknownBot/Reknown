@@ -115,11 +115,7 @@ module.exports = {
                         }
                         if (!row) {
                             if (bool === 1) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-<<<<<<< HEAD
                             sql.query(`INSERT INTO cmdnotfound (guildId, bool) VALUES ('${message.guild.id}', ${bool})`);
-=======
-                            sql.query(`INSERT INTO cmdnotfound (guildId, bool) VALUES (?, ?)`, [message.guild.id, bool]);
->>>>>>> e5f0a6c54d3639184d82deb51a516a1cb6d58ffb
                             client.editMsg(sMessage, `Successfully updated \`cmdnotfound\` to \`${bool ? "true" : "false"}\`.`, message);
                         } else {
                             if (row.bool === bool) return client.editMsg(sMessage, "The value you inputted is already active!", message);
