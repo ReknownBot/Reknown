@@ -6,22 +6,15 @@ module.exports = {
                 let r = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [emoji.guild.id])).rows[0];
                 async function logChannel(selectedChannel) {
                     if (!selectedChannel) return;
-                    if (!emoji.guild.me.hasPermission("SEND_MESSAGES")) return;
-                    if (!emoji.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES")) {
-                        if (!emoji.guild.me.hasPermission("ADMINISTRATOR")) return;
-                    }
-                    if (!emoji.guild.me.hasPermission("VIEW_CHANNEL")) return;
-                    if (!emoji.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL")) {
-                        if (!emoji.guild.me.hasPermission("ADMINISTRATOR")) return;
-                    }
-                    //console.log("emojiDelete");
+                    if (!emoji.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !emoji.guild.me.hasPermission("ADMINISTRATOR")) return;
+                    if (!emoji.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !emoji.guild.me.hasPermission("ADMINISTRATOR")) return;
                     async function emojiDelete() {
                         let audit = await emoji.guild.fetchAuditLogs({
                             limit: 1,
-                            type: 62 // Emoji Delete, look at https://discord.js.org/#/docs/main/stable/typedef/AuditLogAction
+                            type: 62 // Emoji Delete, look at https://discord.js.org/#/docs/main/master/typedef/AuditLogAction
                         });
                         let info = audit.entries.first();
-                        var embed = new Discord.MessageEmbed()
+                        let embed = new Discord.MessageEmbed()
                             .setAuthor(info.executor.tag, info.executor.displayAvatarURL())
                             .setTitle("Emoji Deleted")
                             .addField("Time", info.createdAt)
@@ -30,17 +23,6 @@ module.exports = {
                             .setColor(0x00FFFF)
                             .setFooter(`Log ID: ${info.id}`);
                         selectedChannel.send(embed);
-
-                        /*
-                        Old System
-        
-                        var embed = new Discord.RichEmbed()
-                            .setTitle("Emoji Deleted")
-                            .addField("Emoji Name", emoji.name)
-                            .setColor(0xFF0000)
-                            .setThumbnail(emoji.url);
-                        selectedChannel.send(embed);
-                        */
                     }
                     let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [emoji.guild.id])).rows[0];
                     if (row && row.bool) {
@@ -50,11 +32,12 @@ module.exports = {
                 if (!r) {
                     logChannel(emoji.guild.channels.find(c => c.name === "action-log"));
                 } else {
-                    logChannel(emoji.guild.channels.get(r.channelId));
+                    logChannel(emoji.guild.channels.get(r.channelid));
                 }
             } catch (e) {
                 let rollbar = new client.Rollbar(client.rollbarKey);
                 rollbar.error("Something went wrong in emojiDelete.js", e);
+                console.error(e);
             }
         });
     }

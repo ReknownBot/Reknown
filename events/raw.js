@@ -13,7 +13,12 @@ module.exports = {
             } = event;
             if (event.t === "MESSAGE_REACTION_ADD" || event.t === "MESSAGE_REACTION_REMOVE") {
                 const channel = client.bot.channels.get(data.channel_id);
-                if (!channel.permissionsFor(client.bot.user).has("VIEW_CHANNEL")) return;
+                if (!channel.guild.me)
+                    channel.guild.me = await channel.guild.members.fetch({
+                        user: client.bot.user,
+                        cache: true
+                    });
+                if (!channel.permissionsFor(client.bot.user).has("VIEW_CHANNEL") && !channel.guild.me.hasPermission("ADMINISTRATOR")) return;
                 let message;
                 try {
                     message = await channel.messages.fetch(data.message_id);
@@ -87,7 +92,7 @@ module.exports = {
             } else if (event.t === "MESSAGE_REACTION_REMOVE_ALL") {
                 // Gets the Channel by ID
                 const channel = client.bot.channels.get(data.channel_id);
-                if (!channel.permissionsFor(client.bot.user).has("VIEW_CHANNEL")) return;
+                if (!channel.permissionsFor(client.bot.user).has("VIEW_CHANNEL") && !channel.guild.me.hasPermission("ADMINISTRATOR")) return;
                 // Fetches the message
                 const message = await channel.messages.fetch(data.message_id);
                 // Gets the guild by ID
@@ -98,7 +103,7 @@ module.exports = {
                 const row3 = (await sql.query('SELECT * FROM star WHERE msgID = $1', [message.id])).rows[0];
                 // Enabled
                 if ((row && row.bool) && row3) {
-                    const sChannel = guild.channels.get(row2 ? row2.channelId : null) || guild.channels.find(c => c.name === "starboard");
+                    const sChannel = guild.channels.get(row2 ? row2.channelid : null) || guild.channels.find(c => c.name === "starboard");
                     sql.query('DELETE FROM star WHERE msgID = $1', [message.id]);
                     if (!sChannel) return;
                     // Perm Check (Deleting own message only takes read messages)

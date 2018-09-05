@@ -5,9 +5,6 @@ module.exports = {
                 if (!member.guild) return;
                 // If it's the bot that was kicked / left
                 if (member.user === client.bot.user) return;
-                // If the bot has no perms then return
-                if (!member.guild.me.hasPermission("SEND_MESSAGES")) return;
-                if (!member.guild.me.hasPermission("VIEW_CHANNEL")) return;
 
                 // Checks if the guild has welcome messages enabled
                 let r3 = (await sql.query('SELECT * FROM toggleWelcome WHERE guildId = $1', [member.guild.id])).rows[0];
@@ -20,9 +17,7 @@ module.exports = {
                         if (goodbyeChannel) {
                             // If the bot does not have send messages perms in the welcome channel & does not have administrator (bypass all overwrites) then return
                             if (!member.guild.me.permissionsIn(goodbyeChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-                            if (!member.guild.me.permissionsIn(goodbyeChannel).has("VIEW_CHANNEL")) {
-                                if (!member.guild.me.hasPermission("ADMINISTRATOR")) return;
-                            }
+                            if (!member.guild.me.permissionsIn(goodbyeChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
                             //console.log("guildMemberRemove 1");
 
                             // Function for goodbye messages
@@ -42,7 +37,7 @@ module.exports = {
                                 goodbyeMessages(`${member} has left **${member.guild.name}**.\n\n*There are *${member.guild.memberCount}* members left.*`);
                             } else { // Vise versa
                                 // If the custom message is invalid for some reason, use the default instead
-                                let customMessage = r2.customMessage.replace("<User>", member.toString()).replace("<Guild>", member.guild.name).replace("<MemberCount>", member.guild.memberCount) || `${member} has left **${member.guild.name}**.\n\n*There are *${member.guild.memberCount}* members left.*`;
+                                let customMessage = r2.custommessage.replace("<User>", member.toString()).replace("<Guild>", member.guild.name).replace("<MemberCount>", member.guild.memberCount) || `${member} has left **${member.guild.name}**.\n\n*There are *${member.guild.memberCount}* members left.*`;
                                 goodbyeMessages(customMessage);
                             }
                         }
@@ -70,20 +65,14 @@ module.exports = {
                         let selectedChannel = member.guild.channels.find(c => c.name === "action-log");
                         if (selectedChannel) {
                             if (!member.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-                            if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL")) {
-                                if (!member.guild.me.hasPermission("ADMINISTRATOR")) return;
-                            }
-                            //console.log("guildMemberRemove 2");
+                            if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
                             selectedChannel.send(embed);
                         }
                     } else { // If it is custom
                         let selectedChannel = member.guild.channels.get(r2.channelId);
                         if (selectedChannel) {
                             if (!member.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-                            if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL")) {
-                                if (!member.guild.me.hasPermission("ADMINISTRATOR")) return;
-                            }
-                            //console.log("guildMemberRemove 2");
+                            if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
                             selectedChannel.send(embed);
                         }
                     }
@@ -91,7 +80,7 @@ module.exports = {
             } catch (e) {
                 let rollbar = new client.Rollbar(client.rollbarKey);
                 rollbar.error("Something went wrong in guildMemberRemove.js", e);
-                console.log(e);
+                console.error(e);
             }
         });
     }

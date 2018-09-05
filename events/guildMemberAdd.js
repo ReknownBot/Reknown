@@ -14,18 +14,14 @@ module.exports = {
     // Starts an event
     client.bot.on('guildMemberAdd', async member => {
       try { // Just in case
-        // If the bot has no perms then return
-        if (!member.guild.me.hasPermission("SEND_MESSAGES")) return;
-        if (!member.guild.me.hasPermission("VIEW_CHANNEL")) return;
-
         // Autorole
         let { rows: r3 } = await sql.query('SELECT * FROM autorole WHERE guildId = $1', [member.guild.id]);
-        if (Object.values(r3).length !== 0 && member.guild.me.hasPermission("MANAGE_ROLES")) {
+        if (r3.length !== 0 && member.guild.me.hasPermission("MANAGE_ROLES")) {
           r3.forEach(r => {
             // Gets the role
-            let autoRole = member.guild.roles.get(r.roleId);
+            let autoRole = member.guild.roles.get(r.roleid);
             if (!autoRole)
-              sql.query("DELETE FROM autorole WHERE guildId = $1 AND roleId = $2", [message.guild.id, r.roleId]);
+              sql.query("DELETE FROM autorole WHERE guildId = $1 AND roleId = $2", [message.guild.id, r.roleid]);
             else if (autoRole && autoRole.position < member.guild.me.roles.highest.position)
               // Adds the role
               member.roles.add(autoRole, "Reknown Autorole");
@@ -44,10 +40,7 @@ module.exports = {
             if (welcomeChannel) {
               // If the bot does not have send messages perms in the welcome channel & does not have administrator (bypass all overwrites) then return
               if (!member.guild.me.permissionsIn(welcomeChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-              if (!member.guild.me.permissionsIn(welcomeChannel).has("VIEW_CHANNEL")) {
-                if (!member.guild.me.hasPermission("ADMINISTRATOR")) return;
-              }
-              //console.log("guildMemberAdd 1");
+              if (!member.guild.me.permissionsIn(welcomeChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
 
               // Function for welcoming messages
               async function welcomeMessages(msg) {
@@ -55,38 +48,38 @@ module.exports = {
                 if (!row2 || row2.bool) {
                   const canvas = client.canvas.createCanvas(1600, 600);
                   const ctx = canvas.getContext('2d');
-  
+
                   const background = await client.canvas.loadImage('./background.png');
                   ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-  
+
                   ctx.strokeStyle = '#74037b';
                   ctx.strokeRect(0, 0, canvas.width, canvas.height);
-  
+
                   ctx.font = await applyText(canvas, msg);
                   ctx.fillStyle = '#FF0000';
                   ctx.fillText(msg, 600, 100);
-  
+
                   const {
                     body: buffer
                   } = await client.fetch(member.user.displayAvatarURL({ format: "png" }));
-				  
-				  try {
-					const avatar = await client.canvas.loadImage(buffer);
-					ctx.drawImage(avatar, 50, 50, canvas.height - 100, canvas.height - 100);
-  
-					const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
-					welcomeChannel.send({
-						files: [attachment]
-					});
-				  } catch(e) {
-					let embed = new Discord.MessageEmbed()
-						.setDescription(msg)
-						.setColor(0x00FF00)
-						.setThumbnail(member.user.displayAvatarURL())
-						.setFooter("This message was shown since the image failed to load.")
-						.setTimestamp();
-					welcomeChannel.send(embed);
-				  }
+
+                  try {
+                    const avatar = await client.canvas.loadImage(buffer);
+                    ctx.drawImage(avatar, 50, 50, canvas.height - 100, canvas.height - 100);
+
+                    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
+                    welcomeChannel.send({
+                      files: [attachment]
+                    });
+                  } catch (e) {
+                    let embed = new Discord.MessageEmbed()
+                      .setDescription(msg)
+                      .setColor(0x00FF00)
+                      .setThumbnail(member.user.displayAvatarURL())
+                      .setFooter("This message was shown since the image failed to load.")
+                      .setTimestamp();
+                    welcomeChannel.send(embed);
+                  }
                 } else {
                   let embed = new Discord.MessageEmbed()
                     .setDescription(msg)
@@ -103,7 +96,7 @@ module.exports = {
                 welcomeMessages(`${member.user.tag} joined ${member.guild.name}.\n\nThere are *${member.guild.memberCount}* members now.`);
               } else { // Vise versa
                 // If the custom message is invalid for some reason, use the default instead
-                let customMessage = r2.customMessage.replace("<User>", member.user.tag).replace("<Guild>", member.guild.name).replace("<MemberCount>", member.guild.memberCount) || `${member}, Welcome to **${member.guild.id}!** There are ${member.guild.memberCount} members now.`;
+                let customMessage = r2.custommessage.replace("<User>", member.user.tag).replace("<Guild>", member.guild.name).replace("<MemberCount>", member.guild.memberCount) || `${member}, Welcome to **${member.guild.id}!** There are ${member.guild.memberCount} members now.`;
                 welcomeMessages(customMessage);
               }
             }
@@ -127,24 +120,19 @@ module.exports = {
             .setTitle("Member Joined");
           // Looks for the log channel selected
           let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [member.guild.id])).rows[0];
-          if (!r2 || !r2.channelId) { // If it is default
+          if (!r2 || !r2.channelid) { // If it is default
             let selectedChannel = member.guild.channels.find(c => c.name === "action-log");
             if (selectedChannel) {
               if (!member.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-              if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL")) {
-                if (!member.guild.me.hasPermission("ADMINISTRATOR")) return;
-              }
-              //console.log("guildMemberAdd 2");
+              if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
+              // Sends the embed
               selectedChannel.send(embed);
             }
           } else { // If it is custom
             let selectedChannel = member.guild.channels.get(r2.channelId);
             if (selectedChannel) {
               if (!member.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-              if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL")) {
-                if (!member.guild.me.hasPermission("ADMINISTRATOR")) return;
-              }
-              //console.log("guildMemberAdd 2");
+              if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
               // Sends the embed
               selectedChannel.send(embed);
             }
@@ -167,7 +155,7 @@ module.exports = {
       } catch (e) { // Error occured >:)
         let rollbar = new client.Rollbar(client.rollbarKey);
         rollbar.error("Something went wrong in guildMemberAdd.js", e);
-        console.log(e);
+        console.error(e);
       }
     });
   }

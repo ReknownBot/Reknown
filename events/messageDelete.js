@@ -24,38 +24,9 @@ module.exports = {
                 if (message.author === client.bot.user) return; // If it's Reknown, my bot
                 async function logChannel(selectedChannel) {
                     if (!selectedChannel) return;
-                    if (!message.guild.me.hasPermission("SEND_MESSAGES")) return;
-                    if (!message.guild.me.hasPermission("VIEW_CHANNEL")) return;
-                    if (!message.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES")) {
-                        if (!message.guild.me.hasPermission("ADMINISTRATOR")) return;
-                    }
-                    if (!message.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL")) {
-                        if (!message.guild.me.hasPermission("ADMINISTRATOR")) return;
-                    }
-                    //console.log('messageDelete');
+                    if (!message.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !message.guild.me.hasPermission("ADMINISTRATOR")) return;
+                    if (!message.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !message.guild.me.hasPermission("ADMINISTRATOR")) return;
                     async function messageDelete() {
-                        /* WIP
-                        setTimeout(() => {
-                            message.guild.fetchAuditLogs({
-                                limit: 1,
-                                type: 72
-                            }).then(audit => {
-                                let info = audit.entries.first();
-                                if (info.executor.bot) return;
-                                let embed = new Discord.RichEmbed()
-                                    .setAuthor(info.executor.tag, info.executor.displayAvatarURL)
-                                    .setTitle("Message Deleted")
-                                    .addField("Time", info.createdAt)
-                                    .addField("Member", message.author.tag + ` (${message.author.id})`)
-                                    .addField("Content", message.content ? message.content : "Unknown")
-                                    .setColor(0xFF0000)
-                                    .setThumbnail(message.author.displayAvatarURL)
-                                    .setFooter(`Log ID: ${info.id}`);
-        
-                                selectedChannel.send(embed);
-                            });
-                        }, 1000);*/
-
                         let embed;
                         if (message.content.length > 1024) {
                             embed = new Discord.MessageEmbed()
@@ -95,11 +66,11 @@ module.exports = {
                 if (!r2) {
                     logChannel(message.guild.channels.find(c => c.name === "action-log"));
                 } else {
-                    logChannel(message.guild.channels.get(r2.channelId));
+                    logChannel(message.guild.channels.get(r2.channelid));
                 }
             } catch (e) {
                 let rollbar = new client.Rollbar(client.rollbarKey);
-                rollbar.error("Something went wrong in messageDelete.js", e.stack);
+                rollbar.error("Something went wrong in messageDelete.js", e);
                 console.error(e);
             }
         });

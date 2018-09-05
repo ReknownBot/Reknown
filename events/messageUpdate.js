@@ -7,12 +7,8 @@ module.exports = {
                 async function logChannel(selectedChannel) {
                     async function messageUpdate() {
                         if (!selectedChannel) return;
-                        if (!newMessage.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES")) {
-                            if (!newMessage.guild.me.hasPermission("ADMINISTRATOR")) return;
-                        }
-                        if (!newMessage.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL")) {
-                            if (!newMessage.guild.me.hasPermission("ADMINISTRATOR")) return;
-                        }
+                        if (!newMessage.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !newMessage.guild.me.hasPermission("ADMINISTRATOR")) return;
+                        if (!newMessage.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !newMessage.guild.me.hasPermission("ADMINISTRATOR")) return;
                         //console.log('messageUpdate');
                         if (oldMessage.content === newMessage.content) return;
                         let embed = new Discord.MessageEmbed()
@@ -25,17 +21,15 @@ module.exports = {
                         selectedChannel.send(embed);
                     }
                     let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [oldMessage.guild.id])).rows[0];
-                    if (row && row.bool) {
+                    if (row && row.bool)
                         messageUpdate();
-                    }
                 }
 
                 let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [newMessage.guild.id])).rows[0];
-                if (!r2) {
+                if (!r2)
                     logChannel(newMessage.guild.channels.find(c => c.name === "action-log"));
-                } else {
+                else
                     logChannel(newMessage.guild.channels.get(r2.channelid));
-                }
 
                 // Starboard Content Update
                 if (newMessage.content || newMessage.attachments.size > 0) {
@@ -86,7 +80,7 @@ module.exports = {
                 if (!prefixRow)
                     prefix = "?";
                 else
-                    prefix = prefixRow.customPrefix;
+                    prefix = prefixRow.customprefix;
                 let regexp = new RegExp(`^<@!?${client.bot.user.id}> `);
                 prefix = newMessage.content.match(regexp) ? newMessage.content.match(regexp)[0] : (prefixRow ? prefixRow.customprefix : "?");
                 let args = newMessage.content.slice(prefix.length).split(' ');

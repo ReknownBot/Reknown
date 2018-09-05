@@ -152,7 +152,8 @@ let client = { // Creates an object client
             "welcome",
             "update",
             "autorole",
-            "invite"
+            "invite",
+            "grole"
         ]
     }
 }
@@ -368,6 +369,11 @@ client.bot.on("message", async message => { // Starts the event "message", this 
     if (!message.member)
         message.member = await message.guild.members.fetch({
             user: message.author,
+            cache: true
+        });
+    if (!message.guild.me)
+        message.guild.me = await message.guild.members.fetch({
+            user: client.bot.user,
             cache: true
         });
 

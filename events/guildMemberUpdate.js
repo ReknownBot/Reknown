@@ -5,15 +5,8 @@ module.exports = {
                 if (!newMember.guild.me.hasPermission("VIEW_AUDIT_LOG")) return;
                 async function logChannel(selectedChannel) {
                     if (!selectedChannel) return;
-                    if (!newMember.guild.me.hasPermission("SEND_MESSAGES")) return;
-                    if (!newMember.guild.me.hasPermission("VIEW_CHANNEL")) return;
-                    if (!newMember.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES")) {
-                        if (!newMember.guild.me.hasPermission("ADMINISTRATOR")) return;
-                    }
-                    if (!newMember.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL")) {
-                        if (!newMember.guild.me.hasPermission("ADMINISTRATOR")) return;
-                    }
-                    //console.log("guildMemberUpdate");
+                    if (!newMember.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !newMember.guild.me.hasPermission("ADMINISTRATOR")) return;
+                    if (!newMember.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !newMember.guild.me.hasPermission("ADMINISTRATOR")) return;
                     async function guildMemberUpdate() {
                         if (oldMember.roles.size !== newMember.roles.size) { // If there was a role change
                             let audit = await newMember.guild.fetchAuditLogs({
@@ -30,55 +23,19 @@ module.exports = {
                                 .setFooter(`Log ID: ${info.id}`);
 
                             if (oldMember.roles.size < newMember.roles.size) { // If a role(s) has been added
-                                const roleNameThingy = [];
-                                newMember.roles.forEach(r => {
-                                    roleNameThingy.push(r.name);
-                                });
-                                oldMember.roles.forEach(r => {
-                                    var thingythingy = roleNameThingy.indexOf(r.name);
-                                    roleNameThingy.splice(thingythingy, 1);
-                                });
-                                if (!roleNameThingy.toString()) return;
-
-                                const roleIDThingy = [];
-                                newMember.roles.forEach(r => {
-                                    roleIDThingy.push(r.id);
-                                });
-                                oldMember.roles.forEach(r => {
-                                    var thingythingy2 = roleIDThingy.indexOf(r.id);
-                                    roleIDThingy.splice(thingythingy2, 1);
-                                });
-                                if (!roleIDThingy.toString()) return;
+                                const roles = newMember.roles.filter(r => !oldMember.roles.has(r.id));
 
                                 embed.setTitle("Role Added")
-                                    .setColor(0x00FFFF)
-                                    .addField("Role Name", roleNameThingy)
-                                    .addField("Role ID", roleIDThingy);
-                            } else {
-                                const roleNameThingy = [];
-                                oldMember.roles.forEach(r => {
-                                    roleNameThingy.push(r.name);
-                                });
-                                newMember.roles.forEach(r => {
-                                    var thingythingy = roleNameThingy.indexOf(r.name);
-                                    roleNameThingy.splice(thingythingy, 1);
-                                });
-                                if (!roleNameThingy.toString()) return;
-
-                                const roleIDThingy = [];
-                                oldMember.roles.forEach(r => {
-                                    roleIDThingy.push(r.id);
-                                });
-                                newMember.roles.forEach(r => {
-                                    var thingythingy2 = roleIDThingy.indexOf(r.id);
-                                    roleIDThingy.splice(thingythingy2, 1);
-                                });
-                                if (!roleIDThingy.toString()) return;
+                                    .setColor(0x00FF00)
+                                    .addField("Role Name", roles.map(r => r.name).list())
+                                    .addField("Role ID", roles.map(r => r.id).list());
+                            } else { // If a role(s) has been removed
+                                const roles = oldMember.roles.filter(r => !newMember.roles.has(r.id));
 
                                 embed.setTitle("Role Removed")
-                                    .setColor(0x00FFFF)
-                                    .addField("Role Name", roleNameThingy)
-                                    .addField("Role ID", roleIDThingy);
+                                    .setColor(0xFF0000)
+                                    .addField("Role Name", roles.map(r => r.name).list())
+                                    .addField("Role ID", roles.map(r => r.id).list());
                             }
 
                             selectedChannel.send(embed);
@@ -110,60 +67,6 @@ module.exports = {
 
                             selectedChannel.send(embed);
                         }
-
-
-
-                        /*
-                        Old System
-        
-                        if (oldMember.roles !== newMember.roles) {
-                            if (oldMember.roles.size < newMember.roles.size) {
-                                const rolethingylol = [];
-                                newMember.roles.forEach(element => {
-                                    rolethingylol.push(element.name);
-                                });
-                                oldMember.roles.forEach(element => {
-                                    var thingythingy = rolethingylol.indexOf(element.name);
-                                    rolethingylol.splice(thingythingy, 1);
-                                });
-                                if (!rolethingylol.toString()) return;
-                                setTimeout(() => {
-                                    var embed = new Discord.RichEmbed()
-                                        .setTitle("Role Given")
-                                        .addField("Member:", newMember.user.tag)
-                                        .addField("Role:", rolethingylol.toString())
-                                        .setTimestamp()
-                                        .setColor(0xf4e842);
-                                    selectedChannel.send(embed);
-                                }, 100);
-                            } else {
-                                const rolethingylol = [];
-                                oldMember.roles.forEach(element => {
-                                    rolethingylol.push(element.name);
-                                });
-                                newMember.roles.forEach(element => {
-                                    var thingythingy = rolethingylol.indexOf(element.name);
-                                    rolethingylol.splice(thingythingy, 1);
-                                });
-                                if (!rolethingylol.toString()) return;
-                                setTimeout(() => {
-                                    var embed = new Discord.RichEmbed()
-                                        .setTitle("Role Removed")
-                                        .addField("Member:", newMember.user.tag)
-                                        .addField("Role:", rolethingylol.toString() ? rolethingylol.toString() : "Unknown")
-                                        .setTimestamp()
-                                        .setColor(0xff852d);
-                                    selectedChannel.send(embed);
-                                }, 100);
-                            }
-                        }
-                        if (newMember.guild.id === client.spikeGuildID) {
-                            if (newMember.id === "288831103895076867" Jyguy || newMember.id === "314872358521405442"  Cats ) {
-                                if (newMember.roles.has("439212203116199957")) return; // If user has Admin then return
-                                newMember.addRole("439212203116199957"); // Gives Admin
-                            }
-                        }
-                        */
                     }
                     let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [oldMember.guild.id])).rows[0];
                     if (row && row.bool) {
@@ -174,11 +77,12 @@ module.exports = {
                 if (!r2) { // If no row
                     logChannel(newMember.guild.channels.find(c => c.name === "action-log"));
                 } else { // If yes row
-                    logChannel(newMember.guild.channels.get(r2.channelId));
+                    logChannel(newMember.guild.channels.get(r2.channelid));
                 }
             } catch (e) {
                 let rollbar = new client.Rollbar(client.rollbarKey);
-                rollbar.error("Something went wrong in emojiDelete.js", e.stack);
+                rollbar.error("Something went wrong in emojiDelete.js", e);
+                console.log(e);
             }
         });
     }

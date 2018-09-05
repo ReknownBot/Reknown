@@ -3,9 +3,6 @@ module.exports = {
         client.bot.on("guildBanAdd", async function (guild, user) {
             try {
                 if (user === client.bot.user) return;
-                // If the bot has no perms then return
-                if (!guild.me.hasPermission("SEND_MESSAGES")) return;
-                if (!guild.me.hasPermission("VIEW_CHANNEL")) return;
 
                 // Checks if the guild has welcome messages enabled
                 let r3 = (await sql.query('SELECT * FROM toggleWelcome WHERE guildId = $1', [guild.id])).rows[0];
@@ -18,9 +15,7 @@ module.exports = {
                         if (goodbyeChannel) {
                             // If the bot does not have send messages perms in the welcome channel & does not have administrator (bypass all overwrites) then return
                             if (!guild.me.permissionsIn(goodbyeChannel).has("SEND_MESSAGES") && !guild.me.hasPermission("ADMINISTRATOR")) return;
-                            if (!guild.me.permissionsIn(goodbyeChannel).has("VIEW_CHANNEL")) {
-                                if (!guild.me.hasPermission("ADMINISTRATOR")) return;
-                            }
+                            if (!guild.me.permissionsIn(goodbyeChannel).has("VIEW_CHANNEL") && !guild.me.hasPermission("ADMINISTRATOR")) return;
                             //console.log("guildBanAdd 1");
 
                             // Creates an embed
@@ -29,9 +24,7 @@ module.exports = {
                                 .setDescription(user.tag + " has been banned from **" + guild.name + ".**")
                                 .setThumbnail(user.displayAvatarURL());
                             // Sends the embed to the goodbye channel
-                            goodbyeChannel.send(embed).catch(e => {
-                                console.log(e);
-                            });
+                            goodbyeChannel.send(embed);
                         }
                     }
                     // If it is default
@@ -41,14 +34,14 @@ module.exports = {
                         goodbyeChannel(guild.channels.get(r.channel));
                 }
 
-                // No perms; return
-                if (!guild.me.hasPermission("VIEW_AUDIT_LOG")) return;
                 // Checks if the guild has action log enabled
                 let r = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [guild.id])).rows[0];
                 if (r && r.bool) { // If they have it enabled
+                    // No perms; return
+                    if (!guild.me.hasPermission("VIEW_AUDIT_LOG")) return;
                     let audit = await guild.fetchAuditLogs({
                         limit: 1,
-                        type: 22 // Guild Ban Add, look at https://discord.js.org/#/docs/main/stable/typedef/AuditLogAction
+                        type: 22 // Guild Ban Add, look at https://discord.js.org/#/docs/main/master/typedef/AuditLogAction
                     });
                     let info = audit.entries.first();
                     let embed = new Discord.MessageEmbed()
@@ -67,25 +60,15 @@ module.exports = {
                         let selectedChannel = guild.channels.find(c => c.name === 'action-log');
                         if (selectedChannel) {
                             if (!guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !guild.me.hasPermission("ADMINISTRATOR")) return;
-                            if (!guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL")) {
-                                if (!guild.me.hasPermission("ADMINISTRATOR")) return;
-                            }
-                            //console.log("guildBanAdd 2");
-                            selectedChannel.send(embed).catch(e => {
-                                console.log(e);
-                            });
+                            if (!guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !guild.me.hasPermission("ADMINISTRATOR")) return;
+                            selectedChannel.send(embed);
                         }
                     } else { // If it is custom
-                        let selectedChannel = guild.channels.get(r2.channelId);
+                        let selectedChannel = guild.channels.get(r2.channelid);
                         if (selectedChannel) {
                             if (!guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !guild.me.hasPermission("ADMINISTRATOR")) return;
-                            if (!guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL")) {
-                                if (!guild.me.hasPermission("ADMINISTRATOR")) return;
-                            }
-                            //console.log("guildBanAdd 2");
-                            selectedChannel.send(embed).catch(e => {
-                                console.log(e);
-                            });
+                            if (!guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !guild.me.hasPermission("ADMINISTRATOR")) return;
+                            selectedChannel.send(embed);
                         }
                     }
                 }

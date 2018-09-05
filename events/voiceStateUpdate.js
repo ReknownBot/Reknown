@@ -23,8 +23,10 @@ module.exports = {
                     guild.dispatcher ? guild.dispatcher.end() : undefined;
                     oldVoice.channel.leave();
                 }
-            } catch(e) {
+            } catch (e) {
                 console.error(e);
+                let rollbar = new client.Rollbar(client.rollbarKey);
+                rollbar.error("Something went wrong in grole.js", e);
             }
         });
     }

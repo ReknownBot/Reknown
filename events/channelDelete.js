@@ -8,9 +8,6 @@ module.exports = {
 
                 if (!guild) return;
 
-                // No perms? return
-                if (!guild.me.hasPermission("VIEW_CHANNEL") || !guild.me.hasPermission("SEND_MESSAGES")) return;
-
                 // Function with the log channel
                 function logChannel(selectedChannel) {
                     // If the log channel does not exist return
@@ -30,8 +27,10 @@ module.exports = {
                         .addField("Name", channel.name, true)
                         .addField("ID", channel.id, true)
                         .addField("Topic", channel.topic ? channel.topic : "None", true)
+                        .addField("Type", channel.type, true)
                         .setColor(0xFF0000)
                         .setTimestamp();
+                    channel.parent ? embed.addField("Category", channel.parent.name, true) : null;
 
                     // Send the embed
                     selectedChannel.send(embed);
@@ -44,14 +43,14 @@ module.exports = {
                     if (!r) { // If the row is not found i.e Default log channel
                         logChannel(guild.channels.find(c => c.name === "action-log"));
                     } else { // If it is found, run the function with the custom log channel
-                        logChannel(guild.channels.get(r.channelId));
+                        logChannel(guild.channels.get(r.channelid));
                     }
                 }
             });
         } catch (e) {
             let rollbar = new client.Rollbar(client.rollbarKey);
             rollbar.error("Something went wrong in channelDelete.js", e);
-            console.error;
+            console.error(e);
         }
     }
 }

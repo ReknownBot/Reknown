@@ -2,20 +2,19 @@ module.exports = {
     func: async (client, sql, Discord) => {
         client.bot.on("roleUpdate", async (oldRole, newRole) => {
             try {
+                if (!newRole.guild.me)
+                    newRole.guild.me = await newRole.guild.members.fetch({
+                        user: client.bot.user,
+                        cache: true
+                    });
                 if (!newRole.guild.me.hasPermission("VIEW_AUDIT_LOG")) return;
                 async function logChannel(selectedChannel) {
                     if (!selectedChannel) return;
-                    if (!newRole.guild.me.hasPermission("SEND_MESSAGES")) return;
-                    if (!newRole.guild.me.hasPermission("VIEW_CHANNEL")) return;
-                    if (!newRole.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES")) {
-                        if (!newRole.guild.me.hasPermission("ADMINISTRATOR")) return;
-                    }
-                    if (!newRole.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL")) {
-                        if (!newRole.guild.me.hasPermission("ADMINISTRATOR")) return;
-                    }
-                    //console.log('roleUpdate');
+                    if (!newRole.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !newRole.guild.me.hasPermission("ADMINISTRATOR")) return;
+                    if (!newRole.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !newRole.guild.me.hasPermission("ADMINISTRATOR")) return;
                     if (oldRole === newRole || !oldRole || !newRole) return;
                     async function roleUpdate() {
+                        if (!newRole.guild.me.hasPermission("VIEW_AUDIT_LOG")) return;
                         let audit = await newRole.guild.fetchAuditLogs({
                             limit: 1,
                             type: 31
@@ -45,66 +44,33 @@ module.exports = {
                                     embed.addField("Role Name", newRole.name);
                             }
                             if (e.key === 'permissions') { // Permission Change
-                                if (oldRole.permissions !== newRole.permissions) {
+                                if (oldRole.permissions.bitfield !== newRole.permissions.bitfield) {
                                     embed.addField("Old Permission Number", oldRole.permissions.bitfield)
                                         .addField("New Permission Number", newRole.permissions.bitfield)
                                         .setDescription("[What is a permission number?](https://discordapi.com/permissions.html)");
                                 }
                             }
                         });
-                        if (embed.fields.length === 1 || embed.fields.length === 0) return;
+                        if (embed.fields.length <= 1) return;
+                        if (embed.fields.find(field => field.name === "Old Name") && embed.fields.find(field => field.name === "Role Name"))
+                            embed.fields.find(field => field.name === "Role Name") = undefined;
 
                         selectedChannel.send(embed);
-
-                        /* Old System
-    
-                        var embed = new Discord.RichEmbed();
-                        if (oldRole.position === newRole.position) {
-                            embed
-                                .setTitle("Role Edited")
-                                .addField("Old Role Name", oldRole.name ? oldRole.name : "Unknown")
-                                .addField("New Role Name", newRole.name ? newRole.name : "Unknown")
-                                .addField("Old Role Position", oldRole.position ? oldRole.position : "Unknown")
-                                .addField("New Role Position", newRole.position ? newRole.position : "Unknown")
-                                .addField("Old Role HEX Color", oldRole.hexColor ? oldRole.hexColor : "Unknown")
-                                .addField("New Role HEX Color", newRole.hexColor ? newRole.hexColor : "Unknown")
-                                .addField("Old Role Permission Number", oldRole.permissions ? oldRole.permissions : "Unknown")
-                                .addField("New Role Permission Number", newRole.permissions ? newRole.permissions : "Unknown")
-                                .setColor(0x00FFFF)
-                                .setTimestamp();
-                        } else if (oldRole.name !== newRole.name || oldRole.permissions !== newRole.permissions || oldRole.hexColor !== newRole.hexColor) {
-                            embed
-                                .setTitle("Role Edited")
-                                .addField("Old Role Position", oldRole.position ? oldRole.position : "Unknown")
-                                .addField("New Role Position", newRole.position ? newRole.position : "Unknown")
-                                .addField("Old Role Name", oldRole.name ? oldRole.name : "Unknown")
-                                .addField("New Role Name", newRole.name ? newRole.name : "Unknown")
-                                .addField("Old Role HEX Color", oldRole.hexColor ? oldRole.hexColor : "Unknown")
-                                .addField("New Role HEX Color", newRole.hexColor ? newRole.hexColor : "Unknown")
-                                .addField("Old Role Permission Number", oldRole.permissions ? oldRole.permissions : "Unknown")
-                                .addField("New Role Permission Number", newRole.permissions ? newRole.permissions : "Unknown")
-                                .setColor(0x00FFFF)
-                                .setTimestamp();
-                        } else return;
-                        selectedChannel.send("", { embed: embed });
-                        */
                     }
                     let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [newRole.guild.id])).rows[0];
-                    if (row && row.bool) {
+                    if (row && row.bool)
                         roleUpdate();
-                    }
                 }
 
                 let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [newRole.guild.id])).rows[0];
-                if (!r2) {
+                if (!r2)
                     logChannel(newRole.guild.channels.find(c => c.name === "action-log"));
-                } else {
-                    logChannel(newRole.guild.channels.get(r2.channelId));
-                }
+                else
+                    logChannel(newRole.guild.channels.get(r2.channelid));
             } catch (e) {
                 let rollbar = new client.Rollbar(client.rollbarKey);
                 rollbar.error("Something went wrong in roleUpdate.js", e);
-                console.log(e);
+                console.error(e);
             }
         });
     }
