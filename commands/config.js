@@ -266,10 +266,10 @@ module.exports = {
                         let row = (await sql.query(`SELECT * FROM prefix WHERE guildId = '${message.guild.id}'`)).rows[0];
                         if (row && row.customPrefix === prefix) return client.editMsg(sMessage, "This server's prefix is already set to `" + prefix + "`!", message);
                         if (row) {
-                            sql.query(`UPDATE prefix SET customPrefix = '${client.escape(prefix)}' WHERE guildId = '${message.guild.id}'`);
+                            sql.query(`UPDATE prefix SET customPrefix = $1 WHERE guildId = $2`, [prefix, message.guild.id]);
                             client.editMsg(sMessage, `Successfully updated \`prefix\` to \`${prefix}\`.`, message);
                         } else {
-                            sql.query(`INSERT INTO prefix (guildId, customPrefix) VALUES ('${message.guild.id}', '${client.escape(prefix)}')`);
+                            sql.query(`INSERT INTO prefix (guildId, customPrefix) VALUES ($1, $2)`, [message.guild.id, prefix]);
                             client.editMsg(sMessage, `Successfully updated \`prefix\` to \`${prefix}\`.`, message);
                         }
                     } else if (option === options[8]) { // cooldownmsg
