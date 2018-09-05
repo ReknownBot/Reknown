@@ -27,6 +27,7 @@ module.exports = {
                         selectedMember = message.guild.members.get(args[1] ? args[1].replace(/[<>@&!]/g, "") : null) || await client.bot.users.fetch(args[1] ? args[1].replace(/[<>@&!]/g, "") : null);
                         if (!selectedMember) return client.editMsg(sMessage, "Please provide a valid mention or an ID of a user.", message);
                         if (selectedMember === message.member) return client.editMsg(sMessage, "You cannot ban yourself!", message);
+                        if (selectedMember.user ? selectedMember.user : selectedMember === client.bot.user) return client.editMsg(sMessage, "I cannot ban myself!", message);
                         if (selectedMember.user) { // If it's a member
                             if (selectedMember.roles.highest.position >= message.member.roles.highest.position && message.guild.owner !== message.member) return client.editMsg(sMessage, "You cannot ban that member! (Insufficient Role Position)", message);
                         }
