@@ -4,8 +4,8 @@ module.exports = {
         try {
             async function rulescmd(sMessage) {
                 if (!args[1]) {
-                    let r = await sql.all(`SELECT * FROM rules WHERE guildId = ${message.guild.id}`);
-                    if (Object.values(r).length === 0) return client.editMsg(sMessage, 'The guild does not have custom rules yet!', message);
+                    let { rows: r } = await sql.query('SELECT * FROM rules WHERE guildId = $1', [message.guild.id]);
+                    if (r.length === 0) return client.editMsg(sMessage, 'The guild does not have custom rules yet!', message);
 
                     let pages = [];
                     let page = 1;
@@ -96,7 +96,7 @@ module.exports = {
                     let i = 0;
                     let prom = new Promise(resolve => {
                         message.member.roles.forEach(async role => {
-                            let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "rules", "misc"]);
+                            let row = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, "rules", "misc"])).rows[0];
                             if ((row && row.bool) || message.member === message.guild.owner)
                                 bool2 = true;
                             i++;
@@ -109,7 +109,7 @@ module.exports = {
                     let rule = args.slice(2).join(' ');
                     if (!rule) return client.editMsg(sMessage, "You have to supply a rule for me to add!", message);
                     if (rule.length > 1000) return client.editMsg(sMessage, "The rule may not exceed 1000 characters!", message);
-                    sql.run(`INSERT INTO rules (guildId, rule) VALUES (?, ?)`, [message.guild.id, rule]);
+                    sql.query('INSERT INTO rules (guildId, rule) VALUES ($1, $2)', [message.guild.id, rule]);
                     client.editMsg(sMessage, "Successfully added a rule.", message);
                 } else if (args[1].toLowerCase() === 'remove') {
                     // Checks for the custom permission
@@ -117,7 +117,7 @@ module.exports = {
                     let i = 0;
                     let prom = new Promise(resolve => {
                         message.member.roles.forEach(async role => {
-                            let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "rules", "misc"]);
+                            let row = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, "rules", "misc"])).rows[0];
                             if ((row && row.bool) || message.member === message.guild.owner)
                                 bool2 = true;
                             i++;
@@ -129,9 +129,9 @@ module.exports = {
                     if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.rules` permission.", message);
                     let rule = args.slice(2).join(' ');
                     if (!rule) return client.editMsg(sMessage, "You have to supply a rule for me to remove!", message);
-                    let r = await sql.get(`SELECT rule FROM rules WHERE guildId = ${message.guild.id} AND rule = "${rule.trim()}"`);
+                    let r = (await sql.query('SELECT rule FROM rules WHERE guildId = $1 AND rule = $2', [message.guild.id, rule.trim()])).rows[0];
                     if (!r) return client.editMsg(sMessage, "That rule does not exist! (Make sure it's EXACTLY the same.)", message);
-                    sql.run(`DELETE FROM rules WHERE guildId = ${message.guild.id} AND rule = "${rule}"`);
+                    sql.query('DELETE FROM rules WHERE guildId = $1 AND rule = $2', [message.guild.id, rule]);
                     client.editMsg(sMessage, "Successfully deleted the rule `" + rule + "`.", message);
                 } else if (args[1].toLowerCase() === 'clear') {
                     // Checks for the custom permission
@@ -139,7 +139,7 @@ module.exports = {
                     let i = 0;
                     let prom = new Promise(resolve => {
                         message.member.roles.forEach(async role => {
-                            let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "rules", "misc"]);
+                            let row = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, "rules", "misc"])).rows[0];
                             if ((row && row.bool) || message.member === message.guild.owner)
                                 bool2 = true;
                             i++;
@@ -149,10 +149,10 @@ module.exports = {
                     });
                     await prom;
                     if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.rules` permission.", message);
-                    let rows = await sql.all(`SELECT * FROM rules WHERE guildId = ${message.guild.id}`);
+                    let { rows } = await sql.query('SELECT * FROM rules WHERE guildId = $1', [message.guild.id]);
                     if (Object.values(rows).length === 0) return client.editMsg(sMessage, "This guild does not have any custom rules!", message);
                     rows.forEach((r) => {
-                        sql.run(`DELETE FROM rules WHERE guildId = ${message.guild.id} AND rule = "${r.rule}"`);
+                        sql.query('DELETE FROM rules WHERE guildId = $1 AND rule = $2', [message.guild.id, r.rule]);
                     });
                     client.editMsg(sMessage, "Cleared all the rules.", message);
                 } else {

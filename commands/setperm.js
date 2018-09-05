@@ -8,7 +8,7 @@ module.exports = {
                     let i = 0;
                     let prom = new Promise((resolve, reject) => {
                         message.member.roles.forEach(async role => {
-                            let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "setperm", "misc"]);
+                            let row = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, "setperm", "misc"])).rows[0];
                             if ((row && row.bool) || message.member === message.guild.owner)
                                 bool3 = true;
                             i++;
@@ -40,11 +40,11 @@ module.exports = {
                         for (let key in client.permissions) {
                             if (client.permissions.hasOwnProperty(key)) {
                                 client.permissions[key].forEach(async p => {
-                                    let row2 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pCategory = ? AND pName = ?', [role.id, key, p]);
+                                    let row2 = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pCategory = $2 AND pName = $3', [role.id, key, p])).rows[0];
                                     if (row2) {
-                                        sql.run('UPDATE permissions SET bool = ? WHERE roleID = ? AND pCategory = ? AND pName = ?', [bool2, role.id, key, p]);
+                                        sql.query('UPDATE permissions SET bool = $1 WHERE roleID = $2 AND pCategory = $3 AND pName = $4', [bool2, role.id, key, p]);
                                     } else {
-                                        sql.run('INSERT INTO permissions (roleID, pCategory, pName, bool) VALUES (?, ?, ?, ?)', [role.id, key, p, bool2]);
+                                        sql.query('INSERT INTO permissions (roleID, pCategory, pName, bool) VALUES ($1, $2, $3, $4)', [role.id, key, p, bool2]);
                                     }
                                 });
                             }
@@ -52,23 +52,23 @@ module.exports = {
                         client.editMsg(sMessage, `Successfully changed all of ${role.name}'s permissions to ${bool2 ? "true" : "false"}.`, message);
                     } else if (name === true) {
                         client.permissions[category].forEach(async perm => {
-                            let row2 = await sql.get(`SELECT * FROM permissions WHERE roleID = ? AND pCategory = ? AND pName = ?`, [role.id, category, perm]);
+                            let row2 = (await sql.query(`SELECT * FROM permissions WHERE roleID = $1 AND pCategory = $2 AND pName = $3`, [role.id, category, perm])).rows[0];
                             if (row2) {
-                                sql.run("UPDATE permissions SET bool = ? WHERE roleID = ? AND pCategory = ? AND pName = ?", [bool2, role.id, category, perm]);
+                                sql.query("UPDATE permissions SET bool = $1 WHERE roleID = $2 AND pCategory = $3 AND pName = $4", [bool2, role.id, category, perm]);
                             } else {
-                                sql.run("INSERT INTO permissions (roleID, pCategory, pName, bool) VALUES (?, ?, ?, ?)", [role.id, category, perm, bool2]);
+                                sql.query("INSERT INTO permissions (roleID, pCategory, pName, bool) VALUES ($1, $2, $3, $4)", [role.id, category, perm, bool2]);
                             }
                         });
                         client.editMsg(sMessage, `Successfully changed ${role.name}'s ${category} permissions to ${bool2 ? "true" : 'false'}.`, message);
                     } else {
-                        let row2 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pCategory = ? AND pName = ?', [role.id, category, name]);
+                        let row2 = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pCategory = $2 AND pName = $3', [role.id, category, name])).rows[0];
                         if (!row2) {
                             if (bool2 === 0) return client.editMsg(sMessage, "That role is already set to that!", message);
-                            sql.run("INSERT INTO permissions (roleID, pCategory, pName, bool) VALUES (?, ?, ?, ?)", [role.id, category, name, bool2]);
+                            sql.query("INSERT INTO permissions (roleID, pCategory, pName, bool) VALUES ($1, $2, $3, $4)", [role.id, category, name, bool2]);
                             client.editMsg(sMessage, "Successfully updated that role's permission.", message);
                         } else {
                             if (row2.bool === bool2) return client.editMsg(sMessage, "That role is already set to that!", message);
-                            sql.run("UPDATE permissions SET bool = ? WHERE roleID = ? AND pCategory = ? AND pName = ?", [bool2, role.id, category, name]);
+                            sql.query("UPDATE permissions SET bool = $1 WHERE roleID = $2 AND pCategory = $3 AND pName = $4", [bool2, role.id, category, name]);
                             client.editMsg(sMessage, "Successfully updated that role's permission.", message);
                         }
                     }

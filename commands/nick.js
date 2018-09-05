@@ -8,7 +8,7 @@ module.exports = {
           let i = 0;
           let prom = new Promise(resolve => {
             message.member.roles.forEach(async role => {
-              let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "nick", "mod"]);
+              let row = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, "nick", "mod"])).rows[0];
               if ((row && row.bool) || message.member === message.guild.owner)
                 bool2 = true;
               i++;

@@ -8,7 +8,7 @@ module.exports = {
           let i = 0;
           let prom = new Promise(resolve => {
             message.member.roles.forEach(async role => {
-              let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "unmute", "mod"]);
+              let row = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, "unmute", "mod"])).rows[0];
               if ((row && row.bool) || message.member === message.guild.owner)
                 bool2 = true;
               i++;
@@ -49,9 +49,9 @@ module.exports = {
           person.roles.remove(selectedRole.id, "Unmute");
           client.editMsg(sMessage, "Successfully unmuted " + person.user.tag + ".", message);
 
-          let r = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${message.guild.id}`);
+          let r = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [message.guild.id])).rows[0];
           // Removes the SQLite row
-          sql.run(`DELETE FROM mute WHERE guildId = ${message.guild.id} AND memberId = ${person.id}`);
+          sql.query('DELETE FROM mute WHERE guildId = $1 AND memberId = $2', [message.guild.id, person.id]);
           async function logChannel(selectedChannel) {
             async function unmuteThingy() {
               if (!selectedChannel) return;
@@ -66,10 +66,10 @@ module.exports = {
               selectedChannel.send(embed); // Action Log
             }
 
-            let row = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${message.guild.id}`);
+            let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1')).rows[0];
             if (!row) {
               unmuteThingy();
-              sql.run("INSERT INTO actionlog (guildId, bool) VALUES (?, ?)", [message.guild.id, 1]);
+              sql.query("INSERT INTO actionlog (guildId, bool) VALUES ($1, $2)", [message.guild.id, 1]);
             } else {
               if (row.bool === 1)
                 unmuteThingy();

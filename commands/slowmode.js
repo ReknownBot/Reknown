@@ -8,7 +8,7 @@ module.exports = {
                 let i = 0;
                 let prom = new Promise(resolve => {
                     message.member.roles.forEach(async role => {
-                        let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "set", "slowmode"]);
+                        let row = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, "set", "slowmode"])).rows[0];
                         if ((row && row.bool) || message.member === message.guild.owner)
                             bool2 = true;
                         i++;
@@ -19,7 +19,7 @@ module.exports = {
                 await prom;
                 if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `slowmode.set` permission.", message);
                 if (!args[1]) { // No Arguments (Should not be mistaken as invalid)
-                    let r = await sql.get('SELECT * FROM slowmode WHERE guildId = ? AND channelId = ?', [message.guild.id, message.channel.id]);
+                    let r = (await sql.query('SELECT * FROM slowmode WHERE guildId = $1 AND channelId = $2', [message.guild.id, message.channel.id])).rows[0];
                     if (!r) {
                         client.editMsg(sMessage, "This channel does not have a slowmode set! Use `" + PREFIX + "slowmode set <seconds>` to set one.", message);
                     } else {
@@ -32,18 +32,18 @@ module.exports = {
                     // If it's lower than one / larger than 30
                     if (cooldown > 30 || cooldown < 1) return client.editMsg(sMessage, "The cooldown has to be in between 1 and 30!", message);
                     // Gets slowmode
-                    let r = await sql.get('SELECT * FROM slowmode WHERE guildId = ? AND channelId = ?', [message.guild.id, message.channel.id]);
+                    let r = (await sql.query('SELECT * FROM slowmode WHERE guildId = $1 AND channelId = $2', [message.guild.id, message.channel.id])).rows[0];
                     if (!r) { // If the row is not found
-                        sql.run('INSERT INTO slowmode (guildId, cooldown, channelId) VALUES (?, ?, ?)', [message.guild.id, cooldown, message.channel.id]);
+                        sql.query('INSERT INTO slowmode (guildId, cooldown, channelId) VALUES ($1, $2, $3)', [message.guild.id, cooldown, message.channel.id]);
                         client.editMsg(sMessage, `Successfully set the cooldown of this channel to ${cooldown}.`, message);
                     } else { // Else
-                        sql.run('UPDATE slowmode SET cooldown = ? WHERE guildId = ? AND channelId = ?', [cooldown, message.guild.id, message.channel.id]);
+                        sql.query('UPDATE slowmode SET cooldown = $1 WHERE guildId = $2 AND channelId = $3', [cooldown, message.guild.id, message.channel.id]);
                         client.editMsg(sMessage, `Successfully updated the cooldown of this channel to ${cooldown}.`, message);
                     }
                 } else if (args[1].toLowerCase() === 'clear') { // Clear slowmode
-                    let r = await sql.get('SELECT * FROM slowmode WHERE guildId = ? AND channelId = ?', [message.guild.id, message.channel.id]);
+                    let r = (await sql.query('SELECT * FROM slowmode WHERE guildId = $1 AND channelId = $2', [message.guild.id, message.channel.id])).rows[0];
                     if (r) {
-                        sql.run('DELETE FROM slowmode WHERE guildId = ? AND channelId = ?', [message.guild.id, message.channel.id]);
+                        sql.query('DELETE FROM slowmode WHERE guildId = $1 AND channelId = $2', [message.guild.id, message.channel.id]);
                         client.editMsg(sMessage, "Successfully cleared the slowmode for this channel.", message);
                     } else {
                         client.editMsg(sMessage, 'There is no slowmode set for this channel!', message);

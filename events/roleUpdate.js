@@ -89,13 +89,13 @@ module.exports = {
                         selectedChannel.send("", { embed: embed });
                         */
                     }
-                    let row = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${oldRole.guild.id}`);
+                    let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [newRole.guild.id])).rows[0];
                     if (row && row.bool) {
                         roleUpdate();
                     }
                 }
 
-                let r2 = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${newRole.guild.id}`);
+                let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [newRole.guild.id])).rows[0];
                 if (!r2) {
                     logChannel(newRole.guild.channels.find(c => c.name === "action-log"));
                 } else {

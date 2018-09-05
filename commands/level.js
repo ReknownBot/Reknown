@@ -6,7 +6,7 @@ module.exports = {
                     async function thingy() {
                         let optionalMember = message.guild.members.get(args[1] ? args[1].replace(/[<>@&!]/g, "") : null);
                         if (!optionalMember) {
-                            let row = await sql.get(`SELECT * FROM scores WHERE userID = ? AND guildID = ?`, [message.author.id, message.guild.id]);
+                            let row = (await sql.query('SELECT * FROM scores WHERE userID = $1 AND guildID = $2', [message.author.id, message.guild.id])).rows[0];
                             let embed = new Discord.MessageEmbed()
                                 .setTitle(`Your Leveling Info`)
                                 .addField("Level", row ? row.level : '0', true)
@@ -17,7 +17,7 @@ module.exports = {
                                 .setFooter(`Requested by ${message.author.tag}`);
                             client.editMsg(sMessage, embed, message);
                         } else {
-                            let row = await sql.get(`SELECT * FROM scores WHERE userID = ? AND guildID = ?`, [optionalMember.id, message.guild.id]);
+                            let row = (await sql.query('SELECT * FROM scores WHERE userID = $1 AND guildID = $2', [optionalMember.id, message.guild.id])).rows[0];
                             let embed = new Discord.MessageEmbed()
                                 .setTitle(`${optionalMember.user.tag}'s Leveling Info`)
                                 .addField("Level", row ? row.level : "0", true)
@@ -30,7 +30,7 @@ module.exports = {
                         }
                     }
 
-                    let row = await sql.get(`SELECT * FROM toggleLevel WHERE guildId = ${message.guild.id}`);
+                    let row = (await sql.query('SELECT * FROM toggleLevel WHERE guildId = $1', [message.guild.id])).rows[0];
                     if (row && row.bool) {
                         thingy();
                     } else {

@@ -8,7 +8,7 @@ module.exports = {
           let i = 0;
           let prom = new Promise(resolve => {
             message.member.roles.forEach(async role => {
-              let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "mute", "mod"]);
+              let row = (await sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, "mute", "mod"])).rows[0];
               if ((row && row.bool) || message.member === message.guild.owner)
                 bool2 = true;
               i++;
@@ -79,12 +79,12 @@ module.exports = {
                     let rollbar = new client.Rollbar(client.rollbarKey);
                     rollbar.error("Something went wrong in mute.js", e);
                   });
-                let r = await sql.get(`SELECT * FROM mute WHERE guildId = ${message.guild.id} AND memberId = ${person.id} AND randomNum = ${randomNum}`);
+                let r = (await sql.query('SELECT * FROM mute WHERE guildId = $1 AND memberId = $2 AND randomNum = $3', [message.guild.id, person.id, randomNum])).rows[0];
                 if (r)
-                  sql.run(`DELETE FROM mute WHERE guildId = ${message.guild.id} AND memberId = ${person.id} AND randomNum = ${randomNum}`);
-                let r2 = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${message.guild.id}`);
+                  sql.query('DELETE FROM mute WHERE guildId = $1 AND memberId = $2 AND randomNum = $3', [message.guild.id, person.id, randomNum]);
+                let r2 = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [message.guild.id])).rows[0];
                 if (!r2 || r2.bool === 1) {
-                  let r3 = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${message.guild.id}`);
+                  let r3 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [message.guild.id])).rows[0];
                   let embed = new Discord.MessageEmbed()
                     .setTitle("Member Unmuted")
                     .addField("Member", person.user.tag)
@@ -116,7 +116,7 @@ module.exports = {
                   .setColor(0x9A4B32);
 
                 // Action Log channel
-                let r = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${message.guild.id}`);
+                let r = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [message.guild.id])).rows[0];
                 async function logChannel(selectedChannel) {
                   if (selectedChannel) {
                     if (message.guild.me.hasPermission("ADMINISTRATOR") || (selectedChannel.permissionsFor(message.guild.me).has("SEND_MESSAGES") && selectedChannel.permissionsFor(message.guild.me).has("VIEW_CHANNEL")))
@@ -133,15 +133,15 @@ module.exports = {
               }
 
               // Checks if it's enabled
-              let row = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${message.guild.id}`);
+              let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [message.guild.id])).rows[0];
               if (!row) {
-                sql.run("INSERT INTO actionlog (guildId, bool) VALUES (?, ?)", [message.guild.id, 1]);
+                sql.query("INSERT INTO actionlog (guildId, bool) VALUES ($1, $2)", [message.guild.id, 1]);
                 muteLog();
               } else {
                 if (row.bool === 1)
                   muteLog();
               }
-              sql.run("INSERT INTO mute (guildId, memberId, randomNum) VALUES (?, ?, ?)", [message.guild.id, person.id, randomNum]);
+              sql.query("INSERT INTO mute (guildId, memberId, randomNum) VALUES ($1, $2, $3)", [message.guild.id, person.id, randomNum]);
               client.editMsg(sMessage, `Successfully muted ${person}.`, message);
             } else { // If there is a reason
               // Mutes the member
@@ -152,12 +152,12 @@ module.exports = {
                 // Removes the role after a certain amount of time
                 if (person)
                   person.roles.remove(roleidthingy, "Auto Unmute");
-                let r = await sql.get(`SELECT * FROM mute WHERE guildId = ${message.guild.id} AND memberId = ${person.id} AND randomNum = ${randomNum}`);
+                let r = (await sql.query('SELECT * FROM mute WHERE guildId = $1 AND memberId = $2 AND randomNum = $3', [message.guild.id, person.id, randomNum])).rows[0];
                 if (r)
-                  sql.run(`DELETE FROM mute WHERE guildId = ${message.guild.id} AND memberId = ${person.id} AND randomNum = ${randomNum}`);
-                let r2 = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${message.guild.id}`);
+                  sql.query('DELETE FROM mute WHERE guildId = $1 AND memberId = $2 AND randomNum = $3', [message.guild.id, person.id, randomNum]);
+                let r2 = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [message.guild.id])).rows[0];
                 if (!r2 || r2.bool === 1) {
-                  let r3 = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${message.guild.id}`);
+                  let r3 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [message.guild.id])).rows[0];
                   let embed = new Discord.MessageEmbed()
                     .setTitle("Member Unmuted")
                     .addField("Member", person.user.tag)
@@ -190,7 +190,7 @@ module.exports = {
                   .setColor(0x9A4B32);
 
                 // Action Log channel
-                let r = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${message.guild.id}`);
+                let r = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [message.guild.id])).rows[0];
 
                 function logChannel(selectedChannel) {
                   if (selectedChannel) {
@@ -208,15 +208,15 @@ module.exports = {
               }
 
               // Checks if it's enabled
-              let row = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${message.guild.id}`);
+              let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [message.guild.id])).rows[0];
               if (!row) {
-                sql.run("INSERT INTO actionlog (guildId, bool) VALUES (?, ?)", [message.guild.id, 1]);
+                sql.query("INSERT INTO actionlog (guildId, bool) VALUES ($1, $2)", [message.guild.id, 1]);
                 muteLog();
               } else {
                 if (row.bool === 1)
                   muteLog();
               }
-              sql.run("INSERT INTO mute (guildId, memberId, randomNum) VALUES (?, ?, ?)", [message.guild.id, person.id, randomNum]);
+              sql.query("INSERT INTO mute (guildId, memberId, randomNum) VALUES ($1, $2, $3)", [message.guild.id, person.id, randomNum]);
               client.editMsg(sMessage, `Successfully muted ${person} for ${optionalReason}`, message);
             }
           }, 1000);

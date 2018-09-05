@@ -3,7 +3,7 @@ module.exports = {
         client.bot.on("guildBanRemove", async (guild, user) => {
             try {
                 if (!guild.me.hasPermission("VIEW_AUDIT_LOG")) return;
-                let r = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${guild.id}`);
+                let r = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [guild.id])).rows[0];
                 async function logChannel(selectedChannel) {
                     if (!selectedChannel) return;
                     if (!guild.me.hasPermission("SEND_MESSAGES")) return;
@@ -43,7 +43,7 @@ module.exports = {
                         selectedChannel.send(embed);
                         */
                     }
-                    let row = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${guild.id}`);
+                    let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [guild.id])).rows[0];
                     if (row && row.bool) {
                         guildBanRemove();
                     }

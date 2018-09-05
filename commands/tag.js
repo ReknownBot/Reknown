@@ -17,7 +17,7 @@ module.exports = {
                         if (!args[2]) return client.editMsg(sMessage, "You have to put a tag name!", message);
                         let tagName = args.slice(2).join(' ');
                         if (tagName.length > 49) return client.editMsg(sMessage, "Please keep the tag name under 50 characters.", message);
-                        let row = await sql.get(`SELECT * FROM usertag WHERE tagname = ?`, [tagName]);
+                        let row = (await sql.query(`SELECT * FROM usertag WHERE tagname = '${client.escape(tagName)}'`)).rows[0];
                         if (row) return client.editMsg(sMessage, `You already have a tag named \`${tagName}\`!`, message);
                         message.channel.send("What should the tag's content be? You can also say `cancel` to abort the action.");
                         const filter = (m) => m.author.id === message.author.id && m.channel.id === message.channel.id;
@@ -28,7 +28,7 @@ module.exports = {
                             collector.stop();
                             if (!collected.content) return client.editMsg(sMessage, ":x:, Please send actual characters.", message);
                             if (collected.content.toLowerCase() === "cancel") return client.editMsg(sMessage, ":ok_hand:, Cancelled Action.", message);
-                            sql.run("INSERT INTO usertag (userID, tagcontent, tagname) VALUES (?, ?, ?)", [message.author.id, collected.content, tagName]);
+                            sql.query(`INSERT INTO usertag (userID, tagcontent, tagname) VALUES ('${message.author.id}', '${client.escape(collected.content)}', '${client.escape(tagName)}')`);
                             client.editMsg(sMessage, "Successfully added a tag.", message);
                         });
 
@@ -39,9 +39,9 @@ module.exports = {
                         if (!args[2]) return client.editMsg(sMessage, "You have to put a tag name for me to remove!", message);
                         let tagName = args.slice(2).join(' ');
                         if (tagName.length > 49) return client.editMsg(sMessage, "Tag names has to be less than 50 characters!", message);
-                        let row = await sql.get(`SELECT * FROM usertag WHERE tagname = ?`, [tagName]);
+                        let row = (await sql.query(`SELECT * FROM usertag WHERE tagname = '${client.escape(tagName)}'`)).rows[0];
                         if (!row) return client.editMsg(sMessage, "That tag does not exist!", message);
-                        sql.run(`DELETE FROM usertag WHERE tagname = ?`, [tagName]);
+                        sql.query(`DELETE FROM usertag WHERE tagname = '${client.escape(tagName)}'`);
                         client.editMsg(sMessage, "Successfully removed a tag.", message);
                     } else if (choices[2] === choice) { // Guildadd
                         // Checks for the custom permission
@@ -49,7 +49,7 @@ module.exports = {
                         let i = 0;
                         let prom = new Promise(resolve => {
                             message.member.roles.forEach(async role => {
-                                let row = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "edit", "tag"]);
+                                let row = (await sql.query(`SELECT * FROM permissions WHERE roleID = '${role.id}' AND pName = 'edit' AND pCategory = 'tag'`)).rows[0];
                                 if ((row && row.bool) || message.member === message.guild.owner)
                                     bool2 = true;
                                 i++;
@@ -62,7 +62,7 @@ module.exports = {
                         if (!args[2]) return client.editMsg(sMessage, "You have to put a tag name!", message);
                         let tagName = args.slice(2).join(' ');
                         if (tagName.length > 49) return client.editMsg(sMessage, "Please keep the tag name under 50 characters.", message);
-                        let row2 = await sql.get(`SELECT * FROM guildtag WHERE tagname = ?`, [tagName]);
+                        let row2 = (await sql.query(`SELECT * FROM guildtag WHERE tagname = '${client.escape(tagName)}'`)).rows[0];
                         if (row2) return client.editMsg(sMessage, `The guild already have a tag named \`${tagName}\`!`, message);
                         message.channel.send("What should the tag's content be? You can also say `cancel` to abort the action.");
                         const filter = (m) => m.author.id === message.author.id && m.channel.id === message.channel.id;
@@ -73,7 +73,7 @@ module.exports = {
                             collector.stop();
                             if (!collected.content) return client.editMsg(sMessage, ":x:, Please send actual characters.", message);
                             if (collected.content.toLowerCase() === "cancel") return client.editMsg(sMessage, ":ok_hand:, Cancelled Action.", message);
-                            sql.run("INSERT INTO guildtag (guildID, tagcontent, tagname) VALUES (?, ?, ?)", [message.guild.id, collected.content, tagName]);
+                            sql.query(`INSERT INTO guildtag (guildID, tagcontent, tagname) VALUES ('${message.guild.id}', '${client.escape(collected.content)}', '${client.escape(tagName)}')`);
                             client.editMsg(sMessage, "Successfully added a tag.", message);
                         });
 
@@ -86,7 +86,7 @@ module.exports = {
                         let i = 0;
                         let prom = new Promise(resolve => {
                             message.member.roles.forEach(async role => {
-                                let row2 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "edit", "tag"]);
+                                let row2 = (await sql.query(`SELECT * FROM permissions WHERE roleID = '${role.id}' AND pName = 'edit' AND pCategory = 'tag'`)).rows[0];
                                 if ((row2 && row2.bool) || message.member === message.guild.owner)
                                     bool2 = true;
                                 i++;
@@ -99,23 +99,23 @@ module.exports = {
                         if (!args[2]) return client.editMsg(sMessage, "You have to put a tag name for me to remove!", message);
                         let tagName = args.slice(2).join(' ');
                         if (tagName.length > 49) return client.editMsg(sMessage, "Tag names has to be less than 50 characters!", message);
-                        let row = await sql.get(`SELECT * FROM guildtag WHERE tagname = ?`, [tagName]);
+                        let row = (await sql.query(`SELECT * FROM guildtag WHERE tagname = '${client.escape(tagName)}'`)).rows[0];
                         if (!row) return client.editMsg(sMessage, "That tag does not exist!", message);
-                        sql.run(`DELETE FROM guildtag WHERE tagname = ?`, [tagName]);
+                        sql.query(`DELETE FROM guildtag WHERE tagname = '${client.escape(tagName)}'`);
                         client.editMsg(sMessage, "Successfully removed a guild tag.", message);
                     } else if (choices[4] === choice) { // Show
                         if (!args[2]) return client.editMsg(sMessage, "You have to put a tag name for me to display!", message);
                         let tagName = args.slice(2).join(' ');
-                        let userTag = await sql.get("SELECT * FROM usertag WHERE tagname = ?", [tagName]);
+                        let userTag = (await sql.query(`SELECT * FROM usertag WHERE tagname = '${client.escape(tagName)}'`)).rows[0];
                         if (!userTag) {
-                            let guildTag = await sql.get("SELECT * FROM guildtag WHERE tagname = ?", [tagName]);
+                            let guildTag = (await sql.query(`SELECT * FROM guildtag WHERE tagname = '${client.escape(tagName)}'`)).rows[0];
                             if (!guildTag) return client.editMsg(sMessage, "That tag does not exist!", message);
                             // Checks for the custom permission
                             let bool2 = false;
                             let i = 0;
                             let prom = new Promise(resolve => {
                                 message.member.roles.forEach(async role => {
-                                    let row2 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "view", "tag"]);
+                                    let row2 = (await sql.query(`SELECT * FROM permissions WHERE roleID = '${role.id}' AND pName = 'view' AND pCategory = 'tag'`)).rows[0];
                                     if ((row2 && row2.bool) || message.member === message.guild.owner)
                                         bool2 = true;
                                     i++;

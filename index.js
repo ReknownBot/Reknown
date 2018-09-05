@@ -304,13 +304,15 @@ for (i = 0; i < client.eventList.length; i++) { // Creates a loop
     }
 }
 
-client.bot.on("ready", async () => { // Starts the event "ready", this is executed when the bot turns online
+client.bot.on("ready", async () => { // Starts the event "ready", this is executed when the bot is ready
     console.log("I am ready!"); // sends a message to the log
-    client.bot.user.setActivity(`${client.bot.guilds.size} Servers`, { // Sets the activity for the bot
+    client.bot.user.setActivity(`${client.bot.guilds.size} Servers`, {
         type: "WATCHING"
     });
 
     await sql.connect();
+    await sql.query("DROP TABLE toggleLevel");
+    await sql.query("CREATE TABLE toggleLevel (guildId TEXT, bool INTEGER)");
 
     sql.query('DELETE FROM mute');
 });

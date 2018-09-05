@@ -3,7 +3,7 @@ module.exports = {
         client.bot.on("emojiCreate", async emoji => {
             try {
                 if (!emoji.guild.me.hasPermission("VIEW_AUDIT_LOG")) return;
-                let r = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${emoji.guild.id}`);
+                let r = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [emoji.guild.id])).rows[0];
                 async function logChannel(selectedChannel) {
                     if (!selectedChannel) return;
                     if (!emoji.guild.me.hasPermission("SEND_MESSAGES")) return;
@@ -42,7 +42,7 @@ module.exports = {
                         selectedChannel.send(embed);
                         */
                     }
-                    let row = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${emoji.guild.id}`);
+                    let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [emoji.guild.id])).rows[0];
                     if (row && row.bool) {
                         emojiCreate();
                     }

@@ -10,10 +10,10 @@ module.exports = {
                 if (!member.guild.me.hasPermission("VIEW_CHANNEL")) return;
 
                 // Checks if the guild has welcome messages enabled
-                let r3 = await sql.get(`SELECT * FROM toggleWelcome WHERE guildId = ${member.guild.id}`);
+                let r3 = (await sql.query('SELECT * FROM toggleWelcome WHERE guildId = $1', [member.guild.id])).rows[0];
                 if (r3 && r3.bool) {
                     // Gets the goodbye channel for the guild
-                    let r = await sql.get(`SELECT * FROM welcomeChannel WHERE guildId = ${member.guild.id}`);
+                    let r = await (sql.query('SELECT * FROM welcomeChannel WHERE guildId = $1', [member.guild.id])).rows[0];
                     // This is for the goodbye channel
                     async function goodbyeChannel(goodbyeChannel) {
                         // If the channel exists
@@ -37,7 +37,7 @@ module.exports = {
                             }
 
                             // Gets the goodbye message for the guild
-                            let r2 = await sql.get(`SELECT * FROM goodbyeMessages WHERE guildId = ${member.guild.id}`);
+                            let r2 = (await sql.query('SELECT * FROM goodbyeMessages WHERE guildId = $1', [member.guild.id])).rows[0];
                             if (!r2) { // If the row is not found (i.e no custom goodbye message)
                                 goodbyeMessages(`${member} has left **${member.guild.name}**.\n\n*There are *${member.guild.memberCount}* members left.*`);
                             } else { // Vise versa
@@ -55,7 +55,7 @@ module.exports = {
                 }
 
                 // Checks if the guild has action log enabled
-                let r = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${member.guild.id}`);
+                let r = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [member.guild.id])).rows[0];
                 if (r && r.bool) { // If they have it enabled
                     // Creates an embed
                     let embed = new Discord.MessageEmbed()
@@ -65,7 +65,7 @@ module.exports = {
                         .setDescription(`**Member:** ${member.user.tag} :: ${member.id}`)
                         .setTitle("Member Left");
                     // Looks for the log channel selected
-                    let r2 = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${member.guild.id}`);
+                    let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [member.guild.id])).rows[0];
                     if (!r2 || !r2.channelId) { // If it is default
                         let selectedChannel = member.guild.channels.find(c => c.name === "action-log");
                         if (selectedChannel) {

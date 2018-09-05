@@ -3,7 +3,7 @@ module.exports = {
     func: async (client, message, args, unknownCommand, mess, sql, Discord, fs, PREFIX, bool) => {
             try {
                 async function prefixcmd(sMessage) {
-                    let row = await sql.get("SELECT * FROM prefix WHERE guildId = ?", [message.guild.id]);
+                    let row = (await sql.query("SELECT * FROM prefix WHERE guildId = $1", [message.guild.id])).rows[0];
                     let prefix;
                     if (!row)
                         prefix = "?";

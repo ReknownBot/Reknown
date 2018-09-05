@@ -165,12 +165,12 @@ module.exports = {
                         }
                         */
                     }
-                    let row = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${oldMember.guild.id}`);
+                    let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [oldMember.guild.id])).rows[0];
                     if (row && row.bool) {
                         guildMemberUpdate();
                     }
                 }
-                let r2 = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${newMember.guild.id}`);
+                let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [newMember.guild.id])).rows[0];
                 if (!r2) { // If no row
                     logChannel(newMember.guild.channels.find(c => c.name === "action-log"));
                 } else { // If yes row

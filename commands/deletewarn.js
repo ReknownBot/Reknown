@@ -8,7 +8,7 @@ module.exports = {
         let i = 0;
         let prom = new Promise(resolve => {
           message.member.roles.forEach(async role => {
-            let row3 = await sql.get('SELECT * FROM permissions WHERE roleID = ? AND pName = ? AND pCategory = ?', [role.id, "unwarn", "mod"]);
+            let row3 = (await sql.query(`SELECT * FROM permissions WHERE roleID = '${role.id}' AND pName = 'unwarn' AND pCategory = 'mod'`)).rows[0];
             if ((row3 && row3.bool) || message.member === message.guild.owner)
               bool2 = true;
             i++;
@@ -25,13 +25,13 @@ module.exports = {
         if (selectedMember.user.bot) return client.editMsg(sMessage, "You cannot delete a warning of a bot!", message);
         let warnNumber = args[2];
         if (!warnNumber) return client.editMsg(sMessage, "You have to include a warning number for me to remove! Use ?warnings <user> to get the numbers.\n\n`Eg. ?deletewarn @ᴊʏɢᴜʏ 1`", message);
-        if (!parseInt(warnNumber)) return client.editMsg(sMessage, "That is not a valid number!", message);
+        if (isNaN(warnNumber)) return client.editMsg(sMessage, "That is not a valid number!", message);
         if (warnNumber < 1) return client.editMsg(sMessage, "It cannot be a negative number / 0!", message);
-        let row = await sql.get("SELECT * FROM warnings WHERE warnID = ? AND userId2 = ?", [warnNumber, selectedMember.id + message.guild.id]);
+        let row = (await sql.query(`SELECT * FROM warnings WHERE warnID = ${warnNumber} AND userId2 = '${selectedMember.id + message.guild.id}'`)).rows[0];
         if (row) {
-          let row2 = await sql.run("DELETE FROM warnings WHERE warnID = ? AND userId2 = ?", [warnNumber, selectedMember.id + message.guild.id]);
+          let row2 = await sql.query(`DELETE FROM warnings WHERE warnID = ${warnNumber} AND userId2 = '${selectedMember + message.guild.id}'`);
           client.editMsg(sMessage, `Successfully deleted a warning from ${selectedMember.user.tag}.`, message);
-          sql.run("UPDATE warnings SET warnAmount = ? WHERE userId2 = ?", [row2.warnAmount - 1, selectedMember.id + message.guild.id]);
+          sql.query("UPDATE warnings SET warnAmount = $1 WHERE userId2 = $2", [row2.warnAmount - 1, selectedMember.id + message.guild.id]);
         } else
           client.editMsg(sMessage, "Warning not found. Check a warn ID using `" + PREFIX + "warnings " + selectedMember + "`", message);
       }

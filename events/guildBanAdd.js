@@ -8,10 +8,10 @@ module.exports = {
                 if (!guild.me.hasPermission("VIEW_CHANNEL")) return;
 
                 // Checks if the guild has welcome messages enabled
-                let r3 = await sql.get(`SELECT * FROM toggleWelcome WHERE guildId = ${guild.id}`);
+                let r3 = (await sql.query('SELECT * FROM toggleWelcome WHERE guildId = $1', [guild.id])).rows[0];
                 if (r3 && r3.bool) {
                     // Gets the goodbye channel for the guild
-                    let r = await sql.get(`SELECT * FROM welcomeChannel WHERE guildId = ${guild.id}`);
+                    let r = (await sql.query('SELECT * FROM welcomeChannel WHERE guildId = $1', [guild.id])).rows[0];
                     // This is for the goodbye channel
                     async function goodbyeChannel(goodbyeChannel) {
                         // If the channel exists
@@ -44,7 +44,7 @@ module.exports = {
                 // No perms; return
                 if (!guild.me.hasPermission("VIEW_AUDIT_LOG")) return;
                 // Checks if the guild has action log enabled
-                let r = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${guild.id}`);
+                let r = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [guild.id])).rows[0];
                 if (r && r.bool) { // If they have it enabled
                     let audit = await guild.fetchAuditLogs({
                         limit: 1,
@@ -62,7 +62,7 @@ module.exports = {
                         .setFooter(`Log ID: ${info.id}`);
 
                     // Looks for the log channel selected
-                    let r2 = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${guild.id}`);
+                    let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [guild.id])).rows[0];
                     if (!r2 || !r2.channelId) { // If it is default
                         let selectedChannel = guild.channels.find(c => c.name === 'action-log');
                         if (selectedChannel) {

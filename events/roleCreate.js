@@ -42,13 +42,13 @@ module.exports = {
                             selectedChannel.send(embed);
                         */
                     }
-                    let row = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${role.guild.id}`);
+                    let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [role.guild.id])).rows[0];
                     if (row && row.bool) {
                         roleCreate();
                     }
                 }
 
-                let r2 = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${role.guild.id}`);
+                let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [role.guild.id])).rows[0];
                 if (!r2) {
                     logChannel(role.guild.channels.find(c => c.name === "action-log"));
                 } else {

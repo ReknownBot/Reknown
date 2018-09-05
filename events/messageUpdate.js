@@ -26,13 +26,13 @@ module.exports = {
                             embed: embed
                         });
                     }
-                    let row = await sql.get(`SELECT * FROM actionlog WHERE guildId = ${oldMessage.guild.id}`);
+                    let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [oldMessage.guild.id])).rows[0];
                     if (row && row.bool) {
                         messageUpdate();
                     }
                 }
 
-                let r2 = await sql.get(`SELECT * FROM logChannel WHERE guildId = ${newMessage.guild.id}`);
+                let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [newMessage.guild.id])).rows[0];
                 if (!r2) {
                     logChannel(newMessage.guild.channels.find(c => c.name === "action-log"));
                 } else {
@@ -41,9 +41,9 @@ module.exports = {
 
                 // Starboard Content Update
                 if (newMessage.content || newMessage.attachments.size > 0) {
-                    let row2 = await sql.get(`SELECT * FROM togglestar WHERE guildId = ${newMessage.guild.id}`);
-                    let row3 = await sql.get(`SELECT * FROM starchannel WHERE guildId = ${newMessage.guild.id}`);
-                    let row4 = await sql.get(`SELECT * FROM star WHERE msgID = ${newMessage.id}`);
+                    let row2 = (await sql.query('SELECT * FROM togglestar WHERE guildId = $1', [newMessage.guild.id])).rows[0];
+                    let row3 = (await sql.query('SELECT * FROM starchannel WHERE guildId = $1', [newMessage.guild.id])).rows[0];
+                    let row4 = (await sql.query('SELECT * FROM star WHERE msgID = $1', [newMessage.id])).rows[0];
                     if ((row2 && row2.bool) && row4) {
                         let sChannel;
                         if (!row3)
@@ -74,14 +74,14 @@ module.exports = {
                                 msg2.edit(embed);
                             } else
                                 // Deletes the row if the message doesn't exist
-                                sql.run(`DELETE FROM star WHERE msgID = ${newMessage.id}`);
+                                sql.query('DELETE FROM star WHERE msgID = $1', [newMessage.id]);
                         }
                     }
                 }
 
                 // Command Update
                 if (!newMessage.channel.permissionsFor(client.bot.user).has("VIEW_CHANNEL") || !newMessage.channel.permissionsFor(client.bot.user).has("SEND_MESSAGES")) return;
-                let prefixRow = await sql.get(`SELECT * FROM prefix WHERE guildId = ${newMessage.guild.id}`);
+                let prefixRow = (await sql.query('SELECT * FROM prefix WHERE guildId = $1', [newMessage.guild.id])).rows[0];
                 let prefix;
                 if (!prefixRow)
                     prefix = "?";
@@ -106,7 +106,7 @@ module.exports = {
                             if (client.cooldown.has(newMessage.author.id))
                                 client.commands[args[0].toLowerCase()].func(client, newMessage, args, unknownCommand, newMessage.content.toLowerCase(), sql, Discord, require("fs"), prefix, true); // executes the function of the command (code in separate files in folder commands)
                         } else {
-                            let row = await sql.get(`SELECT * FROM cmdnotfound WHERE guildId = ${newMessage.guild.id}`);
+                            let row = (await sql.query('SELECT * FROM cmdnotfound WHERE guildId = $1', [newMessage.guild.id])).rows[0];
                             if (row && !row.bool) return;
                             let arr = [];
                             client.commandsList.forEach(command => {
@@ -139,9 +139,9 @@ module.exports = {
                         }
                     }
 
-                    let r1 = await sql.get(`SELECT * FROM blacklist WHERE userId = ${newMessage.author.id}`);
+                    let r1 = (await sql.query('SELECT * FROM blacklist WHERE userId = $1', [newMessage.author.id])).rows[0];
                     if (r1) {
-                        let row2 = await sql.get(`SELECT * FROM blacklistmsg WHERE guildId = ${newMessage.guild.id}`);
+                        let row2 = (await sql.query('SELECT * FROM blacklistmsg WHERE guildId = $1', [newMessage.guild.id])).rows[0];
                         if (!row2 || row2.bool) {
                             if (msgToEdit) {
                                 msgToEdit.edit(`You are blacklisted from me by: \`${r1.by}\` and reason: \`${r1.reason}\``);
@@ -151,7 +151,7 @@ module.exports = {
                             }
                         }
                     } else {
-                        let r2 = await sql.get(`SELECT * FROM cooldownmsg WHERE guildId = ${newMessage.guild.id}`);
+                        let r2 = (await sql.query('SELECT * FROM cooldownmsg WHERE guildId = $1', [newMessage.guild.id])).rows[0];
                         if (client.cooldown.has(newMessage.author.id)) {
                             if (!r2 || r2.bool) {
                                 if (msgToEdit) {
