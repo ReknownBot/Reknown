@@ -172,7 +172,7 @@ module.exports = {
                         if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.welcome` permission.", message);
                         let row = (await sql.query(`SELECT * FROM customMessages WHERE guildId = '${message.guild.id}'`)).rows[0];
                         let msg = args.slice(2).join(' ');
-                        if (!msg) return client.editMsg(sMessage, row ? `\`${row.customMessage}\` is the current welcoming message for this server!` : "This server uses the default welcoming message!", message);
+                        if (!msg) return client.editMsg(sMessage, row ? `\`${row.custommessage}\` is the current welcoming message for this server!` : "This server uses the default welcoming message!", message);
                         if (msg.length > 1000) return client.editMsg(sMessage, 'Please keep the length under a thousand characters.', message);
                         if (!row) {
                             if (msg.toLowerCase() === "reset") {
@@ -205,7 +205,7 @@ module.exports = {
                         if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.welcome` permission.", message);
                         let row = (await sql.query(`SELECT bool FROM goodbyeMessages WHERE guildId = '${message.guild.id}'`)).rows[0];
                         let msg = args.slice(2).join(' ');
-                        if (!msg) return client.editMsg(sMessage, row ? `\`${row.customMessage}\` is the current goodbye message for this server!` : "This server uses the default goodbye message!", message);
+                        if (!msg) return client.editMsg(sMessage, row ? `\`${row.custommessage}\` is the current goodbye message for this server!` : "This server uses the default goodbye message!", message);
                         if (msg.length > 1000) return client.editMsg(sMessage, 'Please keep the length under a thousand characters.', message);
                         if (!row) {
                             sql.query(`INSERT INTO goodbyeMessages (guildId, customMessage) VALUES ('${message.guild.id}', '${client.escape(msg)}')`);
@@ -355,10 +355,10 @@ module.exports = {
                         let selectedChannel = message.guild.channels.get(args[2] ? args[2].replace(/[<>#]/g, "") : null);
                         let row = (await sql.query(`SELECT * FROM logChannel WHERE guildId = '${message.guild.id}'`)).rows[0];
                         let row2 = (await sql.query(`SELECT * FROM actionlog WHERE guildId = '${message.guild.id}'`)).rows[0];
-                        if (!selectedChannel) return client.editMsg(sMessage, row ? `${message.guild.channels.get(row.channelId) ? message.guild.channels.get(row.channelId) : "`None`"} is the current log channel for this server!` : "This server uses the default log channel!", message);
+                        if (!selectedChannel) return client.editMsg(sMessage, row ? `${message.guild.channels.get(row.channelid) ? message.guild.channels.get(row.channelid) : "`None`"} is the current log channel for this server!` : "This server uses the default log channel!", message);
                         if (!row2 || !row2.bool) return client.editMsg(sMessage, `This server has logs disabled! Use \`${PREFIX}config togglelog true\` to turn it back on.`, message);
                         if (row) {
-                            if (row.channelId === selectedChannel.id) return client.editMsg(sMessage, "The value you inputted is already active!", message);
+                            if (row.channelid === selectedChannel.id) return client.editMsg(sMessage, "The value you inputted is already active!", message);
                             sql.query(`UPDATE logChannel SET channelId = '${selectedChannel.id}' WHERE guildId = '${message.guild.id}'`);
                             client.editMsg(sMessage, `Successfully updated \`logchannel\` to ${selectedChannel}.`, message);
                         } else {
@@ -448,10 +448,10 @@ module.exports = {
                         let selectedChannel = message.guild.channels.get(args[2] ? args[2].replace(/[<>#]/g, "") : null);
                         let row = (await sql.query(`SELECT * FROM starchannel WHERE guildId = '${message.guild.id}'`)).rows[0];
                         let row2 = (await sql.query(`SELECT * FROM togglestar WHERE guildId = '${message.guild.id}'`)).rows[0];
-                        if (!selectedChannel) return client.editMsg(sMessage, row ? `${message.guild.channels.get(row.channelId) ? message.guild.channels.get(row.channelId) : "`None`"} is the current starboard channel for this server!` : "This server uses the default starboard channel!", message);
+                        if (!selectedChannel) return client.editMsg(sMessage, row ? `${message.guild.channels.get(row.channelid) ? message.guild.channels.get(row.channelId) : "`None`"} is the current starboard channel for this server!` : "This server uses the default starboard channel!", message);
                         if (row2 && !row2.bool) return client.editMsg(sMessage, `This server has starboard disabled! Use \`${PREFIX}config togglestar true\` to turn it back on.`, message);
                         if (row) {
-                            if (row.channelId === selectedChannel.id) return client.editMsg(sMessage, "The value you inputted is already active!", message);
+                            if (row.channelid === selectedChannel.id) return client.editMsg(sMessage, "The value you inputted is already active!", message);
                             sql.query(`UPDATE starchannel SET channel = '${selectedChannel.id}' WHERE guildId = '${message.guild.id}'`);
                             client.editMsg(sMessage, `Successfully updated \`starchannel\` to ${selectedChannel}.`, message);
                         } else {
@@ -476,9 +476,9 @@ module.exports = {
                         if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.update` permission.", message);
                         let selectedChannel = message.guild.channels.get(args[2] ? args[2].replace(/[<>#]/g, "") : null);
                         let row = (await sql.query(`SELECT * FROM updatechannel WHERE guildID = '${message.guild.id}'`)).rows[0];
-                        if (!selectedChannel) return client.editMsg(sMessage, row ? `${message.guild.channels.get(row.channelID) ? message.guild.channels.get(row.channelID) : "`None`"} is the current update channel for this server!` : "This server does not use an update channel!", message);
+                        if (!selectedChannel) return client.editMsg(sMessage, row ? `${message.guild.channels.get(row.channelid) ? message.guild.channels.get(row.channelID) : "`None`"} is the current update channel for this server!` : "This server does not use an update channel!", message);
                         if (row) {
-                            if (row.channelID === selectedChannel.id) return client.editMsg(sMessage, "The value you inputted is already active!", message);
+                            if (row.channelid === selectedChannel.id) return client.editMsg(sMessage, "The value you inputted is already active!", message);
                             sql.query(`UPDATE updatechannel SET channelID = '${selectedChannel.id}' WHERE guildID = '${message.guild.id}'`);
                             client.editMsg(sMessage, `Successfully updated \`updatechannel\` to ${selectedChannel}.`, message);
                         } else {
