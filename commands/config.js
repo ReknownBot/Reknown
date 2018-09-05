@@ -264,7 +264,7 @@ module.exports = {
                         if (!prefix) return client.editMsg(sMessage, "Please provide a prefix for me to set in this server.", message);
                         if (prefix.length > 15) return client.editMsg(sMessage, "The prefix may not exceed 15 characters!", message);
                         let row = (await sql.query(`SELECT * FROM prefix WHERE guildId = '${message.guild.id}'`)).rows[0];
-                        if (row && row.customPrefix === prefix) return client.editMsg(sMessage, "This server's prefix is already set to `" + prefix + "`!", message);
+                        if (row && row.customprefix === prefix) return client.editMsg(sMessage, "This server's prefix is already set to `" + prefix + "`!", message);
                         if (row) {
                             sql.query(`UPDATE prefix SET customPrefix = $1 WHERE guildId = $2`, [prefix, message.guild.id]);
                             client.editMsg(sMessage, `Successfully updated \`prefix\` to \`${prefix}\`.`, message);

@@ -8,7 +8,7 @@ module.exports = {
                     if (!row)
                         prefix = "?";
                     else
-                        prefix = row.customPrefix;
+                        prefix = row.customprefix;
 
                     client.editMsg(sMessage, `The current prefix for ${message.guild.name} is ${prefix} or my mention! \`Take a look at "${PREFIX}config prefix" to set the prefix.\``, message);
                 }
