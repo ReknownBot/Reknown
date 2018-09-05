@@ -150,7 +150,7 @@ module.exports = {
                     await prom;
                     if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.rules` permission.", message);
                     let { rows } = await sql.query('SELECT * FROM rules WHERE guildId = $1', [message.guild.id]);
-                    if (Object.values(rows).length === 0) return client.editMsg(sMessage, "This guild does not have any custom rules!", message);
+                    if (rows.length === 0) return client.editMsg(sMessage, "This guild does not have any custom rules!", message);
                     rows.forEach((r) => {
                         sql.query('DELETE FROM rules WHERE guildId = $1 AND rule = $2', [message.guild.id, r.rule]);
                     });
