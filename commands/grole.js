@@ -32,7 +32,7 @@ module.exports = {
                 if (!sMember) return client.editMsg(sMessage, "That is not a valid member!", message);
 
                 if (!args[2]) return client.editMsg(sMessage, "You have to supply a role for me to give this member!", message);
-                let role = message.guild.roles.get(args[2] ? args[2].replace(/[<>&@]/g, "") : null) || message.guild.roles.find(r => r.name.toLowerCase() === args.slice(2).join(' '));
+                let role = message.guild.roles.get(args[2] ? args[2].replace(/[<>&@]/g, "") : null) || message.guild.roles.find(r => r.name.toLowerCase() === args.slice(2).join(' ').toLowerCase());
                 if (!role) return client.editMsg(sMessage, "That is not a valid role!", message);
                 if (role.position >= message.member.roles.highest.position && message.guild.owner !== message.member) return client.editMsg(sMessage, "Your role position is not high enough!", message);
                 if (role.position >= message.guild.me.roles.highest.position) return client.editMsg(sMessage, "My role position is not high enough!", message);
