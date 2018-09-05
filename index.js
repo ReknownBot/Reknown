@@ -553,7 +553,7 @@ client.bot.on("message", async message => { // Starts the event "message", this 
 
     let r = (await sql.query(`SELECT * FROM prefix WHERE guildId = '${message.guild.id}'`)).rows[0];
     let regexp = new RegExp(`^<@!?${client.bot.user.id}> `);
-    let prefix = message.content.match(regexp) ? message.content.match(regexp)[0] : (r ? r.customPrefix : "?");
+    let prefix = message.content.match(regexp) ? message.content.match(regexp)[0] : (r ? r.customprefix : "?");
     commandThingy(prefix);
 });
 
