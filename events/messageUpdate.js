@@ -22,9 +22,7 @@ module.exports = {
                             .addField("Author:", oldMessage.author.tag)
                             .setColor(0x00FFFF)
                             .setThumbnail(oldMessage.author.displayAvatarURL());
-                        selectedChannel.send("", {
-                            embed: embed
-                        });
+                        selectedChannel.send(embed);
                     }
                     let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [oldMessage.guild.id])).rows[0];
                     if (row && row.bool) {
@@ -36,7 +34,7 @@ module.exports = {
                 if (!r2) {
                     logChannel(newMessage.guild.channels.find(c => c.name === "action-log"));
                 } else {
-                    logChannel(newMessage.guild.channels.get(r2.channelId));
+                    logChannel(newMessage.guild.channels.get(r2.channelid));
                 }
 
                 // Starboard Content Update
@@ -49,26 +47,28 @@ module.exports = {
                         if (!row3)
                             sChannel = newMessage.guild.channels.find(c => c.name === "starboard" && c.type === "text");
                         else
-                            sChannel = newMessage.guild.channels.get(row3.channelId);
+                            sChannel = newMessage.guild.channels.get(row3.channelid);
                         if (sChannel) {
-                            let msg2 = await sChannel.messages.fetch(row4.editID);
+                            let msg2 = await sChannel.messages.fetch(row4.editid);
                             if (msg2) {
                                 let embed = new Discord.MessageEmbed(msg2.embeds[0]);
                                 embed.fields = [{
-                                        name: "Author",
-                                        value: newMessage.author.toString(),
-                                        inline: true
-                                    },
-                                    {
-                                        name: "Channel",
-                                        value: newMessage.channel.toString(),
-                                        inline: true
-                                    }
+                                    name: "Author",
+                                    value: `${newMessage.author} \`${newMessage.author.tag} ${newMessage.author.id}\``,
+                                    inline: true
+                                },
+                                {
+                                    name: "Channel",
+                                    value: newMessage.channel.toString(),
+                                    inline: true
+                                }
                                 ];
-                                newMessage.content ? (embed.fields[2] ? embed.addField("Message", newMessage.content) : embed.fields[2] = {
-                                    name: "Message",
-                                    value: newMessage.content
-                                }) : embed.fields[2] = {};
+                                newMessage.content ?
+                                    embed.fields[3] = {
+                                        name: "Message",
+                                        value: newMessage.content
+                                    } :
+                                    embed.fields[3] = {};
                                 let img = newMessage.attachments.find(attch => attch.height);
                                 img ? embed.setImage(img.proxyURL) : null;
                                 msg2.edit(embed);
@@ -88,7 +88,7 @@ module.exports = {
                 else
                     prefix = prefixRow.customPrefix;
                 let regexp = new RegExp(`^<@!?${client.bot.user.id}> `);
-                prefix = newMessage.content.match(regexp) ? newMessage.content.match(regexp)[0] : (prefixRow ? prefixRow.customPrefix : "?");
+                prefix = newMessage.content.match(regexp) ? newMessage.content.match(regexp)[0] : (prefixRow ? prefixRow.customprefix : "?");
                 let args = newMessage.content.slice(prefix.length).split(' ');
                 for (let i = args.length - 1; i--;)
                     if (args[i] == '')
