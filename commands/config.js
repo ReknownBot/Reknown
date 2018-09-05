@@ -114,7 +114,7 @@ module.exports = {
                             bool = args[2] === "false" ? 0 : 1;
                         }
                         if (!row) {
-                            if (bool === 1) return client.editMsg(sMessage, "The value you inputted is already active!", message);
+                            if (bool === 0) return client.editMsg(sMessage, "The value you inputted is already active!", message);
                             sql.query(`INSERT INTO cmdnotfound (guildId, bool) VALUES ('${message.guild.id}', ${bool})`);
                             client.editMsg(sMessage, `Successfully updated \`cmdnotfound\` to \`${bool ? "true" : "false"}\`.`, message);
                         } else {
@@ -383,13 +383,13 @@ module.exports = {
                         if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.welcome` permission.", message);
                         let row = (await sql.query(`SELECT * FROM picwelcome WHERE guildId = '${message.guild.id}'`)).rows[0];
                         let bool;
-                        if (!args[2]) bool = row ? (row.bool ? 0 : 1) : 0;
+                        if (!args[2]) bool = row ? (row.bool ? 0 : 1) : 1;
                         else {
                             if (args[2].toLowerCase() !== "false" && args[2].toLowerCase() !== "true") return client.editMsg(sMessage, "An invalid argument has been provided, please use `false` or `true`.", message);
                             bool = args[2] === "false" ? 0 : 1;
                         }
                         if (!row) {
-                            if (bool === 1) return client.editMsg(sMessage, "The value you inputted is already active!", message);
+                            if (bool === 0) return client.editMsg(sMessage, "The value you inputted is already active!", message);
                             sql.query(`INSERT INTO picwelcome (guildId, bool) VALUES ('${message.guild.id}', ${bool})`);
                             client.editMsg(sMessage, `Successfully updated \`welcomepic\` to \`${bool ? "true" : "false"}\`.`, message);
                         } else {
