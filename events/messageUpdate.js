@@ -86,9 +86,9 @@ module.exports = {
                 if (!prefixRow)
                     prefix = "?";
                 else
-                    prefix = prefixRow.customPrefix;
+                    prefix = prefixRow.customprefix;
                 let regexp = new RegExp(`^<@!?${client.bot.user.id}> `);
-                prefix = newMessage.content.match(regexp) ? newMessage.content.match(regexp)[0] : (prefixRow ? prefixRow.customPrefix : "?");
+                prefix = newMessage.content.match(regexp) ? newMessage.content.match(regexp)[0] : (prefixRow ? prefixRow.customprefix : "?");
                 let args = newMessage.content.slice(prefix.length).split(' ');
                 for (let i = args.length - 1; i--;)
                     if (args[i] == '')
