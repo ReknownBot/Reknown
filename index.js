@@ -4,7 +4,7 @@ const { Client } = require("pg");
 require("dotenv").config();
 const sql = new Client({
     user: process.env.SQL_USER,
-    password: process.SQL_PASS,
+    password: process.env.SQL_PASS,
     database: process.env.SQL_DB,
     port: process.env.SQL_PORT,
     host: process.env.SQL_HOST,
