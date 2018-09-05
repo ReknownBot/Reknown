@@ -36,7 +36,7 @@ module.exports = {
                 const row3 = (await sql.query('SELECT * FROM star WHERE msgID = $1', [message.id])).rows[0];
                 // Enabled
                 if (row && row.bool) {
-                    const sChannel = message.guild.channels.get(row2 ? row2.channelId : null) || message.guild.channels.find(c => c.name === "starboard");
+                    const sChannel = message.guild.channels.get(row2 ? row2.channelid : null) || message.guild.channels.find(c => c.name === "starboard");
                     if (!sChannel) return;
                     // Perm Checks
                     if (!sChannel.permissionsFor(client.bot.user).has("VIEW_CHANNEL") || !sChannel.permissionsFor(client.bot.user).has("SEND_MESSAGES") || !sChannel.permissionsFor(client.bot.user).has("EMBED_LINKS")) return;
@@ -65,7 +65,7 @@ module.exports = {
                     } else {
                         let sMessage;
                         try {
-                            sMessage = await sChannel.messages.fetch(row3.editID);
+                            sMessage = await sChannel.messages.fetch(row3.editid);
                         } catch (e) {
                             sMessage = null;
                         }
@@ -102,7 +102,7 @@ module.exports = {
                     if (!sChannel) return;
                     // Perm Check (Deleting own message only takes read messages)
                     if (!sChannel.permissionsFor(client.bot.user).has("VIEW_CHANNEL")) return;
-                    let sMessage = await sChannel.messages.fetch(row3.editID);
+                    let sMessage = await sChannel.messages.fetch(row3.editid);
                     if (!sMessage.deleted)
                         sMessage.delete();
                 }
