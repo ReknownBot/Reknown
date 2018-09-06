@@ -5,7 +5,7 @@ module.exports = {
             async function osucmd(sMessage) {
                 let osuType = args[1];
                 if (!osuType) return client.editMsg(sMessage, "You have to put in a type and a username or an ID!", message);
-                if (osuType.toLowerCase() !== "standard" && osuType.toLowerCase() !== "taiko" && osuType.toLowerCase() !== "mania" && osuType.toLowerCase() !== "ctb") return client.editMsg(sMessage, "You have to put in a valid osu gamemode! (osu, mania, ctb, or taiko)", message);
+                if (osuType.toLowerCase() !== "standard" && osuType.toLowerCase() !== "taiko" && osuType.toLowerCase() !== "mania" && osuType.toLowerCase() !== "ctb") return client.editMsg(sMessage, "You have to put in a valid osu gamemode! (standard, mania, ctb, or taiko)", message);
                 if (osuType === "standard") osuType = 0;
                 else if (osuType === "taiko") osuType = 1;
                 else if (osuType === 'ctb') osuType = 2;
