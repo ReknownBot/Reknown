@@ -22,6 +22,7 @@ module.exports = {
                 if (!args[1]) return client.editMsg(sMessage, "You have to mention / put an ID of a member for me to kick!", message);
                 let selectedMember = message.guild.members.get(args[1] ? args[1].replace(/[<>@&!]/g, "") : null); // Defines selected member as the first member mentioned
                 if (!selectedMember) return client.editMsg(sMessage, "I did not find that user!", message); // If the member is not found with the ID
+                if (selectedMember.user === client.bot.user) return client.editMsg(sMessage, 'I cannot kick myself!', message);
                 if (!selectedMember.kickable) return client.editMsg(sMessage, "I cannot kick that user. Check my role position!", message); // If the member is not kickable then return and send a message
                 if (selectedMember.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return client.editMsg(sMessage, "You do not have enough permissions! (Role position not high enough)", message);
                 let optionalReason = args.slice(2).join(" "); // Defines optionalReason as the content after the mention
