@@ -178,6 +178,8 @@ module.exports = {
         } catch (e) {
             console.error(e);
             message.channel.send(`Something went wrong while executing the command: \`${PREFIX}rules\`\n\n\`\`\`xl\n${e}\n\`\`\``);
+            let rollbar = new client.Rollbar(client.rollbarKey);
+            rollbar.error("Something went wrong in rules.js", e);
         }
     },
     jyguyOnly: 0,

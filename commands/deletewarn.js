@@ -31,7 +31,7 @@ module.exports = {
         if (row) {
           let row2 = await sql.query(`DELETE FROM warnings WHERE warnID = ${warnNumber} AND userId2 = '${selectedMember + message.guild.id}'`);
           client.editMsg(sMessage, `Successfully deleted a warning from ${selectedMember.user.tag}.`, message);
-          sql.query("UPDATE warnings SET warnAmount = $1 WHERE userId2 = $2", [row2.warnAmount - 1, selectedMember.id + message.guild.id]);
+          sql.query("UPDATE warnings SET warnAmount = $1 WHERE userId2 = $2", [row2.warnamount - 1, selectedMember.id + message.guild.id]);
         } else
           client.editMsg(sMessage, "Warning not found. Check a warn ID using `" + PREFIX + "warnings " + selectedMember + "`", message);
       }

@@ -129,7 +129,7 @@ module.exports = {
               selectedChannel.send(embed);
             }
           } else { // If it is custom
-            let selectedChannel = member.guild.channels.get(r2.channelId);
+            let selectedChannel = member.guild.channels.get(r2.channelid);
             if (selectedChannel) {
               if (!member.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
               if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;

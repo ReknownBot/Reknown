@@ -20,7 +20,7 @@ module.exports = {
         if (!bool2) return client.editMsg(sMessage, ":x:, Sorry, but you do not have the `misc.update` permission.", message);
         let row2 = (await sql.query('SELECT * FROM updatechannel WHERE guildID = $1', [message.guild.id])).rows[0];
         if (!row2) return client.editMsg(sMessage, 'This server does not have an update channel set! Use `?config updatechannel <Channel Mention or ID>` to set one.', message);
-        let selectedChannel = message.guild.channels.get(row2.channelID);
+        let selectedChannel = message.guild.channels.get(row2.channelid);
         if (!selectedChannel) return client.editMsg(sMessage, "Server updates channel not found. Please update it by using `config updatechannel <Channel Mention or ID>`.", message);
         let updateinfo = args.slice(1).join(" ");
         if (!updateinfo) return client.editMsg(sMessage, "Please supply update info.", message);

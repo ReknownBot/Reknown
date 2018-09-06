@@ -78,7 +78,7 @@ module.exports = {
           if (!r) {
             logChannel(message.guild.channels.find(c => c.name === "action-log"));
           } else {
-            logChannel(message.guild.channels.get(r.channelId));
+            logChannel(message.guild.channels.get(r.channelid));
           }
         }
 

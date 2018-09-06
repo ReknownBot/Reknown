@@ -10,16 +10,10 @@ module.exports = {
                             .setColor(0x00FFFF)
                             .setTimestamp();
                         let { rows } = await sql.query('SELECT warnAmount FROM warnings WHERE userId2 = $1 ORDER BY warnAmount DESC', [message.author.id + message.guild.id]);
-                        let warnAmountThingy = [];
-                        rows.forEach(row => {
-                            warnAmountThingy.push(row.warnAmount);
-                        });
+                        let warnAmountThingy = rows.map(row => row.warnamount);
                         embedThingy.addField("Warning Amount:", warnAmountThingy[0] ? warnAmountThingy[0] : "0");
                         let { rows: rows2 } = await sql.query('SELECT * FROM warnings WHERE userId2 = $1', [message.author.id + message.guild.id]);
-                        let warnReasonThingy = [];
-                        rows2.forEach(row => {
-                            warnReasonThingy.push(`${row.warnReason} (${row.warnID})`);
-                        });
+                        let warnReasonThingy = rows2.map(row => `${row.warnreason} (${row.warnid})`);
                         if (warnReasonThingy.join("\n").length <= 1024) {
                             embedThingy.addField("Warning Informations:", warnReasonThingy[0] ? warnReasonThingy : "None");
                             client.editMsg(sMessage, embedThingy, message);
@@ -45,7 +39,7 @@ module.exports = {
                                     });
                                     str = '';
                                 }
-                                str += `${row.warnReason} (${row.warnID})`;
+                                str += `${row.warnreason} (${row.warnid})`;
                             });
                             if (str) {
                                 pages.push({
@@ -112,16 +106,10 @@ module.exports = {
                             .setColor(0x00FFFF)
                             .setTimestamp();
                         let { rows } = await sql.query('SELECT * FROM warnings WHERE userId2 = $1 ORDER BY warnAmount DESC', [selectedMember.id + message.guild.id]);
-                        let warnAmountThingy = [];
-                        rows.forEach(row => {
-                            warnAmountThingy.push(row.warnamount);
-                        });
+                        let warnAmountThingy = rows.map(r => r.warnamount);
                         embedThingy.addField("Warning Amount", warnAmountThingy[0] ? warnAmountThingy[0] : "0");
                         let { rows: rows2 } = await sql.query('SELECT * FROM warnings WHERE userId2 = $1', [selectedMember.id + message.guild.id]);
-                        let warnReasonThingy = [];
-                        rows2.forEach(row => {
-                            warnReasonThingy.push(`${row.warnreason} (${row.warnid})`);
-                        });
+                        let warnReasonThingy = rows2.map(row => `${row.warnreason} (${row.warnid})`);
                         if (warnReasonThingy.join("\n").length <= 1024) {
                             embedThingy.addField("Warning Informations:", warnReasonThingy[0] ? warnReasonThingy : "None");
                             client.editMsg(sMessage, embedThingy, message);

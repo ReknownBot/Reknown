@@ -47,19 +47,17 @@ module.exports = {
                 } else if (args[1].toLowerCase() === "clear") {
                     let { rows } = await sql.query(`SELECT * FROM autorole WHERE guildId = '${message.guild.id}'`);
                     if (rows.length === 0) return client.editMsg(sMessage, `There are no auto roles set yet! Use ${PREFIX}autorole add <Mention or RoleID> to add one.`, message);
-                    rows.forEach(() => {
-                        sql.query(`DELETE FROM autorole WHERE guildId = '${message.guild.id}'`);
-                    });
+                    sql.query(`DELETE FROM autorole WHERE guildId = '${message.guild.id}'`);
                     client.editMsg(sMessage, "Successfully cleared the autorole.", message);
                 } else if (args[1].toLowerCase() === "list") {
                     let { rows } = await sql.query(`SELECT * FROM autorole WHERE guildId = '${message.guild.id}'`);
                     if (rows.length === 0) return client.editMsg(sMessage, "This guild does not have any auto roles!", message);
                     let x = [];
                     rows.forEach(r => {
-                        if (!message.guild.roles.get(r.roleId))
-                            sql.query(`DELETE FROM autorole WHERE guildId = '${message.guild.id}' AND roleId = '${r.roleId}'`);
+                        if (!message.guild.roles.get(r.roleid))
+                            sql.query(`DELETE FROM autorole WHERE guildId = '${message.guild.id}' AND roleId = '${r.roleid}'`);
                         else
-                            x.push(message.guild.roles.get(r.roleId).name + " :: " + message.guild.roles.get(r.roleId).id + "\n");
+                            x.push(message.guild.roles.get(r.roleid).name + " :: " + message.guild.roles.get(r.roleid).id + "\n");
                     });
                     let embed = new Discord.MessageEmbed()
                         .setTitle(`Auto roles for ${message.guild.name}`)

@@ -56,7 +56,7 @@ module.exports = {
 
                     // Looks for the log channel selected
                     let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [guild.id])).rows[0];
-                    if (!r2 || !r2.channelId) { // If it is default
+                    if (!r2 || !r2.channelid) { // If it is default
                         let selectedChannel = guild.channels.find(c => c.name === 'action-log');
                         if (selectedChannel) {
                             if (!guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !guild.me.hasPermission("ADMINISTRATOR")) return;
@@ -75,7 +75,7 @@ module.exports = {
             } catch (e) {
                 let rollbar = new client.Rollbar(client.rollbarKey);
                 rollbar.error("Something went wrong in guildBanAdd.js", e);
-                console.log(e);
+                console.error(e);
             }
         });
     }

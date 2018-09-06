@@ -457,9 +457,9 @@ client.bot.on("message", async message => { // Starts the event "message", this 
                     if (rows[0]) {
                         let roleArr = [];
                         rows.forEach(r => {
-                            if (!message.guild.roles.get(r.roleID))
-                                return sql.query(`DELETE FROM levelrole WHERE guildID = '${message.guild.id}' AND roleID = '${r.roleID}'`);
-                            roleArr.push(r.roleID);
+                            if (!message.guild.roles.get(r.roleid))
+                                return sql.query(`DELETE FROM levelrole WHERE guildID = '${message.guild.id}' AND roleID = '${r.roleid}'`);
+                            roleArr.push(r.roleid);
                         });
                         if (roleArr.length === 1) {
                             let sRole = message.guild.roles.get(roleArr[0]);
@@ -479,9 +479,8 @@ client.bot.on("message", async message => { // Starts the event "message", this 
         }
 
         let row = (await sql.query(`SELECT * FROM toggleLevel WHERE guildId = '${message.guild.id}'`)).rows[0];
-        if (row && row.bool) {
+        if (row && row.bool)
             thingy();
-        }
         // End of levelling system
     } catch (e) {
         rollbar.error("Something went wrong in index.js levelling system", e);
@@ -528,7 +527,7 @@ client.bot.on("message", async message => { // Starts the event "message", this 
                 if (!r) {
                     commandRun();
                 } else {
-                    customPrefix = r.customPrefix;
+                    customPrefix = r.customprefix;
                     commandRun();
                 }
             }

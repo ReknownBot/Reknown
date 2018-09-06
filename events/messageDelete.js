@@ -10,13 +10,13 @@ module.exports = {
                 let row4 = (await sql.query('SELECT * FROM starchannel WHERE guildId = $1', [message.guild.id])).rows[0];
                 let sChannel;
                 if (row4)
-                    sChannel = message.guild.channels.get(row4.channelId);
+                    sChannel = message.guild.channels.get(row4.channelid);
                 else
                     sChannel = message.guild.channels.find(c => c.name === "starboard");
                 if (row2 && (!row3 || row3.bool)) {
                     sql.query('DELETE FROM star WHERE msgID = $1', [message.id]);
                     if (sChannel) {
-                        let msg = await sChannel.messages.fetch(row2.editID);
+                        let msg = await sChannel.messages.fetch(row2.editid);
                         msg ? msg.delete() : null;
                     }
                 }

@@ -83,7 +83,7 @@ module.exports = {
                   if (!r) {
                     selectedChannel = message.guild.channels.find(c => c.name === "action-log");
                   } else {
-                    selectedChannel = message.guild.channels.get(r.channelId);
+                    selectedChannel = message.guild.channels.get(r.channelid);
                   }
                   if (selectedChannel)
                     selectedChannel.send(embed);

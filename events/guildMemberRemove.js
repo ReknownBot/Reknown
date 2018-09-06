@@ -61,7 +61,7 @@ module.exports = {
                         .setTitle("Member Left");
                     // Looks for the log channel selected
                     let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [member.guild.id])).rows[0];
-                    if (!r2 || !r2.channelId) { // If it is default
+                    if (!r2 || !r2.channelid) { // If it is default
                         let selectedChannel = member.guild.channels.find(c => c.name === "action-log");
                         if (selectedChannel) {
                             if (!member.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
@@ -69,7 +69,7 @@ module.exports = {
                             selectedChannel.send(embed);
                         }
                     } else { // If it is custom
-                        let selectedChannel = member.guild.channels.get(r2.channelId);
+                        let selectedChannel = member.guild.channels.get(r2.channelid);
                         if (selectedChannel) {
                             if (!member.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
                             if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;

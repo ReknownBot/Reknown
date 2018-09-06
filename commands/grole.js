@@ -64,5 +64,6 @@ module.exports = {
             console.error(e);
         }
     },
-    jyguyOnly: 0
+    jyguyOnly: 0,
+    category: 'misc'
 }

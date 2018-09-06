@@ -55,9 +55,7 @@ module.exports = {
                 } else if (choices[2] === choice) { // Clear
                     let { rows: row3 } = await sql.query("SELECT * FROM levelrole WHERE guildID = $1", [message.guild.id]);
                     if (!row3[0]) return client.editMsg(sMessage, "No roles are in the list currently!", message);
-                    row3.forEach(row4 => {
-                        sql.query("DELETE FROM levelrole WHERE guildID = $1 AND roleID = $2", [message.guild.id, row4.roleID]);
-                    });
+                    sql.query("DELETE FROM levelrole WHERE guildID = $1", [message.guild.id]);
                     client.editMsg(sMessage, "Successfully removed all roles from the list.", message);
                 } else if (choices[3] === choice) { // List
                     let { rows: row3 } = await sql.query("SELECT * FROM levelrole WHERE guildID = $1", [message.guild.id]);
@@ -66,9 +64,9 @@ module.exports = {
                     let page = 1;
                     let str = '';
                     row3.forEach(row4 => {
-                        if (!message.guild.roles.get(row4.roleID))
-                            return sql.query("DELETE FROM levelrole WHERE guildID = $1 AND roleID = $2", [message.guild.id, row4.roleID]);
-                        if (str.length + (row4.roleID.length * 2) + new String(row4.level).length + 31 > 2048) {
+                        if (!message.guild.roles.get(row4.roleid))
+                            return sql.query("DELETE FROM levelrole WHERE guildID = $1 AND roleID = $2", [message.guild.id, row4.roleid]);
+                        if (str.length + (row4.roleid.length * 2) + new String(row4.level).length + 31 > 2048) {
                             pages.push(str);
                             str = '';
                         }
@@ -210,6 +208,8 @@ module.exports = {
         } catch (e) {
             message.channel.send(`Something went wrong while executing the command: \`${PREFIX}levelrole\`\n\n\`\`\`xl\n${e}\n\`\`\``);
             console.error(e);
+            let rollbar = new client.Rollbar(client.rollbarKey);
+            rollbar.error("Something went wrong in levelrole.js", e);
         }
     },
     jyguyOnly: 0,

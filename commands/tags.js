@@ -4,15 +4,9 @@ module.exports = {
             try {
                 async function tagscmd(sMessage) {
                     let { rows: rows1 } = await sql.query('SELECT * FROM usertag WHERE userID = $1', [message.author.id]);
-                    let userTags = [];
-                    rows1.forEach(row => {
-                        userTags.push(row.tagname);
-                    });
+                    let userTags = rows1.map(r => r.tagname);
                     let { rows: rows2 } = await sql.query('SELECT * FROM guildtag WHERE guildID = $1', [message.guild.id]);
-                    let guildTags = [];
-                    rows2.forEach(row => {
-                        guildTags.push(row.tagname);
-                    });
+                    let guildTags = rows2.map(r => r.tagname);
                     let embed = new Discord.MessageEmbed()
                         .setColor(message.member.displayHexColor)
                         .setTimestamp()
@@ -34,13 +28,15 @@ module.exports = {
                     } catch (e) {
                         msgToEdit = null;
                     }
-                    renamecmd(msgToEdit);
+                    tagscmd(msgToEdit);
                 } else {
                     tagscmd(message);
                 }
             } catch (e) {
                 message.channel.send(`Something went wrong while executing the command: \`${PREFIX}tags\`\n\n\`\`\`xl\n${e}\n\`\`\``);
                 console.error(e);
+                let rollbar = new client.Rollbar(client.rollbarKey);
+                rollbar.error("Something went wrong in tags.js", e);
             }
         },
         jyguyOnly: 0,

@@ -167,7 +167,7 @@ module.exports = {
             } catch (e) {
                 let rollbar = new client.Rollbar(client.rollbarKey);
                 rollbar.error("Something went wrong in messageUpdate.js", e);
-                console.log(e);
+                console.error(e);
             }
         });
     }

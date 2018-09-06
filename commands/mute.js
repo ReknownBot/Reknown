@@ -97,7 +97,7 @@ module.exports = {
                         selectedChannel.send(embed);
                     }
                   } else {
-                    let selectedChannel = message.guild.channels.get(r3.channelId);
+                    let selectedChannel = message.guild.channels.get(r3.channelid);
                     if (selectedChannel) {
                       if (message.guild.me.hasPermission("ADMINISTRATOR") || (selectedChannel.permissionsFor(message.guild.me).has("SEND_MESSAGES") && selectedChannel.permissionsFor(message.guild.me).has("VIEW_CHANNEL")))
                         selectedChannel.send(embed);
@@ -128,7 +128,7 @@ module.exports = {
                 if (!r) {
                   logChannel(message.guild.channels.find(c => c.name === "action-log"));
                 } else {
-                  logChannel(message.guild.channels.get(r.channelId));
+                  logChannel(message.guild.channels.get(r.channeid));
                 }
               }
 
@@ -171,7 +171,7 @@ module.exports = {
                         selectedChannel.send(embed);
                     }
                   } else {
-                    let selectedChannel = message.guild.channels.get(r3.channelId);
+                    let selectedChannel = message.guild.channels.get(r3.channelid);
                     if (selectedChannel) {
                       if (message.guild.me.hasPermission("ADMINISTRATOR") || (selectedChannel.permissionsFor(message.guild.me).has("SEND_MESSAGES") && selectedChannel.permissionsFor(message.guild.me).has("VIEW_CHANNEL")))
                         selectedChannel.send(embed);
@@ -203,7 +203,7 @@ module.exports = {
                 if (!r) {
                   logChannel(message.guild.channels.find(c => c.name === "action-log"));
                 } else {
-                  logChannel(message.guild.channels.get(r.channelId));
+                  logChannel(message.guild.channels.get(r.channelid));
                 }
               }
 
