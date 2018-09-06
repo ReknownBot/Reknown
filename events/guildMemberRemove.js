@@ -1,3 +1,15 @@
+async function kicked(member, info, channel, Discord) {
+    const embed = new Discord.MessageEmbed()
+        .setTitle('Member Kicked')
+        .setColor(0xffa500)
+        .setAuthor(info.executor.tag, info.executor.displayAvatarURL())
+        .setTimestamp()
+        .addField('Member', `${member.user.tag} (${member.id})`)
+        .addField('Reason', info.reason ? info.reason : 'None');
+
+    channel.send(embed);
+}
+
 module.exports = {
     func: async (client, sql, Discord) => {
         client.bot.on("guildMemberRemove", async member => {
@@ -5,6 +17,12 @@ module.exports = {
                 if (!member.guild) return;
                 // If it's the bot that was kicked / left
                 if (member.user === client.bot.user) return;
+
+                if (!member.guild.me)
+                    member.guild.me = await member.guild.members.fetch({
+                        user: client.bot.user,
+                        cache: true
+                    });
 
                 // Checks if the guild has welcome messages enabled
                 let r3 = (await sql.query('SELECT * FROM toggleWelcome WHERE guildId = $1', [member.guild.id])).rows[0];
@@ -18,7 +36,6 @@ module.exports = {
                             // If the bot does not have send messages perms in the welcome channel & does not have administrator (bypass all overwrites) then return
                             if (!member.guild.me.permissionsIn(goodbyeChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
                             if (!member.guild.me.permissionsIn(goodbyeChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-                            //console.log("guildMemberRemove 1");
 
                             // Function for goodbye messages
                             function goodbyeMessages(msg) {
@@ -52,6 +69,13 @@ module.exports = {
                 // Checks if the guild has action log enabled
                 let r = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [member.guild.id])).rows[0];
                 if (r && r.bool) { // If they have it enabled
+                    let info;
+                    if (member.guild.me.hasPermission("VIEW_AUDIT_LOG")) {
+                        let audit = await member.guild.fetchAuditLogs({
+                            limit: 1
+                        });
+                        info = audit.entries.first();
+                    }
                     // Creates an embed
                     let embed = new Discord.MessageEmbed()
                         .setColor(0xffaa00)
@@ -66,14 +90,20 @@ module.exports = {
                         if (selectedChannel) {
                             if (!member.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
                             if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-                            selectedChannel.send(embed);
+                            if (!info || info.action !== 'MEMBER_KICK' || info.createdTimestamp > 1000)
+                                selectedChannel.send(embed);
+                            else if (info.action === 'MEMBER_KICK')
+                                kicked(member, info, selectedChannel, Discord);
                         }
                     } else { // If it is custom
                         let selectedChannel = member.guild.channels.get(r2.channelid);
                         if (selectedChannel) {
                             if (!member.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
                             if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-                            selectedChannel.send(embed);
+                            if (!info || info.action !== 'MEMBER_KICK' || info.createdTimestamp > 1000)
+                                selectedChannel.send(embed);
+                            else if (info.action === 'MEMBER_KICK')
+                                kicked(member, info, selectedChannel, Discord);
                         }
                     }
                 }
