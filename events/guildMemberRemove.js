@@ -28,7 +28,7 @@ module.exports = {
                 let r3 = (await sql.query('SELECT * FROM toggleWelcome WHERE guildId = $1', [member.guild.id])).rows[0];
                 if (r3 && r3.bool) {
                     // Gets the goodbye channel for the guild
-                    let r = await (sql.query('SELECT * FROM welcomeChannel WHERE guildId = $1', [member.guild.id])).rows[0];
+                    let r = (await sql.query('SELECT * FROM welcomeChannel WHERE guildId = $1', [member.guild.id])).rows[0];
                     // This is for the goodbye channel
                     async function goodbyeChannel(goodbyeChannel) {
                         // If the channel exists
