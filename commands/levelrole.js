@@ -70,7 +70,7 @@ module.exports = {
                             pages.push(str);
                             str = '';
                         }
-                        str += `Role: <@&${row4.roleID}> :: ID: ${row4.roleID} :: Level: ${row4.level}\n`;
+                        str += `Role: <@&${row4.roleid}> :: ID: ${row4.roleid} :: Level: ${row4.level}\n`;
                     });
                     if (str) pages.push(str);
                     if (!pages[0]) return client.editMsg(sMessage, "No roles are in the list currently!", message);
