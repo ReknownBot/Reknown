@@ -90,6 +90,56 @@ const client = class {
         });
 
         this.bot = bot;
+        this.Discord = Discord;
+        this.moment = require('moment');
+
+        this.permissions = {
+            music: [
+                'loop',
+                'pause',
+                'fskip',
+                'clear'
+            ],
+            moderation: [
+                'ban',
+                'softban',
+                'unban',
+                'kick',
+                'mute',
+                'unmute',
+                'warn',
+                'unwarn',
+                'nick',
+                'log',
+                'purge',
+                'blacklist',
+                'unblacklist',
+                'ccreate',
+                'cdelete'
+            ],
+            level: [
+                'role',
+                'options',
+                'set'
+            ],
+            slowmode: [
+                'set',
+                'bypass'
+            ],
+            misc: [
+                'setperm',
+                'rules',
+                'star',
+                'prefix',
+                'togglemsg',
+                'welcome',
+                'update',
+                'autorole',
+                'invite',
+                'grole',
+                'rrole'
+            ]
+        }
     }
 
     capFirstLetter(str) {
@@ -104,6 +154,102 @@ const client = class {
         ordered.sort((a, b) => b[1] - a[1]);
         return ordered.slice(0, 3);
     }
+
+    async checkPerms(pName, pCategory, member) {
+        // If the member is the owner or the member has the permission Administrator, return true
+        if (member.guild.owner === member || member.hasPermission('ADMINISTRATOR'))
+            return true;
+        let bool2 = false;
+        let i = 0;
+        // Creates a promise
+        const prom = new Promise(resolve => {
+            // Loops through the member's roles
+            member.roles.forEach(async role => {
+                // Selects the permission row
+                let row = (await this.sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, pName, pCategory])).rows[0];
+                // If there is a row AND the permission is enabled for the role
+                if (row && row.bool) {
+                    bool2 = true;
+                    // Resolve the promise if the member has permissions to save time
+                    resolve();
+                }
+                // Increments "i"
+                i++;
+                // If it's the last role that is being looped
+                if (i === message.member.roles.size) {
+                    // Resolve the promise in 10ms
+                    setTimeout(resolve, 10);
+                }
+            });
+        });
+
+        await prom;
+        // If the member does not have permissions
+        if (!bool2)
+            // Return false
+            return false;
+        // If the member does have permissions
+        else
+            // Return true
+            return true;
+    }
+
+    checkClientPerms(channel, ...perms) {
+        // Defines "num" as 0
+        let num = 0;
+
+        // Starts a loop on the permissions
+        perms.forEach(perm => {
+            // If the bot has permissions
+            if (channel.permissionsFor(this.bot.user).has(perm))
+                // Adds one to num
+                num += 1;
+        });
+
+        // Return num
+        return num;
+    }
+
+    matchInArray(expression, strings) {
+        // Defines "len" as the array length of "strings"
+        let len = strings.length,
+            i = 0;
+
+        // Starts a for loop
+        for (; i < len; i++) {
+            // If the regex is valid in the string
+            if (expression.test(strings[i]))
+                // Returns true
+                return true;
+        }
+
+        // Returns false
+        return false;
+    }
+
+    get allAlias() {
+        // Defines "allAliases" as an object
+        const allAliases = {};
+
+        // Starts a loop on all the commands
+        Object.values(this.commands).forEach(cmd => {
+            const cmdName = cmd.help.name;
+            // Starts a nested loop for each alias of the command
+            cmd.aliases.forEach(alias => {
+                // If there is no array for that command, make one
+                if (!allAliases[cmdName])
+                    allAliases[cmdName] = [];
+
+                // Add the alias to the array
+                allAliases[cmdName].push(alias);
+            });
+            // Adds the actual command into the array
+            allAliases[cmdName].push(cmdName);
+        });
+
+        // Returns the array
+        return allAliases;
+    }
 }
 
 // Defines "Client" as the client object.
@@ -115,18 +261,21 @@ bot.on('ready', () => require('./events/ready.js')(Client, bot));
 // Starts an event listener "message", this is emitted when a message is sent.
 bot.on('message', message => require('./events/message.js')(Client, message));
 
+// Starts an event listener "voiceStateUpdate", this is emitted when any voice states are updated.
+bot.on('voiceStateUpdate', (oldVoice, newVoice) => require('./events/voiceStateUpdate.js')(Client, oldVoice, newVoice));
+
 // Emitted whenever the client's WebSocket encounters a connection error.
 bot.on('error', console.error);
 
 // Emitted when the process encounters a warning.
 bot.on('warn', i => {
     console.warn(i);
-    Client.rollbar.warn(i);
+    return Client.rollbar.warn(i);
 });
 
 process.on('unhandledRejection', error => {
     console.error(error);
-    Client.rollbar.error(error);
+    return Client.rollbar.error(error);
 });
 
 // Logs the bot in.

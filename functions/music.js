@@ -58,7 +58,7 @@ module.exports = {
         const filter = (reaction, user) => user.id === message.author.id && emojis.includes(reaction.emoji.name);
 
         // Creates an await reactions
-        const reactions = msg.awaitReactions(filter, {
+        const reactions = await msg.awaitReactions(filter, {
             time: 30000,
             max: 1
         });
@@ -94,27 +94,54 @@ module.exports = {
         if (id.indexOf('youtube.com') === -1)
             id = 'https://www.youtube.com/watch?v=' + id;
 
-        // Defines "dispatcher" as the returned value of VoiceConnection#play, and starts playing the music
-        const dispatcher = connection.play(this.ytdl(id));
-
         // Defines "guild" as the object from musicfn.guilds
         const guild = this.guilds[message.guild.id];
 
-        // Sets the volume to save lives
-        dispatcher.setVolumeLogarithmic(guild.volume / 180);
-
         // Gets the video info
         const video = await this.fetchVideoInfo.getVideo(id);
-        guild.dispatcher = dispatcher;
         guild.voiceChannel = connection.channel;
         guild.isPlaying = true;
         guild.queueIDs.push(video.id);
         guild.queueNames.push(video.title);
 
+        // If there was a song already
+        if (guild.queueNames.length > 1) {
+            // Creates an embed
+            var embed = new Client.Discord.MessageEmbed()
+                .setDescription(`Added to queue: **[${Client.Discord.Util.escapeMarkdown(video.title)}](${video.url})**`)
+                .setThumbnail(video.thumbnails['high'].url)
+                .setFooter(`${Client.moment().startOf('day').seconds(video.durationSeconds).format('H:mm:ss')} | Published at`)
+                .setTimestamp(video.publishedAt)
+                .setColor(0x00FFFF);
+            // If this is a new queue
+        } else {
+            // Creates an embed
+            var embed = new Client.Discord.MessageEmbed()
+                .setDescription(`Now Playing: **[${Client.Discord.Util.escapeMarkdown(video.title)}](${video.url})**`)
+                .setThumbnail(video.thumbnails['high'].url)
+                .setFooter(`${Client.moment().startOf('day').seconds(video.durationSeconds).format('H:mm:ss')} | Published at`)
+                .setTimestamp(video.publishedAt)
+                .setColor(0x00FFFF);
+        }
+
+        // Send the embed
+        message.channel.send(embed);
+
+        // If the command was adding a song
+        if (guild.queueIDs.length > 1) return;
+
+        // Defines "dispatcher" as the returned value of VoiceConnection#play, and starts playing the music
+        const dispatcher = connection.play(this.ytdl(id));
+
+        guild.dispatcher = dispatcher;
+
+        // Sets the volume to save lives
+        dispatcher.setVolumeLogarithmic(guild.volume / 180);
+
         // When the song finishes
         dispatcher.on('finish', () => {
             // If looping is enabled
-            if (guild.loop) {
+            if (guild.looping) {
                 // Moves the first element to the last
                 guild.queueIDs.push(guild.queueIDs.shift());
                 guild.queueNames.push(guild.queueNames.shift());

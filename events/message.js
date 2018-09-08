@@ -20,7 +20,7 @@ module.exports = async (Client, message) => {
             skippers: [],
             skips: 0,
             searching: false,
-            loop: true,
+            loop: false,
             volume: 50,
             voiceChannel: null,
             dispatcher: null,
@@ -38,7 +38,7 @@ module.exports = async (Client, message) => {
 
     // Creates a Regex for the bot mention.
     const regexp = new RegExp(`^<@!?${message.client.user.id}> `);
-    
+
     // If the message didn't start with the prefix AND with a mention, return
     if (!message.content.startsWith(Client.prefix) && !message.content.match(regexp)) return;
 
@@ -57,20 +57,48 @@ module.exports = async (Client, message) => {
     const command = args[0].toLowerCase();
 
     // If the command is not found
-    if (!(command in Client.commands)) {
+    if (!(command in Client.commands) && !(command in Client.allAlias)) {
         // Checks if the unknown command message is enabled on the server
         const unknownCmd = (await Client.sql.query('SELECT * FROM cmdnotfound WHERE guildid = $1 AND bool = $2', [message.guild.id, 1]));
         if (unknownCmd) {
             // Gets the closest strings for the command
             const cmds = Client.getFuzz(command);
-            
+
             // Sends a message
-            message.reply(` I did not find that command. Did you mean \`${cmds[0][0]}, ${cmds[1][0]}, or ${cmds[2][0]}\`?`);
+            message.reply(`I did not find that command. Did you mean \`${cmds[0][0]}, ${cmds[1][0]}, or ${cmds[2][0]}\`?`);
         }
         // Returns
         return;
     }
 
-    // Executes the function
-    Client.commands[command](Client, message, args);
+    // If the member is uncached
+    if (!message.member)
+        // Updates message.member as the cached member, and adds it to cache
+        message.member = await message.guild.members.fetch({
+            user: message.author,
+            cache: true
+        });
+
+    // If the bot is not cached
+    if (!message.guild.me)
+        // Fetch the bot, and store it in message.guild.me
+        message.guild.me = await message.guild.members.fetch({
+            user: Client.bot.user,
+            cache: true
+        });
+
+    // If the command executed was not an alias
+    if (command in Client.commands)
+        // Executes the function
+        return Client.commands[command](Client, message, args);
+
+    // If it is an alias
+    else
+        for (val in Client.allAlias) {
+            const prop = Client.allAlias[val];
+                if (prop.includes(command)) {
+                    Client.commands[val](Client, message, args);
+                    break;
+                }
+        }
 }
