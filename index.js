@@ -312,8 +312,6 @@ client.bot.on("ready", async () => { // Starts the event "ready", this is execut
     });
 
     await sql.connect();
-    await sql.query("DROP TABLE toggleLevel");
-    await sql.query("CREATE TABLE toggleLevel (guildId TEXT, bool INTEGER)");
 
     sql.query('DELETE FROM mute');
 });
