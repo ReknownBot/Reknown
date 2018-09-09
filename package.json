@@ -22,10 +22,12 @@
   "homepage": "https://github.com/Jyguy/Reknown#readme",
   "dependencies": {
     "array-utility": "0.0.2",
+    "babel-eslint": "^9.0.0",
     "canvas": "^1.6.11",
     "dateformat": "^3.0.3",
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^6.0.0",
+    "eslint-config-standard": "^12.0.0",
     "ffmpeg-binaries": "^4.0.0",
     "fs": "0.0.1-security",
     "fuzzball": "^1.1.5",
@@ -40,5 +42,12 @@
     "simple-youtube-api": "^5.0.2",
     "youtube-info": "^1.2.0",
     "ytdl-core": "^0.25.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.5.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0"
   }
 }
