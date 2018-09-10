@@ -61,7 +61,11 @@ module.exports = async (Client, message, args) => {
         reason: reason
       });
 
+<<<<<<< HEAD
       return message.channel.send(`Successfully banned ${member.user.tag}${reason ? ` for ${reason}` : '.'}`);
+=======
+      return message.channel.send(`Successfully banned ${member.user.tag}${reason ? ` for the reason of ${reason}` : '.'}`);
+>>>>>>> cc493c5643de1742080c129006b4ecc279153e14
     } catch (e) {
       // If the member is not found in the guild
       return message.reply('That is not a valid member! (Looking for force ban? Call the option `--force`.)');

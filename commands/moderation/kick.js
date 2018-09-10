@@ -1,4 +1,5 @@
 module.exports = async (Client, message, args) => {
+<<<<<<< HEAD
   if (!await Client.checkPerms('kick', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.kick` permission.');
 
   if (!args[1]) return message.reply('You have to supply a member for me to kick!');
@@ -20,6 +21,9 @@ module.exports = async (Client, message, args) => {
   } catch (e) {
     return message.reply('That is not a valid member!');
   }
+=======
+  return 'wip';
+>>>>>>> cc493c5643de1742080c129006b4ecc279153e14
 };
 
 module.exports.help = {

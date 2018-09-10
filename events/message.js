@@ -8,9 +8,12 @@ module.exports = async (Client, message) => {
     return message.channel.send('You cannot use me in a DM, please use a server.');
   }
 
+<<<<<<< HEAD
   // If the guild is not available
   if (!message.guild.available) return;
 
+=======
+>>>>>>> cc493c5643de1742080c129006b4ecc279153e14
   // Defines "permissions" as the bot's permissions for the channel.
   const permissions = message.channel.permissionsFor(message.client.user);
   if (!permissions.has('VIEW_CHANNEL') || !permissions.has('SEND_MESSAGES')) return;
