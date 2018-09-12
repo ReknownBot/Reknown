@@ -75,7 +75,10 @@ module.exports = async (Client, message, args) => {
   });
 
   collector.on('end', collected => {
-    if (collected.size === 0) return message.reply('Time ran out, stopping the minigame.');
+    if (collected.size === 0) {
+      playing.delete(message.author.id + message.guild.id);
+      return message.reply('Time ran out, stopping the minigame.');
+    }
   });
 };
 
