@@ -33,6 +33,7 @@ const client = class {
     this.modCommandsList = this.fs.readdirSync('./commands/moderation');
     this.musicCommandsList = this.fs.readdirSync('./commands/music');
     this.botCommandsList = this.fs.readdirSync('./commands/bot_list');
+    this.miniCommandsList = this.fs.readdirSync('./commands/minigames');
     this.commandsList = [];
     this.eventList = this.fs.readdirSync('./events');
 
@@ -41,7 +42,8 @@ const client = class {
       misc: this.miscCommandsList,
       moderation: this.modCommandsList,
       music: this.musicCommandsList,
-      bot_list: this.botCommandsList
+      bot_list: this.botCommandsList,
+      minigames: this.miniCommandsList
     };
     const categNames = Object.keys(categories);
     for (let i = 0; i < categNames.length; i++) { // Creates a loop
@@ -95,6 +97,7 @@ const client = class {
     this.Discord = Discord;
     this.moment = require('moment');
     this.permissions = require('./permissions.json');
+    this.escapeMarkdown = this.Discord.Util.escapeMarkdown;
   }
 
   capFirstLetter (str) {

@@ -9,7 +9,6 @@ module.exports = async (Client, message, args) => {
 
   dblClient.getBot(bot, async (err, res) => {
     if (err) {
-      // eslint-disable-next-line eqeqeq
       if (err != 'Error: Got HTTP Code 404') throw new Error(err);
       return message.reply('I did not find a bot with that ID.');
     }

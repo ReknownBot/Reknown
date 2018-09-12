@@ -3,7 +3,8 @@ const categoryObj = {
   'fun': 'Fun',
   'music': 'Music',
   'moderation': 'Moderation',
-  'misc': 'Miscellaneous'
+  'misc': 'Miscellaneous',
+  'minigames': 'Minigames'
 };
 
 module.exports = async (Client, message, args) => {
@@ -13,6 +14,7 @@ module.exports = async (Client, message, args) => {
       .setColor(0x00FFFF);
 
     Object.values(Client.commands).forEach(cmd => {
+      if (cmd.private && message.author.id !== '288831103895076867') return;
       const name = cmd.help.name;
       const category = categoryObj[cmd.help.category];
       const field = embed.fields.find(field => field.name === category);
@@ -24,7 +26,6 @@ module.exports = async (Client, message, args) => {
     message.author.send(embed)
       .then(() => message.reply('I have send a list of commands to your DMs.'))
       .catch(e => {
-        // eslint-disable-next-line eqeqeq
         if (e == 'DiscordAPIError: Cannot send messages to this user') {
           message.reply('I could not send the message to you. If you want to view the commands, either hop over to our website (<https://reknownbot.herokuapp.com/commands>) or enable DMs.');
         } else process.emit('unhandledRejection', e);
@@ -33,6 +34,7 @@ module.exports = async (Client, message, args) => {
     if (!Object.keys(Client.allAlias).includes(args[1].toLowerCase())) return message.reply(`I did not find \`${args[1]}\` in my command list.`);
     const cmd = Client.allAlias[args[1].toLowerCase()];
     const cmdInfo = Client.commands[cmd];
+    if (cmdInfo.private && message.author.id !== '288831103895076867') return message.reply('Sorry, but that command is private.');
     const embed = new Client.Discord.MessageEmbed()
       .setTitle(`${cmd} Info`)
       .setColor(0x00FFFF)
