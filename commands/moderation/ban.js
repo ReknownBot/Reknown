@@ -15,61 +15,44 @@ module.exports = async (Client, message, args) => {
     return message.reply('You have to include a member for me to ban!');
   }
 
-  if (!message.guild.owner) {
-    message.guild.owner = message.guild.members.fetch({
-      user: message.guild.ownerID,
-      cache: true
-    });
-  }
-
   // Defines "regex" as a new regular expression
   const regex = new RegExp('--force', 'g');
 
   // If the force option was not called
   if (!Client.matchInArray(regex, args)) {
-    try {
-      // Gets the member
-      const member = await message.guild.members.fetch({
-        user: args[1] ? args[1].replace(/[<>@!?]/g, '') : 'placeholder',
-        cache: true
-      });
+    // Gets the member
+    const member = message.guild.members.get(args[1] ? args[1].replace(/[<>@!?]/g, '') : null);
+    // If the member is not found in the guild
+    if (!member) return message.reply('That is not a valid member! (Looking for force ban? Call the option `--force`.)');
 
-      // If the mentioned member's roles is higher than the message's author's roles AND the message's author is not the owner
-      if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) {
-        // Send a message
-        return message.reply('Your role position is not high enough!');
-      }
-
-      // If the mentioned user is the owner
-      if (member === message.guild.owner) {
-        // Send a message
-        return message.reply('I cannot ban an owner!');
-      }
-
-      // If the mentioned user was the message author
-      if (member === message.member) {
-        return message.reply('You cannot ban yourself!');
-      }
-
-      // If the bot's role position is lower or equal to the member
-      if (message.guild.me.roles.highest.position <= member.roles.highest.position) { return message.reply('My role position is not high enough!'); }
-
-      const reason = args.slice(2).join(' ');
-
-      // Bans the member
-      member.ban({
-        reason: reason
-      });
-
-<<<<<<< HEAD
-      return message.channel.send(`Successfully banned ${member.user.tag}${reason ? ` for ${reason}` : '.'}`);
-=======
-      return message.channel.send(`Successfully banned ${member.user.tag}${reason ? ` for the reason of ${reason}` : '.'}`);
->>>>>>> cc493c5643de1742080c129006b4ecc279153e14
-    } catch (e) {
-      // If the member is not found in the guild
-      return message.reply('That is not a valid member! (Looking for force ban? Call the option `--force`.)');
+    // If the mentioned member's roles is higher than the message's author's roles AND the message's author is not the owner
+    if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) {
+      // Send a message
+      return message.reply('Your role position is not high enough!');
     }
+
+    // If the mentioned user is the owner
+    if (member === message.guild.owner) {
+      // Send a message
+      return message.reply('I cannot ban an owner!');
+    }
+
+    // If the mentioned user was the message author
+    if (member === message.member) {
+      return message.reply('You cannot ban yourself!');
+    }
+
+    // If the bot's role position is lower or equal to the member
+    if (message.guild.me.roles.highest.position <= member.roles.highest.position) { return message.reply('My role position is not high enough!'); }
+
+    const reason = args.slice(2).join(' ');
+
+    // Bans the member
+    member.ban({
+      reason: reason
+    });
+
+    return message.channel.send(`Successfully banned ${member.user.tag}${reason ? ` for ${reason}` : '.'}`);
 
     // If it was called
   } else {

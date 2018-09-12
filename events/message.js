@@ -8,12 +8,9 @@ module.exports = async (Client, message) => {
     return message.channel.send('You cannot use me in a DM, please use a server.');
   }
 
-<<<<<<< HEAD
   // If the guild is not available
   if (!message.guild.available) return;
 
-=======
->>>>>>> cc493c5643de1742080c129006b4ecc279153e14
   // Defines "permissions" as the bot's permissions for the channel.
   const permissions = message.channel.permissionsFor(message.client.user);
   if (!permissions.has('VIEW_CHANNEL') || !permissions.has('SEND_MESSAGES')) return;
@@ -31,7 +28,8 @@ module.exports = async (Client, message) => {
       volume: 50,
       voiceChannel: null,
       dispatcher: null,
-      isPlaying: false
+      isPlaying: false,
+      paused: false
     };
   }
 
@@ -78,24 +76,6 @@ module.exports = async (Client, message) => {
     }
     // Returns
     return;
-  }
-
-  // If the member is uncached
-  if (!message.member) {
-    // Updates message.member as the cached member, and adds it to cache
-    message.member = await message.guild.members.fetch({
-      user: message.author,
-      cache: true
-    });
-  }
-
-  // If the bot is not cached
-  if (!message.guild.me) {
-    // Fetch the bot, and store it in message.guild.me
-    message.guild.me = await message.guild.members.fetch({
-      user: Client.bot.user,
-      cache: true
-    });
   }
 
   // If the command executed was not an alias

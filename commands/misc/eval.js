@@ -37,3 +37,5 @@ module.exports.help = {
   usage: '?eval <Code>',
   aliases: []
 };
+
+module.exports.private = true;

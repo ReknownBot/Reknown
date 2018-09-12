@@ -42,7 +42,6 @@ async function logMessage (Client, member, guild) {
 module.exports = async (Client, member) => {
   const guild = member.guild;
   if (!guild.available) return;
-  if (!guild.me) guild.me = await guild.members.fetch(Client.bot.user);
   if (member === guild.me) return;
 
   logMessage(Client, member, guild);

@@ -32,6 +32,7 @@ const client = class {
     this.miscCommandsList = this.fs.readdirSync('./commands/misc');
     this.modCommandsList = this.fs.readdirSync('./commands/moderation');
     this.musicCommandsList = this.fs.readdirSync('./commands/music');
+    this.botCommandsList = this.fs.readdirSync('./commands/bot_list');
     this.commandsList = [];
     this.eventList = this.fs.readdirSync('./events');
 
@@ -39,7 +40,8 @@ const client = class {
       fun: this.funCommandsList,
       misc: this.miscCommandsList,
       moderation: this.modCommandsList,
-      music: this.musicCommandsList
+      music: this.musicCommandsList,
+      bot_list: this.botCommandsList
     };
     const categNames = Object.keys(categories);
     for (let i = 0; i < categNames.length; i++) { // Creates a loop
@@ -71,6 +73,8 @@ const client = class {
     this.dateFormat = require('dateformat');
     // Requires fuzzball
     this.fuzz = require('fuzzball');
+    // Requires the discord-bot-list module
+    this.dbl = require('discord-bot-list');
     // Defines client.cooldown as
     this.cooldown = new Set();
     // Defines "msgEdit" as an object, this is used for editing features.
@@ -90,54 +94,7 @@ const client = class {
     this.bot = bot;
     this.Discord = Discord;
     this.moment = require('moment');
-
-    this.permissions = {
-      music: [
-        'loop',
-        'pause',
-        'fskip',
-        'clear'
-      ],
-      moderation: [
-        'ban',
-        'softban',
-        'unban',
-        'kick',
-        'mute',
-        'unmute',
-        'warn',
-        'unwarn',
-        'nick',
-        'log',
-        'purge',
-        'blacklist',
-        'unblacklist',
-        'ccreate',
-        'cdelete'
-      ],
-      level: [
-        'role',
-        'options',
-        'set'
-      ],
-      slowmode: [
-        'set',
-        'bypass'
-      ],
-      misc: [
-        'setperm',
-        'rules',
-        'star',
-        'prefix',
-        'togglemsg',
-        'welcome',
-        'update',
-        'autorole',
-        'invite',
-        'grole',
-        'rrole'
-      ]
-    };
+    this.permissions = require('./permissions.json');
   }
 
   capFirstLetter (str) {

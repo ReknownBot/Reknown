@@ -5,11 +5,7 @@ module.exports = {
   guilds: {},
   musicBool: {},
 
-<<<<<<< HEAD
   async isValidYT (str) {
-=======
-  async isValidYT(str) {
->>>>>>> cc493c5643de1742080c129006b4ecc279153e14
     try {
       await this.fetchVideoInfo.getVideo(str);
       // If it is valid
@@ -20,11 +16,7 @@ module.exports = {
     }
   },
 
-<<<<<<< HEAD
   async search_video (str, Client, message) {
-=======
-  async search_video(str, Client, message) {
->>>>>>> cc493c5643de1742080c129006b4ecc279153e14
     // Gets five results from youtube depending on the query
     const results = await this.fetchVideoInfo.searchVideos(str, 5);
 
@@ -99,11 +91,8 @@ module.exports = {
   },
 
   async playMusic (id, message, Client, connection) {
-<<<<<<< HEAD
     if (id.indexOf('youtube.com') === -1) id = 'https://www.youtube.com/watch?v=' + id;
 
-=======
->>>>>>> cc493c5643de1742080c129006b4ecc279153e14
     // Defines "guild" as the object from musicfn.guilds
     const guild = this.guilds[message.guild.id];
 
@@ -143,7 +132,7 @@ module.exports = {
       if (guild.queueIDs.length === 0) {
         // Resets all the properties to its' default values
         guild.isPlaying = false;
-        guild.voiceChannel.leave();
+        guild.voiceChannel ? guild.voiceChannel.leave() : null;
         guild.voiceChannel = null;
         guild.dispatcher = null;
         guild.volume = 50;
@@ -192,11 +181,7 @@ module.exports = {
     message.channel.send(embed);
   },
 
-<<<<<<< HEAD
   addSkip (message) {
-=======
-  addSkip(message) {
->>>>>>> cc493c5643de1742080c129006b4ecc279153e14
     const server = this.guilds[message.guild.id];
     server.skips += 1;
     server.skippers.push(message.author.id);

@@ -1,0 +1,47 @@
+{
+  "music": [
+    "loop",
+    "pause",
+    "fskip",
+    "clear"
+  ],
+  "moderation": [
+    "ban",
+    "softban",
+    "unban",
+    "kick",
+    "mute",
+    "unmute",
+    "warn",
+    "unwarn",
+    "nick",
+    "log",
+    "purge",
+    "blacklist",
+    "unblacklist",
+    "ccreate",
+    "cdelete"
+  ],
+  "level": [
+    "role",
+    "options",
+    "set"
+  ],
+  "slowmode": [
+    "set",
+    "bypass"
+  ],
+  "misc": [
+    "setperm",
+    "rules",
+    "star",
+    "prefix",
+    "togglemsg",
+    "welcome",
+    "update",
+    "autorole",
+    "invite",
+    "grole",
+    "rrole"
+  ]
+}

@@ -24,6 +24,7 @@
     "array-utility": "0.0.2",
     "babel-eslint": "^9.0.0",
     "dateformat": "^3.0.3",
+    "discord-bot-list": "^1.0.1",
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^6.0.0",
     "eslint-config-standard": "^12.0.0",

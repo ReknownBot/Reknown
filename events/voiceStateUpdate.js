@@ -1,8 +1,6 @@
 module.exports = async (Client, oldVoice, newVoice) => {
   const oldvc = oldVoice.channel;
-
   const newvc = newVoice.channel;
-
   const guild = oldVoice.member.guild;
 
   // If the voice state update was not in a guild
@@ -22,6 +20,7 @@ module.exports = async (Client, oldVoice, newVoice) => {
   }
 
   if (oldvc.members.filter(m => !m.user.bot).size === 0) {
+    server.voiceChannel.leave();
     server.voiceChannel = null;
     server.dispatcher = null;
     server.skips = 0;
@@ -29,5 +28,6 @@ module.exports = async (Client, oldVoice, newVoice) => {
     server.looping = false;
     server.queueNames = [];
     server.queueIDs = [];
+    server.paused = false;
   }
 };
