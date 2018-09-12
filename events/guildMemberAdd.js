@@ -1,12 +1,12 @@
 async function welcomeMessage (Client, member, guild) {
-  const welcomeToggle = (await Client.sql.query('SELECT * FROM togglewelcome WHERE guildid = $1', [guild.id])).rows[0];
-  const channelRow = (await Client.sql.query('SELECT * FROM welcomechannel WHERE guildid = $1', [guild.id])).rows[0];
+  const welcomeToggle = (await Client.sql.query('SELECT bool FROM togglewelcome WHERE guildid = $1', [guild.id])).rows[0];
+  const channelRow = (await Client.sql.query('SELECT channel FROM welcomechannel WHERE guildid = $1', [guild.id])).rows[0];
   if (!welcomeToggle || !welcomeToggle.bool) return;
   const welcomeChannel = channelRow ? guild.channels.get(channelRow.channel) : guild.channels.find(c => c.type === 'text' && c.name === 'action-log');
   if (!welcomeChannel) return;
   if (!Client.checkClientPerms(welcomeChannel, 'SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS')) return;
 
-  const msgRow = (await Client.sql.query('SELECT * FROM customMessages WHERE guildid = $1', [guild.id])).rows[0];
+  const msgRow = (await Client.sql.query('SELECT custommessage FROM customMessages WHERE guildid = $1', [guild.id])).rows[0];
   const msg = msgRow ? msgRow.custommessage
     .replace('<Guild>', guild.name)
     .replace('<User>', member.toString())
@@ -22,8 +22,8 @@ async function welcomeMessage (Client, member, guild) {
 }
 
 async function logMessage (Client, member, guild) {
-  const logToggle = (await Client.sql.query('SELECT * FROM actionlog WHERE guildid = $1', [guild.id])).rows[0];
-  const logRow = (await Client.sql.query('SELECT * FROM logchannel WHERE guildid = $1', [guild.id])).rows[0];
+  const logToggle = (await Client.sql.query('SELECT bool FROM actionlog WHERE guildid = $1', [guild.id])).rows[0];
+  const logRow = (await Client.sql.query('SELECT channelid FROM logchannel WHERE guildid = $1', [guild.id])).rows[0];
   if (!logToggle || !logToggle.bool) return;
   const logChannel = logRow ? guild.channels.get(logRow.channelid) : guild.channels.find(c => c.type === 'text' && c.name === 'action-log');
   if (!logChannel) return;
@@ -39,11 +39,51 @@ async function logMessage (Client, member, guild) {
   return logChannel.send(embed);
 }
 
+async function autorole (Client, member, guild) {
+  const { rows } = await Client.sql.query('SELECT roleid FROM autorole WHERE guildId = $1', [guild.id]);
+  if (rows.length === 0) return;
+  if (!member.guild.me.hasPermission('MANAGE_ROLES')) return;
+  rows.forEach(r => {
+    // Gets the role
+    const autoRole = guild.roles.get(r.roleid);
+    if (!autoRole) Client.sql.query('DELETE FROM autorole WHERE guildId = $1 AND roleId = $2', [guild.id, r.roleid]);
+    else if (autoRole.position < guild.me.roles.highest.position) member.roles.add(autoRole, 'Reknown Autorole');
+  });
+}
+
+async function levelrole (Client, member, guild) {
+  const toggleLev = (await Client.sql.query('SELECT bool FROM togglelevel WHERE guildid = $1', [guild.id]));
+  if (!toggleLev || !toggleLev.bool) return;
+  const { rows } = await Client.sql.query('SELECT roleid, level FROM levelrole WHERE guildid = $1', [guild.id]);
+  if (rows.length === 0) return;
+  rows.forEach(async row => {
+    // Gets the role
+    const levelRole = guild.roles.get(row.roleid);
+    if (!levelRole) Client.sql.query('DELETE FROM levelrole WHERE guildid = $1 AND roleid = $2', [guild.id, row.roleid]);
+    else if (levelrole.position < guild.me.roles.highest.position) {
+      const curLevel = (await Client.sql.query('SELECT level FROM scores WHERE userid = $1', [member.id])).rows[0].level;
+      if (curLevel < row.level) return;
+      member.roles.add(levelrole, 'Level Role');
+    }
+  });
+}
+
+async function mute (Client, member, guild) {
+  const row = (await Client.sql.query('SELECT * FROM mute WHERE guildid = $1 AND memberid = $2', [guild.id, member.id])).rows[0];
+  if (!row) return;
+  if (!guild.me.hasPermission('MANAGE_ROLES')) return;
+  const mutedRole = guild.roles.find(r => r.name === 'Muted');
+  if (mutedRole && !member.roles.has(mutedRole.id)) member.roles.add(mutedRole);
+}
+
 module.exports = async (Client, member) => {
   const guild = member.guild;
   if (!guild.available) return;
   if (member === guild.me) return;
 
   logMessage(Client, member, guild);
-  return welcomeMessage(Client, member, guild);
+  welcomeMessage(Client, member, guild);
+  autorole(Client, member, guild);
+  levelrole(Client, member, guild);
+  mute(Client, member, guild);
 };
