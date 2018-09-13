@@ -169,10 +169,8 @@ const client = class {
     // Defines "len" as the array length of "strings"
     let len = strings.length;
 
-    let i = 0;
-
     // Starts a for loop
-    for (; i < len; i++) {
+    for (let i = 0; i < len; i++) {
       // If the regex is valid in the string
       if (expression.test(strings[i])) {
         // Returns true

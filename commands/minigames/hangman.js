@@ -1,5 +1,5 @@
 const playing = new Set();
-function setCharAt (str, index, chr) {
+function setCharAt(str, index, chr) {
   if (index > str.length - 1) return str;
   return str.substr(0, index) + chr + str.substr(index + 1);
 }
@@ -8,7 +8,7 @@ module.exports = async (Client, message, args) => {
   if (playing.has(message.author.id + message.guild.id)) return message.reply('You are already playing a hangman game! Please finish that first.');
   playing.add(message.author.id + message.guild.id);
   const hasPerm = Client.checkClientPerms(message.channel, 'MANAGE_MESSAGES');
-  const word = require('random-word')();
+  const word = require('rword').generate();
   let blurredWord = '_'.repeat(word.length);
   let lives = 12;
   const sLetters = [];
@@ -19,11 +19,11 @@ module.exports = async (Client, message, args) => {
 
   collector.on('collect', async m => {
     if (m.content.toLowerCase() === 'stop') {
+      playing.delete(message.author.id + message.guild.id);
       collector.stop();
       let content = 'Successfully stopped the minigame.';
       if (msg.deleted) message.channel.send(content);
       else msg.edit(content);
-      playing.delete(message.author.id + message.guild.id);
       return;
     }
     if (hasPerm) m.delete();
@@ -49,8 +49,8 @@ module.exports = async (Client, message, args) => {
           blurredWord = setCharAt(blurredWord, indices[i], letter);
         }
         if (blurredWord === word) {
-          collector.stop();
           playing.delete(message.author.id + message.guild.id);
+          collector.stop();
           let content = `You won! The word was **${word}**, and you had **${lives}** lives left.`;
           if (msg.deleted) message.channel.send(content);
           else msg.edit(content);
@@ -62,8 +62,8 @@ module.exports = async (Client, message, args) => {
       } else {
         lives -= 1;
         if (lives === 0) {
-          collector.stop();
           playing.delete(message.author.id + message.guild.id);
+          collector.stop();
           return message.channel.send(`You lost all your lives! The word was **${word}**.`);
         } else {
           let content = `That letter is incorrect. The word is ${Client.escapeMarkdown(blurredWord)}. You have **${lives}** lives left.`;
@@ -74,8 +74,8 @@ module.exports = async (Client, message, args) => {
     }
   });
 
-  collector.on('end', collected => {
-    if (collected.size === 0) {
+  collector.on('end', () => {
+    if (playing.has(message.author.id + message.guild.id)) {
       playing.delete(message.author.id + message.guild.id);
       return message.reply('Time ran out, stopping the minigame.');
     }

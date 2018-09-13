@@ -34,6 +34,7 @@ module.exports = async (Client, message, args) => {
     if (!Object.keys(Client.allAlias).includes(args[1].toLowerCase())) return message.reply(`I did not find \`${args[1]}\` in my command list.`);
     const cmd = Client.allAlias[args[1].toLowerCase()];
     const cmdInfo = Client.commands[cmd];
+    const options = cmdInfo.help.options;
     if (cmdInfo.private && message.author.id !== '288831103895076867') return message.reply('Sorry, but that command is private.');
     const embed = new Client.Discord.MessageEmbed()
       .setTitle(`${cmd} Info`)
@@ -42,6 +43,7 @@ module.exports = async (Client, message, args) => {
       .addField('Description', cmdInfo.help.desc, true)
       .addField('Category', categoryObj[cmdInfo.help.category], true)
       .addField('Usage', cmdInfo.help.usage, true)
+      .addField('Options', typeof options === 'object' ? Object.keys(options).map(option => `--${option} | ${cmdInfo.help.options[option]}`) : 'None')
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
 
     message.channel.send(embed);
