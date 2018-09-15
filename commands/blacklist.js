@@ -26,7 +26,7 @@ module.exports = {
                     if (selectedMember === message.member) return client.editMsg(sMessage, "You cannot blacklist yourself!", message);
                     if (selectedMember.roles.highest.position >= message.member.roles.highest.position && message.member.id !== "288831103895076867" && message.mmber !== message.guild.owner) return client.editMsg(sMessage, "You cannot blacklist members that have the same role or above yours!", message);
 
-                    let row = await sql.query(`SELECT * FROM blacklist WHERE guildId = '${message.guild.id}' AND userId = '${selectedMember.id}'`).rows[0];
+                    let row = (await sql.query(`SELECT * FROM blacklist WHERE guildId = '${message.guild.id}' AND userId = '${selectedMember.id}'`)).rows[0];
                     if (row) {
                         client.editMsg(sMessage, "That user is already blacklisted!", message);
                     } else {
