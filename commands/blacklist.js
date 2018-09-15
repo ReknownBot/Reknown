@@ -42,7 +42,7 @@ module.exports = {
                             }
                             collector.stop();
                             let reason = collected.content;
-                            sql.query(`INSERT INTO blacklist (userId, guildId, reason, by) VALUES ($1, $2, $3, $4)`, [selectedMember.id, message.guild.id, reason, `message.author.tag (${message.author.id})`]);
+                            sql.query(`INSERT INTO blacklist (userId, guildId, reason, by) VALUES ($1, $2, $3, $4)`, [selectedMember.id, message.guild.id, reason, `${message.author.tag} (${message.author.id})`]);
                             client.editMsg(sMessage, `:+1:, Successfully blacklisted ${selectedMember.user.tag} (${selectedMember.id}) for ${reason}`, message);
                         });
 
