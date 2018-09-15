@@ -1,14 +1,3 @@
-const applyText = (canvas, text) => {
-  const ctx = canvas.getContext('2d');
-  let fontSize = 70;
-
-  do {
-    ctx.font = `${fontSize -= 10}px "Mistral"`;
-  } while (ctx.measureText(text).width > canvas.width - 600);
-
-  return ctx.font;
-};
-
 module.exports = {
   func: async (client, sql, Discord) => {
     // Starts an event
@@ -44,50 +33,12 @@ module.exports = {
 
               // Function for welcoming messages
               async function welcomeMessages(msg) {
-                let row2 = (await sql.query('SELECT * FROM picwelcome WHERE guildId = $1', [member.guild.id])).rows[0];
-                if (!row2 || row2.bool) {
-                  const canvas = client.canvas.createCanvas(1600, 600);
-                  const ctx = canvas.getContext('2d');
-
-                  const background = await client.canvas.loadImage('./background.png');
-                  ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-
-                  ctx.strokeStyle = '#74037b';
-                  ctx.strokeRect(0, 0, canvas.width, canvas.height);
-
-                  ctx.font = await applyText(canvas, msg);
-                  ctx.fillStyle = '#FF0000';
-                  ctx.fillText(msg, 600, 100);
-
-                  const {
-                    body: buffer
-                  } = await client.fetch(member.user.displayAvatarURL({ format: "png" }));
-
-                  try {
-                    const avatar = await client.canvas.loadImage(buffer);
-                    ctx.drawImage(avatar, 50, 50, canvas.height - 100, canvas.height - 100);
-
-                    const attachment = new Discord.MessageAttachment(canvas.toBuffer(), 'welcome-image.png');
-                    welcomeChannel.send({
-                      files: [attachment]
-                    });
-                  } catch (e) {
-                    let embed = new Discord.MessageEmbed()
-                      .setDescription(msg)
-                      .setColor(0x00FF00)
-                      .setThumbnail(member.user.displayAvatarURL())
-                      .setFooter("This message was shown since the image failed to load.")
-                      .setTimestamp();
-                    welcomeChannel.send(embed);
-                  }
-                } else {
-                  let embed = new Discord.MessageEmbed()
-                    .setDescription(msg)
-                    .setColor(0x00FF00)
-                    .setThumbnail(member.user.displayAvatarURL())
-                    .setTimestamp();
-                  welcomeChannel.send(embed);
-                }
+                let embed = new Discord.MessageEmbed()
+                  .setDescription(msg)
+                  .setColor(0x00FF00)
+                  .setThumbnail(member.user.displayAvatarURL())
+                  .setTimestamp();
+                welcomeChannel.send(embed);
               }
 
               // Gets the welcoming message for the guild
