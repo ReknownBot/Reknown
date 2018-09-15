@@ -32,7 +32,6 @@ let client = { // Creates an object client
     fetchVideoInfo: require("youtube-info"),
     Rollbar: require("rollbar"),
     osu: require("node-osu"),
-    canvas: require("canvas"),
     fetch: require("node-fetch"),
     dateFormat: require("dateformat"),
     fuzz: require("fuzzball"),
