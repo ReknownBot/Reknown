@@ -10,7 +10,7 @@ module.exports = {
             // Gets the role
             let autoRole = member.guild.roles.get(r.roleid);
             if (!autoRole)
-              sql.query("DELETE FROM autorole WHERE guildId = $1 AND roleId = $2", [message.guild.id, r.roleid]);
+              sql.query("DELETE FROM autorole WHERE guildId = $1 AND roleId = $2", [member.guild.id, r.roleid]);
             else if (autoRole && autoRole.position < member.guild.me.roles.highest.position)
               // Adds the role
               member.roles.add(autoRole, "Reknown Autorole");
