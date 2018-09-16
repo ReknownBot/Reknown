@@ -184,7 +184,7 @@ module.exports = {
                             }
                         } else {
                             if (row.customMessage === msg) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-                            sql.query(`UPDATE customMessages SET customMessage = '${client.escape(msg)}' WHERE guildId = '${message.guild.id}'`);
+                            sql.query(`UPDATE customMessages SET customMessage = $1 WHERE guildId = $2`, [msg, message.guild.id]);
                             client.editMsg(sMessage, `Successfully updated \`welcomemsg\` to \`${msg}\`.`, message);
                         }
                     } else if (option === options[5]) { // goodbyemsg
