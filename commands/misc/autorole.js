@@ -35,7 +35,7 @@ module.exports = async (Client, message, args) => {
         return null;
       }
       return `${role.name} (${row.roleid})`;
-    }).join('\n');
+    }).filter(e => e !== null).join('\n');
     if (roles.length === 0 || str.length === 0) return message.reply('The guild does not have any autoroles!');
     if (str.length <= 2048) {
       const embed = new Client.Discord.MessageEmbed()
@@ -47,8 +47,9 @@ module.exports = async (Client, message, args) => {
     } else {
       const pages = [];
       let page = 1;
+      str = '';
       roles.forEach(role => {
-        if (str.length > 2048) {
+        if (str.length + role.name.length + role.roleid.length + 4 > 2048) {
           pages.push(str);
           str = '';
         }
@@ -84,30 +85,30 @@ module.exports = async (Client, message, args) => {
         } else if (reaction.emoji.name === emojis[1]) {
           if (page === 1) return message.reply('You cannot go before page 1!').then(m => m.delete({ timeout: 5000 }).catch(() => {}));
           page--;
-          return msg.edit(embed.setDescription(pages[page - 1]));
+          return msg.edit(embed.setDescription(pages[page - 1]).setFooter(`Page ${page} of ${pages.length}`));
 
         // Forward
         } else if (reaction.emoji.name === emojis[0]) {
           if (page === pages.length) return message.reply(`You cannot go after page ${page}!`).then(m => m.delete({ timeout: 5000 }).catch(() => {}));
           page++;
-          return msg.edit(embed.setDescription(pages[page - 1]));
+          return msg.edit(embed.setDescription(pages[page - 1]).setFooter(`Page ${page} of ${pages.length}`));
 
         // Rewind
         } else if (reaction.emoji.name === emojis[4]) {
           if (page === 1) return message.reply('You cannot go before page 1!').then(m => m.delete({ timeout: 5000 }).catch(() => {}));
           page = 1;
-          return msg.edit(embed.setDescription(pages[0]));
+          return msg.edit(embed.setDescription(pages[0]).setFooter(`Page ${page} of ${pages.length}`));
 
         // Very end
         } else if (reaction.emoji.name === emojis[3]) {
           if (page === pages.length) return message.reply(`You cannot go after page ${page}!`).then(m => m.delete({ timeout: 5000 }).catch(() => {}));
           page = pages.length;
-          return msg.edit(embed.setDescription(pages[page - 1]));
+          return msg.edit(embed.setDescription(pages[page - 1]).setFooter(`Page ${page} of ${pages.length}`));
         }
       });
 
       collector.on('end', () => {
-        if (!forced) msg.reactions.filter(r => r.users.has(Client.bot.user.id)).forEach(r => r.users.remove(Client.bot.user));
+        if (!forced && !msg.deleted) msg.reactions.filter(r => r.users.has(Client.bot.user.id)).forEach(r => r.users.remove(Client.bot.user));
       });
     }
 
