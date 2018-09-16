@@ -29,9 +29,17 @@ module.exports = async (Client, message, args) => {
     if (hasPerm) m.delete();
     const letter = m.content.toLowerCase();
     if (!allLetters.includes(letter)) {
-      let content = `That is not a letter! The word is ${Client.escapeMarkdown(blurredWord)}. You have **${lives}** lives left.`;
-      if (msg.deleted) msg = await message.channel.send(content);
-      else msg.edit(content);
+      if (letter === word) {
+        let content = `You won! The word was **${word}**, and you had **${lives}** lives left.`;
+        playing.delete(message.author.id + message.guild.id);
+        collector.stop();
+        if (msg.deleted) msg = await message.channel.send(content);
+        else msg.edit(content);
+      } else {
+        let content = `That is not a letter! The word is ${Client.escapeMarkdown(blurredWord)}. You have **${lives}** lives left.`;
+        if (msg.deleted) msg = await message.channel.send(content);
+        else msg.edit(content);
+      }
     } else {
       if (sLetters.includes(letter)) {
         let content = `You had already guessed that letter! The word is ${Client.escapeMarkdown(blurredWord)}. You have **${lives}** lives left.`;
