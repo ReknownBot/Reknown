@@ -4,7 +4,8 @@ const categoryObj = {
   'music': 'Music',
   'moderation': 'Moderation',
   'misc': 'Miscellaneous',
-  'minigames': 'Minigames'
+  'minigames': 'Minigames',
+  'util': 'Utility'
 };
 
 module.exports = async (Client, message, args) => {
@@ -24,7 +25,7 @@ module.exports = async (Client, message, args) => {
     });
 
     message.author.send(embed)
-      .then(() => message.reply('I have send a list of commands to your DMs.'))
+      .then(() => message.reply('I have sent a list of commands to your DMs.'))
       .catch(e => {
         if (e == 'DiscordAPIError: Cannot send messages to this user') {
           message.reply('I could not send the message to you. If you want to view the commands, either hop over to our website (<https://reknownbot.herokuapp.com/commands>) or enable DMs.');

@@ -41,7 +41,7 @@ module.exports = async (Client, message, args) => {
 module.exports.help = {
   name: 'userinfo',
   desc: 'Displays user info about the user mentioned.',
-  category: 'misc',
+  category: 'util',
   usage: '?userinfo [Member]',
   aliases: ['profile', 'uinfo', 'whois']
 };

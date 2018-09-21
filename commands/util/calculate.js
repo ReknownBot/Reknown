@@ -13,7 +13,7 @@ module.exports = async (Client, message, args) => {
 module.exports.help = {
   name: 'calculate',
   desc: 'Calculates a math equation. Powered by **[string-math](https://www.npmjs.com/package/string-math)**.',
-  category: 'misc',
+  category: 'util',
   usage: '?calculate <Equation>',
   aliases: ['calc']
 };

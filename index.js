@@ -34,6 +34,7 @@ const client = class {
     this.musicCommandsList = this.fs.readdirSync('./commands/music');
     this.botCommandsList = this.fs.readdirSync('./commands/bot_list');
     this.miniCommandsList = this.fs.readdirSync('./commands/minigames');
+    this.utilCommandsList = this.fs.readdirSync('./commands/util');
     this.commandsList = [];
     this.eventList = this.fs.readdirSync('./events');
 
@@ -43,7 +44,8 @@ const client = class {
       moderation: this.modCommandsList,
       music: this.musicCommandsList,
       bot_list: this.botCommandsList,
-      minigames: this.miniCommandsList
+      minigames: this.miniCommandsList,
+      util: this.utilCommandsList
     };
     const categNames = Object.keys(categories);
     for (let i = 0; i < categNames.length; i++) { // Creates a loop

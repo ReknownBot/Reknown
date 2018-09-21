@@ -15,7 +15,7 @@ module.exports = async (Client, message, args) => {
 module.exports.help = {
   name: 'avatar',
   desc: 'Displays your or someone else\'s profile picture.',
-  category: 'misc',
+  category: 'util',
   usage: '?avatar [Member]',
   aliases: ['av', 'pfp', 'profilepic']
 };

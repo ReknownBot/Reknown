@@ -7,7 +7,7 @@ module.exports = async (Client, message, args) => {
 module.exports.help = {
   name: 'channelid',
   desc: 'Displays the ID of a channel.',
-  category: 'misc',
+  category: 'util',
   usage: '?channelid [Channel]',
   aliases: ['cid']
 };
