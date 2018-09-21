@@ -41,6 +41,7 @@
     "rollbar": "^2.4.6",
     "rword": "^2.2.0",
     "simple-youtube-api": "^5.0.2",
+    "string-math": "^1.2.1",
     "youtube-info": "^1.2.1",
     "ytdl-core": "^0.25.2"
   },
