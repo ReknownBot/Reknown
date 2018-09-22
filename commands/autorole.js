@@ -29,7 +29,7 @@ module.exports = {
                     if (!selectedRole) return client.editMsg(sMessage, 'You have to mention or supply a valid ID of a role for me to set the auto role for this server!', message);
                     // Checks if the role is @everyone
                     if (selectedRole === message.guild.defaultRole) return client.editMsg(sMessage, "You cannot set the autorole as `@everyone`!", message);
-                    let ro = (await sql.query(`SELECT * FROM autorole WHERE roleId = ${selectedRole.id} AND guildId = ${message.guild.id}`)).rows[0];
+                    let ro = (await sql.query(`SELECT * FROM autorole WHERE roleId = '${selectedRole.id}' AND guildId = '${message.guild.id}'`)).rows[0];
                     if (ro) return client.editMsg(sMessage, "That role is already in the auto role list!", message);
                     // Inserts the row with the information
                     sql.query(`INSERT INTO autorole (guildId, roleId) VALUES ('${message.guild.id}', '${selectedRole.id}')`);
