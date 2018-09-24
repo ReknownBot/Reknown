@@ -20,7 +20,8 @@
     "blacklist",
     "unblacklist",
     "ccreate",
-    "cdelete"
+    "cdelete",
+    "minvite"
   ],
   "level": [
     "role",
