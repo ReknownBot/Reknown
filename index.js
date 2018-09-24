@@ -10,6 +10,7 @@ const sql = new Client({
     host: process.env.SQL_HOST,
     ssl: true
 });
+sql.connect();
 const HypixelAPI = require("hypixel-api");
 require("array-utility"); // More useful array methods
 let emojis = [
