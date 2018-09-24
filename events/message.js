@@ -35,6 +35,8 @@ module.exports = async (Client, message) => {
 
   // Level function
   require('../functions/level.js')(Client, message);
+  // Delete invite function
+  require('../functions/deleteinvite.js')(Client, message);
 
   // Gets the prefix for the server.
   const row = (await Client.sql.query('SELECT * FROM prefix WHERE guildId = $1 LIMIT 1', [message.guild.id])).rows[0];
