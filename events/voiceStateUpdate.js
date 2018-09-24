@@ -26,7 +26,7 @@ module.exports = {
             } catch (e) {
                 console.error(e);
                 let rollbar = new client.Rollbar(client.rollbarKey);
-                rollbar.error("Something went wrong in grole.js", e);
+                rollbar.error("Something went wrong in voiceStateUpdate.js", e);
             }
         });
     }
