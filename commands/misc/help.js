@@ -44,7 +44,7 @@ module.exports = async (Client, message, args) => {
       .addField('Description', cmdInfo.help.desc, true)
       .addField('Category', categoryObj[cmdInfo.help.category], true)
       .addField('Usage', cmdInfo.help.usage, true)
-      .addField('Options', typeof options === 'object' ? Object.keys(options).map(option => `--${option} | ${cmdInfo.help.options[option]}`) : 'None')
+      .addField('Options', typeof options === 'object' ? Object.keys(options).map(option => `--${option} | ${cmdInfo.help.options[option]}`) : 'None', true)
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
 
     message.channel.send(embed);
