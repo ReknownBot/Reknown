@@ -452,7 +452,7 @@ module.exports = {
                         if (row2 && !row2.bool) return client.editMsg(sMessage, `This server has starboard disabled! Use \`${PREFIX}config togglestar true\` to turn it back on.`, message);
                         if (row) {
                             if (row.channelid === selectedChannel.id) return client.editMsg(sMessage, "The value you inputted is already active!", message);
-                            sql.query(`UPDATE starchannel SET channel = '${selectedChannel.id}' WHERE guildId = '${message.guild.id}'`);
+                            sql.query(`UPDATE starchannel SET channelid = '${selectedChannel.id}' WHERE guildId = '${message.guild.id}'`);
                             client.editMsg(sMessage, `Successfully updated \`starchannel\` to ${selectedChannel}.`, message);
                         } else {
                             sql.query(`INSERT INTO starchannel (guildId, channelId) VALUES ('${message.guild.id}', '${selectedChannel.id}')`);
