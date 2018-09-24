@@ -310,8 +310,6 @@ client.bot.on("ready", async () => { // Starts the event "ready", this is execut
         type: "WATCHING"
     });
 
-    await sql.connect();
-
     sql.query('DELETE FROM mute');
 });
 
