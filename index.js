@@ -102,6 +102,7 @@ const client = class {
     this.moment = require('moment');
     this.permissions = require('./permissions.json');
     this.escapeMarkdown = this.Discord.Util.escapeMarkdown;
+    this.contributors = ['468848409202262027', '284857002977525760'];
   }
 
   capFirstLetter (str) {
