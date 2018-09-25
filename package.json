@@ -20,8 +20,12 @@
     "url": "https://github.com/Jyguy/Reknown/issues"
   },
   "homepage": "https://github.com/Jyguy/Reknown#readme",
+  "engines": {
+    "node": "10.11.0"
+  },
   "dependencies": {
     "array-utility": "0.0.2",
+    "await-to-js": "^2.0.1",
     "babel-eslint": "^9.0.0",
     "dateformat": "^3.0.3",
     "discord-bot-list": "^1.0.1",
