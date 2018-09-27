@@ -84,8 +84,9 @@ module.exports = async (Client, message) => {
   if (await require('../functions/blacklist.js')(Client, message.member)) {
     const enabled = (await Client.sql.query('SELECT bool FROM blacklistmsg WHERE guildid = $1 AND bool = 1', [message.guild.id]));
     if (!enabled) return;
-    const { by, reason } = await require('../functions/blacklist.js')(Client, message.member);
-    return message.reply(`You are blacklisted by ${by} for the reason of \`${Client.escapeMarkdown(reason)}\`.`);
+    const obj = await require('../functions/blacklist.js')(Client, message.member);
+    if (obj === 'disabled') return;
+    return message.reply(`You are blacklisted by ${obj.by} for the reason of \`${Client.escapeMarkdown(obj.reason)}\`.`);
   }
 
   // If the command executed was not an alias
