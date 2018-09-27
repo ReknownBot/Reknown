@@ -50,7 +50,7 @@ module.exports = async (Client, message, args) => {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
       const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM blacklistmsg WHERE guildid = $1', [message.guild.id])).rows[0];
-      if ((!row && bool === 1) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
+      if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
       if (!row) Client.sql.query('INSERT INTO blacklistmsg (guildid, bool) VALUES ($1, $2)', [message.guild.id, bool]);
       else Client.sql.query('UPDATE blacklistmsg SET bool = $1 WHERE guildid = $2', [bool, message.guild.id]);
@@ -60,7 +60,7 @@ module.exports = async (Client, message, args) => {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
       const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM deleteinvite WHERE guildid = $1', [message.guild.id])).rows[0];
-      if ((!row && bool === 1) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
+      if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
       if (!row) Client.sql.query('INSERT INTO deleteinvite (guildid, bool) VALUES ($1, $2)', [message.guild.id, bool]);
       else Client.sql.query('UPDATE deleteinvite SET bool = $1 WHERE guildid = $2', [bool, message.guild.id]);
@@ -108,7 +108,7 @@ module.exports = async (Client, message, args) => {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
       const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM togglelevel WHERE guildid = $1', [message.guild.id])).rows[0];
-      if ((!row && bool === 1) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
+      if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
       if (!row) Client.sql.query('INSERT INTO togglelevel (guildid, bool) VALUES ($1, $2)', [message.guild.id, bool]);
       else Client.sql.query('UPDATE togglelevel SET bool = $1 WHERE guildid = $2', [bool, message.guild.id]);
@@ -118,7 +118,7 @@ module.exports = async (Client, message, args) => {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
       const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM actionlog WHERE guildid = $1', [message.guild.id])).rows[0];
-      if ((!row && bool === 1) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
+      if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
       if (!row) Client.sql.query('INSERT INTO actionlog (guildid, bool) VALUES ($1, $2)', [message.guild.id, bool]);
       else Client.sql.query('UPDATE actionlog SET bool = $1 WHERE guildid = $2', [bool, message.guild.id]);
@@ -128,7 +128,7 @@ module.exports = async (Client, message, args) => {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
       const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM togglestar WHERE guildid = $1', [message.guild.id])).rows[0];
-      if ((!row && bool === 1) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
+      if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
       if (!row) Client.sql.query('INSERT INTO togglestar (guildid, bool) VALUES ($1, $2)', [message.guild.id, bool]);
       else Client.sql.query('UPDATE togglestar SET bool = $1 WHERE guildid = $2', [bool, message.guild.id]);
@@ -138,7 +138,7 @@ module.exports = async (Client, message, args) => {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
       const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM togglewelcome WHERE guildid = $1', [message.guild.id])).rows[0];
-      if ((!row && bool === 1) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
+      if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
       if (!row) Client.sql.query('INSERT INTO togglewelcome (guildid, bool) VALUES ($1, $2)', [message.guild.id, bool]);
       else Client.sql.query('UPDATE togglewelcome SET bool = $1 WHERE guildid = $2', [bool, message.guild.id]);
