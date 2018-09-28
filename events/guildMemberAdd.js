@@ -22,21 +22,13 @@ async function welcomeMessage (Client, member, guild) {
 }
 
 async function logMessage (Client, member, guild) {
-  const logToggle = (await Client.sql.query('SELECT bool FROM actionlog WHERE guildid = $1', [guild.id])).rows[0];
-  const logRow = (await Client.sql.query('SELECT channelid FROM logchannel WHERE guildid = $1', [guild.id])).rows[0];
-  if (!logToggle || !logToggle.bool) return;
-  const logChannel = logRow ? guild.channels.get(logRow.channelid) : guild.channels.find(c => c.type === 'text' && c.name === 'action-log');
-  if (!logChannel) return;
-  if (!Client.checkClientPerms(logChannel, 'SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS')) return;
-
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Joined')
     .addField('Member', `${member.user.tag} (${member.id})`)
     .setThumbnail(member.user.displayAvatarURL())
     .setTimestamp()
     .setColor(0x00FF00);
-
-  return logChannel.send(embed);
+  return require('../functions/sendlog.js')(Client, embed, guild.id);
 }
 
 async function autorole (Client, member, guild) {
