@@ -138,7 +138,7 @@ module.exports = async (Client, message, args) => {
 
 module.exports.help = {
   name: 'levelrole',
-  desc: '',
+  desc: 'Adds, removes, lists, or clears the level role! It will only take effect when the leveling system is toggled on.',
   category: 'misc',
   usage: '?levelrole add <Role> <Level Requirement>\n?levelrole remove <Role>\n?levelrole list\n?levelrole clear',
   aliases: ['lrole']
