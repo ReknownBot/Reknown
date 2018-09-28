@@ -166,7 +166,7 @@ const client = class {
       if (!channel.permissionsFor(this.bot.user).has(perm)) bool = false; // Adds one to num i.e makes it truthy
     });
 
-    // Return num
+    // Return bool
     return bool;
   }
 
