@@ -158,16 +158,16 @@ const client = class {
 
   checkClientPerms (channel, ...perms) {
     // Defines "num" as 0
-    let num = 0;
+    let bool = true;
 
     // Starts a loop on the permissions
     perms.forEach(perm => {
       // If the bot has permissions
-      if (channel.permissionsFor(this.bot.user).has(perm)) num += 1; // Adds one to num
+      if (!channel.permissionsFor(this.bot.user).has(perm)) bool = false; // Adds one to num i.e makes it truthy
     });
 
     // Return num
-    return num;
+    return bool;
   }
 
   matchInArray (expression, strings) {
