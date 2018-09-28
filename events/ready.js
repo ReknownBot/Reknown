@@ -8,5 +8,8 @@ module.exports = (Client, bot) => {
   });
 
   // Connects to the postgres database.
-  return Client.sql.connect();
+  Client.sql.connect();
+
+  // Wipes the "mute" table from the database to preserve rows.
+  return Client.sql.query('DELETE FROM mute');
 };
