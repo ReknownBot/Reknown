@@ -35,7 +35,7 @@ module.exports = async (Client, message, args) => {
 
   const reason = args[2] ? args.slice(2).join(' ') : 'None';
 
-  Client.sql.query('INSERT INTO mute (guildid, memberid) VALUES ($1, $2, $3)', [message.guild.id, member.id]);
+  Client.sql.query('INSERT INTO mute (guildid, memberid) VALUES ($1, $2)', [message.guild.id, member.id]);
   member.roles.add(muteRole);
   return message.channel.send(`Successfully muted ${member.user.tag} for \`${Client.escapeMarkdown(reason)}\`.`);
 };
