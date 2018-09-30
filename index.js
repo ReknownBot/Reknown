@@ -73,8 +73,8 @@ const client = class {
     this.osu = new (require('node-osu')).Api(process.env.OSU_KEY);
     // Requires the hypixel API
     this.hypixel = new (require('hypixel-api'))(process.env.HYPIXEL_KEY);
-    // Requires node-fetch for welcoming messages
-    this.fetch = require('node-fetch');
+    // Requires snekfetch
+    this.fetch = require('snekfetch');
     // Requires dateformat
     this.dateFormat = require('dateformat');
     // Requires fuzzball
