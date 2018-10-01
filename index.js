@@ -149,6 +149,7 @@ let client = { // Creates an object client
             "star",
             "prefix",
             "togglemsg",
+            "cooldownmsg",
             "welcome",
             "update",
             "autorole",
