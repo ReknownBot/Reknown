@@ -527,7 +527,7 @@ client.bot.on("message", async message => { // Starts the event "message", this 
                     commandRun();
                 }
             }
-            let row = (await sql.query(`SELECT * FROM blacklist WHERE userId = '${message.author.id}'`)).rows[0];
+            let row = (await sql.query(`SELECT * FROM blacklist WHERE userId = '${message.author.id}' AND guildid = '${message.guild.id}'`)).rows[0];
             if (row) {
                 let row2 = (await sql.query(`SELECT * FROM blacklistmsg WHERE guildId = '${message.guild.id}'`)).rows[0];
                 if (!row2 || row2.bool) {
