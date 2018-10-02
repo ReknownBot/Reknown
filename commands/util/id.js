@@ -1,10 +1,17 @@
 module.exports = async (Client, message, args) => {
-  let member;
-  if (!args[1]) member = message.member;
-  else member = message.guild.members.get(args[1].replace(/[<>@!?]/g, ''));
+  let x;
+  if (!args[1]) x = message.member;
+  else {
+    const possibleMember = message.guild.members.get(args[1].replace(/[<>@!?]/g, ''));
+    const possibleRole = message.guild.roles.get(args[1].replace(/[<>@&]/g, ''));
+    const possibleChannel = message.guild.channels.get(args[1].replace(/[<>#]/g, ''));
+    if (possibleMember) x = possibleMember;
+    else if (possibleRole) x = possibleRole;
+    else if (possibleChannel) x = possibleChannel;
+    else return message.reply('The value you provided did not match anything on the server!');
+  }
 
-  if (!member) return message.reply('The member you provided was not valid!');
-  return message.channel.send(`${message.member === member ? 'Your' : `${member.user.tag}'s`} ID is \`${member.id}\`.`);
+  return message.channel.send(`${message.member === x ? 'Your' : 'The'} ID is \`${x.id}\`.`);
 };
 
 module.exports.help = {
