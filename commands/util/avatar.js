@@ -1,13 +1,14 @@
 module.exports = async (Client, message, args) => {
-  if (!args[1]) var member = message.member;
+  if (!args[1]) var user = message.author;
   // eslint-disable-next-line no-redeclare
-  else var member = message.guild.members.get(args[1].replace(/[<>@!?]/g, ''));
-  if (!member) return message.reply('That member does not exist!');
+  else var user = await Client.bot.users.fetch(args[1].replace(/[<>@!?]/g, '')).catch(() => 'didn\'t find');
+  if (!user || user === 'didn\'t find') return message.reply('That user does not exist!');
 
+  const isAnimated = user.displayAvatarURL().includes('gif');
   const embed = new Client.Discord.MessageEmbed()
-    .setTitle(`${member.user.tag}'s Avatar`)
-    .setImage(member.user.displayAvatarURL({ size: 2048 }))
-    .setColor(member.displayHexColor);
+    .setTitle(`${user.tag}'s Avatar`)
+    .setImage(user.displayAvatarURL({ size: 2048, format: isAnimated ? 'gif' : 'png' }))
+    .setColor(0x00FFFF);
 
   return message.channel.send(embed);
 };
