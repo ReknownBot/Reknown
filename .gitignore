@@ -7,4 +7,3 @@ node_modules
 
 # VSCode and eslint related
 .eslintrc.json
-.vscode/
