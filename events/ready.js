@@ -2,7 +2,7 @@ module.exports = (Client, bot) => {
   // Logs something
   console.log(`Logged in as ${bot.user.tag}!`);
 
-  bot.user.setActivity('you in your sleep 👀', {
+  bot.user.setActivity(`${bot.users.size} Users and ${bot.guilds.size} Servers`, {
     // Sets the activity type for the bot as "Watching"
     type: 'WATCHING'
   });
