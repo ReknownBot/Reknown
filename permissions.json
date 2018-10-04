@@ -37,7 +37,7 @@
     "prefix": "Allows the ability to change the bot's prefix.",
     "togglemsg": "Allows the ability to switch on/off cooldown messages.",
     "welcome": "Allows the ability to change welcome-related options.",
-    "update": "Allows the use of ?updateserver and the ability to change the update channel.",
+    "update": "Allows the use of ?serverupdate and the ability to change the update channel.",
     "autorole": "Allows the ability to change autorole-related options.",
     "invite": "Allows the ability to bypass the deleteinvite config option.",
     "grole": "Allows the use of ?giverole.",
