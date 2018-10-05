@@ -5,7 +5,7 @@
     "fskip": "Allows the use of ?skip --force.",
     "clear": "Allows the use of ?queue clear and remove.."
   },
-  "moderation": {
+  "mod": {
     "ban": "Allows the use of ?ban and ?bans.",
     "softban": "Allows the use of ?softban.",
     "unban": "Allows the use of ?unban.",
@@ -25,7 +25,8 @@
   },
   "level": {
     "role": "Allows the use of ?levelrole.",
-    "options": "Allows the ability to modify level-related settings."
+    "options": "Allows the ability to modify level-related settings.",
+    "set": "Allows the ability of ?setlevel and ?setpoints."
   },
   "slowmode": {
     "set": "Allows the ability to set a slowmode."

@@ -18,10 +18,12 @@ module.exports = async (Client, message, args) => {
 
     return message.channel.send(embed);
   } else {
-    const permNames = Object.values(Client.permissions).map(val => Object.keys(val)).reduce((a, b) => a.concat(b));
-    if (!permNames.includes(args[1].toLowerCase())) return message.reply('The permission name you provided was not valid!');
-    const permDescs = Object.values(Client.permissions).map(val => Object.values(val)).reduce((a, b) => a.concat(b));
-    return message.channel.send(`**${args[1].toLowerCase()}** Info: \`${permDescs[permNames.indexOf(args[1].toLowerCase())]}\``);
+    const permCategory = args[1].toLowerCase().split('.')[0];
+    if (!Object.keys(Client.permissions).includes(permCategory)) return message.reply('The permission category you provided was invalid!');
+    const permName = args[1].toLowerCase().split('.')[1];
+    if (!permName) return message.reply('You have to provide a permission name!\n\n`Eg. ?listperms mod.ban`');
+    if (!Object.keys(Client.permissions[permCategory]).includes(permName)) return message.reply('The permission name you provided was invalid!');
+    return message.channel.send(`${permCategory}.${permName} | ${Client.permissions[permCategory][permName]}`);
   }
 };
 
@@ -29,6 +31,6 @@ module.exports.help = {
   name: 'listperms',
   desc: 'Lists all the custom permissions for the bot.',
   category: 'misc',
-  usage: '?listperms [Permission Name]',
+  usage: '?listperms [(Permission Category).(Permission Name)]',
   aliases: ['permissions', 'perms']
 };
