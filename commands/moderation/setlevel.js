@@ -12,11 +12,11 @@ module.exports = async (Client, message, args) => {
   if (!amt) return message.reply('You have to provide an amount for me to set their level with!');
   if (isNaN(amt)) return message.reply('The amount you provided is not a number!');
   if (amt < 1) return message.reply('The amount cannot be lower than 1!');
-  if (amt > 1000000) return message.reply('The amount cannot exceed one million!');
+  if (amt > 1000) return message.reply('The amount cannot exceed one thousand!');
   if (amt.includes('.')) return message.reply('The amount cannot be a decimal!');
 
   const exists = (await Client.sql.query('SELECT * FROM scores WHERE userid = $1 AND guildid = $2', [member.id, message.guild.id])).rows[0];
-  if (exists) Client.sql.query('UPDATE scores SET level = $1 AND points = $2 WHERE userid = $3 AND guildid = $4', [amt, Math.pow(amt / 0.2, 2), member.id, message.guild.id]);
+  if (exists) Client.sql.query('UPDATE scores SET level = $1, points = $2 WHERE userid = $3 AND guildid = $4', [amt, Math.pow(amt / 0.2, 2), member.id, message.guild.id]);
   else Client.sql.query('INSERT INTO scores (guildid, userid, level, points) VALUES ($1, $2, $3, $4)', [message.guild.id, member.id, amt, Math.pow(amt / 0.2, 2)]);
 
   return message.channel.send(`Successfully changed ${member.user.tag}'s level to ${amt}, which resulted in ${Math.pow(amt / 0.2, 2)} points.`);

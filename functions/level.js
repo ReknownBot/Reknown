@@ -8,10 +8,14 @@ module.exports = async (Client, message) => {
   // If there is no row, insert one
   if (!scoreCount) return Client.sql.query('INSERT INTO scores (userID, guildID, points, level) VALUES ($1, $2, $3, $4)', [message.author.id, message.guild.id, 1, 0]);
 
+  // If the user has reached max level
+  if (scoreCount.points > 25000000) return;
+
   // Gets the current level
   const curLevel = Math.floor(0.2 * Math.sqrt(scoreCount.points + message.content.length));
   // Gets the current score
   const curPoints = message.content.length + scoreCount.points;
+
   // If the new level is bigger than the older one i.e leveled up
   if (curLevel > scoreCount.level) {
     Client.sql.query('UPDATE scores SET level = $1, points = $2 WHERE userID = $3 AND guildID = $4', [curLevel, curPoints, message.author.id, message.guild.id]);
