@@ -13,6 +13,7 @@ module.exports = async (Client, message, args) => {
   if (isNaN(amt)) return message.reply('The amount you provided is not a number!');
   if (amt < 1) return message.reply('The amount cannot be lower than 1!');
   if (amt > 1000000) return message.reply('The amount cannot exceed one million!');
+  if (amt.includes('.')) return message.reply('The amount cannot be a decimal!');
 
   const exists = (await Client.sql.query('SELECT * FROM scores WHERE userid = $1 AND guildid = $2', [member.id, message.guild.id])).rows[0];
   if (exists) Client.sql.query('UPDATE scores SET level = $1 AND points = $2 WHERE userid = $3 AND guildid = $4', [amt, Math.pow(amt / 0.2, 2), member.id, message.guild.id]);
