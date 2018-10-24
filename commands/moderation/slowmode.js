@@ -19,7 +19,7 @@ module.exports = async (Client, message, args) => {
 module.exports.help = {
   name: 'slowmode',
   desc: 'Sets a slowmode for a channel.',
-  category: 'mod',
+  category: 'moderation',
   usage: '?slowmode <Slowmode in Seconds> [Channel]',
   aliases: ['setslowmode']
 };

@@ -19,7 +19,7 @@ module.exports = async (Client, message, args) => {
 module.exports.help = {
   name: 'unmute',
   desc: 'Unmutes a muted member.',
-  category: 'mod',
+  category: 'moderation',
   usage: '?unmute <Member>',
   aliases: ['unsilence']
 };

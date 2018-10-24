@@ -43,7 +43,7 @@ module.exports = async (Client, message, args) => {
 module.exports.help = {
   name: 'mute',
   desc: 'Mutes a member.',
-  category: 'mod',
+  category: 'moderation',
   usage: '?mute <Member> [Reason]',
   aliases: ['silence']
 };

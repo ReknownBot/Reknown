@@ -25,7 +25,7 @@ module.exports = async (Client, message, args) => {
 module.exports.help = {
   name: 'setpoints',
   desc: 'Sets the points of a member.',
-  category: 'mod',
+  category: 'moderation',
   usage: '?setpoints <Member> <Amount>',
   aliases: ['setpoint']
 };

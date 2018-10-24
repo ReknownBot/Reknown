@@ -18,7 +18,7 @@ module.exports = async (Client, message, args) => {
 module.exports.help = {
   name: 'nick',
   desc: 'Nicknames a mentioned member.',
-  category: 'mod',
+  category: 'moderation',
   usage: '?nick <Member> <New Nickname>',
   aliases: ['nickname']
 };

@@ -25,7 +25,7 @@ module.exports = async (Client, message, args) => {
 module.exports.help = {
   name: 'setlevel',
   desc: 'Sets the level of a member!',
-  category: 'mod',
+  category: 'moderation',
   usage: '?setlevel <Member> <New Level>',
   aliases: []
 };
