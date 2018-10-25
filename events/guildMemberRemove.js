@@ -26,25 +26,13 @@ async function goodbyeMessage (Client, member) {
 }
 
 async function logMessage (Client, member) {
-  const guild = member.guild;
-
-  const enabled = (await Client.sql.query('SELECT bool FROM actionlog WHERE guildid = $1 LIMIT 1', [guild.id])).rows[0].bool;
-  if (!enabled) return;
-
-  const channelid = (await Client.sql.query('SELECT channelid FROM logchannel WHERE guildid = $1 LIMIT 1', [guild.id])).rows[0].channelid || 'default';
-
-  const channel = channelid === 'default' ? guild.channels.find(c => c.name === 'action-log' && c.type === 'text') : guild.channels.get(channelid);
-  if (!channel) return;
-  if (!Client.checkClientPerms(channel, 'EMBED_LINKS', 'SEND_MESSAGES')) return;
-
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Left or got Kicked')
     .setColor(0xFF0000)
     .setTimestamp()
     .setThumbnail(member.user.displayAvatarURL({ size: 800 }))
     .setDescription(`**${member.user.tag}** (${member.user.id})`);
-
-  return channel.send(embed);
+  return require('../functions/sendlog.js')(Client, embed, member.guild.id);
 }
 
 module.exports = async (Client, member) => {
