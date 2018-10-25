@@ -221,7 +221,10 @@ bot.on('message', message => require('./events/message.js')(Client, message));
 bot.on('voiceStateUpdate', (oldVoice, newVoice) => require('./events/voiceStateUpdate.js')(Client, oldVoice, newVoice));
 
 // Starts an event listener "guildMemberAdd", this is emitted when a member joins a guild
-bot.on('guildMemberAdd', member => require('./events/guildMemberAdd')(Client, member));
+bot.on('guildMemberAdd', member => require('./events/guildMemberAdd.js')(Client, member));
+
+// Starts an event listener "guildMemberRemove", this is emitted when a member leaves a guild
+bot.on('guildMemberRemove', member => require('./events/guildMemberRemove.js')(Client, member));
 
 // Emitted whenever the client's WebSocket encounters a connection error.
 bot.on('error', console.error);
