@@ -36,6 +36,8 @@ async function logMessage (Client, member) {
 }
 
 module.exports = async (Client, member) => {
+  if (member === member.guild.me) return;
+  if (!member.guild || !member.guild.available) return;
   logMessage(Client, member);
   goodbyeMessage(Client, member);
 };
