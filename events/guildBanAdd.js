@@ -15,7 +15,7 @@ async function logMessage (Client, guild, user) {
     const executor = entry.executor;
     const reason = entry.reason || 'None';
 
-    embed.addField('Banned by', `${executor.tag} (${executor.id})`, true)
+    embed.setAuthor(`${executor.tag} (${executor.id})`, executor.displayAvatarURL())
       .addField('Reason', reason, true);
   }
 
