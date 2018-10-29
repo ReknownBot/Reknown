@@ -3,6 +3,7 @@ async function logMessage (Client, guild, user) {
     .setTitle('Member Banned')
     .addField('Member', `${user.tag} (${user.id})`, true)
     .setThumbnail(user.displayAvatarURL({ size: 800 }))
+    .setColor(0xFF0000)
     .setTimestamp();
 
   if (guild.permissionsFor(Client.bot.user).has('VIEW_AUDIT_LOG')) {
