@@ -229,6 +229,9 @@ bot.on('guildMemberRemove', member => require('./events/guildMemberRemove.js')(C
 // Starts an event listener "guildBanAdd", this is emitted when a member is banned from a guild
 bot.on('guildBanAdd', (guild, user) => require('./events/guildBanAdd.js')(Client, guild, user));
 
+// Starts an event listener "guildBanRemove", this is emitted when a member is unbanned from a guild
+bot.on('guildBanRemove', (guild, user) => require('./events/guildBanAdd.js')(Client, guild, user));
+
 // Emitted whenever the client's WebSocket encounters a connection error.
 bot.on('error', console.error);
 
