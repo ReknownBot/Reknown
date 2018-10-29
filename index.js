@@ -217,6 +217,9 @@ bot.on('ready', () => require('./events/ready.js')(Client, bot));
 // Starts an event listener "message", this is emitted when a message is sent.
 bot.on('message', message => require('./events/message.js')(Client, message));
 
+// Starts an event listener "messageUpdate", this is emitted when a message is updated.
+bot.on('messageUpdate', (oldMessage, newMessage) => require('./events/messageUpdate.js')(Client, oldMessage, newMessage));
+
 // Starts an event listener "voiceStateUpdate", this is emitted when any voice states are updated.
 bot.on('voiceStateUpdate', (oldVoice, newVoice) => require('./events/voiceStateUpdate.js')(Client, oldVoice, newVoice));
 
@@ -230,7 +233,7 @@ bot.on('guildMemberRemove', member => require('./events/guildMemberRemove.js')(C
 bot.on('guildBanAdd', (guild, user) => require('./events/guildBanAdd.js')(Client, guild, user));
 
 // Starts an event listener "guildBanRemove", this is emitted when a member is unbanned from a guild
-bot.on('guildBanRemove', (guild, user) => require('./events/guildBanAdd.js')(Client, guild, user));
+bot.on('guildBanRemove', (guild, user) => require('./events/guildBanRemove.js')(Client, guild, user));
 
 // Emitted whenever the client's WebSocket encounters a connection error.
 bot.on('error', console.error);
