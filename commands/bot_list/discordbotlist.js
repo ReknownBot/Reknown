@@ -1,46 +1,39 @@
+const request = require('request');
+
 module.exports = async (Client, message, args) => {
   if (!args[1]) return message.reply('You have to provide a bot for me to search!');
+  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I do not have enough permissions to embed links in this channel! Please make sure I have that permission in order to use this command.');
   const bot = args[1].replace(/[<>@!?]/g, '');
 
-  const dblClient = new Client.dbl({
-    token: process.env.DBL_API_KEY,
-    id: message.client.user.id
-  });
-
-  dblClient.getBot(bot, async (err, res) => {
-    if (err) {
-      if (err != 'Error: Got HTTP Code 404') throw new Error(err);
-      return message.reply('I did not find a bot with that ID.');
+  request({
+    url: `https://discordbots.org/api/bots/${bot}`,
+    headers: {
+      'Authorization': process.env.DBL_API_KEY
     }
-    if (res.vanity === bot) return message.reply('I did not find a bot with that ID.');
+  }, async (err, res, body) => {
+    if (err) throw new Error(err);
+    body = JSON.parse(body);
+    if (body.error === 'Not Found') return message.reply('The bot you provided was not in discordbots.org!');
 
-    let ownerArr = res.owners.map(async owner => {
-      return (await message.client.users.fetch(owner)).tag;
-    });
-    ownerArr = await Promise.all(ownerArr);
-
-    if (res.longdesc.length > 2048) res.longdesc = 'Too long to display';
-    const regex = new RegExp('<html>', 'g');
-    if (regex.test(res.longdesc)) res.longdesc = 'HTML Designed';
+    const owners = await Promise.all(body.owners.map(async id => message.client.users.fetch(id).then(u => u.tag)));
+    const invite = body.invite || 'Not Specified';
+    const website = body.website || 'None';
+    const botTag = `${body.username}#${body.discriminator} (${body.id})`;
+    const certified = body.certified ? 'True' : 'False';
+    const tags = body.tags.list();
+    const library = body.lib;
+    const shortDesc = body.shortdesc.length > 2048 ? 'Over 2048 Char.' : body.shortdesc;
 
     const embed = new Client.Discord.MessageEmbed()
+      .setTitle(botTag)
       .setColor(0x00FFFF)
-      .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
-      .setAuthor(`${res.username}#${res.discriminator}'s DBL Info`)
-      .setTitle('Detailed Description')
-      .setDescription(res.longdesc.length <= 2048 ? res.longdesc : 'Too long to display')
-      .addField('Brief Description', res.shortdesc)
-      .addField('Invite', res.invite, true)
-      .addField('Library', res.lib, true)
-      .addField('Upvotes', res.points, true)
-      .addField('Certified', res.certifiedBot, true)
-      .addField('Owner(s)', ownerArr.list(), true)
-      .addField('Tag(s)', res.tags[0] ? res.tags.list() : 'None')
-      .addField('Prefix', res.prefix, true);
-
-    res.guilds[0] ? embed.addField('Guilds', res.guilds.list(), true) : null;
-    res.vimeo ? embed.addField('Vimeo', res.vimeo, true) : null;
-    res.invite ? embed.addField('Support Server', `https://discord.gg/${res.support}`, true) : null;
+      .setDescription(shortDesc)
+      .addField('Owners', owners.list(), true)
+      .addField('Certified', certified, true)
+      .addField('Discord Invite', invite, true)
+      .addField('Tags', tags, true)
+      .addField('Library', library, true)
+      .addField('Website', website, true);
 
     return message.channel.send(embed);
   });

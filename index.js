@@ -79,8 +79,6 @@ const client = class {
     this.dateFormat = require('dateformat');
     // Requires fuzzball
     this.fuzz = require('fuzzball');
-    // Requires the discord-bot-list module
-    this.dbl = require('discord-bot-list');
     // Defines client.cooldown as
     this.cooldown = new Set();
     // Defines "msgEdit" as an object, this is used for editing features.
