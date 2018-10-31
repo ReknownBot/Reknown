@@ -82,7 +82,7 @@ module.exports = async (Client, message) => {
 
   // If the member is blacklisted
   if (await require('../functions/blacklist.js')(Client, message.member)) {
-    const enabled = (await Client.sql.query('SELECT bool FROM blacklistmsg WHERE guildid = $1 AND bool = 1', [message.guild.id]));
+    const enabled = (await Client.sql.query('SELECT bool FROM blacklistmsg WHERE guildid = $1 AND bool = 1', [message.guild.id])).rows[0];
     if (!enabled) return;
     const obj = await require('../functions/blacklist.js')(Client, message.member);
     if (obj === 'disabled') return;
