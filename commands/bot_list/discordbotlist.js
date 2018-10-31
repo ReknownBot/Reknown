@@ -26,6 +26,7 @@ module.exports = async (Client, message, args) => {
 
     const embed = new Client.Discord.MessageEmbed()
       .setTitle(botTag)
+      .setURL('https://discordbots.org/bot/338832551278018581')
       .setColor(0x00FFFF)
       .setDescription(shortDesc)
       .addField('Owners', owners.list(), true)
