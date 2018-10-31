@@ -14,8 +14,13 @@ async function logMessage (Client, oldMessage, newMessage) {
   return require('../functions/sendlog.js')(Client, embed, oldMessage.guild.id);
 }
 
+async function editMsg (Client, oldMessage, newMessage) {
+  return Client.bot.emit('message', newMessage);
+}
+
 module.exports = async (Client, oldMessage, newMessage) => {
   if (!oldMessage.guild || !oldMessage.guild.available) return;
 
   logMessage(Client, oldMessage, newMessage);
+  editMsg(Client, oldMessage, newMessage);
 };

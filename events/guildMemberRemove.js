@@ -30,7 +30,7 @@ async function logMessage (Client, member) {
     .setTitle('Member Left or got Kicked')
     .setColor(0xFF0000)
     .setTimestamp()
-    .setThumbnail(member.user.displayAvatarURL({ size: 800 }))
+    .setThumbnail(member.user.displayAvatarURL({ size: 2048 }))
     .setDescription(`**${member.user.tag}** (${member.user.id})`);
   return require('../functions/sendlog.js')(Client, embed, member.guild.id);
 }

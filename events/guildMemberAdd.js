@@ -25,7 +25,7 @@ async function logMessage (Client, member, guild) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Joined')
     .addField('Member', `${member.user.tag} (${member.id})`)
-    .setThumbnail(member.user.displayAvatarURL())
+    .setThumbnail(member.user.displayAvatarURL({ size: 2048 }))
     .setTimestamp()
     .setColor(0x00FF00);
   return require('../functions/sendlog.js')(Client, embed, guild.id);

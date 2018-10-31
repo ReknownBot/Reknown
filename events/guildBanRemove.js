@@ -2,7 +2,7 @@ async function logMessage (Client, guild, user) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Unbanned')
     .addField('Member', `${user.tag} (${user.id})`, true)
-    .setThumbnail(user.displayAvatarURL({ size: 800 }))
+    .setThumbnail(user.displayAvatarURL({ size: 2048 }))
     .setColor(0x00FF00)
     .setTimestamp();
 

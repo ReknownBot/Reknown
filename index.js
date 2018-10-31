@@ -79,10 +79,6 @@ const client = class {
     this.dateFormat = require('dateformat');
     // Requires fuzzball
     this.fuzz = require('fuzzball');
-    // Defines client.cooldown as
-    this.cooldown = new Set();
-    // Defines "msgEdit" as an object, this is used for editing features.
-    this.msgEdit = {};
     // Requires the music functions
     this.musicfn = require('./functions/music.js');
     // Requires the postgres module
