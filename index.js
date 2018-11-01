@@ -223,6 +223,9 @@ bot.on('guildMemberAdd', member => require('./events/guildMemberAdd.js')(Client,
 // Starts an event listener "guildMemberRemove", this is emitted when a member leaves a guild
 bot.on('guildMemberRemove', member => require('./events/guildMemberRemove.js')(Client, member));
 
+// Starts an event listener "guildMemberUpdate", this is emitted when a member is updated (eg. nick or roles)
+bot.on('guildMemberUpdate', (oldMember, newMember) => require('./events/guildMemberUpdate.js')(Client, oldMember, newMember));
+
 // Starts an event listener "guildBanAdd", this is emitted when a member is banned from a guild
 bot.on('guildBanAdd', (guild, user) => require('./events/guildBanAdd.js')(Client, guild, user));
 
