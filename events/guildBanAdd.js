@@ -6,7 +6,7 @@ async function logMessage (Client, guild, user) {
     .setColor(0xFF0000)
     .setTimestamp();
 
-  if (guild.permissionsFor(Client.bot.user).has('VIEW_AUDIT_LOG')) {
+  if (guild.me.hasPermission('VIEW_AUDIT_LOG')) {
     const entry = (await guild.fetchAuditLogs({
       user: user,
       type: 'MEMBER_BAN_ADD',
