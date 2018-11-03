@@ -11,7 +11,7 @@ async function logMessage (Client, guild, user) {
       user: user,
       type: 'MEMBER_BAN_REMOVE',
       limit: 1
-    })).first();
+    })).entries.first();
     const executor = entry.executor;
     const reason = entry.reason || 'None';
 
