@@ -1,5 +1,5 @@
 # About Reknown
-![Reknown's Banner](./assets/images/halloween.png)
+![Reknown's Banner](./assets/images/banner.jpg)
 
 Reknown is a bot programmed in [Discord.js](https://discord.js.org/#/), with music, leveling, and more. This bot is full of commands, with customizable prefix, and more. The default prefix is `?`.
 
