@@ -211,6 +211,9 @@ bot.on('ready', () => require('./events/ready.js')(Client, bot));
 // Starts an event listener "channelCreate", this is emitted when a channel is created.
 bot.on('channelCreate', channel => require('./events/channelCreate.js')(Client, channel));
 
+// Starts an event listener "channelDelete", this is emitted when a channel is deleted.
+bot.on('channelDelete', channel => require('./events/channelDelete.js')(Client, channel));
+
 // Starts an event listener "message", this is emitted when a message is sent.
 bot.on('message', message => require('./events/message.js')(Client, message));
 
