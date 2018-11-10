@@ -1,13 +1,13 @@
 async function logMessage (Client, role) {
   const embed = new Client.Discord.MessageEmbed()
-    .setTitle('Role Created')
-    .setColor(0x00FF00)
+    .setTitle('Role Deleted')
+    .setColor(0xFF0000)
     .setTimestamp()
     .addField('Role', `${role.name} (\`${role.id}\`)`);
 
   if (role.guild.me.hasPermission('VIEW_AUDIT_LOG')) {
     const entry = (await role.guild.fetchAuditLogs({
-      type: 'ROLE_CREATE',
+      type: 'ROLE_DELETE',
       limit: 1
     })).entries.first();
     const executor = entry.executor;

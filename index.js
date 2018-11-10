@@ -241,6 +241,9 @@ bot.on('guildBanRemove', (guild, user) => require('./events/guildBanRemove.js')(
 // Starts an event listener "roleCreate", this is emitted when a role is created
 bot.on('roleCreate', role => require('./events/roleCreate.js')(Client, role));
 
+// Starts an event listener "roleDelete", this is emitted when a role is deleted
+bot.on('roleDelete', role => require('./events/roleDelete.js')(Client, role));
+
 // Emitted whenever the client's WebSocket encounters a connection error.
 bot.on('error', console.error);
 
