@@ -7,7 +7,7 @@ async function logMessage (Client, oldMessage, newMessage) {
     .setAuthor(`${oldMessage.author.tag} (${oldMessage.author.id})`, oldMessage.author.displayAvatarURL())
     .addField('Previous', oldMessage.content ? oldMessage.content.length > 1024 ? 'Over 1024 Char.' : oldMessage.content : 'None')
     .addField('After', newMessage.content ? newMessage.content.length > 1024 ? 'Over 1024 Char.' : newMessage.content : 'None')
-    .addField('Channel', oldMessage.content)
+    .addField('Channel', oldMessage.channel)
     .setColor(0x00FFFF)
     .setTimestamp();
 
