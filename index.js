@@ -217,6 +217,9 @@ bot.on('channelDelete', channel => require('./events/channelDelete.js')(Client, 
 // Starts an event listener "message", this is emitted when a message is sent.
 bot.on('message', message => require('./events/message.js')(Client, message));
 
+// Starts an event listener "messageDelete", this is emitted when a message is deleted.
+bot.on('messageDelete', message => require('./events/messageDelete.js')(Client, message));
+
 // Starts an event listener "messageUpdate", this is emitted when a message is updated.
 bot.on('messageUpdate', (oldMessage, newMessage) => require('./events/messageUpdate.js')(Client, oldMessage, newMessage));
 
