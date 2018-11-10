@@ -112,7 +112,7 @@ module.exports = {
     guild.dispatcher = dispatcher;
 
     // Sets the volume to save lives
-    dispatcher.setVolumeLogarithmic(guild.volume / 180);
+    dispatcher.setVolumeLogarithmic(guild.volume / 175);
 
     // When the song finishes
     dispatcher.on('finish', () => {
