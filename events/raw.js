@@ -97,6 +97,7 @@ module.exports = async (Client, data) => {
     if (!sChannel) return;
 
     if (!Client.checkClientPerms(sChannel, 'VIEW_CHANNEL')) return;
+    if (!msgRow) return;
     const sMessage = await sChannel.messages.fetch(msgRow.editid);
     if (sMessage && !sMessage.deleted) sMessage.delete();
   }

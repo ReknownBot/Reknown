@@ -1,7 +1,7 @@
 async function goodbyeMessage (Client, member) {
   const guild = member.guild;
 
-  const { bool: enabled } = (await Client.sql.query('SELECT bool FROM togglewelcome WHERE guildid = $1 LIMIT 1', [guild.id])).rows[0];
+  const { bool: enabled } = (await Client.sql.query('SELECT bool FROM togglewelcome WHERE guildid = $1 LIMIT 1', [guild.id])).rows[0] || {};
   if (!enabled) return;
 
   const channelid = (await Client.sql.query('SELECT channel FROM welcomechannel WHERE guildid = $1 LIMIT 1', [guild.id])).rows[0].channel || 'default';

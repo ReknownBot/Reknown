@@ -35,7 +35,7 @@ async function editStar (Client, oldMessage, newMessage) {
       const img = newMessage.attachments.find(attch => attch.height);
       if (img) embed.setImage(img.proxyURL);
       return msg.edit(embed);
-    } else Client.sql.run('DELETE FROM star WHERE msgid = $1', [newMessage.id]);
+    } else Client.sql.query('DELETE FROM star WHERE msgid = $1', [newMessage.id]);
   }
 }
 
