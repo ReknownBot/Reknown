@@ -107,7 +107,9 @@ module.exports = {
     if (guild.queueIDs.length > 1) return;
 
     // Defines "dispatcher" as the returned value of VoiceConnection#play, and starts playing the music
-    const dispatcher = connection.play(this.ytdl(id));
+    const dispatcher = connection.play(this.ytdl(id, {
+      filter: 'audioonly'
+    }));
 
     guild.dispatcher = dispatcher;
 
