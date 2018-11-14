@@ -18,9 +18,31 @@ async function editMsg (Client, oldMessage, newMessage) {
   return Client.bot.emit('message', newMessage);
 }
 
+async function editStar (Client, oldMessage, newMessage) {
+  if (newMessage.content || newMessage.attachments.size > 0) {
+    const toggled = (await Client.sql.query('SELECT bool FROM togglestar WHERE guildid = $1 AND bool = $2', [newMessage.guild.id, 1])).rows[0];
+    const cid = (await Client.sql.query('SELECT channelid FROM starchannel WHERE guildid = $1', [newMessage.guild.id])).rows[0];
+    const msgRow = (await Client.sql.query('SELECT editid FROM star WHERE msgid = $1', [newMessage.id])).rows[0];
+    if (toggled && msgRow) {
+      const sChannel = newMessage.guild.channels.get(cid ? cid.channelid : null) || newMessage.guild.channels.find(c => c.name === 'starboard');
+      if (!sChannel) return;
+
+      const msg = await sChannel.messages.fetch(msgRow.editid);
+      if (!msg) return;
+
+      const embed = new Client.Discord.MessageEmbed(msg.embeds[0]);
+      if (newMessage.content) embed.setDescription(newMessage.content);
+      const img = newMessage.attachments.find(attch => attch.height);
+      if (img) embed.setImage(img.proxyURL);
+      return msg.edit(embed);
+    } else Client.sql.run('DELETE FROM star WHERE msgid = $1', [newMessage.id]);
+  }
+}
+
 module.exports = async (Client, oldMessage, newMessage) => {
   if (!oldMessage.guild || !oldMessage.guild.available) return;
 
   logMessage(Client, oldMessage, newMessage);
   editMsg(Client, oldMessage, newMessage);
+  editStar(Client, oldMessage, newMessage);
 };

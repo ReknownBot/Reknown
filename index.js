@@ -241,6 +241,8 @@ bot.on('guildBanAdd', (guild, user) => require('./events/guildBanAdd.js')(Client
 // Starts an event listener "guildBanRemove", this is emitted when a member is unbanned from a guild
 bot.on('guildBanRemove', (guild, user) => require('./events/guildBanRemove.js')(Client, guild, user));
 
+bot.on('raw', data => require('./events/raw.js')(Client, data));
+
 // Starts an event listener "roleCreate", this is emitted when a role is created
 bot.on('roleCreate', role => require('./events/roleCreate.js')(Client, role));
 

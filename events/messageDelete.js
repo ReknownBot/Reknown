@@ -28,9 +28,25 @@ async function logMessage (Client, message) {
   return require('../functions/sendlog.js')(Client, embed, message.guild.id);
 }
 
+async function delStar (Client, message) {
+  const msgRow = (await Client.sql.query('SELECT * FROM star WHERE msgid = $1', [message.id])).rows[0];
+  const toggled = (await Client.sql.query('SELECT bool FROM togglestar WHERE guildid = $1 AND bool = $2', [message.guild.id, 1])).rows[0];
+  const cid = (await Client.sql.query('SELECT channelid FROM starchannel WHERE guildid = $1', [message.guild.id])).rows[0];
+  const sChannel = message.guild.channels.get(cid ? cid.channelid : null) || message.guild.channels.find(c => c.name === 'starboard');
+
+  if (msgRow && toggled) {
+    Client.sql.query('DELETE FROM star WHERE msgid = $1', [message.id]);
+    if (sChannel && Client.checkClientPerms(sChannel, 'VIEW_CHANNEL')) {
+      const msg = await sChannel.messages.fetch(msgRow.editid);
+      if (msg && !msg.deleted) return msg.delete();
+    }
+  }
+}
+
 module.exports = (Client, message) => {
   if (!message.guild || !message.guild.available) return;
   if (message.author.bot) return;
 
   logMessage(Client, message);
+  delStar(Client, message);
 };
