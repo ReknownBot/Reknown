@@ -16,13 +16,16 @@ async function logMessage (Client, message) {
       type: 'MESSAGE_DELETE',
       limit: 1
     })).entries.first();
-    const executor = entry.executor;
-    const reason = entry.reason || 'None';
 
-    if (Date.now() - entry.createdTimestamp < 7000) embed.setAuthor(`${executor.tag} (${executor.id})`, executor.displayAvatarURL()).addField('Author', message.author, true);
-    else embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
+    if (entry) {
+      const executor = entry.executor;
+      const reason = entry.reason || 'None';
 
-    embed.addField('Reason', reason, true);
+      if (Date.now() - entry.createdTimestamp < 7000) embed.setAuthor(`${executor.tag} (${executor.id})`, executor.displayAvatarURL()).addField('Author', message.author, true);
+      else embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
+
+      embed.addField('Reason', reason, true);
+    }
   }
 
   return require('../functions/sendlog.js')(Client, embed, message.guild.id);

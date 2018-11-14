@@ -13,6 +13,7 @@ async function logMessage (Client, channel) {
       type: 'CHANNEL_DELETE',
       limit: 1
     })).entries.first();
+    if (!entry) return;
     const executor = entry.executor;
     const reason = entry.reason || 'None';
 

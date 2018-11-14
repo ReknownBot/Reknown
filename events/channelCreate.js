@@ -13,11 +13,14 @@ async function logMessage (Client, channel) {
       type: 'CHANNEL_CREATE',
       limit: 1
     })).entries.first();
-    const executor = entry.executor;
-    const reason = entry.reason || 'None';
 
-    embed.setAuthor(`${executor.tag} (${executor.id})`, executor.displayAvatarURL())
-      .addField('Reason', reason, true);
+    if (entry) {
+      const executor = entry.executor;
+      const reason = entry.reason || 'None';
+
+      embed.setAuthor(`${executor.tag} (${executor.id})`, executor.displayAvatarURL())
+        .addField('Reason', reason, true);
+    }
   }
 
   return require('../functions/sendlog.js')(Client, embed, channel.guild.id);
