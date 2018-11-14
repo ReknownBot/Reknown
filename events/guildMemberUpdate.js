@@ -22,6 +22,9 @@ async function roleChange (Client, oldMember, newMember) {
   if (oldMember.roles.size > newMember.roles.size) { // Role Removed
     const roles = oldMember.roles.filter(r => !newMember.roles.has(r.id));
 
+    const muteRole = oldMember.guild.roles.find(r => r.name === 'Muted');
+    if (muteRole && roles.has(muteRole.id) && Client.mutes.includes(oldMember.id)) Client.mutes.splice(Client.mutes.indexOf(oldMember.id), 1);
+
     embed = new Client.Discord.MessageEmbed()
       .setTitle('Role Removed')
       .setColor(0xffa500)

@@ -61,8 +61,7 @@ async function levelrole (Client, member, guild) {
 }
 
 async function mute (Client, member, guild) {
-  const row = (await Client.sql.query('SELECT * FROM mute WHERE guildid = $1 AND memberid = $2', [guild.id, member.id])).rows[0];
-  if (!row) return;
+  if (!Client.mutes.includes(member.id)) return;
   if (!guild.me.hasPermission('MANAGE_ROLES')) return;
   const mutedRole = guild.roles.find(r => r.name === 'Muted');
   if (mutedRole && !member.roles.has(mutedRole.id)) member.roles.add(mutedRole);
