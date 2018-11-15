@@ -1,4 +1,4 @@
-async function logMessage(Client, guild, user) {
+async function logMessage (Client, guild, user) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Banned')
     .addField('Member', `${user.tag} (${user.id})`, true)
