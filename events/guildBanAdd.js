@@ -1,4 +1,4 @@
-async function logMessage (Client, guild, user) {
+async function logMessage(Client, guild, user) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Banned')
     .addField('Member', `${user.tag} (${user.id})`, true)
@@ -12,11 +12,14 @@ async function logMessage (Client, guild, user) {
       type: 'MEMBER_BAN_ADD',
       limit: 1
     })).entries.first();
-    const executor = entry.executor;
-    const reason = entry.reason || 'None';
 
-    embed.setAuthor(`${executor.tag} (${executor.id})`, executor.displayAvatarURL())
-      .addField('Reason', reason, true);
+    if (entry) {
+      const executor = entry.executor;
+      const reason = entry.reason || 'None';
+
+      embed.setAuthor(`${executor.tag} (${executor.id})`, executor.displayAvatarURL())
+        .addField('Reason', reason, true);
+    }
   }
 
   return require('../functions/sendlog.js')(Client, embed, guild.id);

@@ -1,13 +1,15 @@
 module.exports = async (Client, oldVoice, newVoice) => {
   const oldvc = oldVoice.channel;
   const newvc = newVoice.channel;
-  const guild = oldVoice.member.guild;
+  const guild = oldVoice.guild;
 
   // If the voice state update was not in a guild
   if (!guild) return;
 
   // If it was a join
   if (!oldvc && newvc) return;
+
+  if (!oldvc && !newvc) return;
 
   // If the old vc did not include the bot
   if (!oldvc.members.has(Client.bot.user.id)) return;

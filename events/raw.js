@@ -6,7 +6,7 @@ module.exports = async (Client, data) => {
 
   data = data.d;
   const channel = Client.bot.channels.get(data.channel_id);
-  if (!Client.checkClientPerms(channel, 'VIEW_CHANNEL')) return;
+  if (!Client.checkClientPerms(channel, 'VIEW_CHANNEL', 'SEND_MESSAGES')) return;
 
   if (event === allowedEvents[0] || event === allowedEvents[1]) {
     let message;
@@ -18,6 +18,9 @@ module.exports = async (Client, data) => {
       } else return;
     }
     if (!message.content && message.attachments.size === 0) return;
+
+    const toggled = await Client.sql.query('SELECT bool FROM togglestar WHERE guildid = $1 AND bool = $2', [message.guild.id, 1]);
+    if (!toggled.rows[0]) return;
 
     const { emoji } = data;
     if (channel.type !== 'text') return;
@@ -32,9 +35,6 @@ module.exports = async (Client, data) => {
       });
       return;
     }
-
-    const toggled = await Client.sql.query('SELECT bool FROM togglestar WHERE guildid = $1 AND bool = $2', [message.guild.id, 1]);
-    if (!toggled.rows[0]) return;
 
     const cid = (await Client.sql.query('SELECT channelid FROM starchannel WHERE guildid = $1', [message.guild.id])).rows[0];
     const msgRow = (await Client.sql.query('SELECT editid FROM star WHERE msgid = $1', [message.id])).rows[0];
