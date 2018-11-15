@@ -82,11 +82,15 @@ module.exports = async (Client, message) => {
 
   // If the member is blacklisted
   if (await require('../functions/blacklist.js')(Client, message.member)) {
-    const enabled = (await Client.sql.query('SELECT bool FROM blacklistmsg WHERE guildid = $1 AND bool = 1', [message.guild.id])).rows[0];
-    if (!enabled) return;
     const obj = await require('../functions/blacklist.js')(Client, message.member);
     if (obj === 'disabled') return;
     return message.reply(`You are blacklisted by ${obj.by} for the reason of \`${Client.escapeMarkdown(obj.reason)}\`.`);
+  }
+
+  // If the member is globally blacklisted
+  if (await require('../functions/gblacklist.js')(Client, message.member)) {
+    const reason = await require('../functions/blacklist.js')(Client, message.member);
+    return message.reply(`You are globally blacklisted from me for the reason of \`${Client.escapeMarkdown(reason)}\`. You may appeal in my support server.`);
   }
 
   // If the command executed was not an alias
