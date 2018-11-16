@@ -11,7 +11,7 @@ module.exports = async (Client, message, args) => {
   isAFK.add(message.author.id + message.guild.id);
   message.channel.send(`You are now AFK for the reason of \`${Client.escapeMarkdown(reason)}\``);
 
-  const filter = m => m.mentions.users.has(message.author.id) || m.author.id === message.author.id;
+  const filter = m => (m.mentions.users.has(message.author.id) || m.author.id === message.author.id) && !m.author.bot;
   const collector = message.channel.createMessageCollector(filter);
 
   collector.on('collect', msg => {
