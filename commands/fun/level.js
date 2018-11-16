@@ -17,7 +17,7 @@ module.exports = async (Client, message, args) => {
     .setColor(member.displayHexColor)
     .addField('Level', level.level > 1000 ? 'Max' : level.level, true)
     .addField('Points', level.points > 25000000 ? 'Max' : `${level.points}/${Math.pow((level.level + 1) / 0.2, 2)}`, true)
-    .addField('Rank', `#${rank}`)
+    .addField('Rank', rank ? `#${rank}` : 'N/A')
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
 
   return message.channel.send(embed);
