@@ -82,7 +82,7 @@ const client = class {
     // Requires the music functions
     this.musicfn = require('./functions/music.js');
     // Requires the postgres module
-    this.sql = new (require('pg')).Client({
+    this.sql = new (require('pg')).Pool({
       user: process.env.SQL_USER,
       password: process.env.SQL_PASS,
       database: process.env.SQL_DB,
