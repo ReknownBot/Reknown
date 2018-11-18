@@ -15,7 +15,7 @@ async function goodbyeMessage (Client, member) {
     .replace('<Guild>', guild.name)
     .replace('<User>', member.toString())
     .replace('<MemberCount>', guild.memberCount)
-    : `${member}, Welcome to **${member.guild.name}!** There are ${member.guild.memberCount} members now.`;
+    : `${member} left **${member.guild.name}**. There are ${member.guild.memberCount} members now.`;
 
   const embed = new Client.Discord.MessageEmbed()
     .setDescription(msg)
