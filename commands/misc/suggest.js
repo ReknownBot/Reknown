@@ -21,7 +21,7 @@ module.exports = async (Client, message, args) => {
 
 module.exports.help = {
   name: 'suggest',
-  desc: 'Suggests something related to the bot. Any abuse of this command will result in a global blacklist.',
+  desc: 'Suggests something related to the bot. Any abuse of this command will result in a global blacklist. This command has a 10-minute cooldown.',
   category: 'misc',
   usage: '?suggest <Suggestion>',
   aliases: []
