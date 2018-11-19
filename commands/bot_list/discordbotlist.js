@@ -1,11 +1,9 @@
-const request = require('request');
-
 module.exports = async (Client, message, args) => {
   if (!args[1]) return message.reply('You have to provide a bot for me to search!');
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I do not have enough permissions to embed links in this channel! Please make sure I have that permission in order to use this command.');
   const bot = args[1].replace(/[<>@!?]/g, '');
 
-  request({
+  Client.request({
     url: `https://discordbots.org/api/bots/${bot}`,
     headers: {
       'Authorization': process.env.DBL_API_KEY

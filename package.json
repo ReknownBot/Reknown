@@ -44,7 +44,6 @@
     "rollbar": "^2.5.0",
     "rword": "^2.3.0",
     "simple-youtube-api": "^5.1.1",
-    "snekfetch": "^4.0.4",
     "string-math": "^1.2.1",
     "youtube-info": "^1.3.2",
     "ytdl-core": "^0.25.2"

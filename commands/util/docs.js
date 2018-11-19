@@ -1,5 +1,3 @@
-const request = require('request');
-
 module.exports = async (Client, message, args) => {
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I need the `Embed Links` permission for this command!');
   if (!args[1]) return message.reply('You have to provide a query for me to search!');
@@ -9,7 +7,7 @@ module.exports = async (Client, message, args) => {
 
   const query = args.slice(1).join(' ').replace('#', '.');
 
-  request(`https://djsdocs.sorta.moe/main/${branch}/embed?q=${query}`, (err, res, body) => {
+  Client.request(`https://djsdocs.sorta.moe/main/${branch}/embed?q=${query}`, (err, res, body) => {
     if (err) throw new Error(err);
 
     body = JSON.parse(body);
