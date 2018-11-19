@@ -1,33 +1,35 @@
-module.exports = {
-    func: (client, sql, Discord) => {
-        client.bot.on('voiceStateUpdate', (oldVoice, newVoice) => {
-            try {
-                if (!oldVoice.member.guild) return;
-                if (newVoice.member === newVoice.member.guild.me) return;
-                if (!oldVoice.channel && !newVoice.channel) return;
-                if (oldVoice.channel && newVoice.channel) return;
-                if (!oldVoice.channel && newVoice.channel) return;
-                if (!oldVoice.channel.members.has(client.bot.user.id)) return;
-                if (oldVoice.channel !== newVoice.channel && newVoice.channel && oldVoice.channel) {
-                    client.guilds[newVoice.member.guild.id].voiceChannel = newVoice.channel;
-                }
-                if (oldVoice.channel.members.filter(m => !m.user.bot).size === 0) {
-                    if (!client.guilds[newVoice.member.guild.id]) return;
-                    let guild = client.guilds[newVoice.member.guild.id];
-                    guild.queue = [];
-                    guild.queueNames = [];
-                    guild.skipReq = 0;
-                    guild.skippers = [];
-                    guild.isPlaying = false;
-                    guild.volume = 50;
-                    guild.dispatcher ? guild.dispatcher.end() : undefined;
-                    oldVoice.channel.leave();
-                }
-            } catch (e) {
-                console.error(e);
-                let rollbar = new client.Rollbar(client.rollbarKey);
-                rollbar.error("Something went wrong in voiceStateUpdate.js", e);
-            }
-        });
-    }
-}
+module.exports = async (Client, oldVoice, newVoice) => {
+  const oldvc = oldVoice.channel;
+  const newvc = newVoice.channel;
+  const guild = oldVoice.guild;
+
+  // If the voice state update was not in a guild
+  if (!guild) return;
+
+  // If it was a join
+  if (!oldvc && newvc) return;
+
+  if (!oldvc && !newvc) return;
+
+  // If the old vc did not include the bot
+  if (!oldvc.members.has(Client.bot.user.id)) return;
+
+  const server = Client.musicfn.guilds[guild.id];
+
+  // If the member that was changed was the bot (Moved)
+  if (oldVoice.member.id === Client.bot.user.id && oldvc && newvc) {
+    server.voiceChannel = newvc;
+  }
+
+  if (oldvc.members.filter(m => !m.user.bot).size === 0) {
+    server.voiceChannel.leave();
+    server.voiceChannel = null;
+    server.dispatcher = null;
+    server.skips = 0;
+    server.skippers = [];
+    server.looping = false;
+    server.queueNames = [];
+    server.queueIDs = [];
+    server.paused = false;
+  }
+};

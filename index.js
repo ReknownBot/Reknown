@@ -1,582 +1,268 @@
-const Discord = require("discord.js");
-const fs = require("fs");
-const { Client } = require("pg");
-require("dotenv").config();
-const sql = new Client({
-    user: process.env.SQL_USER,
-    password: process.env.SQL_PASS,
-    database: process.env.SQL_DB,
-    port: process.env.SQL_PORT,
-    host: process.env.SQL_HOST,
-    ssl: true
+// Requires the Discord.js module
+const Discord = require('discord.js');
+// Defines "bot" as the Discord Client
+const bot = new Discord.Client({
+  disableEveryone: true,
+  disabledEvents: [
+    'START_TYPING',
+    'STOP_TYPING',
+    'RELATIONSHIP_ADD',
+    'RELATIONSHIP_REMOVE',
+    'USER_SETTINGS_UPDATE',
+    'USER_NOTE_UPDATE',
+    'GUILD_SYNC'
+  ]
 });
-const HypixelAPI = require("hypixel-api");
-require("array-utility"); // More useful array methods
-let emojis = [
-    "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "⏹"
-];
-let client = { // Creates an object client
-    bot: new Discord.Client({
-        disableEveryone: true,
-        disabledEvents: [
-            "TYPING_START"
-        ]
-    }), // Defines bot, the discord client inside the object client
-    commands: {}, // Defines an empty object commands
-    events: {},
-    spigetGuildID: "422121219576430604",
-    commandsList: fs.readdirSync('./commands'),
-    eventList: fs.readdirSync('./events'),
-    ytdl: require("ytdl-core"),
-    getYouTubeID: require("get-youtube-id"),
-    fetchVideoInfo: require("youtube-info"),
-    Rollbar: require("rollbar"),
-    osu: require("node-osu"),
-    fetch: require("node-fetch"),
-    dateFormat: require("dateformat"),
-    fuzz: require("fuzzball"),
-    escape: require("sqlstring").escape,
-    cooldown: new Set(),
-    msgEdit: {},
-    guilds: {},
-    mBool: {},
-    skip_song: async function (message) {
-        this.guilds[message.guild.id].dispatcher.end();
-    },
-    playMusic: async function (id, message, connection) {
-        if (!message.member.voice.channel) return;
-        let guild = this.guilds[message.guild.id];
+// Requires array-utility, which adds useful methods to arrays.
+require('array-utility');
+// Gets the variables from .env and puts it in process.env
+require('dotenv').config();
+// Defines the client class
+const client = class {
+  constructor () {
+    // Defines "prefix" as the default prefix. This may or may not be updated in the "message" event.
+    this.prefix = '?';
+    // Requires fs
+    this.fs = require('fs');
+    // Defines "commands" and "events" as objects.
+    this.commands = {};
+    this.events = {};
+    // Reads the folders "commands" and "events"
+    this.funCommandsList = this.fs.readdirSync('./commands/fun');
+    this.miscCommandsList = this.fs.readdirSync('./commands/misc');
+    this.modCommandsList = this.fs.readdirSync('./commands/moderation');
+    this.musicCommandsList = this.fs.readdirSync('./commands/music');
+    this.botCommandsList = this.fs.readdirSync('./commands/bot_list');
+    this.miniCommandsList = this.fs.readdirSync('./commands/minigames');
+    this.utilCommandsList = this.fs.readdirSync('./commands/util');
+    this.commandsList = [];
+    this.eventList = this.fs.readdirSync('./events');
 
-        stream = this.ytdl("https://www.youtube.com/watch?v=" + id, {
-            filter: 'audioonly'
-        });
-        guild.skipReq = 0;
-        guild.skippers = [];
-        guild.isPlaying = true;
-
-        guild.dispatcher = connection.play(stream);
-        guild.dispatcher.setVolumeLogarithmic(guild.volume / 180);
-        guild.dispatcher.on('finish', function () {
-            guild.skipReq = 0;
-            guild.skippers = [];
-            guild.queue.shift();
-            guild.queueNames.shift();
-            if (guild.queue.length === 0) {
-                guild.queue = [];
-                guild.queueNames = [];
-                guild.isPlaying = false;
-            } else {
-                setTimeout(() => {
-                    client.playMusic(guild.queue[0], message, connection);
-                }, 500);
-            }
-        });
-    },
-    add_to_queue: async function (strID, message) {
-        if (!message.member.voice.channel) return;
-        if (this.isYoutube(strID)) {
-            this.guilds[message.guild.id].queue.push(this.getYouTubeID(strID));
-        } else {
-            this.guilds[message.guild.id].queue.push(strID);
+    const categories = {
+      fun: this.funCommandsList,
+      misc: this.miscCommandsList,
+      moderation: this.modCommandsList,
+      music: this.musicCommandsList,
+      bot_list: this.botCommandsList,
+      minigames: this.miniCommandsList,
+      util: this.utilCommandsList
+    };
+    const categNames = Object.keys(categories);
+    for (let i = 0; i < categNames.length; i++) { // Creates a loop
+      for (let i2 = 0; i2 < categories[categNames[i]].length; i2++) {
+        let item = categories[categNames[i]][i2]; // Defines each of the file as item
+        if (item.match(/\.js$/)) { // only take js files
+          delete require.cache[require.resolve(`./commands/${categNames[i]}/${item}`)]; // delete the cache of the require, useful in case you wanna reload the command again
+          this.commands[item.slice(0, -3)] = require(`./commands/${categNames[i]}/${item}`); // and put the require inside the client.commands object
+          this.commandsList.push(item.slice(0, -3));
         }
-    },
-    isYoutube: function (str) {
-        return str.toLowerCase().indexOf("youtube.com") > -1;
-    },
-    isAFK: {},
-    editMsg: async function (msg, content, msg3) {
-        if (!msg.id)
-            msg = null;
-        if (!msg || msg.author.id !== this.bot.user.id) {
-            let msg2 = await msg3.channel.send(content);
-            this.msgEdit[msg3.id] = msg2.id;
-            return msg2;
-        } else {
-            let msg2 = await msg.edit(content.files ? '' : content, content.files ? {
-                embed: content
-            } : {
-                    embed: null
-                });
-            this.msgEdit[msg3.id] = msg2.id;
-            return msg2;
-        }
-    },
-    randFromArr: (array) => array[Math.floor(Math.random() * array.length)],
-    capitalizeFirstLetter: (string) => {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    },
-    permissions: {
-        mod: [
-            "ban",
-            "softban",
-            "unban",
-            "kick",
-            "mute",
-            "unmute",
-            "warn",
-            "unwarn",
-            'nick',
-            'log',
-            "purge",
-            "blacklist",
-            "unblacklist",
-            "ccreate",
-            "cdelete"
-        ],
-        tag: [
-            "edit",
-            "view"
-        ],
-        music: [
-            'fskip',
-            'clear',
-            'resume',
-            'pause'
-        ],
-        level: [
-            'role',
-            'options',
-            "set"
-        ],
-        slowmode: [
-            "set",
-            "bypass"
-        ],
-        misc: [
-            "setperm",
-            "rules",
-            "star",
-            "prefix",
-            "togglemsg",
-            "welcome",
-            "update",
-            "autorole",
-            "invite",
-            "grole"
-        ]
+      }
     }
-}
 
-const Youtube = require("simple-youtube-api");
-client.youtube = new Youtube(process.env.YT_API_KEY);
-client.osuKey = process.env.OSU_KEY;
-client.hypixel = new HypixelAPI(process.env.HYPIXEL_KEY);
-client.rollbarKey = process.env.ROLLBAR_ACCESS_TOKEN;
-
-client.load = async (command, message, sMessage) => {
-    if (command) {
-        if (client.commandsList.indexOf(`${command}.js`) >= 0) {
-            delete require.cache[require.resolve(`./commands/${command}`)];
-            client.commands[command] = require(`./commands/${command}`);
-            client.editMsg(sMessage, `Reloaded ${command}!`, message);
-        } else {
-            client.editMsg(sMessage, "Command not found!", message);
-        }
-    } else { // If no input
-        client.commands = {};
-        for (i = 0; i < client.commandsList.length; i++) {
-            let item = client.commandsList[i];
-            if (item.match(/\.js$/)) {
-                delete require.cache[require.resolve(`./commands/${item}`)];
-                client.commands[item.slice(0, -3)] = require(`./commands/${item}`);
-            }
-        }
-        client.editMsg(sMessage, "Reloaded all commands!", message);
-    }
-}
-
-client.getID = async function (str, cb, message) {
-    if (this.isYoutube(str)) {
-        if (str.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)) {
-            const playlist = await this.youtube.getPlaylist(str);
-            const videos = await playlist.getVideos();
-            let i = 0;
-            let done2 = false;
-            for (const video of Object.values(videos)) {
-                const video2 = await this.youtube.getVideoByID(video.id);
-                if (!this.guilds[message.guild.id].thingy)
-                    done2 = false,
-                        this.guilds[message.guild.id].thingy = true;
-                else
-                    done2 = true;
-                if (i === 0) {
-                    await cb(video2.id, true, playlist.title, true, done2);
-                } else {
-                    await cb(video2.id, true, playlist.title, false, done2);
-                }
-                i++;
-            }
-        } else {
-            cb(this.getYouTubeID(str));
-        }
-    } else {
-        this.search_video(str, function (id) {
-            cb(id);
-        }, message);
-    }
-}
-
-client.search_video = async function (query, callback, message) {
-    let results = await client.youtube.searchVideos(query, 5);
-    let arr = [];
-    let IDarr = [];
-    results.forEach((r, index) => {
-        arr.push(`**${index + 1}: ${r.title}**`);
-        IDarr.push(r.id);
-    });
-
-    if (arr.length === 0) {
-        callback("c5daGZ96QGU");
-        return message.channel.send("I did not find any results, so I'll play **Undertale OST: 100 - Megalovania**");
-    }
-    this.mBool[message.guild.id] = true;
-
-    let msg = await message.channel.send(`Here are the results:\n\n${arr.join('\n')}\n\nPlease choose by reacting to one of these.`);
-    await msg.react(emojis[0]);
-    await msg.react(emojis[1]);
-    await msg.react(emojis[2]);
-    await msg.react(emojis[3]);
-    await msg.react(emojis[4]);
-    await msg.react(emojis[5]);
-
-    const filter = (reaction, user) => user.id === message.author.id && emojis.includes(reaction.emoji.name);
-    const collector = msg.createReactionCollector(filter, {
-        time: 30000
-    });
-
-    collector.on("collect", reaction => {
-        collector.stop();
-        this.mBool[message.guild.id] = false;
-        msg ? msg.delete() : undefined;
-        let reactionNumber;
-        if (reaction.emoji.name === emojis[0])
-            reactionNumber = 0;
-        else if (reaction.emoji.name === emojis[1])
-            reactionNumber = 1;
-        else if (reaction.emoji.name === emojis[2])
-            reactionNumber = 2;
-        else if (reaction.emoji.name === emojis[3])
-            reactionNumber = 3;
-        else if (reaction.emoji.name === emojis[4])
-            reactionNumber = 4;
-        else if (reaction.emoji.name === emojis[5])
-            reactionNumber = 5;
-        if (reactionNumber === 5) {
-            message.channel.send("Ok, cancelling search.");
-        } else {
-            if (arr.length === 5) {
-                callback(IDarr[reactionNumber]);
-            } else if (arr.length < 5 && reactionNumber < 4) {
-                message.channel.send("That is not a valid result!");
-            }
-        }
-    });
-
-    collector.on("end", collected => {
-        if (collected.size < 1) {
-            this.mBool[message.guild.id] = false;
-            message.channel.send("No reaction collected, cancelling command.");
-            msg ? msg.delete() : undefined;
-        }
-    });
-}
-
-Object.filter = (obj, predicate) =>
-    Object.keys(obj)
-        .filter(key => predicate(obj[key]))
-        .reduce((res, key) => (res[key] = obj[key], res), {});
-
-let rollbar = new client.Rollbar(client.rollbarKey);
-
-for (i = 0; i < client.commandsList.length; i++) { // Creates a loop
-    let item = client.commandsList[i]; // Defines each of the file as item
-    if (item.match(/\.js$/)) { // only take js files
-        delete require.cache[require.resolve(`./commands/${item}`)]; // delete the cache of the require, useful in case you wanna reload the command again
-        client.commands[item.slice(0, -3)] = require(`./commands/${item}`); // and put the require inside the client.commands object
-    }
-}
-
-for (i = 0; i < client.eventList.length; i++) { // Creates a loop
-    let item = client.eventList[i]; // Defines each of the file as item
-    if (item.match(/\.js$/)) { // only take js files
+    for (let i = 0; i < this.eventList.length; i++) { // Creates a loop
+      let item = this.eventList[i]; // Defines each of the file as item
+      if (item.match(/\.js$/)) { // only take js files
         delete require.cache[require.resolve(`./events/${item}`)]; // delete the cache of the require, useful in case you wanna reload the command again
-        client.events[item.slice(0, -3)] = require(`./events/${item}`); // and put the require inside the client.commands object
+        this.events[item.slice(0, -3)] = require(`./events/${item}`); // and put the require inside the client.commands object
+      }
     }
-}
 
-client.bot.on("ready", async () => { // Starts the event "ready", this is executed when the bot is ready
-    console.log("I am ready!"); // sends a message to the log
-    client.bot.user.setActivity(`${client.bot.guilds.size} Servers`, {
-        type: "WATCHING"
+    // Requires rollbar for error handling
+    this.rollbar = new (require('rollbar'))(process.env.ROLLBAR_ACCESS_TOKEN);
+    // Requires the osu! API
+    this.osu = new (require('node-osu')).Api(process.env.OSU_KEY);
+    // Requires the hypixel API
+    this.hypixel = new (require('hypixel-api'))(process.env.HYPIXEL_KEY);
+    // Requires snekfetch
+    this.fetch = require('snekfetch');
+    // Requires dateformat
+    this.dateFormat = require('dateformat');
+    // Requires fuzzball
+    this.fuzz = require('fuzzball');
+    // Requires the music functions
+    this.musicfn = require('./functions/music.js');
+    // Requires the postgres module
+    this.sql = new (require('pg')).Pool({
+      user: process.env.SQL_USER,
+      password: process.env.SQL_PASS,
+      database: process.env.SQL_DB,
+      port: process.env.SQL_PORT,
+      host: process.env.SQL_HOST,
+      ssl: true
     });
 
-    sql.query('DELETE FROM mute');
+    this.bot = bot;
+    this.Discord = Discord;
+    this.moment = require('moment');
+    this.permissions = require('./permissions.json');
+    this.escapeMarkdown = this.Discord.Util.escapeMarkdown;
+    this.contributors = ['468848409202262027', '284857002977525760'];
+    this.mutes = [];
+  }
+
+  capFirstLetter (str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  getFuzz (str) {
+    let ordered = [];
+    this.commandsList.forEach(cmd => {
+      ordered.push([cmd, this.fuzz.ratio(str, cmd)]);
+    });
+    ordered.sort((a, b) => b[1] - a[1]);
+    return ordered.slice(0, 3);
+  }
+
+  async checkPerms (pName, pCategory, member) {
+    // If the member is the owner or the member has the permission Administrator, return true
+    if (member.guild.owner === member || member.hasPermission('ADMINISTRATOR')) { return true; }
+    let bool2 = false;
+    let i = 0;
+    // Creates a promise
+    const prom = new Promise(resolve => {
+      // Loops through the member's roles
+      member.roles.forEach(async role => {
+        // Selects the permission row
+        let row = (await this.sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, pName, pCategory])).rows[0];
+        // If there is a row AND the permission is enabled for the role
+        if (row && row.bool) {
+          bool2 = true;
+          // Resolve the promise if the member has permissions to save time
+          resolve();
+        }
+        // Increments "i"
+        i++;
+        // If it's the last role that is being looped
+        if (i === member.roles.size) {
+          // Resolve the promise in 10ms
+          setTimeout(resolve, 10);
+        }
+      });
+    });
+
+    await prom;
+    // If the member does not have permissions
+    if (!bool2) {
+      // Return false
+      return false;
+    } else { // If the member does have permissions
+      // Return true
+      return true;
+    }
+  }
+
+  checkClientPerms (channel, ...perms) {
+    // Defines "num" as 0
+    let bool = true;
+
+    // Starts a loop on the permissions
+    perms.forEach(perm => {
+      // If the bot has permissions
+      if (!channel.permissionsFor(this.bot.user).has(perm)) bool = false; // Adds one to num i.e makes it truthy
+    });
+
+    // Return bool
+    return bool;
+  }
+
+  matchInArray (expression, strings) {
+    // Defines "len" as the array length of "strings"
+    let len = strings.length;
+
+    // Starts a for loop
+    for (let i = 0; i < len; i++) {
+      // If the regex is valid in the string
+      if (expression.test(strings[i])) {
+        // Returns true
+        return true;
+      }
+    }
+
+    // Returns false
+    return false;
+  }
+
+  get allAlias () {
+    // Defines "allAliases" as an object
+    const allAliases = {};
+
+    // Starts a loop on all the commands
+    Object.values(this.commands).forEach(cmd => {
+      const cmdName = cmd.help.name;
+      // Starts a nested loop for each alias of the command
+      cmd.help.aliases.forEach(alias => {
+        // If there is no array for that command, make one
+        allAliases[alias] = cmdName;
+      });
+      // Adds the actual command into the array
+      allAliases[cmdName] = cmdName;
+    });
+
+    // Returns the array
+    return allAliases;
+  }
+};
+
+// Defines "Client" as the client object.
+const Client = new client();
+
+// Starts an event listener "ready", this is emitted when the bot is ready.
+bot.on('ready', () => require('./events/ready.js')(Client, bot));
+
+// Starts an event listener "channelCreate", this is emitted when a channel is created.
+bot.on('channelCreate', channel => require('./events/channelCreate.js')(Client, channel));
+
+// Starts an event listener "channelDelete", this is emitted when a channel is deleted.
+bot.on('channelDelete', channel => require('./events/channelDelete.js')(Client, channel));
+
+// Starts an event listener "message", this is emitted when a message is sent.
+bot.on('message', message => require('./events/message.js')(Client, message));
+
+// Starts an event listener "messageDelete", this is emitted when a message is deleted.
+bot.on('messageDelete', message => require('./events/messageDelete.js')(Client, message));
+
+// Starts an event listener "messageUpdate", this is emitted when a message is updated.
+bot.on('messageUpdate', (oldMessage, newMessage) => require('./events/messageUpdate.js')(Client, oldMessage, newMessage));
+
+// Starts an event listener "voiceStateUpdate", this is emitted when any voice states are updated.
+bot.on('voiceStateUpdate', (oldVoice, newVoice) => require('./events/voiceStateUpdate.js')(Client, oldVoice, newVoice));
+
+// Starts an event listener "guildMemberAdd", this is emitted when a member joins a guild
+bot.on('guildMemberAdd', member => require('./events/guildMemberAdd.js')(Client, member));
+
+// Starts an event listener "guildMemberRemove", this is emitted when a member leaves a guild
+bot.on('guildMemberRemove', member => require('./events/guildMemberRemove.js')(Client, member));
+
+// Starts an event listener "guildMemberUpdate", this is emitted when a member is updated (eg. nick or roles)
+bot.on('guildMemberUpdate', (oldMember, newMember) => require('./events/guildMemberUpdate.js')(Client, oldMember, newMember));
+
+// Starts an event listener "guildBanAdd", this is emitted when a member is banned from a guild
+bot.on('guildBanAdd', (guild, user) => require('./events/guildBanAdd.js')(Client, guild, user));
+
+// Starts an event listener "guildBanRemove", this is emitted when a member is unbanned from a guild
+bot.on('guildBanRemove', (guild, user) => require('./events/guildBanRemove.js')(Client, guild, user));
+
+bot.on('raw', data => require('./events/raw.js')(Client, data));
+
+// Starts an event listener "roleCreate", this is emitted when a role is created
+bot.on('roleCreate', role => require('./events/roleCreate.js')(Client, role));
+
+// Starts an event listener "roleDelete", this is emitted when a role is deleted
+bot.on('roleDelete', role => require('./events/roleDelete.js')(Client, role));
+
+// Emitted whenever the client's WebSocket encounters a connection error.
+bot.on('error', console.error);
+
+// Emitted when the process encounters a warning.
+bot.on('warn', i => {
+  console.warn(i);
+  return Client.rollbar.warn(i);
 });
 
 process.on('unhandledRejection', error => {
-    //rollbar.error("Unhandled Rejection", error);
-    console.log(error);
-});
-/*.on('uncaughtException', exception => {
-        rollbar.error("Uncaught Exception", exception.stack);
-    }).on('warn', warn => {
-        rollbar.warning("Warning:", warn.stack);
-    });*/
-
-client.bot.on('error', error => {
-    if (!error.message.includes("ECONNRESET")) {
-        //rollbar.error('Error:', error);
-        console.error(error);
-    }
+  console.error(error);
+  return Client.rollbar.error(error);
 });
 
-
-let channels = {};
-
-client.bot.on("message", async message => { // Starts the event "message", this is executed whenever a message is sent where the bot is included.
-    // If it's a DM, return
-    if (message.channel.type !== "text") return;
-    // The author is a bot? Return.
-    if (message.author.bot) return;
-
-    // Checks for perms
-    if (!message.guild.me.permissionsIn(message.channel).has("SEND_MESSAGES") || !message.guild.me.permissionsIn(message.channel).has("VIEW_CHANNEL")) {
-        if (!message.guild.me.hasPermission("ADMINISTRATOR")) return;
-    }
-
-    client.msgEdit[message.id] = null;
-
-    let mess = message.content.toLowerCase().trim(); // Defines mess, which is the lowercase version of the original msg
-
-    if (!client.guilds[message.guild.id]) {
-        client.guilds[message.guild.id] = {
-            queue: [],
-            queueNames: [],
-            isPlaying: false,
-            dispatcher: null,
-            voiceChannel: null,
-            skipReq: 0,
-            skippers: [],
-            volume: 50
-        };
-    }
-
-    if (!message.member)
-        message.member = await message.guild.members.fetch({
-            user: message.author,
-            cache: true
-        });
-    if (!message.guild.me)
-        message.guild.me = await message.guild.members.fetch({
-            user: client.bot.user,
-            cache: true
-        });
-
-    if (message.guild.me.permissionsIn(message.channel).has("MANAGE_MESSAGES") || message.guild.me.hasPermission("ADMINISTRATOR")) {
-        // Start of slowmode
-        // Checks for perms
-        let bool2 = false;
-        let i = 0;
-        let prom = new Promise(resolve => {
-            message.member.roles.forEach(async role => {
-                let row3 = (await sql.query(`SELECT * FROM permissions WHERE roleID = '${role.id}' AND pName = 'bypass' AND pCategory = 'slowmode'`)).rows[0];
-                if ((row3 && row3.bool) || message.member === message.guild.owner)
-                    bool2 = true;
-                i++;
-                if (i === message.member.roles.size)
-                    setTimeout(resolve, 10);
-            });
-        });
-        await prom;
-        if (!bool2) {
-            if (!channels[message.channel.id])
-                channels[message.channel.id] = new Set();
-            let row = (await sql.query(`SELECT * FROM slowmode WHERE guildId = '${message.guild.id}' AND channelId = '${message.channel.id}'`)).rows[0];
-            if (row) {
-                if (channels[message.channel.id].has(message.author.id)) return message.delete().catch(O_o => { });
-                channels[message.channel.id].add(message.author.id);
-                setTimeout(() => channels[message.channel.id].delete(message.author.id), row.cooldown * 1000);
-            }
-        }
-        // End of slowmode
-    }
-
-    // Start of deleteinvite
-    let bool2 = false;
-    let i = 0;
-    let prom = new Promise(resolve => {
-        message.member.roles.forEach(async role => {
-            let row4 = (await sql.query(`SELECT * FROM permissions WHERE roleID = '${role.id}' AND pName = 'invite' AND pCategory = 'misc'`)).rows[0];
-            if ((row4 && row4.bool) || message.member === message.guild.owner)
-                bool2 = true;
-            i++;
-            if (i === message.member.roles.size) {
-                setTimeout(resolve, 10);
-            }
-        });
-    });
-    await prom;
-    if (!bool2) {
-        let row5 = (await sql.query(`SELECT * FROM deleteinvite WHERE guildId = '${message.guild.id}'`)).rows[0];
-        if (row5 && row5.bool && message.guild.me.permissionsIn(message.channel).has("MANAGE_MESSAGES") && message.deletable && /(?:https?:\/\/)?discord(?:app.com\/invite|.gg)\/[\w\d]+/gi.test(message.content)) {
-            message.delete();
-            let m = await message.reply(" No invite links.");
-            m.delete({
-                timeout: 5000
-            });
-        }
-    }
-    // End of deleteinvite
-
-    try {
-        // Start of levelling system
-        async function thingy() {
-            let row = (await sql.query(`SELECT * FROM scores WHERE userID = '${message.author.id}' AND guildID = '${message.guild.id}'`)).rows[0];
-            if (!row) { // If the row is not found
-                sql.query(`INSERT INTO scores (userID, points, level, guildID) VALUES ('${message.author.id}', 1, 0, '${message.guild.id}')`);
-            } else { // If the row is found
-                let curLevel = Math.floor(0.2 * Math.sqrt(row.points + message.content.length));
-                if (curLevel > row.level) {
-                    row.level = curLevel;
-                    sql.query(`UPDATE scores SET points = ${row.points + message.content.length}, level = ${curLevel} WHERE userID = '${message.author.id}' AND guildID = '${message.guild.id}'`);
-                    let msg = await message.channel.send(`${message.author}, You're now level ${curLevel}! Nice :)`);
-                    msg.delete({
-                        timeout: 5000
-                    }).catch((e) => {
-                        if (!e.toString().includes('Unknown Message')) {
-                            rollbar.error("Something went wrong in index.js levelling system", e);
-                            console.error(e);
-                        }
-                    });
-                    let { rows } = await sql.query(`SELECT * FROM levelrole WHERE guildID = '${message.guild.id}' AND level <= ${curLevel}`);
-                    if (rows[0]) {
-                        let roleArr = [];
-                        rows.forEach(r => {
-                            if (!message.guild.roles.get(r.roleid))
-                                return sql.query(`DELETE FROM levelrole WHERE guildID = '${message.guild.id}' AND roleID = '${r.roleid}'`);
-                            roleArr.push(r.roleid);
-                        });
-                        if (roleArr.length === 1) {
-                            let sRole = message.guild.roles.get(roleArr[0]);
-                            if ((message.guild.me.hasPermission("MANAGE_ROLES") || message.guild.me.hasPermission("ADMINISTRATOR")) && sRole.position < message.guild.me.roles.highest.position && !message.member.roles.has(sRole.id))
-                                message.member.roles.add(sRole, 'Level Role');
-                        } else if (roleArr.length > 1) {
-                            for (let i = 0; i < roleArr.length; i++) {
-                                let sRole = message.guild.roles.get(roleArr[i]);
-                                if ((message.guild.me.hasPermission("MANAGE_ROLES") || message.guild.me.hasPermission("ADMINISTRATOR")) && sRole.position < message.guild.me.roles.highest.position && !message.member.roles.has(sRole.id))
-                                    message.member.roles.add(sRole, "Level Role")
-                            }
-                        }
-                    }
-                }
-                sql.query(`UPDATE scores SET points = ${row.points + message.content.length} WHERE userID = '${message.author.id}' AND guildID = '${message.guild.id}'`);
-            }
-        }
-
-        let row = (await sql.query(`SELECT * FROM toggleLevel WHERE guildId = '${message.guild.id}'`)).rows[0];
-        if (row && row.bool)
-            thingy();
-        // End of levelling system
-    } catch (e) {
-        rollbar.error("Something went wrong in index.js levelling system", e);
-        console.error(e);
-    }
-
-    async function commandThingy(customPrefix) {
-        //if (message.mentions.users.has(client.bot.user.id)) message.channel.send("In case you forgot the prefix, it is `" + customPrefix + "`!");
-        if (message.content.startsWith(customPrefix) && message.content !== customPrefix) { // If the message starts with the prefix
-            async function commandThingy2() {
-                let msg;
-                let args = message.content.slice(customPrefix.length).split(' '); // Defines args, which is put in an array with the prefix gone
-                // Removes all double spaces
-                for (let i = args.length - 1; i--;)
-                    if (args[i] == '')
-                        args.splice(i, 1);
-                let r = (await sql.query(`SELECT * FROM prefix WHERE guildId = '${message.guild.id}'`)).rows[0];
-                async function commandRun() {
-                    let unknownCommand = `Invalid command. Use ${customPrefix}help to see the commands!`; // Defines unknownCommand so jyguy doesn't need to type it all the time
-                    if (args[0].toLowerCase() in client.commands) { // if there is the command in the command list
-                        client.commands[args[0].toLowerCase()].func(client, message, args, unknownCommand, mess, sql, Discord, fs, customPrefix, false); // executes the function of the command (code in separate files in folder commands)
-                    } else {
-                        let row = (await sql.query(`SELECT * FROM cmdnotfound WHERE guildId = '${message.guild.id}'`)).rows[0];
-                        if (!row || !row.bool) return;
-                        let arr = [];
-                        client.commandsList.forEach(command => {
-                            let rawcommand = command.slice(0, command.length - 3);
-                            let item = client.commands[rawcommand];
-                            // If the message author ID is Jyguy, add it to the list regardless of guilds
-                            if (message.author.id === '288831103895076867') {
-                                arr.push(`${rawcommand} ${client.fuzz.ratio(rawcommand, args[0])}`);
-                                // From now on the member will be 100% not jyguy
-                                // If default
-                            } else if (!item.jyguyOnly)
-                                arr.push(`${rawcommand} ${client.fuzz.ratio(rawcommand, args[0])}`);
-                        });
-                        let arr2 = arr.sort((a, b) => {
-                            return b.split(' ')[1] - a.split(' ')[1];
-                        });
-                        msg = await message.channel.send(`Could not find the command. Did you mean \`${arr2[0].split(' ')[0]}, ${arr2[1].split(' ')[0]}, or ${arr2[2].split(' ')[0]}\`?`);
-                        client.msgEdit[message.id] = msg.id;
-                    }
-                }
-                if (!r) {
-                    commandRun();
-                } else {
-                    customPrefix = r.customprefix;
-                    commandRun();
-                }
-            }
-            let row = (await sql.query(`SELECT * FROM blacklist WHERE userId = '${message.author.id}'`)).rows[0];
-            if (row) {
-                let row2 = (await sql.query(`SELECT * FROM blacklistmsg WHERE guildId = '${message.guild.id}'`)).rows[0];
-                if (!row2 || row2.bool) {
-                    msg = await message.channel.send(`You are blacklisted from me by: \`${row.by}\` and reason: \`${row.reason}\``);
-                    client.msgEdit[message.id] = msg.id;
-                }
-            } else {
-                let row2 = (await sql.query(`SELECT * FROM cooldownmsg WHERE guildId = '${message.guild.id}'`)).rows[0];
-                if (client.cooldown.has(message.author.id)) {
-                    if (row2 && row2.bool) {
-                        msg = await message.channel.send("Please wait 3 seconds before executing a command.");
-                        client.msgEdit[message.id] = msg.id;
-                    }
-                } else {
-                    client.cooldown.add(message.author.id); // Adds the ID to the set
-                    setTimeout(() => {
-                        client.cooldown.delete(message.author.id); // Deletes the ID after 3 seconds
-                    }, 3000);
-                    commandThingy2();
-                }
-            }
-        }
-    }
-
-    let r = (await sql.query(`SELECT * FROM prefix WHERE guildId = '${message.guild.id}'`)).rows[0];
-    let regexp = new RegExp(`^<@!?${client.bot.user.id}> `);
-    let prefix = message.content.match(regexp) ? message.content.match(regexp)[0] : (r ? r.customprefix : "?");
-    commandThingy(prefix);
-});
-
-// Events (action log)
-client.events["guildMemberAdd"].func(client, sql, Discord);
-client.events["guildMemberRemove"].func(client, sql, Discord);
-client.events["guildMemberUpdate"].func(client, sql, Discord);
-client.events["guildBanAdd"].func(client, sql, Discord);
-client.events["emojiCreate"].func(client, sql, Discord);
-client.events["emojiDelete"].func(client, sql, Discord);
-client.events["guildBanRemove"].func(client, sql, Discord);
-//client.events["guildCreate"].func(client, sql, Discord);
-client.events["messageDelete"].func(client, sql, Discord);
-client.events["messageUpdate"].func(client, sql, Discord);
-client.events["roleCreate"].func(client, sql, Discord);
-client.events["roleDelete"].func(client, sql, Discord);
-client.events["roleUpdate"].func(client, sql, Discord);
-client.events["messageDeleteBulk"].func(client, sql, Discord);
-client.events["channelCreate"].func(client, sql, Discord);
-client.events["channelDelete"].func(client, sql, Discord);
-client.events["voiceStateUpdate"].func(client, sql, Discord);
-//client.events["rateLimit"].func(client, sql, Discord);
-client.events["raw"].func(client, sql, Discord);
-// End of events
-
-client.bot.login(process.env.BOT_TOKEN);
+// Logs the bot in.
+bot.login(process.env.BOT_TOKEN);

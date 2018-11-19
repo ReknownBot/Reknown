@@ -1,56 +1,33 @@
-module.exports = {
-    func: async (client, sql, Discord) => {
-        try {
-            // Start the event
-            client.bot.on("channelDelete", async channel => {
-                // Define the guild
-                let guild = channel.guild;
+async function logMessage (Client, channel) {
+  const embed = new Client.Discord.MessageEmbed()
+    .setTitle('Channel Deleted')
+    .addField('Channel', `${channel.name} \`(${channel.id})\``, true)
+    .addField('Type', channel.type, true)
+    .setColor(0xFF0000)
+    .setTimestamp();
 
-                if (!guild) return;
+  if (channel.parent) embed.addField('Category', channel.parent.name, true);
 
-                // Function with the log channel
-                function logChannel(selectedChannel) {
-                    // If the log channel does not exist return
-                    if (!selectedChannel) return;
+  if (channel.guild.me.hasPermission('VIEW_AUDIT_LOG')) {
+    const entry = (await channel.guild.fetchAuditLogs({
+      type: 'CHANNEL_DELETE',
+      limit: 1
+    })).entries.first();
 
-                    // Perm Checks
-                    if (!guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES")) {
-                        if (!message.guild.me.hasPermission("ADMINISTRATOR")) return;
-                    }
-                    if (!guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL")) {
-                        if (!guild.me.hasPermission("ADMINISTRATOR")) return;
-                    }
+    if (entry) {
+      const executor = entry.executor;
+      const reason = entry.reason || 'None';
 
-                    // MessageEmbed constructor
-                    let embed = new Discord.MessageEmbed()
-                        .setTitle("Channel Deleted")
-                        .addField("Name", channel.name, true)
-                        .addField("ID", channel.id, true)
-                        .addField("Topic", channel.topic ? channel.topic : "None", true)
-                        .addField("Type", channel.type, true)
-                        .setColor(0xFF0000)
-                        .setTimestamp();
-                    channel.parent ? embed.addField("Category", channel.parent.name, true) : null;
-
-                    // Send the embed
-                    selectedChannel.send(embed);
-                }
-
-                // Gets the log channel set for the guild
-                let r = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [guild.id])).rows[0]; // Gets the SQL row
-                let r2 = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [guild.id])).rows[0];
-                if (r2 && r2.bool) {
-                    if (!r) { // If the row is not found i.e Default log channel
-                        logChannel(guild.channels.find(c => c.name === "action-log"));
-                    } else { // If it is found, run the function with the custom log channel
-                        logChannel(guild.channels.get(r.channelid));
-                    }
-                }
-            });
-        } catch (e) {
-            let rollbar = new client.Rollbar(client.rollbarKey);
-            rollbar.error("Something went wrong in channelDelete.js", e);
-            console.error(e);
-        }
+      embed.setAuthor(`${executor.tag} (${executor.id})`, executor.displayAvatarURL())
+        .addField('Reason', reason, true);
     }
+  }
+
+  return require('../functions/sendlog.js')(Client, embed, channel.guild.id);
 }
+
+module.exports = (Client, channel) => {
+  if (!channel.guild || !channel.guild.available) return;
+
+  logMessage(Client, channel);
+};

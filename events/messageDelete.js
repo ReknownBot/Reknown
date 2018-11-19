@@ -1,78 +1,55 @@
-module.exports = {
-    func: (client, sql, Discord) => {
-        client.bot.on("messageDelete", async message => {
-            try {
-                // If the message was sent in not a guild channel
-                if (message.channel.type !== "text") return;
+async function logMessage (Client, message) {
+  const embed = new Client.Discord.MessageEmbed()
+    .setTitle('Message Deleted')
+    .addField('Channel', message.channel)
+    .setColor(0xFF0000)
+    .setTimestamp();
 
-                let row2 = (await sql.query('SELECT * FROM star WHERE msgID = $1', [message.id])).rows[0];
-                let row3 = (await sql.query('SELECT * FROM togglestar WHERE guildId = $1', [message.guild.id])).rows[0];
-                let row4 = (await sql.query('SELECT * FROM starchannel WHERE guildId = $1', [message.guild.id])).rows[0];
-                let sChannel;
-                if (row4)
-                    sChannel = message.guild.channels.get(row4.channelid);
-                else
-                    sChannel = message.guild.channels.find(c => c.name === "starboard");
-                if (row2 && (!row3 || row3.bool)) {
-                    sql.query('DELETE FROM star WHERE msgID = $1', [message.id]);
-                    if (sChannel) {
-                        let msg = await sChannel.messages.fetch(row2.editid);
-                        msg ? msg.delete() : null;
-                    }
-                }
+  if (!message.content && message.embeds[0]) return;
+  else if (message.attachments.first() && message.attachments.first().width) embed.setImage(message.attachments.first().proxyURL);
 
-                if (message.author === client.bot.user) return; // If it's Reknown, my bot
-                async function logChannel(selectedChannel) {
-                    if (!selectedChannel) return;
-                    if (!message.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !message.guild.me.hasPermission("ADMINISTRATOR")) return;
-                    if (!message.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !message.guild.me.hasPermission("ADMINISTRATOR")) return;
-                    async function messageDelete() {
-                        let embed;
-                        if (message.content.length > 1024) {
-                            embed = new Discord.MessageEmbed()
-                                .setTitle("Message Over 1024 characters Deleted")
-                                .addField("Author", message.author.tag)
-                                .addField("Channel", message.channel.toString())
-                                .setColor(0xFF0000);
-                        } else {
-                            if (message.embeds.find(e => e.type === 'rich')) {
-                                embed = new Discord.MessageEmbed(message.embeds[0]);
-                                message.embeds[0].image ? embed.setImage(message.embeds[0].image.proxyURL) : null;
-                                message.embeds[0].thumbnail ? embed.setThumbnail(message.embeds[0].thumbnail.proxyURL) : null;
-                                selectedChannel.send(`${message.author.tag}'s (${message.author.id}) Embed Deleted at ${message.channel.toString()}:`, {
-                                    embed
-                                });
-                            } else {
-                                embed = new Discord.MessageEmbed()
-                                    .setTitle("Message Deleted")
-                                    .addField("Content:", message.content ? message.content : "None")
-                                    .addField("Author:", message.author.tag)
-                                    .addField("Channel", message.channel.toString())
-                                    .setColor(0xFF0000);
-                                if (message.attachments.size > 0 && message.attachments.first().width) {
-                                    embed.setImage(message.attachments.first().proxyURL);
-                                }
-                                selectedChannel.send(embed);
-                            }
-                        }
-                    }
-                    let row = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [message.guild.id])).rows[0];
-                    if (row && row.bool) {
-                        messageDelete();
-                    }
-                }
+  if (message.content) embed.addField('Content', message.content);
+  else if (!embed.image) return;
 
-                let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [message.guild.id])).rows[0];
-                if (!r2) {
-                    logChannel(message.guild.channels.find(c => c.name === "action-log"));
-                } else {
-                    logChannel(message.guild.channels.get(r2.channelid));
-                }
-            } catch (e) {
-                let rollbar = new client.Rollbar(client.rollbarKey);
-                rollbar.error("Something went wrong in messageDelete.js", e);
-                console.error(e);
-            }
-        });
+  if (message.guild.me.hasPermission('VIEW_AUDIT_LOG')) {
+    const entry = (await message.guild.fetchAuditLogs({
+      type: 'MESSAGE_DELETE',
+      limit: 1
+    })).entries.first();
+
+    if (entry) {
+      const executor = entry.executor;
+      const reason = entry.reason || 'None';
+
+      if (Date.now() - entry.createdTimestamp < 7000) embed.setAuthor(`${executor.tag} (${executor.id})`, executor.displayAvatarURL()).addField('Author', message.author, true);
+      else embed.setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL());
+
+      embed.addField('Reason', reason, true);
     }
+  }
+
+  return require('../functions/sendlog.js')(Client, embed, message.guild.id);
 }
+
+async function delStar (Client, message) {
+  const msgRow = (await Client.sql.query('SELECT * FROM star WHERE msgid = $1', [message.id])).rows[0];
+  const toggled = (await Client.sql.query('SELECT bool FROM togglestar WHERE guildid = $1 AND bool = $2', [message.guild.id, 1])).rows[0];
+  const cid = (await Client.sql.query('SELECT channelid FROM starchannel WHERE guildid = $1', [message.guild.id])).rows[0];
+  const sChannel = message.guild.channels.get(cid ? cid.channelid : null) || message.guild.channels.find(c => c.name === 'starboard');
+
+  if (msgRow && toggled) {
+    Client.sql.query('DELETE FROM star WHERE msgid = $1', [message.id]);
+    if (sChannel && Client.checkClientPerms(sChannel, 'VIEW_CHANNEL')) {
+      const msg = await sChannel.messages.fetch(msgRow.editid);
+      if (msg && !msg.deleted) return msg.delete();
+    }
+  }
+}
+
+module.exports = (Client, message) => {
+  if (!message.guild || !message.guild.available) return;
+  if (message.author.bot) return;
+
+  logMessage(Client, message);
+  delStar(Client, message);
+};

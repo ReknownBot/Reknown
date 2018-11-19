@@ -1,113 +1,80 @@
-module.exports = {
-  func: async (client, sql, Discord) => {
-    // Starts an event
-    client.bot.on('guildMemberAdd', async member => {
-      try { // Just in case
-        // Autorole
-        let { rows: r3 } = await sql.query('SELECT * FROM autorole WHERE guildId = $1', [member.guild.id]);
-        if (r3.length !== 0 && member.guild.me.hasPermission("MANAGE_ROLES")) {
-          r3.forEach(r => {
-            // Gets the role
-            let autoRole = member.guild.roles.get(r.roleid);
-            if (!autoRole)
-              sql.query("DELETE FROM autorole WHERE guildId = $1 AND roleId = $2", [member.guild.id, r.roleid]);
-            else if (autoRole && autoRole.position < member.guild.me.roles.highest.position)
-              // Adds the role
-              member.roles.add(autoRole, "Reknown Autorole");
-          });
-        }
-        // End of autorole
+async function welcomeMessage (Client, member, guild) {
+  const welcomeToggle = (await Client.sql.query('SELECT bool FROM togglewelcome WHERE guildid = $1', [guild.id])).rows[0];
+  const channelRow = (await Client.sql.query('SELECT channel FROM welcomechannel WHERE guildid = $1', [guild.id])).rows[0];
+  if (!welcomeToggle || !welcomeToggle.bool) return;
+  const welcomeChannel = channelRow ? guild.channels.get(channelRow.channel) : guild.channels.find(c => c.type === 'text' && c.name === 'action-log');
+  if (!welcomeChannel) return;
+  if (!Client.checkClientPerms(welcomeChannel, 'SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS')) return;
 
-        // Checks if the guild has welcome messages enabled
-        r3 = (await sql.query('SELECT * FROM toggleWelcome WHERE guildId = $1', [member.guild.id])).rows[0];
-        if (r3 && r3.bool) {
-          // Gets the welcome channel for the guild
-          let r = (await sql.query('SELECT * FROM welcomeChannel WHERE guildId = $1', [member.guild.id])).rows[0];
-          // This is for the welcome channel
-          async function welcomeChannel(welcomeChannel) {
-            // If the channel exists
-            if (welcomeChannel) {
-              // If the bot does not have send messages perms in the welcome channel & does not have administrator (bypass all overwrites) then return
-              if (!member.guild.me.permissionsIn(welcomeChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-              if (!member.guild.me.permissionsIn(welcomeChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
+  const msgRow = (await Client.sql.query('SELECT custommessage FROM customMessages WHERE guildid = $1', [guild.id])).rows[0];
+  const msg = msgRow ? msgRow.custommessage
+    .replace('<Guild>', guild.name)
+    .replace('<User>', member.toString())
+    .replace('<MemberCount>', guild.memberCount)
+    : `${member}, Welcome to **${member.guild.name}!** There are ${member.guild.memberCount} members now.`;
 
-              // Function for welcoming messages
-              async function welcomeMessages(msg) {
-                let embed = new Discord.MessageEmbed()
-                  .setDescription(msg)
-                  .setColor(0x00FF00)
-                  .setThumbnail(member.user.displayAvatarURL())
-                  .setTimestamp();
-                welcomeChannel.send(embed);
-              }
+  const embed = new Client.Discord.MessageEmbed()
+    .setDescription(msg)
+    .setColor(0x00FF00)
+    .setTimestamp();
 
-              // Gets the welcoming message for the guild
-              let r2 = (await sql.query('SELECT * FROM customMessages WHERE guildId = $1', [member.guild.id])).rows[0];
-              if (!r2) { // If the row is not found (i.e no custom welcoming message)
-                welcomeMessages(`${member.user.tag} joined ${member.guild.name}.\n\nThere are *${member.guild.memberCount}* members now.`);
-              } else { // Vise versa
-                // If the custom message is invalid for some reason, use the default instead
-                let customMessage = r2.custommessage.replace("<User>", member.user.tag).replace("<Guild>", member.guild.name).replace("<MemberCount>", member.guild.memberCount) || `${member}, Welcome to **${member.guild.id}!** There are ${member.guild.memberCount} members now.`;
-                welcomeMessages(customMessage);
-              }
-            }
-          }
-          // If it is default
-          if (!r || !r.channel)
-            welcomeChannel(member.guild.channels.find(c => c.position === 0 && c.type === 'text'));
-          else // If it's custom
-            welcomeChannel(member.guild.channels.get(r.channel));
-        }
-
-        // Checks if the guild has action log enabled
-        let r = (await sql.query('SELECT * FROM actionlog WHERE guildId = $1', [member.guild.id])).rows[0];
-        if (r && r.bool) { // If they have it enabled
-          // Creates an embed
-          let embed = new Discord.MessageEmbed()
-            .setColor(0x00ff00)
-            .setThumbnail(member.user.displayAvatarURL())
-            .setTimestamp()
-            .setDescription(`**Member:** ${member.user.tag} :: ${member.id}`)
-            .setTitle("Member Joined");
-          // Looks for the log channel selected
-          let r2 = (await sql.query('SELECT * FROM logChannel WHERE guildId = $1', [member.guild.id])).rows[0];
-          if (!r2 || !r2.channelid) { // If it is default
-            let selectedChannel = member.guild.channels.find(c => c.name === "action-log");
-            if (selectedChannel) {
-              if (!member.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-              if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-              // Sends the embed
-              selectedChannel.send(embed);
-            }
-          } else { // If it is custom
-            let selectedChannel = member.guild.channels.get(r2.channelid);
-            if (selectedChannel) {
-              if (!member.guild.me.permissionsIn(selectedChannel).has("SEND_MESSAGES") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-              if (!member.guild.me.permissionsIn(selectedChannel).has("VIEW_CHANNEL") && !member.guild.me.hasPermission("ADMINISTRATOR")) return;
-              // Sends the embed
-              selectedChannel.send(embed);
-            }
-          }
-        }
-
-        // Checks if the member is muted
-        r = (await sql.query('SELECT * FROM mute WHERE guildId = $1 AND memberId = $2', [member.guild.id, member.id])).rows[0];
-        if (r) { // If the row is found
-          // If the bot has permissions to add a role
-          if (member.guild.me.hasPermission("MANAGE_ROLES")) {
-            // Gets the role
-            let muteRole = member.guild.roles.find(r => r.name === "Muted");
-            // If the role still exists
-            if (muteRole)
-              // Adds the role
-              member.roles.add(muteRole);
-          }
-        }
-      } catch (e) { // Error occured >:)
-        let rollbar = new client.Rollbar(client.rollbarKey);
-        rollbar.error("Something went wrong in guildMemberAdd.js", e);
-        console.error(e);
-      }
-    });
-  }
+  return welcomeChannel.send(embed);
 }
+
+async function logMessage (Client, member, guild) {
+  const embed = new Client.Discord.MessageEmbed()
+    .setTitle('Member Joined')
+    .addField('Member', `${member.user.tag} (${member.id})`)
+    .setThumbnail(member.user.displayAvatarURL({ size: 2048 }))
+    .setTimestamp()
+    .setColor(0x00FF00);
+  return require('../functions/sendlog.js')(Client, embed, guild.id);
+}
+
+async function autorole (Client, member, guild) {
+  const { rows } = await Client.sql.query('SELECT roleid FROM autorole WHERE guildId = $1', [guild.id]);
+  if (rows.length === 0) return;
+  if (!member.guild.me.hasPermission('MANAGE_ROLES')) return;
+  rows.forEach(r => {
+    // Gets the role
+    const autoRole = guild.roles.get(r.roleid);
+    if (!autoRole) Client.sql.query('DELETE FROM autorole WHERE guildId = $1 AND roleId = $2', [guild.id, r.roleid]);
+    else if (autoRole.position < guild.me.roles.highest.position) member.roles.add(autoRole, 'Reknown Autorole');
+  });
+}
+
+async function levelrole (Client, member, guild) {
+  const toggleLev = (await Client.sql.query('SELECT bool FROM togglelevel WHERE guildid = $1', [guild.id]));
+  if (!toggleLev || !toggleLev.bool) return;
+  const { rows } = await Client.sql.query('SELECT roleid, level FROM levelrole WHERE guildid = $1', [guild.id]);
+  if (rows.length === 0) return;
+  rows.forEach(async row => {
+    // Gets the role
+    const levelRole = guild.roles.get(row.roleid);
+    if (!levelRole) Client.sql.query('DELETE FROM levelrole WHERE guildid = $1 AND roleid = $2', [guild.id, row.roleid]);
+    else if (levelrole.position < guild.me.roles.highest.position) {
+      const curLevel = (await Client.sql.query('SELECT level FROM scores WHERE userid = $1', [member.id])).rows[0].level;
+      if (curLevel < row.level) return;
+      member.roles.add(levelrole, 'Level Role');
+    }
+  });
+}
+
+async function mute (Client, member, guild) {
+  if (!Client.mutes.includes(member.id)) return;
+  if (!guild.me.hasPermission('MANAGE_ROLES')) return;
+  const mutedRole = guild.roles.find(r => r.name === 'Muted');
+  if (mutedRole && !member.roles.has(mutedRole.id)) member.roles.add(mutedRole);
+}
+
+module.exports = async (Client, member) => {
+  const guild = member.guild;
+  if (!guild.available) return;
+  if (member === guild.me) return;
+
+  logMessage(Client, member, guild);
+  welcomeMessage(Client, member, guild);
+  autorole(Client, member, guild);
+  levelrole(Client, member, guild);
+  mute(Client, member, guild);
+};

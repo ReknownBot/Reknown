@@ -1,1 +1,15 @@
-**Reknown** is a Discord Bot programmed in the library **Discord.js**, with music, leveling, welcoming, and much more. This bot is in half-development, so expect a few restarts a day. It also comes with starboard. All features are **OPTIONAL**, and can be toggled on/off with `?config`. You can view a list of the commands with either `?help` or our [website](https://reknownbot.herokuapp.com). You can join our support server [here](https://discord.gg/n45fq9K), but if THAT's not enough for you, contact me directly through Discord (ᴊʏɢᴜʏ#9535) or my [Twitter](https://twitter.com/Jyguy_).
+# About Reknown
+![Reknown's Banner](./assets/images/banner.jpg)
+
+Reknown is a bot programmed in [Discord.js](https://discord.js.org/#/), with music, leveling, and more. This bot is full of commands, with customizable prefix, and more. The default prefix is `?`.
+
+If you manage to find a bug or unexpected behaviour, please let us know in our [Discord Server](https://discord.gg/n45fq9K/) or in our [GitHub issue tracker](https://github.com/Jyguy/Reknown/issues).
+
+# Contributors
+~~~
+Dr. Ari Gami#0001
+Activities: Helped with hosting and fuzzy strings.
+
+Vorphixx#3142
+Activities: GFX and keeping me company when I'm coding my rewrite :P
+~~~

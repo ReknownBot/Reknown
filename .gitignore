@@ -1,5 +1,9 @@
-# Modules
-node_modules/
+# Module
 package-lock.json
+node_modules
 
+# .env file
 .env
+
+# VSCode and eslint related
+.eslintrc.json
