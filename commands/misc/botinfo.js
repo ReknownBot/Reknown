@@ -11,7 +11,7 @@ module.exports = async (Client, message, args) => {
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .addField('Owner', (await Client.bot.users.fetch('288831103895076867')).tag, true)
     .addField('Contributors', contributors, true)
-    .addField('Donate', '[PayPal](https://paypal.me/jyguy)', true)
+    .addField('Donate', '[Patreon](https://www.patreon.com/Jyguy)\n[PayPal](https://paypal.me/jyguy)', true)
     .addField('Support', '[Here](https://discord.gg/n45fq9K)', true)
     .addField('Uptime', `${days} days, ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`);
 
