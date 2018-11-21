@@ -15,5 +15,5 @@ module.exports.help = {
   desc: 'The bot rock paper scissors with you!',
   category: 'fun',
   usage: '?rps <Choice>',
-  aliases: []
+  aliases: ['rockpaperscissors']
 };
