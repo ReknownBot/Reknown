@@ -4,7 +4,8 @@ async function goodbyeMessage (Client, member) {
   const { bool: enabled } = (await Client.sql.query('SELECT bool FROM togglewelcome WHERE guildid = $1 LIMIT 1', [guild.id])).rows[0] || {};
   if (!enabled) return;
 
-  const channelid = (await Client.sql.query('SELECT channel FROM welcomechannel WHERE guildid = $1 LIMIT 1', [guild.id])).rows[0].channel || 'default';
+  const cRow = (await Client.sql.query('SELECT channel FROM welcomechannel WHERE guildid = $1 LIMIT 1', [guild.id])).rows[0];
+  const channelid = cRow.channel || 'default';
 
   const channel = channelid === 'default' ? guild.channels.find(c => c.position === 0 && c.type === 'text') : guild.channels.get(channelid);
   if (!channel) return;
