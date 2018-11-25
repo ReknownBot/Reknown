@@ -215,6 +215,15 @@ bot.on('channelCreate', channel => require('./events/channelCreate.js')(Client, 
 // Starts an event listener "channelDelete", this is emitted when a channel is deleted.
 bot.on('channelDelete', channel => require('./events/channelDelete.js')(Client, channel));
 
+// Starts an event listener "emojiCreate", this is emitted when an emoji is created.
+bot.on('emojiCreate', emoji => require('./events/emojiCreate.js')(Client, emoji));
+
+// Starts an event listener "emojiDelete", this is emitted when an emoji is deleted.
+bot.on('emojiDelete', emoji => require('./events/emojiDelete.js')(Client, emoji));
+
+// Starts an event listener "emojiUpdate", this is emitted when an emoji is updated.
+bot.on('emojiUpdate', (oldEmoji, newEmoji) => require('./events/emojiUpdate.js')(Client, oldEmoji, newEmoji));
+
 // Starts an event listener "message", this is emitted when a message is sent.
 bot.on('message', message => require('./events/message.js')(Client, message));
 
