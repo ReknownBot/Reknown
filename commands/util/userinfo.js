@@ -1,39 +1,40 @@
 module.exports = async (Client, message, args) => {
+  let user;
   if (!args[1]) {
-    var member = message.member;
+    user = message.author;
   } else {
-    // eslint-disable-next-line no-redeclare
-    var member = message.guild.members.get(args[1].replace(/[<>@!?]/g, ''));
-    return message.reply('That is not a valid member!');
+    user = await message.client.users.fetch(args[1].replace(/[<>@!?]/g, '')).catch(() => 'failed');
+    if (user === 'failed') return message.reply('The user you provided was invalid!');
   }
 
-  let roles = member.roles.filter(role => role !== message.guild.defaultRole).map(role => role.toString()).list();
-  if (roles.length > 1024) roles = 'Too many to display.';
-  if (!roles) roles = 'None';
-
-  const members = message.guild.members;
-  const memSort = members.sort((a, b) => {
-    return a.joinedTimestamp - b.joinedTimestamp;
-  }).array();
-  let position = 0;
-  for (let i = 0; i < memSort.length; i++) {
-    position++;
-    if (memSort[i].id === member.id) break;
-  }
+  const inGuild = message.guild.members.has(user.id);
 
   const embed = new Client.Discord.MessageEmbed()
-    .setTitle(`${member.user.tag}'s User Info`)
-    .setColor(member.displayHexColor)
+    .setTitle(`${user.tag}'s User Info`)
+    .setColor(inGuild ? message.guild.members.get(user.id).displayHexColor : 0x00FFFF)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp()
-    .setThumbnail(member.user.displayAvatarURL())
-    .addField('Created At', Client.dateFormat(member.user.createdAt), true)
-    .addField('Joined At', Client.dateFormat(member.joinedAt), true)
-    .addField('Roles', roles)
-    .addField('Status', Client.capFirstLetter(member.presence.status), true)
-    .addField('Joined Position', position, true);
+    .setThumbnail(user.displayAvatarURL())
+    .addField('Created At', Client.dateFormat(user.createdAt), true)
+    .addField('Status', Client.capFirstLetter(user.presence.status), true);
 
-  if (member.presence.activity) embed.addField('Game', member.presence.activity.name);
+  if (inGuild) {
+    const member = message.guild.members.get(user.id);
+
+    const memSort = message.guild.members.sort((a, b) => {
+      return a.joinedTimestamp - b.joinedTimestamp;
+    }).array();
+    let position = 0;
+    for (let i = 0; i < memSort.length; i++) {
+      position++;
+      if (memSort[i].id === user.id) break;
+    }
+
+    embed.addField('Joined At', Client.dateFormat(member.joinedAt), true)
+      .addField('Joined Position', position, true);
+  }
+
+  if (user.presence.activity) embed.addField('Game', user.presence.activity.name);
 
   return message.channel.send(embed);
 };
@@ -42,6 +43,6 @@ module.exports.help = {
   name: 'userinfo',
   desc: 'Displays user info about the user mentioned.',
   category: 'util',
-  usage: '?userinfo [Member]',
+  usage: '?userinfo [User]',
   aliases: ['profile', 'uinfo', 'whois']
 };
