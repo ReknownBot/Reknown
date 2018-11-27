@@ -3,7 +3,7 @@ module.exports = async (Client, message, args) => {
   if (!args[1]) x = message.member;
   else {
     const possibleMember = message.guild.members.get(args[1].replace(/[<>@!?]/g, ''));
-    const possibleRole = message.guild.roles.get(args[1].replace(/[<>@&]/g, '')) || message.guild.roles.find(r => r.name.toLowerCase() === args.slice(1).join(' '));
+    const possibleRole = message.guild.roles.get(args[1].replace(/[<>@&]/g, '')) || message.guild.roles.find(r => r.name.toLowerCase() === args.slice(1).join(' ').toLowerCase());
     const possibleChannel = message.guild.channels.get(args[1].replace(/[<>#]/g, ''));
     if (possibleMember) x = possibleMember;
     else if (possibleRole) x = possibleRole;
