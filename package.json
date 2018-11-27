@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "array-utility": "0.0.2",
-    "await-to-js": "^2.0.1",
     "babel-eslint": "^9.0.0",
     "dateformat": "^3.0.3",
     "discord.js": "github:discordjs/discord.js",
