@@ -2,7 +2,7 @@ module.exports = async (Client, message, args) => {
   if (message.author.id !== '288831103895076867') return message.reply('Only the bot owner can use this command!');
 
   if (!args[1]) return message.reply('You have to provide a user to remove a global blacklist!');
-  const user = Client.bot.users.fetch(args[1].replace(/[<>@!?]/g, '')).then(u => u).catch(() => 'failed');
+  const user = await Client.bot.users.fetch(args[1].replace(/[<>@!?]/g, '')).then(u => u).catch(() => 'failed');
   if (!user || user === 'failed') return message.reply('The user you provided was invalid!');
 
   const exists = (await Client.sql.query('SELECT reason FROM gblacklist WHERE memberid = $1', [user.id])).rows[0];
