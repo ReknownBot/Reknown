@@ -147,8 +147,8 @@ module.exports = async (Client, message, args) => {
       if (!channel) return message.reply('That channel is invalid!');
 
       const row = (await Client.sql.query('SELECT * FROM welcomechannel WHERE guildid = $1', [message.guild.id])).rows[0];
-      if (!row) Client.sql.query('INSERT INTO welcomechannel (guildid, channelid) VALUES ($1, $2)', [message.guild.id, channel.id]);
-      else Client.sql.query('UPDATE welcomechannel SET channelid = $1 WHERE guildid = $2', [channel.id, message.guild.id]);
+      if (!row) Client.sql.query('INSERT INTO welcomechannel (guildid, channel) VALUES ($1, $2)', [message.guild.id, channel.id]);
+      else Client.sql.query('UPDATE welcomechannel SET channel = $1 WHERE guildid = $2', [channel.id, message.guild.id]);
       return message.channel.send(`Successfully updated \`${option}\` to ${channel}.`);
     }
     case 'welcomemsg': {
