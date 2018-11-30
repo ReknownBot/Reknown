@@ -21,7 +21,7 @@ module.exports = async (Client, message, args) => {
     if (m.content.toLowerCase() === 'stop') {
       playing.delete(message.author.id + message.guild.id);
       collector.stop();
-      let content = 'Successfully stopped the minigame.';
+      const content = 'Successfully stopped the minigame.';
       if (msg.deleted) message.channel.send(content);
       else msg.edit(content);
       return;
@@ -30,19 +30,25 @@ module.exports = async (Client, message, args) => {
     const letter = m.content.toLowerCase();
     if (!allLetters.includes(letter)) {
       if (letter === word) {
-        let content = `You won! The word was **${word}**, and you had **${lives}** lives left.`;
         playing.delete(message.author.id + message.guild.id);
         collector.stop();
-        if (msg.deleted) msg = await message.channel.send(content);
+
+        const registered = (await Client.sql.query('SELECT money FROM economy WHERE userid = $1', [message.author.id])).rows[0];
+        const amt = lives * 25;
+
+        const content = `You won! The word was **${word}**, and you had **${lives}** lives left.${registered ? ` You earned ${amt} Credits.` : ''}`;
+        if (msg.deleted) message.channel.send(content);
         else msg.edit(content);
+
+        if (registered) Client.sql.query('UPDATE economy SET money = money + $1 WHERE userid = $2', [amt, message.author.id]);
       } else {
-        let content = `That is not a letter! The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`;
+        const content = `That is not a letter! The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`;
         if (msg.deleted) msg = await message.channel.send(content);
         else msg.edit(content);
       }
     } else {
       if (sLetters.includes(letter)) {
-        let content = `You had already guessed that letter! The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`;
+        const content = `You had already guessed that letter! The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`;
         if (msg.deleted) msg = await message.channel.send(content);
         else msg.edit(content);
         return;
@@ -59,11 +65,17 @@ module.exports = async (Client, message, args) => {
         if (blurredWord === word) {
           playing.delete(message.author.id + message.guild.id);
           collector.stop();
-          let content = `You won! The word was **${word}**, and you had **${lives}** lives left.`;
+
+          const registered = (await Client.sql.query('SELECT money FROM economy WHERE userid = $1', [message.author.id])).rows[0];
+          const amt = lives * 25;
+
+          const content = `You won! The word was **${word}**, and you had **${lives}** lives left.${registered ? ` You earned ${amt} Credits.` : ''}`;
           if (msg.deleted) message.channel.send(content);
           else msg.edit(content);
+
+          if (registered) Client.sql.query('UPDATE economy SET money = money + $1 WHERE userid = $2', [amt, message.author.id]);
         } else {
-          let content = `Correct! The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`;
+          const content = `Correct! The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`;
           if (msg.deleted) msg = await message.channel.send(content);
           else msg.edit(content);
         }
@@ -74,7 +86,7 @@ module.exports = async (Client, message, args) => {
           collector.stop();
           return message.channel.send(`You lost all your lives! The word was **${word}**.`);
         } else {
-          let content = `That letter is incorrect. The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`;
+          const content = `That letter is incorrect. The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`;
           if (msg.deleted) msg = await message.channel.send(content);
           else msg.edit(content);
         }
