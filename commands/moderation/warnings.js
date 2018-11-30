@@ -5,7 +5,7 @@ module.exports = async (Client, message, args) => {
   const { rows } = await Client.sql.query('SELECT * FROM warnings WHERE userid2 = $1 ORDER BY warnid DESC', [member.id + message.guild.id]);
   if (!rows[0]) return message.reply(`${message.member === member ? 'You do' : 'That user does'} not have any warnings!`);
 
-  const warnings = rows.map(r => `${Client.escapeMarkdown(r.warnreason)} \`Warn ID: ${r.warnid}\``);
+  const warnings = rows.map(r => `${Client.escMD(r.warnreason)} \`Warn ID: ${r.warnid}\``);
   if (warnings.join('\n').length <= 2048) {
     const embed = new Client.Discord.MessageEmbed()
       .setTitle(`${member.user.tag}'s Warning Info`)

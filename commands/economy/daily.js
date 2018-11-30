@@ -1,0 +1,24 @@
+module.exports = async (Client, message, args) => {
+  const cooldown = (await Client.sql.query('SELECT time FROM daily WHERE userid = $1 LIMIT 1', [message.author.id])).rows[0];
+  if (cooldown && Date.now() - cooldown.time < 57600000) return message.reply(`You need to wait ${Math.floor((57600000 - (Date.now() - cooldown.time)) / 1000)} more seconds to use this command again.`);
+
+  if (cooldown) await Client.sql.query('DELETE FROM daily WHERE userid = $1', [message.author.id]);
+
+  const amt = Math.floor(Math.random() * 201) + 100;
+  const ecoRow = (await Client.sql.query('SELECT money FROM economy WHERE userid = $1', [message.author.id])).rows[0];
+  if (!ecoRow) return message.reply(`You haven't registered yet! Please use \`${Client.escMD(Client.prefixes[message.guild.id])}register\` to do so.`);
+
+  Client.sql.query('UPDATE economy SET money = $1 WHERE userid = $2', [ecoRow.money + amt, message.author.id]);
+  Client.sql.query('INSERT INTO daily (time, userid) VALUES ($1, $2)', [Date.now(), message.author.id]);
+
+  if (amt === 300) return message.channel.send('Congratulations! You earned the maximum daily reward! (300 Credits)');
+  else return message.channel.send(`You earned **${amt}** credits.`);
+};
+
+module.exports.help = {
+  name: 'daily',
+  desc: 'Gets your daily money. This command has 16 hours of cooldown.',
+  category: 'economy',
+  usage: '?daily',
+  aliases: []
+};

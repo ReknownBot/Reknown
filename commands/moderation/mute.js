@@ -37,7 +37,7 @@ module.exports = async (Client, message, args) => {
 
   Client.mutes.push(member.id);
   member.roles.add(muteRole);
-  return message.channel.send(`Successfully muted ${member.user.tag} for \`${Client.escapeMarkdown(reason)}\`.`);
+  return message.channel.send(`Successfully muted ${member.user.tag} for \`${Client.escMD(reason)}\`.`);
 };
 
 module.exports.help = {

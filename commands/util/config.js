@@ -62,7 +62,7 @@ module.exports = async (Client, message, args) => {
       const row = (await Client.sql.query('SELECT goodbyemessage FROM goodbyemessages WHERE guildid = $1', [message.guild.id])).rows[0];
       if (!row) Client.sql.query('INSERT INTO goodbyemessages (guildid, custommessage) VALUES ($1, $2)', [message.guild.id, msg]);
       else Client.sql.query('UPDATE goodbyemessages SET custommessage = $1 WHERE guildid = $2', [msg, message.guild.id]);
-      return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escapeMarkdown(msg)}\`.`);
+      return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escMD(msg)}\`.`);
     }
     case 'logchannel': {
       const channel = message.guild.channels.get(value.replace(/[<>#]/g, ''));
@@ -82,7 +82,7 @@ module.exports = async (Client, message, args) => {
 
       if (!row) Client.sql.query('INSERT INTO prefix (guildid, customprefix) VALUES ($1, $2)', [message.guild.id, prefix]);
       else Client.sql.query('UPDATE prefix SET customprefix = $1 WHERE guildid = $2', [prefix, message.guild.id]);
-      return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escapeMarkdown(prefix)}\`.`);
+      return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escMD(prefix)}\`.`);
     }
     case 'starchannel': {
       const channel = message.guild.channels.get(value.replace(/[<>#]/g, ''));
@@ -158,7 +158,7 @@ module.exports = async (Client, message, args) => {
       const row = (await Client.sql.query('SELECT custommessage FROM custommessages WHERE guildid = $1', [message.guild.id])).rows[0];
       if (!row) Client.sql.query('INSERT INTO custommessages (guildid, custommessage) VALUES ($1, $2)', [message.guild.id, msg]);
       else Client.sql.query('UPDATE custommessages SET custommessage = $1 WHERE guildid = $2', [msg, message.guild.id]);
-      return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escapeMarkdown(msg)}\`.`);
+      return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escMD(msg)}\`.`);
     }
   }
 };

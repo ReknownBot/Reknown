@@ -9,11 +9,11 @@ module.exports = async (Client, message, args) => {
   if (member === message.guild.owner) return message.reply('I cannot blacklist the owner!');
 
   const blacklisted = (await Client.sql.query('SELECT by, reason FROM blacklist WHERE guildid = $1 AND userid = $2', [message.guild.id, member.id])).rows[0];
-  if (blacklisted) return message.reply(`That member is already blacklisted by ${blacklisted.by} for \`${Client.escapeMarkdown(blacklisted.reason)}\`!`);
+  if (blacklisted) return message.reply(`That member is already blacklisted by ${blacklisted.by} for \`${Client.escMD(blacklisted.reason)}\`!`);
 
   const reason = args[2] ? args.slice(2).join(' ') : 'None';
   Client.sql.query('INSERT INTO blacklist (guildid, userid, by, reason) VALUES ($1, $2, $3, $4)', [message.guild.id, member.id, `${message.author.tag} (${message.author.id})`, reason]);
-  return message.reply(`Successfully blacklisted ${member.user.tag} for \`${Client.escapeMarkdown(reason)}\`.`);
+  return message.reply(`Successfully blacklisted ${member.user.tag} for \`${Client.escMD(reason)}\`.`);
 };
 
 module.exports.help = {

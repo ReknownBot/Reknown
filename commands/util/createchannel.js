@@ -20,7 +20,7 @@ module.exports = async (Client, message, args) => {
     type: type,
     reason: '?createchannel Command'
   });
-  return message.channel.send(`Successfully created a ${type === 'category' ? type : `${type} channel`} with the name of \`${Client.escapeMarkdown(name)}\`.`);
+  return message.channel.send(`Successfully created a ${type === 'category' ? type : `${type} channel`} with the name of \`${Client.escMD(name)}\`.`);
 };
 
 module.exports.help = {

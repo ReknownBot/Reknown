@@ -7,7 +7,7 @@ module.exports = async (Client, message, args) => {
     return message.reply('The formula you have put in was incorrect!');
   }
 
-  return message.channel.send(`The result from **${Client.escapeMarkdown(eq)}** was **${Client.escapeMarkdown(result.toString())}**!`);
+  return message.channel.send(`The result from **${Client.escMD(eq)}** was **${Client.escMD(result.toString())}**!`);
 };
 
 module.exports.help = {

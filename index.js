@@ -20,8 +20,6 @@ require('dotenv').config();
 // Defines the client class
 const client = class {
   constructor () {
-    // Defines "prefix" as the default prefix. This may or may not be updated in the "message" event.
-    this.prefix = '?';
     // Requires fs
     this.fs = require('fs');
     // Defines "commands" and "events" as objects.
@@ -35,6 +33,7 @@ const client = class {
     this.botCommandsList = this.fs.readdirSync('./commands/bot_list');
     this.miniCommandsList = this.fs.readdirSync('./commands/minigames');
     this.utilCommandsList = this.fs.readdirSync('./commands/util');
+    this.econCommandsList = this.fs.readdirSync('./commands/economy');
     this.commandsList = [];
     this.eventList = this.fs.readdirSync('./events');
 
@@ -45,7 +44,8 @@ const client = class {
       music: this.musicCommandsList,
       bot_list: this.botCommandsList,
       minigames: this.miniCommandsList,
-      util: this.utilCommandsList
+      util: this.utilCommandsList,
+      economy: this.econCommandsList
     };
     const categNames = Object.keys(categories);
     for (let i = 0; i < categNames.length; i++) { // Creates a loop
@@ -95,9 +95,10 @@ const client = class {
     this.Discord = Discord;
     this.moment = require('moment');
     this.permissions = require('./permissions.json');
-    this.escapeMarkdown = this.Discord.Util.escapeMarkdown;
+    this.escMD = this.Discord.Util.escapeMarkdown;
     this.contributors = ['468848409202262027', '284857002977525760'];
     this.mutes = [];
+    this.prefixes = {};
   }
 
   capFirstLetter (str) {
@@ -207,7 +208,7 @@ const client = class {
 const Client = new client();
 
 // Starts an event listener "ready", this is emitted when the bot is ready.
-bot.on('ready', () => require('./events/ready.js')(Client, bot));
+bot.on('ready', () => require('./events/ready.js')(Client));
 
 // Starts an event listener "channelCreate", this is emitted when a channel is created.
 bot.on('channelCreate', channel => require('./events/channelCreate.js')(Client, channel));

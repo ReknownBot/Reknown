@@ -23,7 +23,7 @@ module.exports = async (Client, message, args) => {
   const reason = args[3] ? args.slice(3).join(' ') : 'None';
 
   Client.sql.query('INSERT INTO warnings (userid2, warnamount, warnreason) VALUES ($1, $2, $3)', [member.id + message.guild.id, amt, reason]);
-  return message.channel.send(`Successfully warned ${member.user.tag} for \`${Client.escapeMarkdown(reason)}\` with ${amt} total warnings.`);
+  return message.channel.send(`Successfully warned ${member.user.tag} for \`${Client.escMD(reason)}\` with ${amt} total warnings.`);
 };
 
 module.exports.help = {

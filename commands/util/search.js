@@ -44,7 +44,7 @@ module.exports = async (Client, message, args) => {
     messages.forEach(m => {
       if (m.author.id === member.id) {
         num++;
-        arr.push(`\`${num}. ${Client.escapeMarkdown(m.content)}\``);
+        arr.push(`\`${num}. ${Client.escMD(m.content)}\``);
       }
     });
     amt -= 100;

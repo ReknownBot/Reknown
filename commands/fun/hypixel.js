@@ -13,7 +13,7 @@ module.exports = async (Client, message, args) => {
     const player = info.player;
 
     const embed = new Client.Discord.MessageEmbed()
-      .setTitle(`${Client.escapeMarkdown(player.displayname)}'s Hypixel Stats`)
+      .setTitle(`${Client.escMD(player.displayname)}'s Hypixel Stats`)
       .setURL(`https://hypixel.net/player/${player.displayname}/`)
       .addField('Achievements Completed', Object.values(player.achievements).reduce((a, b) => a + b, 0), true)
       .addField('Network Exp', player.networkExp, true)
@@ -30,7 +30,7 @@ module.exports = async (Client, message, args) => {
     const { guild } = await hypixel.getGuild(guildid);
 
     const embed = new Client.Discord.MessageEmbed()
-      .setTitle(`${Client.escapeMarkdown(guild.name)} Guild Stats`)
+      .setTitle(`${Client.escMD(guild.name)} Guild Stats`)
       .setURL(`https://hypixel.net/guilds/${guild.name.replace(' ', '%20')}/`)
       .addField('Member Count', guild.members.length)
       .addField('Guild Tag', guild.tag ? guild.tag : 'None')
@@ -45,7 +45,7 @@ module.exports = async (Client, message, args) => {
     const { guild: guildInfo } = await hypixel.getGuild(info.guild);
 
     const embed = new Client.Discord.MessageEmbed()
-      .setTitle(`${Client.escapeMarkdown(guildInfo.name)} Guild Stats`)
+      .setTitle(`${Client.escMD(guildInfo.name)} Guild Stats`)
       .setURL(`https://hypixel.net/guilds/${guildInfo.name.replace(' ', '%20')}/`)
       .addField('Member Count', guildInfo.members.length)
       .addField('Guild Tag', guildInfo.tag ? guildInfo.tag : 'None')

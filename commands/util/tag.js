@@ -19,7 +19,7 @@ module.exports = async (Client, message, args) => {
     if (serverTag) { // Server tags
       if (!await Client.checkPerms('edit', 'tag', message.member)) return message.reply(':x: Sorry, but you do not have the `tag.edit` permission.');
       const exists = (await Client.sql.query('SELECT * FROM guildtag WHERE tagname = $1 AND guildid = $2 LIMIT 1', [tagName, message.guild.id])).rows[0];
-      if (exists) return message.reply(`There is already a tag named \`${Client.escapeMarkdown(tagName)}\` in the server.`);
+      if (exists) return message.reply(`There is already a tag named \`${Client.escMD(tagName)}\` in the server.`);
 
       message.reply('What should the tag\'s content be? You can also reply with `cancel`.');
 
@@ -31,7 +31,7 @@ module.exports = async (Client, message, args) => {
       return message.channel.send(`Successfully added a server tag named ${tagName}.`);
     } else { // Personal tags
       const exists = (await Client.sql.query('SELECT * FROM usertag WHERE tagname = $1 AND userid = $2 LIMIT 1', [tagName, message.author.id])).rows[0];
-      if (exists) return message.reply(`There is already a tag named \`${Client.escapeMarkdown(tagName)}\` in your personal tags.`);
+      if (exists) return message.reply(`There is already a tag named \`${Client.escMD(tagName)}\` in your personal tags.`);
 
       message.reply('What should the tag\'s content be? You can also reply with `cancel`.');
 
@@ -49,14 +49,14 @@ module.exports = async (Client, message, args) => {
     if (serverTag) { // Server tags
       if (!await Client.checkPerms('edit', 'tag', message.member)) return message.reply(':x: Sorry, but you do not have the `tag.edit` permission.');
       const exists = (await Client.sql.query('SELECT * FROM guildtag WHERE tagname = $1 AND guildid = $2 LIMIT 1', [tagName, message.guild.id])).rows[0];
-      if (!exists) return message.reply(`There is no server tag named \`${Client.escapeMarkdown(tagName)}\`.`);
+      if (!exists) return message.reply(`There is no server tag named \`${Client.escMD(tagName)}\`.`);
 
       Client.sql.query('DELETE FROM guildtag WHERE guildid = $1 AND tagname = $2', [message.guild.id, tagName]);
       return message.channel.send(`Successfully removed a server tag named ${tagName}.`);
     } else { // Personal tags
       if (!await Client.checkPerms('edit', 'tag', message.member)) return message.reply(':x: Sorry, but you do not have the `tag.edit` permission.');
       const exists = (await Client.sql.query('SELECT * FROM usertag WHERE userid = $1 AND tagname = $2 LIMIT 1', [message.author.id, tagName])).rows[0];
-      if (!exists) return message.reply(`There is no tag named \`${Client.escapeMarkdown(tagName)}\`.`);
+      if (!exists) return message.reply(`There is no tag named \`${Client.escMD(tagName)}\`.`);
 
       Client.sql.query('DELETE FROM usertag WHERE userid = $1 AND tagname = $2', [message.author.id, tagName]);
       return message.channel.send(`Successfully removed a tag named ${tagName}.`);

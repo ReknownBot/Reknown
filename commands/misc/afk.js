@@ -9,7 +9,7 @@ module.exports = async (Client, message, args) => {
   else var reason = args.slice(1).join(' ');
 
   isAFK.add(message.author.id + message.guild.id);
-  message.channel.send(`You are now AFK for the reason of \`${Client.escapeMarkdown(reason)}\``);
+  message.channel.send(`You are now AFK for the reason of \`${Client.escMD(reason)}\``);
 
   const filter = m => (m.mentions.users.has(message.author.id) || m.author.id === message.author.id) && !m.author.bot;
   const collector = message.channel.createMessageCollector(filter);
@@ -20,7 +20,7 @@ module.exports = async (Client, message, args) => {
       isAFK.delete(message.author.id + message.guild.id);
       return message.channel.send(`${message.author.tag}, Welcome back!`);
     } else {
-      return message.reply(`${message.member} is currently AFK for \`${Client.escapeMarkdown(reason)}\`.`);
+      return message.reply(`${message.member} is currently AFK for \`${Client.escMD(reason)}\`.`);
     }
   });
 };

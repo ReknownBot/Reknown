@@ -5,7 +5,8 @@ const categoryObj = {
   'moderation': 'Moderation',
   'misc': 'Miscellaneous',
   'minigames': 'Minigames',
-  'util': 'Utility'
+  'util': 'Utility',
+  'economy': 'Economy'
 };
 
 module.exports = async (Client, message, args) => {

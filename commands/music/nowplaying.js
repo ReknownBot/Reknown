@@ -3,7 +3,7 @@ module.exports = async (Client, message, args) => {
 
   const vidInfo = await Client.musicfn.fetchVideoInfo.getVideoByID(Client.musicfn.guilds[message.guild.id].queueIDs[0]);
   const embed = new Client.Discord.MessageEmbed()
-    .setTitle(`Now Playing: ${Client.escapeMarkdown(vidInfo.title)}`)
+    .setTitle(`Now Playing: ${Client.escMD(vidInfo.title)}`)
     .setURL(vidInfo.shortURL)
     .setThumbnail(vidInfo.thumbnails['high'].url)
     .setFooter(`${Client.moment().startOf('day').seconds(vidInfo.durationSeconds).format('H:mm:ss')} | Published at`)

@@ -39,16 +39,19 @@ module.exports = async (Client, message) => {
   require('../functions/deleteinvite.js')(Client, message);
 
   // Gets the prefix for the server.
-  const row = (await Client.sql.query('SELECT * FROM prefix WHERE guildId = $1 LIMIT 1', [message.guild.id])).rows[0];
+  const row = (await Client.sql.query('SELECT customprefix FROM prefix WHERE guildId = $1 LIMIT 1', [message.guild.id])).rows[0];
 
-  // Updates Client.prefix as the custom prefix. If the server does not have one, then use the default.
-  Client.prefix = row ? row.customprefix : '?';
+  if (!Client.prefixes[message.guild.id]) {
+    Client.prefixes[message.guild.id] = row ? row.customprefix : '?';
+  }
+
+  const prefix = Client.prefixes[message.guild.id];
 
   // Creates a Regex for the bot mention.
   const regexp = new RegExp(`^<@!?${message.client.user.id}> `);
 
   // If the message didn't start with the prefix AND with a mention OR it IS the prefix, return
-  if ((!message.content.startsWith(Client.prefix) && !message.content.match(regexp)) || message.content === Client.prefix) return;
+  if ((!message.content.startsWith(prefix) && !message.content.match(regexp)) || message.content === prefix) return;
 
   // Defines args as nothing.
   let args;
@@ -59,7 +62,7 @@ module.exports = async (Client, message) => {
     args = message.content.slice(message.content.match(regexp)[0].length).split(/ +/g);
   } else {
     // Updates "args" as a string sliced by the length of the prefix split by spaces
-    args = message.content.slice(Client.prefix.length).split(/ +/g);
+    args = message.content.slice(prefix.length).split(/ +/g);
   }
 
   // Defines "command" as the first word of the message lowercased.
@@ -84,13 +87,13 @@ module.exports = async (Client, message) => {
   if (await require('../functions/blacklist.js')(Client, message.member)) {
     const obj = await require('../functions/blacklist.js')(Client, message.member);
     if (obj === 'disabled') return;
-    return message.reply(`You are blacklisted by ${obj.by} for the reason of \`${Client.escapeMarkdown(obj.reason)}\`.`);
+    return message.reply(`You are blacklisted by ${obj.by} for the reason of \`${Client.escMD(obj.reason)}\`.`);
   }
 
   // If the member is globally blacklisted
   if (await require('../functions/gblacklist.js')(Client, message.member)) {
     const reason = await require('../functions/blacklist.js')(Client, message.member);
-    return message.reply(`You are globally blacklisted from me for the reason of \`${Client.escapeMarkdown(reason)}\`. You may appeal in my support server.`);
+    return message.reply(`You are globally blacklisted from me for the reason of \`${Client.escMD(reason)}\`. You may appeal in my support server.`);
   }
 
   // If the command executed was not an alias

@@ -15,7 +15,7 @@ module.exports = async (Client, message, args) => {
   const allLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
   const filter = m => m.author.id === message.author.id && m.channel.id === message.channel.id;
   const collector = message.channel.createMessageCollector(filter, { time: 1000 * 60 * 5 });
-  let msg = await message.channel.send(`Successfully started a hangman game. The word is ${Client.escapeMarkdown(blurredWord)}. You have **${lives}** lives left.`);
+  let msg = await message.channel.send(`Successfully started a hangman game. The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`);
 
   collector.on('collect', async m => {
     if (m.content.toLowerCase() === 'stop') {
@@ -36,13 +36,13 @@ module.exports = async (Client, message, args) => {
         if (msg.deleted) msg = await message.channel.send(content);
         else msg.edit(content);
       } else {
-        let content = `That is not a letter! The word is ${Client.escapeMarkdown(blurredWord)}. You have **${lives}** lives left.`;
+        let content = `That is not a letter! The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`;
         if (msg.deleted) msg = await message.channel.send(content);
         else msg.edit(content);
       }
     } else {
       if (sLetters.includes(letter)) {
-        let content = `You had already guessed that letter! The word is ${Client.escapeMarkdown(blurredWord)}. You have **${lives}** lives left.`;
+        let content = `You had already guessed that letter! The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`;
         if (msg.deleted) msg = await message.channel.send(content);
         else msg.edit(content);
         return;
@@ -63,7 +63,7 @@ module.exports = async (Client, message, args) => {
           if (msg.deleted) message.channel.send(content);
           else msg.edit(content);
         } else {
-          let content = `Correct! The word is ${Client.escapeMarkdown(blurredWord)}. You have **${lives}** lives left.`;
+          let content = `Correct! The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`;
           if (msg.deleted) msg = await message.channel.send(content);
           else msg.edit(content);
         }
@@ -74,7 +74,7 @@ module.exports = async (Client, message, args) => {
           collector.stop();
           return message.channel.send(`You lost all your lives! The word was **${word}**.`);
         } else {
-          let content = `That letter is incorrect. The word is ${Client.escapeMarkdown(blurredWord)}. You have **${lives}** lives left.`;
+          let content = `That letter is incorrect. The word is ${Client.escMD(blurredWord)}. You have **${lives}** lives left.`;
           if (msg.deleted) msg = await message.channel.send(content);
           else msg.edit(content);
         }
