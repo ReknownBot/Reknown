@@ -8,7 +8,6 @@ async function logMessage (Client, guild, user) {
 
   if (guild.me.hasPermission('VIEW_AUDIT_LOG')) {
     const entry = (await guild.fetchAuditLogs({
-      user: user,
       type: 'MEMBER_BAN_ADD',
       limit: 1
     })).entries.first();
