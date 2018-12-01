@@ -12,7 +12,7 @@ module.exports = async (Client, message, args) => {
     if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough!');
     if (member === message.guild.owner) return message.reply('I cannot ban an owner!');
     if (member === message.member) return message.reply('You cannot ban yourself!');
-    if (message.guild.me.roles.highest.position <= member.roles.highest.position) { return message.reply('My role position is not high enough!'); }
+    if (message.guild.me.roles.highest.position <= member.roles.highest.position) return message.reply('My role position is not high enough!');
 
     const reason = args.slice(2).join(' ');
     member.ban({ reason: reason });
@@ -22,6 +22,10 @@ module.exports = async (Client, message, args) => {
 
     const user = await Client.bot.users.fetch(args[1]).catch(() => 'failed');
     if (user === 'failed') return message.reply('That is not a valid ID!');
+
+    const bans = await message.guild.fetchBans();
+    if (bans.has(user.id)) return message.reply('That user is already banned!');
+
     const reason = args.slice(2).join(' ');
 
     message.guild.members.ban(user, { reason: reason });
