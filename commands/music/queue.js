@@ -2,9 +2,7 @@ module.exports = async (Client, message, args) => {
   const server = Client.musicfn.guilds[message.guild.id];
 
   if (!message.guild.me.voice.channel || server.isPlaying === false) return message.reply('I am not playing anything!');
-
   if (!message.member.voice.channel) return message.reply('You have to be in a voice channel to use this!');
-
   if (message.member.voice.channel !== message.guild.me.voice.channel) return message.reply('You have to be in the same voice channel as me to use that command!');
 
   const arg = args[1] ? args[1].toLowerCase() : null;
@@ -17,14 +15,13 @@ module.exports = async (Client, message, args) => {
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
     return message.channel.send(embed);
   } else if (arg === 'remove') {
-    // Checks for perms
     if (!await Client.checkPerms('clear', 'music', message.member)) return message.reply(':x: Sorry, but you do not have the `music.clear` permission.');
 
     const num = args[2];
-    // If the user input provided is not a number
     if (isNaN(num)) return message.reply('That is not a number!');
     if (num < 1) return message.reply('The number may not be smaller than one!');
     if (num > server.queueNames.length) return message.reply('Your number is out of range of the song count!');
+    if (num.includes('.')) return message.reply('The number may not be a decimal!');
 
     const removedName = server.queueNames[num - 1];
 
@@ -39,7 +36,6 @@ module.exports = async (Client, message, args) => {
 
     return message.channel.send(`Successfully removed \`${Client.Discord.Util.escapeMarkdown(removedName)}\``);
   } else if (arg === 'clear') {
-    // Checks for perms
     if (!await Client.checkPerms('clear', 'music', message.member)) return message.reply(':x: Sorry, but you do not have the `music.clear` permission.');
 
     server.dispatcher.end();
@@ -51,6 +47,6 @@ module.exports.help = {
   name: 'queue',
   desc: 'Displays the current queue.',
   category: 'music',
-  usage: ['?queue OR ?queue list', '?queue remove <Song Position>', '?queue clear'],
+  usage: '?queue OR ?queue list\n?queue remove <Song Position>\n?queue clear',
   aliases: ['q']
 };

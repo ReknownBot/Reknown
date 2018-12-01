@@ -37,7 +37,6 @@ module.exports = async (Client, message, args) => {
     return message.channel.send(`Successfully removed \`${role.name}\` from the level role list.`);
   } else if (choice === options[2]) { // List
     const { rows: roles } = await Client.sql.query('SELECT * FROM levelrole WHERE guildid = $1 ORDER BY level ASC', [message.guild.id]);
-    // Removes all deleted roles from the database
     roles.forEach(r => {
       if (!message.guild.roles.get(r.roleid)) {
         Client.sql.query('DELETE FROM levelrole WHERE guildid = $1 AND roleid = $2', [message.guild.id, r.roleid]);

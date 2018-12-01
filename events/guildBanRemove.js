@@ -25,9 +25,11 @@ async function logMessage (Client, guild, user) {
   return require('../functions/sendlog.js')(Client, embed, guild.id);
 };
 
-module.exports = async (Client, guild, user) => {
-  if (user === Client.bot.user) return;
-  if (!guild || !guild.available) return;
+module.exports = (Client) => {
+  return Client.bot.on('guildBanRemove', (guild, user) => {
+    if (user === Client.bot.user) return;
+    if (!guild || !guild.available) return;
 
-  logMessage(Client, guild, user);
+    logMessage(Client, guild, user);
+  });
 };

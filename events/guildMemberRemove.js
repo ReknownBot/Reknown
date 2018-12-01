@@ -26,7 +26,7 @@ async function goodbyeMessage (Client, member) {
   return channel.send(embed);
 }
 
-async function logMessage (Client, member) {
+function logMessage (Client, member) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Left or got Kicked')
     .setColor(0xFF0000)
@@ -36,9 +36,11 @@ async function logMessage (Client, member) {
   return require('../functions/sendlog.js')(Client, embed, member.guild.id);
 }
 
-module.exports = async (Client, member) => {
-  if (member === member.guild.me) return;
-  if (!member.guild || !member.guild.available) return;
-  logMessage(Client, member);
-  goodbyeMessage(Client, member);
+module.exports = (Client) => {
+  return Client.bot.on('guildMemberRemove', member => {
+    if (member === member.guild.me) return;
+    if (!member.guild || !member.guild.available) return;
+    logMessage(Client, member);
+    goodbyeMessage(Client, member);
+  });
 };

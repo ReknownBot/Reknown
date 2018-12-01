@@ -21,7 +21,7 @@ async function welcomeMessage (Client, member, guild) {
   return welcomeChannel.send(embed);
 }
 
-async function logMessage (Client, member, guild) {
+function logMessage (Client, member, guild) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Joined')
     .addField('Member', `${member.user.tag} (${member.id})`)
@@ -36,7 +36,6 @@ async function autorole (Client, member, guild) {
   if (rows.length === 0) return;
   if (!member.guild.me.hasPermission('MANAGE_ROLES')) return;
   rows.forEach(r => {
-    // Gets the role
     const autoRole = guild.roles.get(r.roleid);
     if (!autoRole) Client.sql.query('DELETE FROM autorole WHERE guildId = $1 AND roleId = $2', [guild.id, r.roleid]);
     else if (autoRole.position < guild.me.roles.highest.position) member.roles.add(autoRole, 'Reknown Autorole');
@@ -49,7 +48,6 @@ async function levelrole (Client, member, guild) {
   const { rows } = await Client.sql.query('SELECT roleid, level FROM levelrole WHERE guildid = $1', [guild.id]);
   if (rows.length === 0) return;
   rows.forEach(async row => {
-    // Gets the role
     const levelRole = guild.roles.get(row.roleid);
     if (!levelRole) Client.sql.query('DELETE FROM levelrole WHERE guildid = $1 AND roleid = $2', [guild.id, row.roleid]);
     else if (levelrole.position < guild.me.roles.highest.position) {
@@ -60,21 +58,23 @@ async function levelrole (Client, member, guild) {
   });
 }
 
-async function mute (Client, member, guild) {
+function mute (Client, member, guild) {
   if (!Client.mutes.includes(member.id)) return;
   if (!guild.me.hasPermission('MANAGE_ROLES')) return;
   const mutedRole = guild.roles.find(r => r.name === 'Muted');
   if (mutedRole && !member.roles.has(mutedRole.id)) member.roles.add(mutedRole);
 }
 
-module.exports = async (Client, member) => {
-  const guild = member.guild;
-  if (!guild.available) return;
-  if (member === guild.me) return;
+module.exports = (Client) => {
+  return Client.bot.on('guildMemberAdd', member => {
+    const guild = member.guild;
+    if (!guild.available) return;
+    if (member === guild.me) return;
 
-  logMessage(Client, member, guild);
-  welcomeMessage(Client, member, guild);
-  autorole(Client, member, guild);
-  levelrole(Client, member, guild);
-  mute(Client, member, guild);
+    logMessage(Client, member, guild);
+    welcomeMessage(Client, member, guild);
+    autorole(Client, member, guild);
+    levelrole(Client, member, guild);
+    mute(Client, member, guild);
+  });
 };

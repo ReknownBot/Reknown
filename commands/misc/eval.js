@@ -7,7 +7,6 @@ function clean (text) {
 }
 
 module.exports = async (Client, message, args) => {
-  // If the author is not Jyguy
   if (message.author.id !== '288831103895076867') return message.reply('Only the bot owner may use this command!');
 
   const code = args.slice(1).join(' ');

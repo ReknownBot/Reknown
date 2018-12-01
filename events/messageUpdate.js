@@ -1,4 +1,4 @@
-async function logMessage (Client, oldMessage, newMessage) {
+function logMessage (Client, oldMessage, newMessage) {
   if (!oldMessage.content && !newMessage.content) return;
   if (oldMessage.content === newMessage.content) return;
 
@@ -14,7 +14,7 @@ async function logMessage (Client, oldMessage, newMessage) {
   return require('../functions/sendlog.js')(Client, embed, oldMessage.guild.id);
 }
 
-async function editMsg (Client, oldMessage, newMessage) {
+function editMsg (Client, oldMessage, newMessage) {
   return Client.bot.emit('message', newMessage);
 }
 
@@ -39,10 +39,12 @@ async function editStar (Client, oldMessage, newMessage) {
   }
 }
 
-module.exports = async (Client, oldMessage, newMessage) => {
-  if (!oldMessage.guild || !oldMessage.guild.available) return;
+module.exports = (Client) => {
+  return Client.bot.on('messageUpdate', (oldMessage, newMessage) => {
+    if (!oldMessage.guild || !oldMessage.guild.available) return;
 
-  logMessage(Client, oldMessage, newMessage);
-  editMsg(Client, oldMessage, newMessage);
-  editStar(Client, oldMessage, newMessage);
+    logMessage(Client, oldMessage, newMessage);
+    editMsg(Client, oldMessage, newMessage);
+    editStar(Client, oldMessage, newMessage);
+  });
 };

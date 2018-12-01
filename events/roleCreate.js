@@ -23,8 +23,10 @@ async function logMessage (Client, role) {
   return require('../functions/sendlog.js')(Client, embed, role.guild.id);
 }
 
-module.exports = (Client, role) => {
-  if (!role.guild.available) return;
+module.exports = (Client) => {
+  return Client.bot.on('roleCreate', role => {
+    if (!role.guild.available) return;
 
-  logMessage(Client, role);
+    logMessage(Client, role);
+  });
 };

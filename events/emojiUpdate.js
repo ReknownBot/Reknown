@@ -26,8 +26,10 @@ async function logMessage (Client, oldEmoji, newEmoji) {
   return require('../functions/sendlog.js')(Client, embed, newEmoji.guild.id);
 }
 
-module.exports = async (Client, oldEmoji, newEmoji) => {
-  if (!newEmoji.guild.available) return;
+module.exports = (Client) => {
+  return Client.bot.on('emojiUpdate', (oldEmoji, newEmoji) => {
+    if (!newEmoji.guild.available) return;
 
-  logMessage(Client, oldEmoji, newEmoji);
+    logMessage(Client, oldEmoji, newEmoji);
+  });
 };

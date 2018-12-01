@@ -42,6 +42,6 @@ module.exports.help = {
   name: 'discordbotlist',
   desc: 'Displays information of a bot in discordbots.org.',
   category: 'bot list',
-  usage: '?discordbotlist <Bot ID or Mention>',
+  usage: '?discordbotlist <Bot>',
   aliases: ['dbl']
 };

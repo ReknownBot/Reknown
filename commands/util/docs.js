@@ -7,7 +7,7 @@ module.exports = async (Client, message, args) => {
 
   const query = args.slice(1).join(' ').replace('#', '.');
 
-  Client.request(`https://djsdocs.sorta.moe/main/${branch}/embed?q=${query}`, (err, res, body) => {
+  return Client.request(`https://djsdocs.sorta.moe/main/${branch}/embed?q=${query}`, (err, res, body) => {
     if (err) throw new Error(err);
 
     body = JSON.parse(body);

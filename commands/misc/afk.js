@@ -3,7 +3,6 @@ const isAFK = new Set();
 module.exports = async (Client, message, args) => {
   if (isAFK.has(message.author.id + message.guild.id)) return message.reply('You are already AFK!');
 
-  // If no reason was provided
   if (!args[1]) var reason = 'None';
   // eslint-disable-next-line no-redeclare
   else var reason = args.slice(1).join(' ');

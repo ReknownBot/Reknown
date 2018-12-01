@@ -46,10 +46,12 @@ async function delStar (Client, message) {
   }
 }
 
-module.exports = (Client, message) => {
-  if (!message.guild || !message.guild.available) return;
-  if (message.author.bot) return;
+module.exports = (Client) => {
+  return Client.bot.on('messageDelete', message => {
+    if (!message.guild || !message.guild.available) return;
+    if (message.author.bot) return;
 
-  logMessage(Client, message);
-  delStar(Client, message);
+    logMessage(Client, message);
+    delStar(Client, message);
+  });
 };

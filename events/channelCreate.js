@@ -26,8 +26,10 @@ async function logMessage (Client, channel) {
   return require('../functions/sendlog.js')(Client, embed, channel.guild.id);
 }
 
-module.exports = (Client, channel) => {
-  if (!channel.guild || !channel.guild.available) return;
+module.exports = (Client) => {
+  return Client.bot.on('channelCreate', channel => {
+    if (!channel.guild || !channel.guild.available) return;
 
-  logMessage(Client, channel);
+    logMessage(Client, channel);
+  });
 };

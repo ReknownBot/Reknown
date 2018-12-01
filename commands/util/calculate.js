@@ -4,7 +4,7 @@ module.exports = async (Client, message, args) => {
   try {
     var result = require('string-math')(eq);
   } catch (e) {
-    return message.reply('The formula you have put in was incorrect!');
+    return message.reply('The formula you put in was incorrect!');
   }
 
   return message.channel.send(`The result from **${Client.escMD(eq)}** was **${Client.escMD(result.toString())}**!`);

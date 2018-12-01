@@ -1,5 +1,4 @@
 module.exports = () => {
-  // Defines the replies in an array
   const replies = [
     'It is certain.',
     'It is decidedly so.',
@@ -22,5 +21,6 @@ module.exports = () => {
     'Outlook not so good.',
     'Very doubtful.'
   ];
+
   return replies[Math.floor(Math.random() * replies.length)];
 };

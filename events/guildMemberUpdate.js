@@ -1,4 +1,4 @@
-async function nickChange (Client, oldNick, newNick, guild, member) {
+function nickChange (Client, oldNick, newNick, guild, member) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle(`Nickname ${newNick === null ? 'Reset' : 'Changed'}`)
     .setColor(0x00FFFF)
@@ -16,7 +16,7 @@ async function nickChange (Client, oldNick, newNick, guild, member) {
   return require('../functions/sendlog.js')(Client, embed, guild.id);
 }
 
-async function roleChange (Client, oldMember, newMember) {
+function roleChange (Client, oldMember, newMember) {
   let embed;
 
   if (oldMember.roles.size > newMember.roles.size) { // Role Removed
@@ -45,7 +45,9 @@ async function roleChange (Client, oldMember, newMember) {
   return require('../functions/sendlog.js')(Client, embed, oldMember.guild.id);
 }
 
-module.exports = (Client, oldMember, newMember) => {
-  if (oldMember.nickname !== newMember.nickname) nickChange(Client, oldMember.nickname || 'None', newMember.nickname, oldMember.guild, newMember);
-  if (oldMember.roles.size !== newMember.roles.size) roleChange(Client, oldMember, newMember);
+module.exports = (Client) => {
+  return Client.bot.on('guildMemberUpdate', (oldMember, newMember) => {
+    if (oldMember.nickname !== newMember.nickname) nickChange(Client, oldMember.nickname || 'None', newMember.nickname, oldMember.guild, newMember);
+    if (oldMember.roles.size !== newMember.roles.size) roleChange(Client, oldMember, newMember);
+  });
 };

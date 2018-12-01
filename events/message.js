@@ -1,112 +1,76 @@
-module.exports = async (Client, message) => {
-  // If the author is a bot, return. This is to stop "botsceptions".
-  if (message.author.bot) return;
+module.exports = (Client) => {
+  return Client.bot.on('message', async message => {
+    if (message.author.bot) return;
+    if (message.channel.type === 'dm') return message.channel.send('You cannot use me in a DM, please use a server.');
+    if (!message.guild.available) return;
 
-  // If the message was sent in a DM
-  if (message.channel.type === 'dm') {
-    // Returns & Sends a message
-    return message.channel.send('You cannot use me in a DM, please use a server.');
-  }
+    if (!message.channel.permissionsFor(Client.bot.user).has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
 
-  // If the guild is not available
-  if (!message.guild.available) return;
-
-  // Defines "permissions" as the bot's permissions for the channel.
-  const permissions = message.channel.permissionsFor(message.client.user);
-  if (!permissions.has('VIEW_CHANNEL') || !permissions.has('SEND_MESSAGES')) return;
-
-  // If there is no object for the music functions
-  if (!Client.musicfn.guilds[message.guild.id]) {
-    // Defines the object
-    Client.musicfn.guilds[message.guild.id] = {
-      queueIDs: [],
-      queueNames: [],
-      skippers: [],
-      skips: 0,
-      searching: false,
-      loop: false,
-      volume: 50,
-      voiceChannel: null,
-      dispatcher: null,
-      isPlaying: false,
-      paused: false
-    };
-  }
-
-  // Level function
-  require('../functions/level.js')(Client, message);
-  // Delete invite function
-  require('../functions/deleteinvite.js')(Client, message);
-
-  // Gets the prefix for the server.
-  const row = (await Client.sql.query('SELECT customprefix FROM prefix WHERE guildId = $1 LIMIT 1', [message.guild.id])).rows[0];
-
-  if (!Client.prefixes[message.guild.id]) {
-    Client.prefixes[message.guild.id] = row ? row.customprefix : '?';
-  }
-
-  const prefix = Client.prefixes[message.guild.id];
-
-  // Creates a Regex for the bot mention.
-  const regexp = new RegExp(`^<@!?${message.client.user.id}> `);
-
-  // If the message didn't start with the prefix AND with a mention OR it IS the prefix, return
-  if ((!message.content.startsWith(prefix) && !message.content.match(regexp)) || message.content === prefix) return;
-
-  // Defines args as nothing.
-  let args;
-
-  // If the message content started with the mention and a command
-  if (message.content.match(regexp)) {
-    // Updates "args" as a string sliced by the length of the mention split by spaces
-    args = message.content.slice(message.content.match(regexp)[0].length).split(/ +/g);
-  } else {
-    // Updates "args" as a string sliced by the length of the prefix split by spaces
-    args = message.content.slice(prefix.length).split(/ +/g);
-  }
-
-  // Defines "command" as the first word of the message lowercased.
-  const command = args[0].toLowerCase();
-
-  // If the command is not found
-  if (!(command in Client.commands) && !Client.allAlias[command]) {
-    // Checks if the unknown command message is enabled on the server
-    const unknownCmd = (await Client.sql.query('SELECT * FROM cmdnotfound WHERE guildid = $1 AND bool = $2', [message.guild.id, 1])).rows[0];
-    if (unknownCmd) {
-      // Gets the closest strings for the command
-      const cmds = Client.getFuzz(command);
-
-      // Sends a message
-      message.reply(`I did not find that command. Did you mean \`${cmds[0][0]}, ${cmds[1][0]}, or ${cmds[2][0]}\`?`);
+    if (!Client.musicfn.guilds[message.guild.id]) {
+      Client.musicfn.guilds[message.guild.id] = {
+        queueIDs: [],
+        queueNames: [],
+        skippers: [],
+        skips: 0,
+        searching: false,
+        loop: false,
+        volume: 50,
+        voiceChannel: null,
+        dispatcher: null,
+        isPlaying: false,
+        paused: false
+      };
     }
-    // Returns
-    return;
-  }
 
-  // If the member is blacklisted
-  if (await require('../functions/blacklist.js')(Client, message.member)) {
-    const obj = await require('../functions/blacklist.js')(Client, message.member);
-    if (obj === 'disabled') return;
-    return message.reply(`You are blacklisted by ${obj.by} for the reason of \`${Client.escMD(obj.reason)}\`.`);
-  }
+    require('../functions/level.js')(Client, message);
+    require('../functions/deleteinvite.js')(Client, message);
 
-  // If the member is globally blacklisted
-  if (await require('../functions/gblacklist.js')(Client, message.member)) {
-    const reason = await require('../functions/blacklist.js')(Client, message.member);
-    return message.reply(`You are globally blacklisted from me for the reason of \`${Client.escMD(reason)}\`. You may appeal in my support server.`);
-  }
+    const row = (await Client.sql.query('SELECT customprefix FROM prefix WHERE guildId = $1 LIMIT 1', [message.guild.id])).rows[0];
 
-  // If the command executed was not an alias
-  if (command in Client.commands) {
-    // Executes the function
-    return Client.commands[command](Client, message, args);
-  } else { // If it is an alias
-    for (const val in Client.allAlias) {
-      const prop = Client.allAlias[val];
-      if (val === command) {
-        Client.commands[prop](Client, message, args);
-        break;
+    if (!Client.prefixes[message.guild.id]) {
+      Client.prefixes[message.guild.id] = row ? row.customprefix : '?';
+    }
+
+    const prefix = Client.prefixes[message.guild.id];
+    const regexp = new RegExp(`^<@!?${message.client.user.id}> `);
+    if ((!message.content.startsWith(prefix) && !message.content.match(regexp)) || message.content === prefix) return;
+
+    let args;
+
+    if (message.content.match(regexp)) args = message.content.slice(message.content.match(regexp)[0].length).split(/ +/g);
+    else args = message.content.slice(prefix.length).split(/ +/g);
+
+    const command = args[0].toLowerCase();
+    if (!(command in Client.commands) && !Client.allAlias[command]) {
+      const unknownCmd = (await Client.sql.query('SELECT * FROM cmdnotfound WHERE guildid = $1 AND bool = $2', [message.guild.id, 1])).rows[0];
+      if (unknownCmd) {
+        const cmds = Client.getFuzz(command);
+
+        message.reply(`I did not find that command. Did you mean \`${cmds[0][0]}, ${cmds[1][0]}, or ${cmds[2][0]}\`?`);
+      }
+      return;
+    }
+
+    if (await require('../functions/blacklist.js')(Client, message.member)) {
+      const obj = await require('../functions/blacklist.js')(Client, message.member);
+      if (obj === 'disabled') return;
+      return message.reply(`You are blacklisted by ${obj.by} for the reason of \`${Client.escMD(obj.reason)}\`.`);
+    }
+
+    if (await require('../functions/gblacklist.js')(Client, message.member)) {
+      const reason = await require('../functions/blacklist.js')(Client, message.member);
+      return message.reply(`You are globally blacklisted from me for the reason of \`${Client.escMD(reason)}\`. You may appeal in my support server.`);
+    }
+
+    if (command in Client.commands) return Client.commands[command](Client, message, args);
+    else {
+      for (const val in Client.allAlias) {
+        const prop = Client.allAlias[val];
+        if (val === command) {
+          Client.commands[prop](Client, message, args);
+          break;
+        }
       }
     }
-  }
+  });
 };
