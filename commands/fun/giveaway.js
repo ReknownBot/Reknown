@@ -2,7 +2,7 @@ module.exports = async (Client, message, args) => {
   if (!message.member.hasPermission('MANAGE_GUILD')) return message.reply('You do not have the `Manage Server` permission!');
 
   if (!args[1]) return message.reply('You have to provide a channel that the message is in!');
-  const channel = message.guild.channels.get(args[1].replace(/[<>@!?]/g, ''));
+  const channel = message.guild.channels.get(args[1].replace(/[<>@#]/g, ''));
   if (!channel) return message.reply('The channel you provided is invalid!');
   if (!Client.checkClientPerms(channel, 'VIEW_CHANNEL')) return message.reply('I need the permission `View Channel` in that channel!');
 
