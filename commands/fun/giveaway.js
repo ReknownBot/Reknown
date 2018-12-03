@@ -14,13 +14,13 @@ module.exports = async (Client, message, args) => {
   reaction ? await reaction.users.fetch() : null;
   if (!reaction || reaction.users.filter(u => !u.bot).size === 0) return message.reply('No user reacted with 🎉 in that message!');
 
-  const amt = args[3] || 1;
+  const amt = args[3] || '1';
   if (isNaN(amt)) return message.reply('The amount of winners must be a number!');
   if (amt > 5) return message.reply('The amount cannot exceed 5!');
   if (amt < 1) return message.reply('The amount may not be under 1!');
   if (amt.includes('.')) return message.reply('The amount may not be a decimal!');
 
-  const winners = reaction.users.filter(u => !u.bot).random(amt).filter(u => u).map(u => u.toString());
+  const winners = reaction.users.filter(u => !u.bot).random(amt).filter(u => u).map(u => u.tag);
   return message.channel.send(`The ${winners.length === 1 ? 'winner is' : 'winners are'} ${winners.list()}!`);
 };
 
