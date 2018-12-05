@@ -57,7 +57,7 @@ module.exports = async (Client, message, args) => {
       });
       if (str) pages.push(str);
 
-      let embed = new Client.Discord.MessageEmbed()
+      const embed = new Client.Discord.MessageEmbed()
         .setTitle(`${message.guild.name}'s Autorole List`)
         .setColor(0x00FFFF)
         .setFooter(`Page ${page} of ${pages.length}`)

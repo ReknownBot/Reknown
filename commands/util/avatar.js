@@ -1,7 +1,7 @@
 module.exports = async (Client, message, args) => {
-  if (!args[1]) var user = message.author;
-  // eslint-disable-next-line no-redeclare
-  else var user = await Client.bot.users.fetch(args[1].replace(/[<>@!?]/g, '')).catch(() => 'didn\'t find');
+  let user;
+  if (!args[1]) user = message.author;
+  else user = await Client.bot.users.fetch(args[1].replace(/[<>@!?]/g, '')).catch(() => 'didn\'t find');
   if (!user || user === 'didn\'t find') return message.reply('That user does not exist!');
 
   const isAnimated = user.displayAvatarURL().includes('gif');

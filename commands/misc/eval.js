@@ -17,7 +17,7 @@ module.exports = async (Client, message, args) => {
     let evaled = await eval(code);
     if (typeof (evaled) !== 'string') evaled = require('util').inspect(evaled);
 
-    let embed = new Client.Discord.MessageEmbed()
+    const embed = new Client.Discord.MessageEmbed()
       .setAuthor('Evaluation')
       .setTitle('Output')
       .setDescription(`\`\`\`xl\n${clean(evaled).length <= 2048 ? clean(evaled) : 'Over 2048 Characters'}\n\`\`\``)

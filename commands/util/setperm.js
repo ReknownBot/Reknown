@@ -3,9 +3,10 @@ module.exports = async (Client, message, args) => {
 
   if (!args[1]) return message.reply('You have to provide a permission for me to allow / disallow a role!');
   const perm = args[1];
+  let permCateg, permName;
   if (perm !== '*') {
-    var permCateg = args[1].toLowerCase().split('.')[0];
-    var permName = args[1].toLowerCase().split('.')[1];
+    permCateg = args[1].toLowerCase().split('.')[0];
+    permName = args[1].toLowerCase().split('.')[1];
     if (!Object.keys(Client.permissions).includes(permCateg)) return message.reply('The permission category you provided was invalid!');
 
     if (permName && !Object.keys(Client.permissions[permCateg]).includes(permName)) return message.reply('The permission name you provided was invalid!');

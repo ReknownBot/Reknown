@@ -29,8 +29,8 @@ module.exports = async (Client, message, args) => {
       await msg.react('◀');
       await msg.react('▶');
 
-      let backwardFilter = (reaction, user) => reaction.emoji.name === '◀' && user.id === message.author.id;
-      let forwardFilter = (reaction, user) => reaction.emoji.name === '▶' && user.id === message.author.id;
+      const backwardFilter = (reaction, user) => reaction.emoji.name === '◀' && user.id === message.author.id;
+      const forwardFilter = (reaction, user) => reaction.emoji.name === '▶' && user.id === message.author.id;
 
       const backwards = msg.createReactionCollector(backwardFilter, {
         time: 60000

@@ -8,7 +8,7 @@ module.exports = async (Client, message, args) => {
     const messages = await message.channel.awaitMessages(filter, { time: 15000, max: 1 });
     if (!messages.first()) return message.reply('I did not get a reply in time, canceling action.');
 
-    let m = messages.first();
+    const m = messages.first();
     if (!['yes', 'no'].includes(m.content)) return message.reply('That reply was invalid! Canceling action.');
     if (m.content === 'no') return message.channel.send('Ok.');
 

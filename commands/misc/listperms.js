@@ -2,7 +2,7 @@ const capitalize = require('../../functions/capFirstLetter.js');
 
 module.exports = async (Client, message, args) => {
   if (!args[1]) {
-    let fields = [];
+    const fields = [];
     Object.keys(Client.permissions).forEach(category => {
       category = capitalize(category);
       fields.push({

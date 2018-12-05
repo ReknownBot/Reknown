@@ -12,14 +12,14 @@ module.exports = async (Client, message) => {
 
   if (curLevel > scoreCount.level) {
     Client.sql.query('UPDATE scores SET level = $1, points = $2 WHERE userID = $3 AND guildID = $4', [curLevel, curPoints, message.author.id, message.guild.id]);
-    let msg = await message.channel.send(`GG ${message.author}! You are now level ${curLevel}.`);
+    const msg = await message.channel.send(`GG ${message.author}! You are now level ${curLevel}.`);
     setTimeout(() => {
       if (!msg.deleted) msg.delete();
     }, 5000);
 
     const { rows } = await Client.sql.query('SELECT * FROM levelrole WHERE guildID = $1 AND level <= $2', [message.guild.id, curLevel]);
     if (rows.length !== 0) {
-      let roleArr = [];
+      const roleArr = [];
       rows.forEach(r => {
         if (!message.guild.roles.get(r.roleid)) {
           return Client.sql.query('DELETE FROM levelrole WHERE guildID = $1 AND roleID = $2', [message.guild.id, r.roleid]);
@@ -28,13 +28,13 @@ module.exports = async (Client, message) => {
       });
 
       if (roleArr.length === 1) {
-        let sRole = message.guild.roles.get(roleArr[0]);
+        const sRole = message.guild.roles.get(roleArr[0]);
         if ((message.guild.me.hasPermission('MANAGE_ROLES') || message.guild.me.hasPermission('ADMINISTRATOR')) && sRole.position < message.guild.me.roles.highest.position && !message.member.roles.has(sRole.id)) {
           message.member.roles.add(sRole, 'Level Role');
         }
       } else if (roleArr.length > 1) {
         for (let i = 0; i < roleArr.length; i++) {
-          let sRole = message.guild.roles.get(roleArr[i]);
+          const sRole = message.guild.roles.get(roleArr[i]);
           if ((message.guild.me.hasPermission('MANAGE_ROLES') || message.guild.me.hasPermission('ADMINISTRATOR')) && sRole.position < message.guild.me.roles.highest.position && !message.member.roles.has(sRole.id)) message.member.roles.add(sRole, 'Level Role');
         }
       }

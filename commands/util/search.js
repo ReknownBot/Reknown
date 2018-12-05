@@ -13,7 +13,7 @@ module.exports = async (Client, message, args) => {
   if (amt.includes('.')) return message.reply('The message amount should __not__ be a decimal!');
 
   const max = Math.ceil(amt / 100);
-  let arr = [];
+  const arr = [];
   let num = 0;
   let lastID;
   for (let i = 0; i < max; i++) {

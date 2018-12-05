@@ -105,15 +105,16 @@ module.exports = {
   async sendinfo (Client, message, id) {
     const guild = this.guilds[message.guild.id];
     const video = await this.fetchVideoInfo.getVideo(id);
+    let embed;
     if (guild.queueNames.length > 1) {
-      var embed = new Client.Discord.MessageEmbed()
+      embed = new Client.Discord.MessageEmbed()
         .setDescription(`Added to queue: **[${Client.Discord.Util.escapeMarkdown(video.title)}](${video.url})**`)
         .setThumbnail(video.thumbnails['high'].url)
         .setFooter(`${Client.moment().startOf('day').seconds(video.durationSeconds).format('H:mm:ss')} | Published at`)
         .setTimestamp(video.publishedAt)
         .setColor(0x00FFFF);
     } else {
-      var embed = new Client.Discord.MessageEmbed() // eslint-disable-line no-redeclare
+      embed = new Client.Discord.MessageEmbed()
         .setDescription(`Now Playing: **[${Client.Discord.Util.escapeMarkdown(video.title)}](${video.url})**`)
         .setThumbnail(video.thumbnails['high'].url)
         .setFooter(`${Client.moment().startOf('day').seconds(video.durationSeconds).format('H:mm:ss')} | Published at`)

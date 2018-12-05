@@ -72,7 +72,7 @@ module.exports = async (Client, message, args) => {
     }
 
     const tagArray = rows.map(r => r.tagname);
-    let str = tagArray.list();
+    const str = tagArray.list();
 
     if (str.length > 2048) {
       const pages = Client.Discord.Util.splitMessage(str, { maxLength: 2048, char: ', ' });

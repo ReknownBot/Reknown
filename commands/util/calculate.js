@@ -1,8 +1,9 @@
 module.exports = async (Client, message, args) => {
   if (!args[1]) return message.reply('You have to provide an equation for me to solve!');
   const eq = args.slice(1).join(' ');
+  let result;
   try {
-    var result = require('string-math')(eq);
+    result = require('string-math')(eq);
   } catch (e) {
     return message.reply('The formula you put in was incorrect!');
   }

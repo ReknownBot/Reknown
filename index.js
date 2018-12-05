@@ -66,7 +66,7 @@ const client = class {
   }
 
   getFuzz (str) {
-    let ordered = [];
+    const ordered = [];
     this.commandsList.forEach(cmd => {
       ordered.push([cmd, this.fuzz.ratio(str, cmd)]);
     });
@@ -79,7 +79,7 @@ const client = class {
     let bool2 = false;
     const prom = new Promise(resolve => {
       member.roles.forEach(async (role, i) => {
-        let row = (await this.sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, pName, pCategory])).rows[0];
+        const row = (await this.sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, pName, pCategory])).rows[0];
         if (row && row.bool) {
           bool2 = true;
           resolve();
@@ -104,7 +104,7 @@ const client = class {
   }
 
   matchInArray (expression, strings) {
-    let len = strings.length;
+    const len = strings.length;
 
     for (let i = 0; i < len; i++) {
       if (expression.test(strings[i])) return true;

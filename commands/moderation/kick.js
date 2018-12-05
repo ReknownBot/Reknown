@@ -3,7 +3,7 @@ module.exports = async (Client, message, args) => {
 
   if (!args[1]) return message.reply('You have to supply a member for me to kick!');
 
-  let member = message.guild.members.get(args[1] ? args[1].replace(/[<>@!?]/g, '') : null);
+  const member = message.guild.members.get(args[1] ? args[1].replace(/[<>@!?]/g, '') : null);
 
   if (!member) return message.reply('That is not a valid member!');
   if (message.guild.owner === member) return message.reply('I cannot kick an owner!');

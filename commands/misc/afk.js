@@ -3,9 +3,9 @@ const isAFK = new Set();
 module.exports = async (Client, message, args) => {
   if (isAFK.has(message.author.id + message.guild.id)) return message.reply('You are already AFK!');
 
-  if (!args[1]) var reason = 'None';
-  // eslint-disable-next-line no-redeclare
-  else var reason = args.slice(1).join(' ');
+  let reason;
+  if (!args[1]) reason = 'None';
+  else reason = args.slice(1).join(' ');
 
   isAFK.add(message.author.id + message.guild.id);
   message.channel.send(`You are now AFK for the reason of \`${Client.escMD(reason)}\``);
