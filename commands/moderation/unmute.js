@@ -11,6 +11,7 @@ module.exports = async (Client, message, args) => {
   if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('You cannot unmute ones that have a higher role than you!');
   if (!member.roles.has(muteRole.id)) return message.reply('That member is not muted!');
 
+  Client.sql.query('DELETE FROM mute WHERE userid = $1 AND guildid = $2', [member.id, message.guild.id]);
   Client.mutes.splice(Client.mutes.indexOf(member.id), 1);
   member.roles.remove(muteRole);
   return message.channel.send(`Successfully unmuted ${member.user.tag} (${member.id}).`);

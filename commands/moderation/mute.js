@@ -33,17 +33,50 @@ module.exports = async (Client, message, args) => {
   if (member === message.guild.owner) return message.reply('I cannot mute an owner!');
   if (member.roles.has(muteRole.id)) return message.reply('That member is already muted!');
 
-  const reason = args[2] ? args.slice(2).join(' ') : 'None';
+  if (!args[2]) return message.reply('You have to provide a length of time for me to mute that member for!');
+  const time = args[2].slice(0, -1);
+  if (isNaN(time)) return message.reply('The time you provided is not a number!');
+  if (time < 1) return message.reply('The time may not be smaller than one!');
+  if (time.includes('.')) return message.reply('The time cannot be a decimal!');
+  const type = args[2].slice(-1).toLowerCase();
+  if (!['s', 'm', 'h'].includes(type)) return message.reply('The type you provided was invalid! The type can be one of the following: `s`, `m`, or `h`.');
+  if (type === 's' && time > 172800) return message.reply('The max amount of seconds is 172,800!');
+  if (type === 'm' && time > 2880) return message.reply('The max amount of minutes is 2,880!');
+  if (type === 'h' && time > 48) return message.reply('The max amount of hours is 48!');
 
+  let ms = time;
+  switch (type) {
+    case 's':
+      ms *= 1000;
+      break;
+    case 'm':
+      ms *= 60000;
+      break;
+    case 'h':
+      ms *= 3600000;
+  }
+
+  const reason = args[3] ? args.slice(3).join(' ') : 'None';
+
+  setTimeout(() => {
+    Client.sql.query('DELETE FROM mute WHERE userid = $1 AND guildid = $2', [member.id, message.guild.id]);
+    Client.mutes.splice(Client.mutes.indexOf(member.id), 1);
+
+    if (!message.guild || !message.guild.me || !message.guild.me.hasPermission('MANAGE_ROLES') || !muteRole) return;
+    if (muteRole.position >= message.guild.me.roles.position) return;
+
+    return member.roles.remove(muteRole);
+  }, ms);
+  Client.sql.query('INSERT INTO mute (userid, guildid, time, mutedat) VALUES ($1, $2, $3, $4)', [member.id, message.guild.id, ms, Date.now()]);
   Client.mutes.push(member.id);
   member.roles.add(muteRole);
-  return message.channel.send(`Successfully muted ${member.user.tag} for \`${Client.escMD(reason)}\`.`);
+  return message.channel.send(`Successfully muted ${member.user.tag} for \`${Client.escMD(reason)}\` and will be unmuted in ${time + type}.`);
 };
 
 module.exports.help = {
   name: 'mute',
   desc: 'Mutes a member.',
   category: 'moderation',
-  usage: '?mute <Member> [Reason]',
+  usage: '?mute <Member> <Time> [Reason]',
   aliases: ['silence']
 };

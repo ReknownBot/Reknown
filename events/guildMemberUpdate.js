@@ -23,7 +23,10 @@ function roleChange (Client, oldMember, newMember) {
     const roles = oldMember.roles.filter(r => !newMember.roles.has(r.id));
 
     const muteRole = oldMember.guild.roles.find(r => r.name === 'Muted');
-    if (muteRole && roles.has(muteRole.id) && Client.mutes.includes(oldMember.id)) Client.mutes.splice(Client.mutes.indexOf(oldMember.id), 1);
+    if (muteRole && roles.has(muteRole.id) && Client.mutes.includes(oldMember.id)) {
+      Client.sql.query('DELETE FROM mute WHERE userid = $1 AND guildid = $2', [oldMember.id, oldMember.guild.id]);
+      Client.mutes.splice(Client.mutes.indexOf(oldMember.id), 1);
+    }
 
     embed = new Client.Discord.MessageEmbed()
       .setTitle('Role Removed')
