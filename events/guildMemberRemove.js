@@ -28,19 +28,41 @@ async function goodbyeMessage (Client, member) {
 
 function logMessage (Client, member) {
   const embed = new Client.Discord.MessageEmbed()
-    .setTitle('Member Left or got Kicked')
-    .setColor(0xFF0000)
+    .setTitle('Member Left')
+    .setColor(0xff9400)
     .setTimestamp()
     .setThumbnail(member.user.displayAvatarURL({ size: 2048 }))
     .setDescription(`**${member.user.tag}** (${member.user.id})`);
   return require('../functions/sendlog.js')(Client, embed, member.guild.id);
 }
 
+function kickMessage (Client, entry, member) {
+  const embed = new Client.Discord.MessageEmbed()
+    .setTitle('Member Kicked')
+    .setColor(0xFF0000)
+    .setTimestamp()
+    .setThumbnail(member.user.displayAvatarURL({ size: 2048 }))
+    .addField('Member', `${member.user.tag} - ${member.user.id}`, true)
+    .setAuthor(entry.executor.tag, entry.executor.displayAvatarURL());
+  if (entry.reason) embed.addField('Reason', entry.reason, true);
+
+  return require('../functions/sendlog.js')(Client, embed, member.guild.id);
+}
+
 module.exports = (Client) => {
-  return Client.bot.on('guildMemberRemove', member => {
+  return Client.bot.on('guildMemberRemove', async member => {
     if (member === member.guild.me) return;
     if (!member.guild || !member.guild.available) return;
-    logMessage(Client, member);
+
     goodbyeMessage(Client, member);
+
+    if (!member.guild.me.hasPermission('VIEW_AUDIT_LOG')) return logMessage(Client, member);
+    else {
+      const entry = (await member.guild.fetchAuditLogs({ type: 20, limit: 1 })).entries.first();
+      if (!entry) return;
+      if (Date.now() - entry.createdTimestamp > 5000) return logMessage(Client, member);
+
+      return kickMessage(Client, entry, member);
+    }
   });
 };
