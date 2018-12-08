@@ -12,7 +12,8 @@ module.exports = async (Client, message, args) => {
   if (!member.roles.has(muteRole.id)) return message.reply('That member is not muted!');
 
   Client.sql.query('DELETE FROM mute WHERE userid = $1 AND guildid = $2', [member.id, message.guild.id]);
-  Client.mutes.splice(Client.mutes.indexOf(member.id), 1);
+  clearTimeout(Client.mutes.get(member.id));
+  Client.mutes.delete(member.id);
   member.roles.remove(muteRole);
   return message.channel.send(`Successfully unmuted ${member.user.tag} (${member.id}).`);
 };

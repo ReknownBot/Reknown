@@ -59,7 +59,7 @@ async function levelrole (Client, member, guild) {
 }
 
 function mute (Client, member, guild) {
-  if (!Client.mutes.includes(member.id)) return;
+  if (!Client.mutes.has(member.id)) return;
   if (!guild.me.hasPermission('MANAGE_ROLES')) return;
   const mutedRole = guild.roles.find(r => r.name === 'Muted');
   if (mutedRole && !member.roles.has(mutedRole.id)) member.roles.add(mutedRole);

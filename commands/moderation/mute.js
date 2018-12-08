@@ -58,9 +58,10 @@ module.exports = async (Client, message, args) => {
 
   const reason = args[3] ? args.slice(3).join(' ') : 'None';
 
-  setTimeout(() => {
+  const timeout = setTimeout(() => {
     Client.sql.query('DELETE FROM mute WHERE userid = $1 AND guildid = $2', [member.id, message.guild.id]);
-    Client.mutes.splice(Client.mutes.indexOf(member.id), 1);
+    clearTimeout(Client.mutes.get(member.id));
+    Client.mutes.delete(member.id);
 
     if (!message.guild || !message.guild.me || !message.guild.me.hasPermission('MANAGE_ROLES') || !muteRole) return;
     if (muteRole.position >= message.guild.me.roles.position) return;
@@ -68,7 +69,7 @@ module.exports = async (Client, message, args) => {
     return member.roles.remove(muteRole);
   }, ms);
   Client.sql.query('INSERT INTO mute (userid, guildid, time, mutedat) VALUES ($1, $2, $3, $4)', [member.id, message.guild.id, ms, Date.now()]);
-  Client.mutes.push(member.id);
+  Client.mutes.set(member.id, timeout);
   member.roles.add(muteRole);
   return message.channel.send(`Successfully muted ${member.user.tag} for \`${Client.escMD(reason)}\` and will be unmuted in ${time + type}.`);
 };

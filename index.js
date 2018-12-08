@@ -54,7 +54,7 @@ const client = class {
     this.permissions = require('./permissions.json');
     this.escMD = this.Discord.Util.escapeMarkdown;
     this.contributors = ['468848409202262027', '284857002977525760'];
-    this.mutes = [];
+    this.mutes = new Discord.Collection();
     this.prefixes = {};
 
     const eventList = this.fs.readdirSync('./events').filter(f => f.endsWith('.js')).map(f => f.slice(0, -3));

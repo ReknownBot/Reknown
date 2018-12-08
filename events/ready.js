@@ -18,9 +18,9 @@ module.exports = (Client) => {
         if (!role || role.position >= guild.me.roles.highest.position) return;
         return member.roles.remove(role);
       }
-      Client.mutes.push(row.userid);
-      setTimeout(() => {
-        Client.mutes.splice(Client.mutes.indexOf(row.userid), 1);
+      const timeout = setTimeout(() => {
+        clearTimeout(Client.mutes.get(row.userid));
+        Client.mutes.delete(row.userid);
         Client.sql.query('DELETE FROM mute WHERE userid = $1 AND guildid = $2', [row.userid, row.guildid]);
 
         const guild = Client.bot.guilds.get(row.guildid);
@@ -31,6 +31,7 @@ module.exports = (Client) => {
         if (!role || role.position >= guild.me.roles.highest.position) return;
         return member.roles.remove(role);
       }, row.time);
+      Client.mutes.set(row.userid, timeout);
     });
 
     const { rows: dailyRows } = await Client.sql.query('SELECT * FROM daily');
