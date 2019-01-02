@@ -24,6 +24,7 @@ module.exports = (Client) => {
 
     require('../functions/level.js')(Client, message);
     require('../functions/deleteinvite.js')(Client, message);
+    require('../functions/eco.js')(Client, message.member);
 
     const row = (await Client.sql.query('SELECT customprefix FROM prefix WHERE guildId = $1 LIMIT 1', [message.guild.id])).rows[0];
 
