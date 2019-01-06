@@ -26,6 +26,7 @@
   "dependencies": {
     "array-utility": "0.0.2",
     "babel-eslint": "^9.0.0",
+    "cowsay": "^1.4.0",
     "dateformat": "^3.0.3",
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^6.2.0",
