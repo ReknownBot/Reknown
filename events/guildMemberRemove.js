@@ -51,7 +51,7 @@ function kickMessage (Client, entry, member) {
 
 module.exports = (Client) => {
   return Client.bot.on('guildMemberRemove', async member => {
-    if (member === member.guild.me) return;
+    if (!member.guild.me) return;
     if (!member.guild || !member.guild.available) return;
 
     goodbyeMessage(Client, member);
