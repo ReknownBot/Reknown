@@ -25,7 +25,7 @@ module.exports = async (Client, message, args) => {
       } else field.value += `\n${name}`;
     });
 
-    message.author.send(embed)
+    return message.author.send(embed)
       .then(() => message.reply('I have sent a list of commands to your DMs.'))
       .catch(e => {
         if (e == 'DiscordAPIError: Cannot send messages to this user') {
@@ -48,7 +48,7 @@ module.exports = async (Client, message, args) => {
       .addField('Options', typeof options === 'object' ? Object.keys(options).map(option => `--${option} | ${cmdInfo.help.options[option]}`) : 'None', true)
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
 
-    message.channel.send(embed);
+    return message.channel.send(embed);
   }
 };
 
