@@ -75,23 +75,13 @@ const client = class {
   }
 
   async checkPerms (pName, pCategory, member) {
-    if (member.guild.owner === member || member.hasPermission('ADMINISTRATOR')) { return true; }
-    let bool2 = false;
-    const prom = new Promise(resolve => {
-      member.roles.forEach(async (role, i) => {
-        const row = (await this.sql.query('SELECT * FROM permissions WHERE roleID = $1 AND pName = $2 AND pCategory = $3', [role.id, pName, pCategory])).rows[0];
-        if (row && row.bool) {
-          bool2 = true;
-          resolve();
-        }
-        i++;
-        if (i === member.roles.size) setTimeout(resolve, 10);
-      });
-    });
+    if (member.guild.owner === member || member.hasPermission('ADMINISTRATOR')) return true;
 
-    await prom;
-    if (!bool2) return false;
-    else return true;
+    const { rows } = await this.sql.query('SELECT roleid,bool FROM permissions WHERE pName = $1 AND pCategory = $2', [pName, pCategory]);
+    const row = rows.find(r => member.roles.has(r.roleid));
+
+    if (row && row.bool) return true;
+    return false;
   }
 
   checkClientPerms (channel, ...perms) {
