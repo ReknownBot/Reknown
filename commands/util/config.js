@@ -17,7 +17,10 @@ const obj = {
 
 module.exports = async (Client, message, args) => {
   const option = args[1] ? args[1].toLowerCase() : null;
-  if (!option) return message.reply('You have to provide an option to change!');
+  if (!option) {
+    args = ['help', 'config'];
+    return require('../misc/help.js')(Client, message, args);
+  }
   if (!Object.keys(obj).includes(option)) return message.reply('That option is not valid. Use `?help config` to see all the options.');
   if (!await Client.checkPerms(option, obj[option][1], message.member)) return message.reply(`:x: Sorry, but you do not have the \`${obj[option][0]}.${obj[option][1]}\` permission.`);
 
