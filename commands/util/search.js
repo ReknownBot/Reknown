@@ -1,5 +1,3 @@
-/* eslint-disable no-unneeded-ternary */
-
 module.exports = async (Client, message, args) => {
   if (!args[1]) return message.reply('You have to provide a member for me to search!');
   const member = message.guild.members.get(args[1].replace(/[<>@!?]/g, ''));
@@ -21,12 +19,12 @@ module.exports = async (Client, message, args) => {
     if (amt > 100) {
       msgs = await message.channel.messages.fetch({
         limit: 100,
-        before: lastID ? lastID : null
+        before: lastID
       });
     } else {
       msgs = await message.channel.messages.fetch({
         limit: amt,
-        before: lastID ? lastID : null
+        before: lastID
       });
     }
 

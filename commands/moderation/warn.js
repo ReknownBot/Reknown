@@ -2,7 +2,7 @@ module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('warn', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.warn` permission.');
 
   if (!args[1]) return message.reply('You have to supply a user for me to warn!');
-  const member = message.guild.members.get(args[1].replace(/[<>@!?]/g, ''));
+  const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
   if (!member) return message.reply('That member does not exist! Supply an ID or a mention.');
   if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough to warn that member!');
   if (member.user.bot) return message.reply('I cannot warn a bot!');

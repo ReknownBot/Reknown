@@ -1,8 +1,6 @@
 module.exports = async (Client, message, args) => {
-  let user;
-  if (!args[1]) user = message.author;
-  else user = await Client.bot.users.fetch(args[1].replace(/[<>@!?]/g, '')).catch(() => 'didn\'t find');
-  if (!user || user === 'didn\'t find') return message.reply('That user does not exist!');
+  const user = args[1] ? Client.getObj(args[1], { type: 'user' }) : message.author;
+  if (!user) return message.reply('That user does not exist!');
 
   const isAnimated = user.displayAvatarURL().includes('gif');
   const embed = new Client.Discord.MessageEmbed()

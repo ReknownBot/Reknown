@@ -13,7 +13,7 @@ module.exports = async (Client, message, args) => {
   }
 
   if (!args[2]) return message.reply('You have to provide a role to change permissions!');
-  const role = message.guild.roles.get(args[2].replace(/[<>@&]/g, ''));
+  const role = Client.getObj(args[2], { guild: message.guild, type: 'role' });
   if (!role) return message.reply('The role you provided was invalid!');
   if (role.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough for that role!');
 

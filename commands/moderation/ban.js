@@ -7,7 +7,7 @@ module.exports = async (Client, message, args) => {
   const regex = new RegExp('--force', 'g');
 
   if (!Client.matchInArray(regex, args)) {
-    const member = message.guild.members.get(args[1].replace(/[<>@!?]/g, ''));
+    const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
     if (!member) return message.reply('That is not a valid member! (Looking for force ban? Call the option `--force`.)');
     if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough!');
     if (member === message.guild.owner) return message.reply('I cannot ban an owner!');
@@ -20,8 +20,8 @@ module.exports = async (Client, message, args) => {
   } else {
     args.splice(args.indexOf('--force'), 1);
 
-    const user = await Client.bot.users.fetch(args[1]).catch(() => 'failed');
-    if (user === 'failed') return message.reply('That is not a valid ID!');
+    const user = Client.getObj(args[1], { type: 'user' });
+    if (!user) return message.reply('That is not a valid ID!');
 
     const bans = await message.guild.fetchBans();
     if (bans.has(user.id)) return message.reply('That user is already banned!');

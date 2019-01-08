@@ -116,6 +116,29 @@ const client = class {
 
     return allAliases;
   }
+
+  getObj (mention, options) {
+    const type = options.type;
+    const guild = options.guild;
+
+    if (type === 'member' || type === 'user') {
+      if (mention.startsWith('<@')) {
+        mention = mention.slice(2, -1);
+        if (mention.startsWith('!')) mention = mention.slice(1);
+      }
+
+      if (type === 'member') return guild.members.get(mention);
+      return this.bot.users.fetch(mention).then(u => u).catch(() => false);
+    } else if (type === 'channel') {
+      if (mention.startsWith('<#')) mention = mention.slice(2, -1);
+
+      return guild.channels.get(mention);
+    } else if (type === 'role') {
+      if (mention.startsWith('<@&')) mention = mention.slice(3, -1);
+
+      return guild.roles.get(mention);
+    }
+  }
 };
 
 const Client = new client();

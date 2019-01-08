@@ -2,9 +2,7 @@ module.exports = async (Client, message, args) => {
   const toggled = (await Client.sql.query('SELECT bool FROM togglelevel WHERE guildid = $1', [message.guild.id])).rows[0];
   if (!toggled || !toggled.bool) return message.reply('The leveling system is disabled! Use `?config togglelevel true` to turn it back on.');
 
-  let member;
-  if (!args[1]) member = message.member;
-  else member = message.guild.members.get(args[1].replace(/[<>@!?]/g, ''));
+  const member = args[1] ? Client.getObj(args[1], { guild: message.guild, type: 'member' }) : message.member;
   if (!member) return message.reply('The member you provided was invalid!');
 
   const level = (await Client.sql.query('SELECT points, level FROM scores WHERE userid = $1 AND guildid = $2 LIMIT 1', [member.id, message.guild.id])).rows[0];

@@ -8,7 +8,7 @@ module.exports = async (Client, message, args) => {
   // Add
   if (option === options[0]) {
     if (!args[2]) return message.reply('You have to declare what role you want to add!');
-    const role = message.guild.roles.get(args[2].replace(/[<>@&]/g, ''));
+    const role = Client.getObj(args[2], { guild: message.guild, type: 'role' });
     if (!role) return message.reply('Your second argument was not a valid role!');
     const { rows: roles } = await Client.sql.query('SELECT roleid FROM autorole WHERE guildid = $1', [message.guild.id]);
     if (roles.some(r => r.roleid === role.id)) return message.reply('That role is already on the list!');
@@ -18,7 +18,7 @@ module.exports = async (Client, message, args) => {
   // Remove
   } else if (option === options[1]) {
     if (!args[2]) return message.reply('You have to declare what role you want to remove!');
-    const role = message.guild.roles.get(args[2].replace(/[<>@&]/g, ''));
+    const role = Client.getObj(args[2], { guild: message.guild, type: 'role' });
     if (!role) return message.reply('Your second argument was not a valid role!');
     const { rows: roles } = await Client.sql.query('SELECT roleid FROM autorole WHERE guildid = $1', [message.guild.id]);
     if (!roles.some(r => r.roleid === role.id)) return message.reply('That role is not on the list!');
