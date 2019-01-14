@@ -30,7 +30,6 @@
     "dateformat": "^3.0.3",
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^6.2.0",
-    "ffmpeg-binaries": "^4.0.0",
     "fs": "0.0.1-security",
     "fuzzball": "^1.2.0",
     "get-youtube-id": "^1.0.0",
