@@ -1,11 +1,6 @@
 module.exports = async (Client, message, args) => {
-  let user;
-  if (!args[1]) {
-    user = message.author;
-  } else {
-    user = await message.client.users.fetch(args[1].replace(/[<>@!?]/g, '')).catch(() => 'failed');
-    if (user === 'failed') return message.reply('The user you provided was invalid!');
-  }
+  const user = args[1] ? Client.getObj(args[1], { type: 'user' }) : message.author;
+  if (!user) return message.reply('The user you provided was invalid!');
 
   const inGuild = message.guild.members.has(user.id);
 

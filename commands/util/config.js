@@ -68,7 +68,7 @@ module.exports = async (Client, message, args) => {
       return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escMD(msg)}\`.`);
     }
     case 'logchannel': {
-      const channel = message.guild.channels.get(value.replace(/[<>#]/g, ''));
+      const channel = Client.getObj(value, { guild: message.guild, type: 'channel' });
       if (!channel) return message.reply('That channel is invalid!');
 
       const row = (await Client.sql.query('SELECT * FROM logchannel WHERE guildid = $1', [message.guild.id])).rows[0];
@@ -88,7 +88,7 @@ module.exports = async (Client, message, args) => {
       return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escMD(prefix)}\`.`);
     }
     case 'starchannel': {
-      const channel = message.guild.channels.get(value.replace(/[<>#]/g, ''));
+      const channel = Client.getObj(value, { guild: message.guild, type: 'channel' });
       if (!channel) return message.reply('That channel is invalid!');
 
       const row = (await Client.sql.query('SELECT * FROM starchannel WHERE guildid = $1', [message.guild.id])).rows[0];
@@ -137,7 +137,7 @@ module.exports = async (Client, message, args) => {
       return message.channel.send(`Successfully updated \`${option}\` to \`${value}\`.`);
     }
     case 'updatechannel': {
-      const channel = message.guild.channels.get(value.replace(/[<>#]/g, ''));
+      const channel = Client.getObj(value, { guild: message.guild, type: 'channel' });
       if (!channel) return message.reply('That channel is invalid!');
 
       const row = (await Client.sql.query('SELECT * FROM updatechannel WHERE guildid = $1', [message.guild.id])).rows[0];
@@ -146,7 +146,7 @@ module.exports = async (Client, message, args) => {
       return message.channel.send(`Successfully updated \`${option}\` to ${channel}.`);
     }
     case 'welcomechannel': {
-      const channel = message.guild.channels.get(value.replace(/[<>#]/g, ''));
+      const channel = Client.getObj(value, { guild: message.guild, type: 'channel' });
       if (!channel) return message.reply('That channel is invalid!');
 
       const row = (await Client.sql.query('SELECT * FROM welcomechannel WHERE guildid = $1', [message.guild.id])).rows[0];

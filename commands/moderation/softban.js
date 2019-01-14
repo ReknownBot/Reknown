@@ -11,7 +11,7 @@ module.exports = async (Client, message, args) => {
     args.splice(args.indexOf('--days'), 2);
   }
 
-  const member = message.guild.members.get(args[1].replace(/[@<>!?]/g, ''));
+  const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
   if (!member) return message.reply('That is not a member!');
   if (member === message.member) return message.reply('You cannot softban yourself!');
   if (message.member.roles.highest.position <= member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough!');

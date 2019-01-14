@@ -26,7 +26,7 @@ module.exports = async (Client, message, args) => {
 
   if (!args[1]) return message.reply('You have to provide a member for me to mute!');
 
-  const member = message.guild.members.get(args[1].replace(/[<>@!?]/g, ''));
+  const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
   if (!member) return message.reply('The member you provided is invalid or is not in the server!');
   if (member === message.member) return message.reply('You cannot mute yourself!');
   if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough for that member!');

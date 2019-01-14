@@ -105,21 +105,15 @@ module.exports = {
   async sendinfo (Client, message, id) {
     const guild = this.guilds[message.guild.id];
     const video = await this.fetchVideoInfo.getVideo(id);
-    let embed;
+    const embed = new Client.Discord.MessageEmbed()
+      .setColor(0x00FFFF)
+      .setTimestamp(video.publishedAt)
+      .setFooter(`${Client.moment().startOf('day').seconds(video.durationSeconds).format('H:mm:ss')} | Published at`)
+      .setThumbnail(video.thumbnails['high'].url);
     if (guild.queueNames.length > 1) {
-      embed = new Client.Discord.MessageEmbed()
-        .setDescription(`Added to queue: **[${Client.Discord.Util.escapeMarkdown(video.title)}](${video.url})**`)
-        .setThumbnail(video.thumbnails['high'].url)
-        .setFooter(`${Client.moment().startOf('day').seconds(video.durationSeconds).format('H:mm:ss')} | Published at`)
-        .setTimestamp(video.publishedAt)
-        .setColor(0x00FFFF);
+      embed.setDescription(`Added to queue: **[${Client.Discord.Util.escapeMarkdown(video.title)}](${video.url})**\n\nRequested by ${message.author}`);
     } else {
-      embed = new Client.Discord.MessageEmbed()
-        .setDescription(`Now Playing: **[${Client.Discord.Util.escapeMarkdown(video.title)}](${video.url})**`)
-        .setThumbnail(video.thumbnails['high'].url)
-        .setFooter(`${Client.moment().startOf('day').seconds(video.durationSeconds).format('H:mm:ss')} | Published at`)
-        .setTimestamp(video.publishedAt)
-        .setColor(0x00FFFF);
+      embed.setDescription(`Now Playing: **[${Client.Discord.Util.escapeMarkdown(video.title)}](${video.url})**\n\nRequested by ${message.author}`);
     }
 
     return message.channel.send(embed);

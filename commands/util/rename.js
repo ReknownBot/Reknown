@@ -1,6 +1,6 @@
 module.exports = async (Client, message, args) => {
   if (!args[1]) return message.reply('You have to provide a channel for me to rename!');
-  const channel = message.guild.channels.get(args[1].replace(/[<>#]/g, ''));
+  const channel = Client.getObj(args[1], { guild: message.guild, type: 'channel' });
   if (!channel) return message.reply('The channel you provided was invalid!');
   if (!channel.permissionsFor(message.member).has('MANAGE_CHANNELS')) return message.reply('You do not have enough permissions on that channel!');
   if (!channel.permissionsFor(message.guild.me).has('MANAGE_CHANNELS')) return message.reply('I do not have enough permissions to rename that channel!');

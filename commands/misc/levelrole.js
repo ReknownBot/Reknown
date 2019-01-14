@@ -9,7 +9,7 @@ module.exports = async (Client, message, args) => {
   if (choice === options[0]) { // Add
     if (!args[2]) return message.reply('You have to provide a role for me to add to the level role!');
 
-    const role = message.guild.roles.get(args[2].replace(/[<>@&]/g, ''));
+    const role = Client.getObj(args[2], { guild: message.guild, type: 'role' });
     if (!role) return message.reply('The role you provided was invalid!');
 
     const exists = (await Client.sql.query('SELECT * FROM levelrole WHERE guildid = $1 AND roleid = $2 LIMIT 1', [message.guild.id, role.id])).rows[0];
@@ -27,7 +27,7 @@ module.exports = async (Client, message, args) => {
   } else if (choice === options[1]) { // Remove
     if (!args[2]) return message.reply('You have to provide a role for me to remove!');
 
-    const role = message.guild.roles.get(args[2].replace(/[<>@&]/g, ''));
+    const role = Client.getObj(args[2], { guild: message.guild, type: 'role' });
     if (!role) return message.reply('The role you provided was invalid!');
 
     const exists = (await Client.sql.query('SELECT * FROM levelrole WHERE guildid = $1 AND roleid = $2 LIMIT 1', [message.guild.id, role.id])).rows[0];

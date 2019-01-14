@@ -8,8 +8,8 @@ module.exports = async (Client, message, args) => {
   if (slowmode < 0) return message.reply('The slowmode value cannot be lower than 0!');
   if (slowmode.includes('.')) return message.reply('THe slowmode value cannot be a decimal!');
 
-  const channel = args[2] ? message.guild.channels.find(c => c.id === args[2].replace(/[<>#]/g, '') && c.type === 'text') : message.channel;
-  if (!channel) return message.reply('I did not find a text channel from the channel you provided!');
+  const channel = args[2] ? Client.getObj(args[2], { guild: message.guild, type: 'channel' }) : message.channel;
+  if (!channel || channel.type !== 'text') return message.reply('I did not find a text channel from the channel you provided!');
   if (!Client.checkClientPerms(channel, 'MANAGE_CHANNELS')) return message.reply('I need the permission "Manage Channels" for this command!');
 
   channel.setRateLimitPerUser(slowmode);
