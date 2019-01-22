@@ -47,6 +47,7 @@ const client = class {
       host: process.env.SQL_HOST,
       ssl: true
     });
+    this.fetch = require('node-fetch');
 
     this.bot = bot;
     this.Discord = Discord;
