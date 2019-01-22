@@ -20,7 +20,7 @@ module.exports = async (Client, message, args) => {
   } else {
     args.splice(args.indexOf('--force'), 1);
 
-    const user = Client.getObj(args[1], { type: 'user' });
+    const user = await Client.getObj(args[1], { type: 'user' });
     if (!user) return message.reply('That is not a valid ID!');
 
     const bans = await message.guild.fetchBans();

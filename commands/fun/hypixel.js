@@ -5,12 +5,12 @@ module.exports = async (Client, message, args) => {
   if (!options.includes(option)) return message.reply(`That option is not valid! The options are \`${options.list()}\`.`);
   if (!args[2]) return message.reply('You have to provide what I should search by!');
 
-  const hypixel = Client.hypixel;
-
   if (option === 'player') {
-    const info = await hypixel.getPlayer('name', args[2]).catch(() => 'failed');
-    if (info === 'failed') return message.reply('That player name is not valid!');
-    const player = info.player;
+    const info = await Client.fetch(`https://api.hypixel.net/player?key=${process.env.HYPIXEL_KEY}&name=${encodeURIComponent(args[2])}`);
+    const json = await info.json();
+    if (!json.success) return message.reply('Either the Hypixel API is down, or the API key is incorrect. Please report this in my support server.');
+    if (!json.player) return message.reply('That player name is not valid!');
+    const player = json.player;
 
     const embed = new Client.Discord.MessageEmbed()
       .setTitle(`${Client.escMD(player.displayname)}'s Hypixel Stats`)
@@ -23,15 +23,15 @@ module.exports = async (Client, message, args) => {
 
     return message.channel.send(embed);
   } else if (option === 'guild') {
-    const info = await hypixel.findGuild('name', args.slice(2).join(' '));
-    if (!info.guild) return message.reply('I did not find a guild by that name!');
-    const guildid = info.guild;
-
-    const { guild } = await hypixel.getGuild(guildid);
+    const info = await Client.fetch(`https://api.hypixel.net/guild?key=${process.env.HYPIXEL_KEY}&name=${encodeURIComponent(args.slice(2).join(' '))}`);
+    const json = await info.json();
+    if (!json.success) return message.reply('Either the Hypixel API is down, or the API key is incorrect. Please report this in my support server.');
+    if (!json.guild) return message.reply('I did not find a guild by that name!');
+    const guild = json.guild;
 
     const embed = new Client.Discord.MessageEmbed()
       .setTitle(`${Client.escMD(guild.name)} Guild Stats`)
-      .setURL(`https://hypixel.net/guilds/${guild.name.replace(' ', '%20')}/`)
+      .setURL(`https://hypixel.net/guilds/${encodeURIComponent(guild.name)}/`)
       .addField('Member Count', guild.members.length)
       .addField('Guild Tag', guild.tag ? guild.tag : 'None')
       .addField('XP', guild.exp)
@@ -39,17 +39,23 @@ module.exports = async (Client, message, args) => {
 
     return message.channel.send(embed);
   } else if (option === 'guildmember') {
-    const info = await hypixel.findGuild('memberName', args[2]).catch(() => 'failed');
-    if (info === 'failed' || !info.guild) return message.reply('I did not find a guild by that member\'s name!');
+    const playerInfo = await Client.fetch(`https://api.hypixel.net/player?key=${process.env.HYPIXEL_KEY}&name=${encodeURIComponent(args[2])}`);
+    const playerJSON = await playerInfo.json();
+    if (!playerJSON.success) return message.reply('Either the Hypixel API is down, or the API key is incorrect. Please report this in my support server.');
+    if (!playerJSON.player) return message.reply('That player name is not valid!');
+    const uuid = playerJSON.player.uuid;
 
-    const { guild: guildInfo } = await hypixel.getGuild(info.guild);
+    const info = await Client.fetch(`https://api.hypixel.net/guild?key=${process.env.HYPIXEL_KEY}&player=${encodeURIComponent(uuid)}`);
+    const json = await info.json();
+    if (!json.guild) return message.reply('I did not find a guild by that member name!');
+    const guild = json.guild;
 
     const embed = new Client.Discord.MessageEmbed()
-      .setTitle(`${Client.escMD(guildInfo.name)} Guild Stats`)
-      .setURL(`https://hypixel.net/guilds/${guildInfo.name.replace(' ', '%20')}/`)
-      .addField('Member Count', guildInfo.members.length)
-      .addField('Guild Tag', guildInfo.tag ? guildInfo.tag : 'None')
-      .addField('XP', guildInfo.exp)
+      .setTitle(`${Client.escMD(guild.name)} Guild Stats`)
+      .setURL(`https://hypixel.net/guilds/${encodeURIComponent(guild.name)}/`)
+      .addField('Member Count', guild.members.length)
+      .addField('Guild Tag', guild.tag ? guild.tag : 'None')
+      .addField('XP', guild.exp)
       .setColor(0x00FFFF);
 
     return message.channel.send(embed);
