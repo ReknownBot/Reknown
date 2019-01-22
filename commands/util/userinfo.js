@@ -1,5 +1,5 @@
 module.exports = async (Client, message, args) => {
-  const user = args[1] ? Client.getObj(args[1], { type: 'user' }) : message.author;
+  const user = args[1] ? await Client.getObj(args[1], { type: 'user' }) : message.author;
   if (!user) return message.reply('The user you provided was invalid!');
 
   const inGuild = message.guild.members.has(user.id);

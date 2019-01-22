@@ -34,7 +34,6 @@ const client = class {
 
     this.rollbar = new (require('rollbar'))(process.env.ROLLBAR_ACCESS_TOKEN);
     this.osu = new (require('node-osu')).Api(process.env.OSU_KEY);
-    this.hypixel = new (require('hypixel-api'))(process.env.HYPIXEL_KEY);
     this.request = require('request');
     this.dateFormat = require('dateformat');
     this.fuzz = require('fuzzball');
@@ -129,7 +128,7 @@ const client = class {
       }
 
       if (type === 'member') return guild.members.get(mention);
-      return this.bot.users.fetch(mention).then(u => u).catch(() => false);
+      return this.bot.users.fetch(mention).catch(() => false);
     } else if (type === 'channel') {
       if (mention.startsWith('<#')) mention = mention.slice(2, -1);
 

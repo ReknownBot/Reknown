@@ -4,7 +4,7 @@ module.exports = async (Client, message, args) => {
 
   if (!args[1]) return message.reply('You have to provide a member for me to unban!');
 
-  const user = Client.getObj(args[1], { type: 'user' });
+  const user = await Client.getObj(args[1], { type: 'user' });
   if (!user) return message.reply('The user you provided was invalid. Make sure it\'s a valid ID!');
 
   const bans = await message.guild.fetchBans();

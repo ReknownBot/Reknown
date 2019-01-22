@@ -1,5 +1,5 @@
 module.exports = async (Client, message, args) => {
-  const user = args[1] ? Client.getObj(args[1], { type: 'user' }) : message.author;
+  const user = args[1] ? await Client.getObj(args[1], { type: 'user' }) : message.author;
   if (!user) return message.reply('That user does not exist!');
 
   const isAnimated = user.displayAvatarURL().includes('gif');
