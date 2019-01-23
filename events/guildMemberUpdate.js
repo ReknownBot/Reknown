@@ -7,10 +7,10 @@ function nickChange (Client, oldNick, newNick, guild, member) {
     .setThumbnail(member.user.displayAvatarURL({ size: 2048 }));
 
   if (newNick === null) {
-    embed.addField('Old Nickname', oldNick);
+    embed.addField('Old Nickname', Client.escMD(oldNick));
   } else {
-    embed.addField('Old Nickname', oldNick, true)
-      .addField('New Nickname', newNick, true);
+    embed.addField('Old Nickname', Client.escMD(oldNick), true)
+      .addField('New Nickname', Client.escMD(newNick), true);
   }
 
   return require('../functions/sendlog.js')(Client, embed, guild.id);
@@ -33,7 +33,7 @@ function roleChange (Client, oldMember, newMember) {
       .setTitle('Role Removed')
       .setColor(0xffa500)
       .addField('Member', `${newMember.user.tag} (${newMember.id})`, true)
-      .addField('Role', roles.map(r => `${r.name} - ${r.id}`).list(), true)
+      .addField('Role', roles.map(r => `${Client.escMD(r.name)} - ${r.id}`).list(), true)
       .setThumbnail(newMember.user.displayAvatarURL({ size: 2048 }));
   } else { // Role Added
     const roles = newMember.roles.filter(r => !oldMember.roles.has(r.id));
@@ -42,7 +42,7 @@ function roleChange (Client, oldMember, newMember) {
       .setTitle('Role Added')
       .setColor(0x00ff00)
       .addField('Member', `${newMember.user.tag} (${newMember.id})`, true)
-      .addField('Role', roles.map(r => `${r.name} - ${r.id}`).list(), true)
+      .addField('Role', roles.map(r => `${Client.escMD(r.name)} - ${r.id}`).list(), true)
       .setThumbnail(newMember.user.displayAvatarURL({ size: 2048 }));
   }
 

@@ -3,7 +3,7 @@ async function logMessage (Client, role) {
     .setTitle('Role Created')
     .setColor(0x00FF00)
     .setTimestamp()
-    .addField('Role', `${role.name} (\`${role.id}\`)`);
+    .addField('Role', `${Client.escMD(role.name)} \`${role.id}\``);
 
   if (role.guild.me.hasPermission('VIEW_AUDIT_LOG')) {
     const entry = (await role.guild.fetchAuditLogs({
