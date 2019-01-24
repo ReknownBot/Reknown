@@ -33,7 +33,7 @@ module.exports = async (Client, message, args) => {
     const embed = new Client.Discord.MessageEmbed()
       .setTitle('Succeeded in Encoding!')
       .setColor(0x00FF00)
-      .setDescription(encoded)
+      .setDescription(Client.escMD(encoded))
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
     return message.channel.send(embed);
   }
