@@ -6,22 +6,6 @@ module.exports = (Client) => {
 
     if (!message.channel.permissionsFor(Client.bot.user).has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
 
-    if (!Client.musicfn.guilds[message.guild.id]) {
-      Client.musicfn.guilds[message.guild.id] = {
-        queueIDs: [],
-        queueNames: [],
-        skippers: [],
-        skips: 0,
-        searching: false,
-        loop: false,
-        volume: 50,
-        voiceChannel: null,
-        dispatcher: null,
-        isPlaying: false,
-        paused: false
-      };
-    }
-
     require('../functions/level.js')(Client, message);
     require('../functions/deleteinvite.js')(Client, message);
     require('../functions/eco.js')(Client, message.member);
