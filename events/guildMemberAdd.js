@@ -31,17 +31,6 @@ function logMessage (Client, member, guild) {
   return require('../functions/sendlog.js')(Client, embed, guild.id);
 }
 
-async function autorole (Client, member, guild) {
-  const { rows } = await Client.sql.query('SELECT roleid FROM autorole WHERE guildId = $1', [guild.id]);
-  if (rows.length === 0) return;
-  if (!member.guild.me.hasPermission('MANAGE_ROLES')) return;
-  rows.forEach(r => {
-    const autoRole = guild.roles.get(r.roleid);
-    if (!autoRole) Client.sql.query('DELETE FROM autorole WHERE guildId = $1 AND roleId = $2', [guild.id, r.roleid]);
-    else if (autoRole.position < guild.me.roles.highest.position) member.roles.add(autoRole, 'Reknown Autorole');
-  });
-}
-
 async function levelrole (Client, member, guild) {
   const toggleLev = (await Client.sql.query('SELECT bool FROM togglelevel WHERE guildid = $1', [guild.id]));
   if (!toggleLev || !toggleLev.bool) return;
@@ -73,7 +62,6 @@ module.exports = (Client) => {
 
     logMessage(Client, member, guild);
     welcomeMessage(Client, member, guild);
-    autorole(Client, member, guild);
     levelrole(Client, member, guild);
     mute(Client, member, guild);
   });
