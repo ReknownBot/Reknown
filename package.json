@@ -32,20 +32,15 @@
     "dotenv": "^6.2.0",
     "fs": "0.0.1-security",
     "fuzzball": "^1.2.0",
-    "get-youtube-id": "^1.0.0",
     "moment": "^2.24.0",
     "node-fetch": "^2.3.0",
     "node-osu": "^1.3.2",
-    "opusscript": "0.0.6",
     "pg": "^7.8.0",
     "random-puppy": "^1.1.0",
     "request": "^2.88.0",
     "rollbar": "^2.5.1",
     "rword": "^2.3.0",
-    "simple-youtube-api": "^5.1.1",
-    "string-math": "^1.2.1",
-    "youtube-info": "^1.3.2",
-    "ytdl-core": "^0.25.2"
+    "string-math": "^1.2.1"
   },
   "devDependencies": {
     "eslint-plugin-promise": "^4.0.1"

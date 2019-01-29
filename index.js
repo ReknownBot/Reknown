@@ -37,7 +37,6 @@ const client = class {
     this.request = require('request');
     this.dateFormat = require('dateformat');
     this.fuzz = require('fuzzball');
-    this.musicfn = require('./functions/music.js');
     this.sql = new (require('pg')).Pool({
       user: process.env.SQL_USER,
       password: process.env.SQL_PASS,

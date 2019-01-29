@@ -1,4 +1,5 @@
 module.exports = async (Client, message, args) => {
+  if (!args[1]) return message.reply('Please specify one of the modes; standard, taiko, ctb, or mania.');
   const mode = args[1].toLowerCase();
   const modeChoices = {
     standard: 0,
@@ -7,7 +8,6 @@ module.exports = async (Client, message, args) => {
     mania: 3
   };
   const user = args.slice(2).join(' ').toLowerCase();
-  if (!mode) return message.reply('Please specify one of the modes; standard, taiko, ctb, or mania.');
   if (!Object.keys(modeChoices).includes(mode)) return message.reply('That is not a valid mode! The modes are standard, taiko, ctb, and mania.');
   if (!user) return message.reply('Please specify a player for me to get stats on.');
   try {

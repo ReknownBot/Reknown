@@ -43,7 +43,7 @@ function kickMessage (Client, entry, member) {
     .setTimestamp()
     .setThumbnail(member.user.displayAvatarURL({ size: 2048 }))
     .addField('Member', `${member.user.tag} - ${member.user.id}`, true)
-    .setAuthor(entry.executor.tag, entry.executor.displayAvatarURL());
+    .setAuthor(`${entry.executor.tag} (${entry.executor.id})`, entry.executor.displayAvatarURL());
   if (entry.reason) embed.addField('Reason', entry.reason, true);
 
   return require('../functions/sendlog.js')(Client, embed, member.guild.id);
