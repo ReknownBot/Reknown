@@ -14,9 +14,7 @@ module.exports = (Client) => {
       try {
         message = await channel.messages.fetch(data.message_id);
       } catch (e) {
-        if (e != 'DiscordAPIError: Unknown Message') {
-          throw new Error(e);
-        } else return;
+        return;
       }
       if (!message.content && message.attachments.size === 0) return;
 
@@ -30,10 +28,10 @@ module.exports = (Client) => {
       const member = message.guild.members.get(data.user_id);
       if (member.user.bot) return;
       if (member.id === message.author.id) {
-        // eslint-disable-next-line
-        if (event === 'MESSAGE_REACTION_ADD') channel.send(`${member}, You cannot star your own messages.`).then(m => m.delete({ timeout: 5000 })).catch(e => {
-          if (e != 'DiscordAPIError: Unknown Message') throw new Error(e);
-        });
+        if (event === 'MESSAGE_REACTION_ADD') {
+          channel.send(`${member}, You cannot star your own messages.`).then(m => m.delete({ timeout: 5000 }).catch(() => { }))
+            .catch(() => { });
+        }
         return;
       }
 

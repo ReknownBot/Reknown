@@ -59,7 +59,7 @@ module.exports = {
   },
 
   async playMusic (id, message, Client, connection) {
-    if (id.indexOf('youtube.com') === -1) id = 'https://www.youtube.com/watch?v=' + id;
+    if (id.indexOf('youtube.com') === -1 && id.indexOf('youtu.be') === -1) id = 'https://www.youtube.com/watch?v=' + id;
 
     const guild = this.guilds[message.guild.id];
 
@@ -71,7 +71,7 @@ module.exports = {
 
     if (guild.queueIDs.length > 1) return;
 
-    const dispatcher = connection.play(this.ytdl(id, { filter: 'audioonly' }));
+    const dispatcher = connection.play(this.ytdl(id, { filter: 'audioonly', quality: 'highest' }));
 
     guild.dispatcher = dispatcher;
     dispatcher.setVolumeLogarithmic(guild.volume / 175);

@@ -27,7 +27,7 @@ module.exports = async (Client, message, args) => {
   }
 
   const connection = await voiceChannel.join();
-  if (query.indexOf('youtube.com') === -1) query = 'https://www.youtube.com/watch?v=' + query;
+  if (query.indexOf('youtube.com') === -1 && query.indexOf('youtu.be') === -1) query = 'https://www.youtube.com/watch?v=' + query;
 
   Client.musicfn.sendinfo(Client, message, query);
   return Client.musicfn.playMusic(query, message, Client, connection);
