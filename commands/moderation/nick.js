@@ -20,5 +20,5 @@ module.exports.help = {
   desc: 'Nicknames a mentioned member.',
   category: 'moderation',
   usage: '?nick <Member> <New Nickname>',
-  aliases: ['nickname']
+  aliases: ['nickname', 'setnick']
 };

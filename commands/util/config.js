@@ -26,11 +26,11 @@ module.exports = async (Client, message, args) => {
 
   const value = args[2] ? args[2].toLowerCase() : null;
   if (!value) return message.reply('You have to provide a value for the option!');
+  const bool = value === 'true' ? 1 : 0;
 
   switch (option) {
     case 'blacklistmsg': {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
-      const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM blacklistmsg WHERE guildid = $1', [message.guild.id])).rows[0];
       if ((!row && bool === 1) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
@@ -40,7 +40,6 @@ module.exports = async (Client, message, args) => {
     }
     case 'cmdnotfound': {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
-      const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM cmdnotfound WHERE guildid = $1', [message.guild.id])).rows[0];
       if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
@@ -50,7 +49,6 @@ module.exports = async (Client, message, args) => {
     }
     case 'deleteinvite': {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
-      const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM deleteinvite WHERE guildid = $1', [message.guild.id])).rows[0];
       if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
@@ -98,7 +96,6 @@ module.exports = async (Client, message, args) => {
     }
     case 'togglelevel': {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
-      const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM togglelevel WHERE guildid = $1', [message.guild.id])).rows[0];
       if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
@@ -108,7 +105,6 @@ module.exports = async (Client, message, args) => {
     }
     case 'togglelog': {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
-      const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM actionlog WHERE guildid = $1', [message.guild.id])).rows[0];
       if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
@@ -118,7 +114,6 @@ module.exports = async (Client, message, args) => {
     }
     case 'togglestar': {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
-      const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM togglestar WHERE guildid = $1', [message.guild.id])).rows[0];
       if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
@@ -128,7 +123,6 @@ module.exports = async (Client, message, args) => {
     }
     case 'togglewelcome': {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
-      const bool = value === 'true' ? 1 : 0;
       const row = (await Client.sql.query('SELECT bool FROM togglewelcome WHERE guildid = $1', [message.guild.id])).rows[0];
       if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
 
@@ -173,7 +167,7 @@ module.exports.help = {
   usage: '?config <Option> <Value>',
   options: {
     blacklistmsg: 'Toggles the blacklisted message.',
-    cmdnotfound: 'Toggles "I did not find that command. ...".',
+    cmdnotfound: 'Toggles the unknown command message.',
     deleteinvite: 'Deletes all invites by users without the `misc.invite` permission.',
     goodbyemsg: 'Sets the message sent when someone leaves the server.',
     logchannel: 'Sets the channel to send logs in.',

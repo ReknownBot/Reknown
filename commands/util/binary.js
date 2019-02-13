@@ -7,7 +7,7 @@ module.exports = async (Client, message, args) => {
 
   if (choice === 'decode') {
     if (!args[2]) return message.reply('You have to provide binary for me to decode!');
-    const binArr = Client.Discord.Util.splitMessage(args.slice(2).join(''), { maxLength: 8, char: '' });
+    const binArr = Client.splitMessage(args.slice(2).join(''), { maxLength: 8, char: '' });
     let decoded;
     if (typeof binArr === 'string') {
       if (binArr.length < 8 || isNaN(binArr) || binArr.includes('.') || /[^0-1]/.test(binArr)) return message.reply('Something was wrong with your binary. Please check it and run the command again.');

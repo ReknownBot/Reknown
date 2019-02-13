@@ -4,7 +4,7 @@ module.exports = async (Client, message, args) => {
   const hours = Math.floor((Client.bot.uptime / 1000 / 60 / 60) % 24);
   const days = Math.floor(Client.bot.uptime / 1000 / 60 / 60 / 24);
 
-  return message.channel.send(`**Uptime**: ${days} Days, ${hours} Hours, ${minutes} Minutes, and ${seconds} Seconds.`);
+  return message.channel.send(`**Uptime**: **${days}** Days, **${hours}** Hours, **${minutes}** Minutes, and **${seconds}** Seconds.`);
 };
 
 module.exports.help = {

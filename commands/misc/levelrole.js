@@ -36,6 +36,8 @@ module.exports = async (Client, message, args) => {
     Client.sql.query('DELETE FROM levelrole WHERE guildid = $1 AND roleid = $2', [message.guild.id, role.id]);
     return message.channel.send(`Successfully removed \`${role.name}\` from the level role list.`);
   } else if (choice === options[2]) { // List
+    if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I require the permission `Embed Links` for this command!');
+
     const { rows: roles } = await Client.sql.query('SELECT * FROM levelrole WHERE guildid = $1 ORDER BY level ASC', [message.guild.id]);
     roles.forEach(r => {
       if (!message.guild.roles.get(r.roleid)) {
@@ -46,26 +48,14 @@ module.exports = async (Client, message, args) => {
 
     if (roles.length === 0) return message.reply('There are currently no level roles on this server!');
 
-    let str = roles.map(r => {
+    const pages = Client.splitMessage(roles.map(r => {
       const role = message.guild.roles.get(r.roleid);
-      return `${role} | ID: ${role.id} | Level: ${r.level}`;
-    }).join('\n');
-    if (str.length > 2048) {
-      str = '';
+      return `${role} | ID **${role.id}** | Level **${r.level}**`;
+    }).join('\n'), { maxLength: 2048 });
+    if (pages instanceof Array) {
+      if (!Client.checkClientPerms(message.channel, 'ADD_REACTIONS', 'MANAGE_MESSAGES')) return message.reply('There are multiple pages of bans. I require the permissions `Add Reactions` and `Manage Messages` to do this.');
+
       let page = 1;
-      const pages = [];
-
-      roles.forEach(r => {
-        const role = message.guild.roles.get(r.roleid);
-        if (str.length + 18 + role.id.length + role.toString().length + r.level.toString().length > 2048) {
-          pages.push(str);
-          str = '';
-        }
-
-        str += `${role} | ID: ${role.id} | Level: ${r.level}`;
-      });
-      if (str) pages.push(str);
-
       const embed = new Client.Discord.MessageEmbed()
         .setTitle(`${message.guild.name}'s Level Role List`)
         .setColor(0x00FFFF)
@@ -88,7 +78,7 @@ module.exports = async (Client, message, args) => {
         if (reaction.emoji.name === emojis[2]) {
           forced = true;
           collector.stop();
-          return msg.reactions.filter(r => r.users.has(Client.bot.user.id)).forEach(r => r.users.remove(Client.bot.user));
+          return msg.reactions.removeAll();
 
           // Backward
         } else if (reaction.emoji.name === emojis[1]) {
@@ -117,14 +107,14 @@ module.exports = async (Client, message, args) => {
       });
 
       collector.on('end', () => {
-        if (!forced && !msg.deleted) msg.reactions.filter(r => r.users.has(Client.bot.user.id)).forEach(r => r.users.remove(Client.bot.user));
+        if (!forced && !msg.deleted) msg.reactions.removeAll();
       });
     } else {
       const embed = new Client.Discord.MessageEmbed()
         .setTitle(`Level roles in ${message.guild.name}`)
         .setColor(0x00FFFF)
         .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
-        .setDescription(str);
+        .setDescription(pages);
       return message.channel.send(embed);
     }
   } else if (choice === options[3]) { // Clear

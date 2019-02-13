@@ -9,7 +9,8 @@ const bot = new Discord.Client({
     'USER_SETTINGS_UPDATE',
     'USER_NOTE_UPDATE',
     'GUILD_SYNC'
-  ]
+  ],
+  partials: ['MESSAGE']
 });
 
 require('array-utility');
@@ -52,6 +53,7 @@ const client = class {
     this.moment = require('moment');
     this.permissions = require('./permissions.json');
     this.escMD = this.Discord.Util.escapeMarkdown;
+    this.splitMessage = this.Discord.Util.splitMessage;
     this.contributors = ['468848409202262027', '284857002977525760'];
     this.mutes = new Discord.Collection();
     this.prefixes = {};
