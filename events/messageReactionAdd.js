@@ -7,7 +7,7 @@ module.exports = (Client) => {
     const channel = message.channel;
     if (channel.type !== 'text') return;
     if (!Client.checkClientPerms(channel, 'VIEW_CHANNEL', 'SEND_MESSAGES')) return;
-    const emoji = reaction.emoji;
+    const emoji = reaction.emoji.name;
     if (emoji !== '⭐') return;
 
     const toggled = (await Client.sql.query('SELECT bool FROM togglestar WHERE guildid = $1 AND bool = $2', [message.guild.id, 1])).rows[0];
