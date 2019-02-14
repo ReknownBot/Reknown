@@ -40,7 +40,8 @@ async function editStar (Client, oldMessage, newMessage) {
 }
 
 module.exports = (Client) => {
-  return Client.bot.on('messageUpdate', (oldMessage, newMessage) => {
+  return Client.bot.on('messageUpdate', async (oldMessage, newMessage) => {
+    if (oldMessage.partial) await oldMessage.fetch();
     if (!oldMessage.guild || !oldMessage.guild.available) return;
 
     logMessage(Client, oldMessage, newMessage);
