@@ -6,14 +6,14 @@ module.exports = async (Client, message, args) => {
   if (isNaN(slowmode)) return message.reply('The slowmode amount you provided was not a number!');
   if (slowmode > 120) return message.reply('The slowmode value has to be less or equal to 120!');
   if (slowmode < 0) return message.reply('The slowmode value cannot be lower than 0!');
-  if (slowmode.includes('.')) return message.reply('THe slowmode value cannot be a decimal!');
+  if (slowmode.includes('.')) return message.reply('The slowmode value cannot be a decimal!');
 
   const channel = args[2] ? Client.getObj(args[2], { guild: message.guild, type: 'channel' }) : message.channel;
   if (!channel || channel.type !== 'text') return message.reply('I did not find a text channel from the channel you provided!');
-  if (!Client.checkClientPerms(channel, 'MANAGE_CHANNELS')) return message.reply('I need the permission "Manage Channels" for this command!');
+  if (!Client.checkClientPerms(channel, 'MANAGE_CHANNELS')) return message.reply('I need the permission `Manage Channels` in that channel for this command!');
 
   channel.setRateLimitPerUser(slowmode);
-  return message.channel.send(`Successfully set the slowmode to ${slowmode} in ${channel}.`);
+  return message.channel.send(`Successfully set the slowmode to **${slowmode}** in ${channel}.`);
 };
 
 module.exports.help = {

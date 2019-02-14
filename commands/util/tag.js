@@ -75,7 +75,7 @@ module.exports = async (Client, message, args) => {
     const str = tagArray.list();
 
     if (str.length > 2048) {
-      const pages = Client.Discord.Util.splitMessage(str, { maxLength: 2048, char: ', ' });
+      const pages = Client.splitMessage(str, { maxLength: 2048, char: ', ' });
       let page = 1;
 
       const embed = new Client.Discord.MessageEmbed()

@@ -38,7 +38,7 @@
     "pg": "^7.8.0",
     "random-puppy": "^1.1.0",
     "request": "^2.88.0",
-    "rollbar": "^2.5.1",
+    "rollbar": "^2.5.2",
     "rword": "^2.3.0",
     "string-math": "^1.2.1"
   },

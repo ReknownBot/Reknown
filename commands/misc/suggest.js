@@ -10,13 +10,13 @@ module.exports = async (Client, message, args) => {
 
   const channel = message.client.channels.get('461229814406316052');
   const embed = new Client.Discord.MessageEmbed()
-    .setTitle(`New Suggestion by ${message.author.tag} (${message.author.id})`)
+    .setAuthor(`New Suggestion by ${message.author.tag} - ${message.author.id}`, message.author.displayAvatarURL())
     .setColor(0x00FFFF)
     .setDescription(suggestion)
     .setTimestamp();
 
   channel.send(embed);
-  return message.channel.send('Successfully sent a suggestion, please wait 10 minutes before suggesting again.');
+  return message.channel.send('✅ Successfully sent a suggestion. Please wait 10 minutes before suggesting again.');
 };
 
 module.exports.help = {

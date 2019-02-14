@@ -1,12 +1,12 @@
 module.exports = async (Client, message, args) => {
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I do not have the required permission `Embed Links`!');
-
   if (!args[1]) return message.reply('You have to include a message for me to say!');
+  const msg = args.slice(1).join(' ');
 
   const embed = new Client.Discord.MessageEmbed()
     .setAuthor(message.author.tag, message.author.displayAvatarURL())
     .setColor(0x00FFFF)
-    .setDescription(args.slice(1).join(' '));
+    .setDescription(msg);
 
   if (Client.checkClientPerms(message.channel, 'MANAGE_MESSAGES')) message.delete();
   return message.channel.send(embed);
