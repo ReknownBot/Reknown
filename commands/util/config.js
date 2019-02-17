@@ -15,11 +15,39 @@ const obj = {
   welcomemsg: ['misc', 'welcome']
 };
 
+const options = {
+  blacklistmsg: 'Toggles the blacklisted message.',
+  cmdnotfound: 'Toggles the unknown command message.',
+  deleteinvite: 'Deletes all invites by users without the `misc.invite` permission.',
+  goodbyemsg: 'Sets the message sent when someone leaves the server.',
+  logchannel: 'Sets the channel to send logs in.',
+  prefix: 'Sets the prefix for the bot.',
+  starchannel: 'Sets the channel for starboard messages.',
+  togglelevel: 'Toggles the entire leveling system.',
+  togglelog: 'Toggles the action log.',
+  togglestar: 'Toggles starboard.',
+  togglewelcome: 'Toggles welcoming messages.',
+  updatechannel: 'Sets the channel to send messages when using `?serverupdate`.',
+  welcomechannel: 'Sets the channel to send welcoming and goodbye messages.',
+  welcomemsg: 'Sets the message sent when someone joins the server.'
+};
+
 module.exports = async (Client, message, args) => {
   const option = args[1] ? args[1].toLowerCase() : null;
   if (!option) {
-    args = ['help', 'config'];
-    return require('../misc/help.js')(Client, message, args);
+    const info = Object.keys(options).map(key => {
+      const value = options[key];
+      return `\`${key}\` ${value}`;
+    });
+    if (!message.channel.permissionsFor(Client.bot.user).has('EMBED_LINKS')) return message.channel.send(info);
+
+    const embed = new Client.Discord.MessageEmbed()
+      .setTitle('Available config options')
+      .setColor(0x00FF00)
+      .setDescription(info)
+      .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
+
+    return message.channel.send(embed);
   }
   if (!Object.keys(obj).includes(option)) return message.reply('That option is not valid. Use `?help config` to see all the options.');
   if (!await Client.checkPerms(option, obj[option][1], message.member)) return message.reply(`:x: Sorry, but you do not have the \`${obj[option][0]}.${obj[option][1]}\` permission.`);
@@ -165,21 +193,5 @@ module.exports.help = {
   desc: 'Sets up config settings.',
   category: 'util',
   usage: '?config <Option> <Value>',
-  options: {
-    blacklistmsg: 'Toggles the blacklisted message.',
-    cmdnotfound: 'Toggles the unknown command message.',
-    deleteinvite: 'Deletes all invites by users without the `misc.invite` permission.',
-    goodbyemsg: 'Sets the message sent when someone leaves the server.',
-    logchannel: 'Sets the channel to send logs in.',
-    prefix: 'Sets the prefix for the bot.',
-    starchannel: 'Sets the channel for starboard messages.',
-    togglelevel: 'Toggles the entire leveling system.',
-    togglelog: 'Toggles the action log.',
-    togglestar: 'Toggles starboard.',
-    togglewelcome: 'Toggles welcoming messages.',
-    updatechannel: 'Sets the channel to send messages when using `?serverupdate`.',
-    welcomechannel: 'Sets the channel to send welcoming and goodbye messages.',
-    welcomemsg: 'Sets the message sent when someone joins the server.'
-  },
   aliases: ['settings']
 };
