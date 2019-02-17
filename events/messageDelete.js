@@ -48,6 +48,7 @@ async function delStar (Client, message) {
 
 module.exports = (Client) => {
   return Client.bot.on('messageDelete', message => {
+    if (message.partial) return;
     if (!message.guild || !message.guild.available) return;
     if (message.author.bot) return;
 
