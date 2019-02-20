@@ -81,27 +81,15 @@ const client = class {
     const { rows } = await this.sql.query('SELECT roleid,bool FROM permissions WHERE pName = $1 AND pCategory = $2', [pName, pCategory]);
     const row = rows.find(r => member.roles.has(r.roleid));
 
-    if (row && row.bool) return true;
-    return false;
+    return !!(row && row.bool);
   }
 
   checkClientPerms (channel, ...perms) {
-    let bool = true;
-    perms.forEach(perm => {
-      if (!channel.permissionsFor(this.bot.user).has(perm)) bool = false;
-    });
-
-    return bool;
+    return perms.some(perm => channel.permissionsFor(this.bot.user).has(perm));
   }
 
   matchInArray (expression, strings) {
-    const len = strings.length;
-
-    for (let i = 0; i < len; i++) {
-      if (expression.test(strings[i])) return true;
-    }
-
-    return false;
+    return strings.some(str => expression.test(str));
   }
 
   get allAlias () {
