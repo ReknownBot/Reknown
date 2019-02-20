@@ -6,7 +6,7 @@ module.exports = (Client) => {
 
     if (!message.channel.permissionsFor(Client.bot.user).has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
 
-    require('../functions/level.js')(Client, message);
+    if (!message.edits[1]) require('../functions/level.js')(Client, message);
     require('../functions/deleteinvite.js')(Client, message);
     require('../functions/eco.js')(Client, message.member);
 
