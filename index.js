@@ -131,9 +131,11 @@ const client = class {
       if (type === 'member') return guild.members.get(mention);
       return this.bot.users.fetch(mention).catch(() => false);
     } else if (type === 'channel') {
+      const filter = options.filter;
       if (mention.startsWith('<#')) mention = mention.slice(2, -1);
 
-      return guild.channels.get(mention);
+      if (!filter) return guild.channels.get(filter);
+      return guild.channels.find(chan => chan.type === filter && chan.id === mention);
     } else if (type === 'role') {
       if (mention.startsWith('<@&')) mention = mention.slice(3, -1);
 
