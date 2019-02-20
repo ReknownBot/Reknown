@@ -23,7 +23,7 @@ module.exports = async (Client, message, args) => {
     const permName = args[1].toLowerCase().split('.')[1];
     if (!permName) return message.reply('You have to provide a permission name!\n\n`Eg. ?listperms mod.ban`');
     if (!Object.keys(Client.permissions[permCategory]).includes(permName)) return message.reply('The permission name you provided was invalid!');
-    return message.channel.send(`${permCategory}.${permName} | ${Client.permissions[permCategory][permName]}`);
+    return message.channel.send(`\`${permCategory}.${permName}\` **${Client.permissions[permCategory][permName]}**`);
   }
 };
 
