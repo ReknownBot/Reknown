@@ -25,6 +25,11 @@
   "slowmode": {
     "set": "Allows the ability to set a slowmode."
   },
+  "ticket": {
+    "close": "Allows the ability to close tickets besides your own.",
+    "toggle": "Allows the ability to toggle the ticket system.",
+    "category": "Allows the ability to change the ticket category."
+  },
   "misc": {
     "setperm": "Allows the ability to set permissions for roles.",
     "rules": "Allows the ability to change the rules.",
