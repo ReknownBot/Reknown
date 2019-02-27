@@ -116,6 +116,9 @@ module.exports = async (Client, message, args) => {
 
       if (!row) Client.sql.query('INSERT INTO prefix (guildid, customprefix) VALUES ($1, $2)', [message.guild.id, prefix]);
       else Client.sql.query('UPDATE prefix SET customprefix = $1 WHERE guildid = $2', [prefix, message.guild.id]);
+
+      Client.prefixes[message.guild.id] = prefix;
+
       return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escMD(prefix)}\`.`);
     }
     case 'starchannel': {
