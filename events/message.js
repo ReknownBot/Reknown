@@ -10,7 +10,7 @@ module.exports = (Client) => {
     require('../functions/deleteinvite.js')(Client, message);
     require('../functions/eco.js')(Client, message.member);
 
-    const row = (await Client.sql.query('SELECT customprefix FROM prefix WHERE guildId = $1 LIMIT 1', [message.guild.id])).rows[0];
+    const row = (await Client.sql.query('SELECT customprefix FROM prefix WHERE guildid = $1', [message.guild.id])).rows[0];
 
     if (!Client.prefixes[message.guild.id]) {
       Client.prefixes[message.guild.id] = row ? row.customprefix : '?';
