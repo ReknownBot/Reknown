@@ -81,27 +81,15 @@ const client = class {
     const { rows } = await this.sql.query('SELECT roleid,bool FROM permissions WHERE pName = $1 AND pCategory = $2', [pName, pCategory]);
     const row = rows.find(r => member.roles.has(r.roleid));
 
-    if (row && row.bool) return true;
-    return false;
+    return !!(row && row.bool);
   }
 
   checkClientPerms (channel, ...perms) {
-    let bool = true;
-    perms.forEach(perm => {
-      if (!channel.permissionsFor(this.bot.user).has(perm)) bool = false;
-    });
-
-    return bool;
+    return perms.some(perm => channel.permissionsFor(this.bot.user).has(perm));
   }
 
   matchInArray (expression, strings) {
-    const len = strings.length;
-
-    for (let i = 0; i < len; i++) {
-      if (expression.test(strings[i])) return true;
-    }
-
-    return false;
+    return strings.some(str => expression.test(str));
   }
 
   get allAlias () {
@@ -131,9 +119,11 @@ const client = class {
       if (type === 'member') return guild.members.get(mention);
       return this.bot.users.fetch(mention).catch(() => false);
     } else if (type === 'channel') {
+      const filter = options.filter;
       if (mention.startsWith('<#')) mention = mention.slice(2, -1);
 
-      return guild.channels.get(mention);
+      if (!filter) return guild.channels.get(mention);
+      return guild.channels.find(chan => chan.type === filter && chan.id === mention);
     } else if (type === 'role') {
       if (mention.startsWith('<@&')) mention = mention.slice(3, -1);
 

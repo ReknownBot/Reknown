@@ -6,20 +6,52 @@ const obj = {
   logchannel: ['mod', 'log'],
   prefix: ['misc', 'prefix'],
   starchannel: ['misc', 'star'],
+  ticketcategory: ['ticket', 'category'],
   togglelevel: ['level', 'options'],
   togglelog: ['mod', 'log'],
   togglestar: ['misc', 'star'],
+  toggletickets: ['ticket', 'toggle'],
   togglewelcome: ['misc', 'welcome'],
   updatechannel: ['misc', 'update'],
   welcomechannel: ['misc', 'welcome'],
   welcomemsg: ['misc', 'welcome']
 };
 
+const options = {
+  blacklistmsg: 'Toggles the blacklisted message.',
+  cmdnotfound: 'Toggles the unknown command message.',
+  deleteinvite: 'Deletes all invites by users without the `misc.invite` permission.',
+  goodbyemsg: 'Sets the message sent when someone leaves the server.',
+  logchannel: 'Sets the channel to send logs in.',
+  prefix: 'Sets the prefix for the bot.',
+  starchannel: 'Sets the channel for starboard messages.',
+  ticketcategory: 'Sets the category for ticket channels.',
+  togglelevel: 'Toggles the entire leveling system.',
+  togglelog: 'Toggles the action log.',
+  togglestar: 'Toggles starboard.',
+  toggletickets: 'Toggles the ticket system.',
+  togglewelcome: 'Toggles welcoming messages.',
+  updatechannel: 'Sets the channel to send messages when using `?serverupdate`.',
+  welcomechannel: 'Sets the channel to send welcoming and goodbye messages.',
+  welcomemsg: 'Sets the message sent when someone joins the server.'
+};
+
 module.exports = async (Client, message, args) => {
   const option = args[1] ? args[1].toLowerCase() : null;
   if (!option) {
-    args = ['help', 'config'];
-    return require('../misc/help.js')(Client, message, args);
+    const info = Object.keys(options).map(key => {
+      const value = options[key];
+      return `\`${key}\` ${value}`;
+    });
+    if (!message.channel.permissionsFor(Client.bot.user).has('EMBED_LINKS')) return message.channel.send(info);
+
+    const embed = new Client.Discord.MessageEmbed()
+      .setTitle('Available config options')
+      .setColor(0x00FF00)
+      .setDescription(info)
+      .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
+
+    return message.channel.send(embed);
   }
   if (!Object.keys(obj).includes(option)) return message.reply('That option is not valid. Use `?help config` to see all the options.');
   if (!await Client.checkPerms(option, obj[option][1], message.member)) return message.reply(`:x: Sorry, but you do not have the \`${obj[option][0]}.${obj[option][1]}\` permission.`);
@@ -68,6 +100,7 @@ module.exports = async (Client, message, args) => {
     case 'logchannel': {
       const channel = Client.getObj(value, { guild: message.guild, type: 'channel' });
       if (!channel) return message.reply('That channel is invalid!');
+      if (channel.type !== 'text') return message.reply('The channel you provided wasn\'t a text channel!');
 
       const row = (await Client.sql.query('SELECT * FROM logchannel WHERE guildid = $1', [message.guild.id])).rows[0];
       if (!row) Client.sql.query('INSERT INTO logchannel (guildid, channelid) VALUES ($1, $2)', [message.guild.id, channel.id]);
@@ -94,6 +127,16 @@ module.exports = async (Client, message, args) => {
       else Client.sql.query('UPDATE starchannel SET channelid = $1 WHERE guildid = $2', [channel.id, message.guild.id]);
       return message.channel.send(`Successfully updated \`${option}\` to ${channel}.`);
     }
+    case 'ticketcategory': {
+      const channel = Client.getObj(value, { guild: message.guild, type: 'channel', filter: 'category' });
+      if (!channel) return message.reply('That channel is invalid!');
+      if (channel.type !== 'category') return message.reply('The channel needs to be a category!');
+
+      const row = (await Client.sql.query('SELECT * FROM ticketcategory WHERE guildid = $1', [message.guild.id])).rows[0];
+      if (!row) Client.sql.query('INSERT INTO ticketcategory (guildid, channelid) VALUES ($1, $2)', [message.guild.id, channel.id]);
+      else Client.sql.query('UPDATE starchannel SET channelid = $1 WHERE guildid = $2', [channel.id, message.guild.id]);
+      return message.channel.send(`Successfully updated \`${option}\` to ${Client.escMD(channel.name)}.`);
+    }
     case 'togglelevel': {
       if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
       const row = (await Client.sql.query('SELECT bool FROM togglelevel WHERE guildid = $1', [message.guild.id])).rows[0];
@@ -119,6 +162,15 @@ module.exports = async (Client, message, args) => {
 
       if (!row) Client.sql.query('INSERT INTO togglestar (guildid, bool) VALUES ($1, $2)', [message.guild.id, bool]);
       else Client.sql.query('UPDATE togglestar SET bool = $1 WHERE guildid = $2', [bool, message.guild.id]);
+      return message.channel.send(`Successfully updated \`${option}\` to \`${value}\`.`);
+    }
+    case 'toggletickets': {
+      if (value !== 'true' && value !== 'false') return message.reply('The value you provided is invalid! That option takes `true` or `false`.');
+      const row = (await Client.sql.query('SELECT bool FROM toggletickets WHERE guildid = $1', [message.guild.id])).rows[0];
+      if ((!row && bool === 0) || (row && row.bool === bool)) return message.reply('The value you provided is the same as the current one!');
+
+      if (!row) Client.sql.query('INSERT INTO toggletickets (guildid, bool) VALUES ($1, $2)', [message.guild.id, bool]);
+      else Client.sql.query('UPDATE toggletickets SET bool = $1 WHERE guildid = $2', [bool, message.guild.id]);
       return message.channel.send(`Successfully updated \`${option}\` to \`${value}\`.`);
     }
     case 'togglewelcome': {
@@ -165,21 +217,5 @@ module.exports.help = {
   desc: 'Sets up config settings.',
   category: 'util',
   usage: '?config <Option> <Value>',
-  options: {
-    blacklistmsg: 'Toggles the blacklisted message.',
-    cmdnotfound: 'Toggles the unknown command message.',
-    deleteinvite: 'Deletes all invites by users without the `misc.invite` permission.',
-    goodbyemsg: 'Sets the message sent when someone leaves the server.',
-    logchannel: 'Sets the channel to send logs in.',
-    prefix: 'Sets the prefix for the bot.',
-    starchannel: 'Sets the channel for starboard messages.',
-    togglelevel: 'Toggles the entire leveling system.',
-    togglelog: 'Toggles the action log.',
-    togglestar: 'Toggles starboard.',
-    togglewelcome: 'Toggles welcoming messages.',
-    updatechannel: 'Sets the channel to send messages when using `?serverupdate`.',
-    welcomechannel: 'Sets the channel to send welcoming and goodbye messages.',
-    welcomemsg: 'Sets the message sent when someone joins the server.'
-  },
   aliases: ['settings']
 };

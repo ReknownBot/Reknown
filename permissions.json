@@ -1,10 +1,4 @@
 {
-  "music": {
-    "loop": "Allows the use of ?loop.",
-    "pause": "Allows the use of ?pause and ?resume.",
-    "fskip": "Allows the use of ?skip --force.",
-    "clear": "Allows the use of ?queue clear and remove.."
-  },
   "mod": {
     "ban": "Allows the use of ?ban and ?bans.",
     "softban": "Allows the use of ?softban.",
@@ -31,6 +25,11 @@
   "slowmode": {
     "set": "Allows the ability to set a slowmode."
   },
+  "ticket": {
+    "close": "Allows the ability to close tickets besides your own.",
+    "toggle": "Allows the ability to toggle the ticket system.",
+    "category": "Allows the ability to change the ticket category."
+  },
   "misc": {
     "setperm": "Allows the ability to set permissions for roles.",
     "rules": "Allows the ability to change the rules.",
@@ -40,8 +39,6 @@
     "welcome": "Allows the ability to change welcome-related options.",
     "update": "Allows the use of ?serverupdate and the ability to change the update channel.",
     "autorole": "Allows the ability to change autorole-related options.",
-    "invite": "Allows the ability to bypass the deleteinvite config option.",
-    "grole": "Allows the use of ?giverole.",
-    "rrole": "Allows the use of ?removerole."
+    "invite": "Allows the ability to bypass the deleteinvite config option."
   }
 }
