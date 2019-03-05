@@ -1,4 +1,6 @@
 module.exports = async (Client, message, args) => {
+  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I am missing the required permission `Embed Links`.');
+
   const embed = new Client.Discord.MessageEmbed()
     .setTitle(`Total Member Count in ${message.guild.name}`)
     .setColor(0x00FFFF)

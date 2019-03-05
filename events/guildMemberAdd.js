@@ -28,7 +28,7 @@ function logMessage (Client, member, guild) {
     .setThumbnail(member.user.displayAvatarURL({ size: 2048 }))
     .setTimestamp()
     .setColor(0x00FF00);
-  return require('../functions/sendlog.js')(Client, embed, guild.id);
+  return Client.functions.get('sendlog')(Client, embed, guild.id);
 }
 
 async function levelrole (Client, member, guild) {

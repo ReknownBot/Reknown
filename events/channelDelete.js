@@ -23,7 +23,7 @@ async function logMessage (Client, channel) {
     }
   }
 
-  return require('../functions/sendlog.js')(Client, embed, channel.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, channel.guild.id);
 }
 
 module.exports = (Client) => {

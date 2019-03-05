@@ -6,8 +6,7 @@ module.exports = async (Client, message, args) => {
   if (!args[2]) return message.reply('You have to provide what I should search by!');
 
   if (option === 'player') {
-    const info = await Client.fetch(`https://api.hypixel.net/player?key=${process.env.HYPIXEL_KEY}&name=${encodeURIComponent(args[2])}`);
-    const json = await info.json();
+    const json = await Client.fetch(`https://api.hypixel.net/player?key=${process.env.HYPIXEL_KEY}&name=${encodeURIComponent(args[2])}`).then(res => res.json());
     if (!json.success) return message.reply('Either the Hypixel API is down, or the API key is incorrect. Please report this in my support server.');
     if (!json.player) return message.reply('That player name is not valid!');
     const player = json.player;

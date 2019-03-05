@@ -13,7 +13,7 @@ function nickChange (Client, oldNick, newNick, guild, member) {
       .addField('New Nickname', Client.escMD(newNick), true);
   }
 
-  return require('../functions/sendlog.js')(Client, embed, guild.id);
+  return Client.functions.get('sendlog')(Client, embed, guild.id);
 }
 
 function roleChange (Client, oldMember, newMember) {
@@ -46,7 +46,7 @@ function roleChange (Client, oldMember, newMember) {
       .setThumbnail(newMember.user.displayAvatarURL({ size: 2048 }));
   }
 
-  return require('../functions/sendlog.js')(Client, embed, oldMember.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, oldMember.guild.id);
 }
 
 module.exports = (Client) => {

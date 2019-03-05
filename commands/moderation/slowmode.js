@@ -10,7 +10,7 @@ module.exports = async (Client, message, args) => {
 
   const channel = args[2] ? Client.getObj(args[2], { guild: message.guild, type: 'channel' }) : message.channel;
   if (!channel || channel.type !== 'text') return message.reply('I did not find a text channel from the channel you provided!');
-  if (!Client.checkClientPerms(channel, 'MANAGE_CHANNELS')) return message.reply('I need the permission `Manage Channels` in that channel for this command!');
+  if (!Client.checkClientPerms(channel, 'MANAGE_CHANNELS')) return Client.functions.get('noClientPerms')(message, ['Manage Channels'], channel);
 
   channel.setRateLimitPerUser(slowmode);
   return message.channel.send(`Successfully set the slowmode to **${slowmode}** in ${channel}.`);

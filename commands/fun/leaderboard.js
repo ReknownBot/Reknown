@@ -1,5 +1,5 @@
 module.exports = async (Client, message, args) => {
-  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I do not have the required permission `Embed Links`!');
+  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
   const toggled = (await Client.sql.query('SELECT bool FROM togglelevel WHERE guildid = $1 AND bool = $2', [message.guild.id, 1])).rows[0];
   if (!toggled) return message.reply('The leveling system is disabled!');

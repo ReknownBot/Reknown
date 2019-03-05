@@ -1,6 +1,6 @@
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('ban', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.ban` permission.');
-  if (!Client.checkClientPerms(message.channel, 'BAN_MEMBERS')) return message.reply('I require the permission `Ban Members` for this command.');
+  if (!Client.checkClientPerms(message.channel, 'BAN_MEMBERS', 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Ban Members', 'Embed Links']);
 
   const bans = await message.guild.fetchBans();
   if (bans.size === 0) return message.reply('There are no bans in this server!');
@@ -16,7 +16,7 @@ module.exports = async (Client, message, args) => {
     return message.channel.send(embed);
   }
 
-  if (!Client.checkClientPerms(message.channel, 'ADD_REACTIONS', 'MANAGE_MESSAGES')) return message.reply('There are multiple pages of bans. I require the permissions `Add Reactions` and `Manage Messages` to do this.');
+  if (!Client.checkClientPerms(message.channel, 'ADD_REACTIONS')) return Client.functions.get('noClientPerms')(message, ['Add Reactions']);
   let page = 1;
 
   const embed = new Client.Discord.MessageEmbed()
@@ -67,7 +67,7 @@ module.exports = async (Client, message, args) => {
   });
 
   collector.on('end', () => {
-    if (!msg.deleted) msg.reactions.removeAll();
+    if (!msg.deleted && Client.checkClientPerms(message.channel, 'MANAGE_MESSAGES')) msg.reactions.removeAll();
   });
 };
 

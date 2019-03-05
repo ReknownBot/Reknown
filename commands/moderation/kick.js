@@ -1,5 +1,6 @@
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('kick', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.kick` permission.');
+  if (!message.guild.me.hasPermission('KICK_MEMBERS')) return Client.functions.get('noClientPerms')(message, ['Kick Members']);
 
   if (!args[1]) return message.reply('You have to supply a member for me to kick!');
 

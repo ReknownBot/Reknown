@@ -36,7 +36,7 @@ module.exports = async (Client, message, args) => {
     Client.sql.query('DELETE FROM levelrole WHERE guildid = $1 AND roleid = $2', [message.guild.id, role.id]);
     return message.channel.send(`Successfully removed \`${role.name}\` from the level role list.`);
   } else if (choice === options[2]) { // List
-    if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I require the permission `Embed Links` for this command!');
+    if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
     const { rows: roles } = await Client.sql.query('SELECT * FROM levelrole WHERE guildid = $1 ORDER BY level ASC', [message.guild.id]);
     roles.forEach(r => {
@@ -53,7 +53,7 @@ module.exports = async (Client, message, args) => {
       return `${role} | ID **${role.id}** | Level **${r.level}**`;
     }).join('\n'), { maxLength: 2048 });
     if (pages instanceof Array) {
-      if (!Client.checkClientPerms(message.channel, 'ADD_REACTIONS', 'MANAGE_MESSAGES')) return message.reply('There are multiple pages of bans. I require the permissions `Add Reactions` and `Manage Messages` to do this.');
+      if (!Client.checkClientPerms(message.channel, 'ADD_REACTIONS')) return Client.functions.get('noClientPerms')(message, ['Add Reactions'], message.channel);
 
       let page = 1;
       const embed = new Client.Discord.MessageEmbed()
@@ -107,7 +107,7 @@ module.exports = async (Client, message, args) => {
       });
 
       collector.on('end', () => {
-        if (!forced && !msg.deleted) msg.reactions.removeAll();
+        if (!forced && !msg.deleted && Client.checkClientPerms(message.channel, 'ADD_REACTIONS')) msg.reactions.removeAll();
       });
     } else {
       const embed = new Client.Discord.MessageEmbed()

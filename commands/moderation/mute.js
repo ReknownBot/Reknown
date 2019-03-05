@@ -1,5 +1,6 @@
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('mute', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.mute` permission.');
+  if (!message.guild.me.hasPermission('MANAGE_ROLES')) return Client.functions.get('noClientPerms')(message, ['Manage Roles']);
 
   let muteRole = message.guild.roles.find(r => r.name.toLowerCase() === 'muted');
   if (!muteRole) {
@@ -12,7 +13,6 @@ module.exports = async (Client, message, args) => {
     if (!['yes', 'no'].includes(m.content)) return message.reply('That reply was invalid! Canceling action.');
     if (m.content === 'no') return message.channel.send('Ok.');
 
-    if (!message.guild.me.hasPermission('MANAGE_ROLES')) return message.reply('I do not have enough permissions to create a role! Canceling action.');
     muteRole = await message.guild.roles.create({
       data: {
         name: 'Muted',

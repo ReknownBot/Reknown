@@ -12,7 +12,7 @@ module.exports = async (Client, message, args) => {
 
   const channel = message.guild.channels.get(updateRow.channelid);
   if (!channel) return message.reply('The channel ID that was set in the updatechannel config was invalid! Please recalibrate it by using `config updatechannel <Channel>`.');
-  if (!Client.checkClientPerms(channel, 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS')) return message.reply(`I do not have enough permissions for the update channel ${channel}! Please make sure I have all of the following permissions.\n\n\`View Channel\nSend Messages\nEmbed Links\``);
+  if (!Client.checkClientPerms(channel, 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['View Channels', 'Send Messages', 'Embed Links'], channel);
 
   const embed = new Client.Discord.MessageEmbed()
     .setDescription(updatemsg)

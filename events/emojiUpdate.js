@@ -23,7 +23,7 @@ async function logMessage (Client, oldEmoji, newEmoji) {
     }
   }
 
-  return require('../functions/sendlog.js')(Client, embed, newEmoji.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, newEmoji.guild.id);
 }
 
 module.exports = (Client) => {

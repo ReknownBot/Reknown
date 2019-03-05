@@ -1,7 +1,9 @@
-const capitalize = require('../../functions/capFirstLetter.js');
-
 module.exports = async (Client, message, args) => {
+  const capitalize = Client.functions.get('capFirstLetter');
+
   if (!args[1]) {
+    if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
+
     const fields = [];
     Object.keys(Client.permissions).forEach(category => {
       category = capitalize(category);

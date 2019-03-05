@@ -11,7 +11,7 @@ function logMessage (Client, oldMessage, newMessage) {
     .setColor(0x00FFFF)
     .setTimestamp();
 
-  return require('../functions/sendlog.js')(Client, embed, oldMessage.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, oldMessage.guild.id);
 }
 
 function editMsg (Client, oldMessage, newMessage) {

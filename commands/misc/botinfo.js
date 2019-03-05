@@ -1,9 +1,11 @@
 module.exports = async (Client, message, args) => {
+  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
+
   const seconds = Math.floor((Client.bot.uptime / 1000) % 60);
   const minutes = Math.floor((Client.bot.uptime / 1000 / 60) % 60);
   const hours = Math.floor((Client.bot.uptime / 1000 / 60 / 60) % 24);
   const days = Math.floor(Client.bot.uptime / 1000 / 60 / 60 / 24);
-  const contributors = (await Promise.all(Client.contributors.map(async id => (await Client.bot.users.fetch(id)).tag))).list();
+  const contributors = Client.contributors.map(id => Client.bot.users.fetch(id).then(u => u.tag)).list();
 
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Bot Information')

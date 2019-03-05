@@ -28,7 +28,7 @@ async function logMessage (Client, message) {
     }
   }
 
-  return require('../functions/sendlog.js')(Client, embed, message.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, message.guild.id);
 }
 
 async function delStar (Client, message) {

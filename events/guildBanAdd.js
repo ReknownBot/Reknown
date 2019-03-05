@@ -21,7 +21,7 @@ async function logMessage (Client, guild, user) {
     }
   }
 
-  return require('../functions/sendlog.js')(Client, embed, guild.id);
+  return Client.functions.get('sendlog')(Client, embed, guild.id);
 };
 
 module.exports = (Client) => {

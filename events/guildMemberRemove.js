@@ -33,7 +33,7 @@ function logMessage (Client, member) {
     .setTimestamp()
     .setThumbnail(member.user.displayAvatarURL({ size: 2048 }))
     .setDescription(`**${member.user.tag}** (${member.user.id})`);
-  return require('../functions/sendlog.js')(Client, embed, member.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, member.guild.id);
 }
 
 function kickMessage (Client, entry, member) {
@@ -46,7 +46,7 @@ function kickMessage (Client, entry, member) {
     .setAuthor(`${entry.executor.tag} (${entry.executor.id})`, entry.executor.displayAvatarURL());
   if (entry.reason) embed.addField('Reason', entry.reason, true);
 
-  return require('../functions/sendlog.js')(Client, embed, member.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, member.guild.id);
 }
 
 module.exports = (Client) => {

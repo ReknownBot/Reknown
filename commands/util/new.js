@@ -7,7 +7,7 @@ module.exports = async (Client, message, args) => {
   const category = channelRow ? message.guild.channels.find(chan => chan.type === 'category' && chan.id === channelRow.channelid) : null;
   if (category === undefined) return message.reply('The category set to put tickets in was invalid. Please recalibrate it.');
   if (category && !Client.checkClientPerms(category, 'MANAGE_CHANNELS')) return message.reply('I do not have enough permissions to create a ticket channel!');
-  console.log(category);
+  else if (!category && !message.guild.me.hasPermission('MANAGE_CHANNELS')) return message.reply('I do not have enough permissions to create a ticket channel!');
   const channel = await message.guild.channels.create(`ticket-${message.author.username}`, {
     topic: message.author.id,
     parent: category

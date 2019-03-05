@@ -18,14 +18,14 @@ require('dotenv').config();
 
 const client = class {
   constructor () {
-    this.fs = require('fs');
+    const fs = require('fs');
 
     this.commands = {};
     this.commandsList = [];
-    const categories = this.fs.readdirSync('./commands');
+    const categories = fs.readdirSync('./commands');
 
     categories.forEach(c => {
-      const files = this.fs.readdirSync(`./commands/${c}`).filter(f => f.endsWith('.js')).map(f => f.slice(0, -3));
+      const files = fs.readdirSync(`./commands/${c}`).filter(f => f.endsWith('.js')).map(f => f.slice(0, -3));
 
       files.forEach(file => {
         this.commands[file] = require(`./commands/${c}/${file}.js`);
@@ -33,9 +33,12 @@ const client = class {
       });
     });
 
+    this.functions = new Discord.Collection();
+    this.fnList = fs.readdirSync('./functions').filter(f => f.endsWith('.js')).map(f => f.slice(0, -3));
+
+    this.fnList.forEach(fn => this.functions.set(fn, require(`./functions/${fn}.js`)));
+
     this.rollbar = new (require('rollbar'))(process.env.ROLLBAR_ACCESS_TOKEN);
-    this.osu = new (require('node-osu')).Api(process.env.OSU_KEY);
-    this.request = require('request');
     this.dateFormat = require('dateformat');
     this.fuzz = require('fuzzball');
     this.sql = new (require('pg')).Pool({
@@ -58,7 +61,7 @@ const client = class {
     this.mutes = new Discord.Collection();
     this.prefixes = {};
 
-    const eventList = this.fs.readdirSync('./events').filter(f => f.endsWith('.js')).map(f => f.slice(0, -3));
+    const eventList = fs.readdirSync('./events').filter(f => f.endsWith('.js')).map(f => f.slice(0, -3));
     eventList.forEach(event => require(`./events/${event}.js`)(this));
   }
 
@@ -85,7 +88,7 @@ const client = class {
   }
 
   checkClientPerms (channel, ...perms) {
-    return perms.some(perm => channel.permissionsFor(this.bot.user).has(perm));
+    return channel.permissionsFor(this.bot.user).has(perms);
   }
 
   matchInArray (expression, strings) {
@@ -133,13 +136,6 @@ const client = class {
 };
 
 const Client = new client();
-
-bot.on('error', console.error);
-
-bot.on('warn', i => {
-  console.warn(i);
-  return Client.rollbar.warn(i);
-});
 
 process.on('unhandledRejection', error => {
   console.error(error);
