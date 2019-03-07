@@ -135,7 +135,7 @@ fs.readdirSync('./commands').forEach(c => {
   const files = fs.readdirSync(`./commands/${c}`).filter(f => f.endsWith('.js')).map(f => f.slice(0, -3));
 
   files.forEach(file => {
-    client.commands[file] = require(`./commands/${c}/${file}.js`);
+    client.commands[file] = require(`../commands/${c}/${file}.js`);
     client.commandsList.push(file);
   });
 });
@@ -153,7 +153,7 @@ Object.values(client.commands).forEach(cmd => {
 
 client.allAlias = allAliases;
 
-const eventList = fs.readdirSync('../events').filter(f => f.endsWith('.js')).map(f => f.slice(0, -3));
+const eventList = fs.readdirSync('./events').filter(f => f.endsWith('.js')).map(f => f.slice(0, -3));
 eventList.forEach(event => require(`../events/${event}.js`)(client));
 
 module.exports = client;

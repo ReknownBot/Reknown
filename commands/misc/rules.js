@@ -33,7 +33,7 @@ module.exports = async (Client, message, args) => {
 
       let msg = await message.author.send(embed).catch(() => null);
       if (!msg) {
-        if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
+        if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
         msg = await message.channel.send(embed);
       } else message.channel.send('Check your DMs!');
       const emojis = ['⏪', '◀', '⏹', '▶', '⏩'];
