@@ -1,3 +1,7 @@
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ */
 module.exports = async (Client, message) => {
   const enabled = (await Client.sql.query('SELECT bool FROM deleteinvite WHERE guildid = $1 LIMIT 1', [message.guild.id])).rows[0];
   if (!enabled || !enabled.bool) return;

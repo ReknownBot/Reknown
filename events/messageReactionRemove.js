@@ -1,3 +1,6 @@
+/**
+ * @param {import('../structures/client.js').} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('messageReactionRemove', async (reaction, user) => {
     if (reaction.message.partial) await reaction.message.fetch();

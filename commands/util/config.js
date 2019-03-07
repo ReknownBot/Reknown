@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 const obj = {
   blacklistmsg: ['misc', 'blacklist'],
   cmdnotfound: ['misc', 'togglemsg'],

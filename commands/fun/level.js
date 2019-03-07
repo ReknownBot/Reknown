@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+ */
 module.exports = async (Client, message, args) => {
   const toggled = (await Client.sql.query('SELECT bool FROM togglelevel WHERE guildid = $1', [message.guild.id])).rows[0];
   if (!toggled || !toggled.bool) return message.reply('The leveling system is disabled! Use `?config togglelevel true` to turn it back on.');

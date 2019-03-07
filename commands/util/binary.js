@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I require the permission `Embed Links` for this command.');
 

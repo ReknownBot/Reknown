@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+ */
 module.exports = async (Client, message, args) => {
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
   const body = await Client.fetch('https://dog.ceo/api/breeds/image/random').then(res => res.json());

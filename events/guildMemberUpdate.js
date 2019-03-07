@@ -1,4 +1,11 @@
-function nickChange (Client, oldNick, newNick, guild, member) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {String} oldNick
+ * @param {String} newNick
+ * @param {import('discord.js').Guild} guild
+ * @param {import('discord.js').GuildMember} member
+ */
+function nickChange(Client, oldNick, newNick, guild, member) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle(`Nickname ${newNick === null ? 'Reset' : 'Changed'}`)
     .setColor(0x00FFFF)
@@ -16,6 +23,11 @@ function nickChange (Client, oldNick, newNick, guild, member) {
   return Client.functions.get('sendlog')(Client, embed, guild.id);
 }
 
+/**
+ * @param {import('../structures/client.js').} Client
+ * @param {import('discord.js').GuildMember} oldMember
+ * @param {import('discord.js').GuildMember} newMember
+ */
 function roleChange (Client, oldMember, newMember) {
   let embed;
 
@@ -49,6 +61,9 @@ function roleChange (Client, oldMember, newMember) {
   return Client.functions.get('sendlog')(Client, embed, oldMember.guild.id);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('guildMemberUpdate', (oldMember, newMember) => {
     if (oldMember.nickname !== newMember.nickname) nickChange(Client, oldMember.nickname || 'None', newMember.nickname, oldMember.guild, newMember);

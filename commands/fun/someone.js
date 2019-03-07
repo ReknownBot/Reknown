@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+ */
 module.exports = async (Client, message, args) => {
   const userTag = message.guild.members.random().user.tag;
   return message.channel.send(`${userTag}, You have been @someone'd!`);

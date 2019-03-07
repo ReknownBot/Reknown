@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('ban', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.ban` permission.');
   if (!Client.checkClientPerms(message.channel, 'BAN_MEMBERS', 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Ban Members', 'Embed Links']);

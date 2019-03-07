@@ -1,3 +1,9 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
+
 const categoryObj = {
   'bot list': 'Bot List',
   'fun': 'Fun',

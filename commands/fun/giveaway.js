@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+ */
 module.exports = async (Client, message, args) => {
   if (!message.member.hasPermission('MANAGE_GUILD')) return message.reply('You do not have the `Manage Server` permission!');
 

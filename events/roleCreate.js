@@ -1,4 +1,8 @@
-async function logMessage (Client, role) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').Role} role
+ */
+async function logMessage(Client, role) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Role Created')
     .setColor(0x00FF00)
@@ -23,6 +27,9 @@ async function logMessage (Client, role) {
   return Client.functions.get('sendlog')(Client, embed, role.guild.id);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('roleCreate', role => {
     if (!role.guild.available) return;

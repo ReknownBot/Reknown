@@ -5,8 +5,5 @@ node_modules
 # .env file
 .env
 
-# eslint config file
-.eslintrc.json
-
 # Visual Studio Folder
 .vs

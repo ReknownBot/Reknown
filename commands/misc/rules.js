@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   if (!args[1]) {
     const rules = (await Client.sql.query('SELECT rule FROM rules WHERE guildid = $1', [message.guild.id])).rows.map((r, index) => `**${index + 1}.** ${r.rule}`);

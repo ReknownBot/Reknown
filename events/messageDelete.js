@@ -1,4 +1,8 @@
-async function logMessage (Client, message) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ */
+async function logMessage(Client, message) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Message Deleted')
     .addField('Channel', message.channel)
@@ -31,6 +35,10 @@ async function logMessage (Client, message) {
   return Client.functions.get('sendlog')(Client, embed, message.guild.id);
 }
 
+/**
+ * @param {import('../structures/client.js').} Client
+ * @param {import('discord.js').Message} message
+ */
 async function delStar (Client, message) {
   const msgRow = (await Client.sql.query('SELECT * FROM star WHERE msgid = $1', [message.id])).rows[0];
   const toggled = (await Client.sql.query('SELECT bool FROM togglestar WHERE guildid = $1 AND bool = $2', [message.guild.id, 1])).rows[0];
@@ -46,6 +54,9 @@ async function delStar (Client, message) {
   }
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('messageDelete', message => {
     if (message.partial) return;

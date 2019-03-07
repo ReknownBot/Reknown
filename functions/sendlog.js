@@ -1,3 +1,8 @@
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').MessageEmbed} embed
+ * @param {String} guildID
+ */
 module.exports = async (Client, embed, guildID) => {
   const toggled = (await Client.sql.query('SELECT bool FROM actionlog WHERE guildid = $1', [guildID])).rows[0];
   if (!toggled || !toggled.bool) return;

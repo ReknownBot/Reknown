@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+ */
 module.exports = async (Client, message, args) => {
   const ecoRow = (await Client.sql.query('SELECT money FROM economy WHERE userid = $1', [message.author.id])).rows[0];
   if (!ecoRow) return message.reply(`You need to be registered to use this command! Use \`${Client.prefixes[message.guild.id]}register\` to do so.`);

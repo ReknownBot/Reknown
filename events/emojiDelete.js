@@ -1,4 +1,8 @@
-async function logMessage (Client, emoji) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').GuildEmoji} emoji
+ */
+async function logMessage(Client, emoji) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle(`${emoji.animated ? 'Animated ' : ''}Emoji Deleted`)
     .addField('Emoji ID', emoji.id, true)
@@ -25,6 +29,9 @@ async function logMessage (Client, emoji) {
   return Client.functions.get('sendlog')(Client, embed, emoji.guild.id);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('emojiDelete', emoji => {
     if (!emoji.guild.available) return;

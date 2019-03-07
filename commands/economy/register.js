@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+ */
 module.exports = async (Client, message, args) => {
   const registered = (await Client.sql.query('SELECT * FROM economy WHERE userid = $1', [message.author.id])).rows[0];
   if (registered) return message.reply('You are already registered!');

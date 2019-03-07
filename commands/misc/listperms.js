@@ -1,12 +1,15 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
-  const capitalize = Client.functions.get('capFirstLetter');
-
   if (!args[1]) {
     if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
     const fields = [];
     Object.keys(Client.permissions).forEach(category => {
-      category = capitalize(category);
+      category = Client.capFirstLetter(category);
       fields.push({
         name: category,
         value: Object.keys(Object.values(Client.permissions).find(val => Client.permissions[category.toLowerCase()] === val)).list()

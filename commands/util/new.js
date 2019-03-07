@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   const toggled = (await Client.sql.query('SELECT * FROM toggletickets WHERE guildid = $1 AND bool = $2', [message.guild.id, 1])).rows[0];
   if (!toggled) return message.reply('The ticket system is disabled!');

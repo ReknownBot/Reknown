@@ -1,4 +1,9 @@
-function logMessage (Client, oldMessage, newMessage) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').Message} oldMessage
+ * @param {import('discord.js').Message} newMessage
+ */
+function logMessage(Client, oldMessage, newMessage) {
   if (!oldMessage.content && !newMessage.content) return;
   if (oldMessage.content === newMessage.content) return;
 
@@ -14,11 +19,19 @@ function logMessage (Client, oldMessage, newMessage) {
   return Client.functions.get('sendlog')(Client, embed, oldMessage.guild.id);
 }
 
-function editMsg (Client, oldMessage, newMessage) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').Message} newMessage
+ */
+function editMsg (Client, newMessage) {
   return Client.bot.emit('message', newMessage);
 }
 
-async function editStar (Client, oldMessage, newMessage) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').Message} newMessage
+ */
+async function editStar (Client, newMessage) {
   if (newMessage.content || newMessage.attachments.size > 0) {
     const toggled = (await Client.sql.query('SELECT bool FROM togglestar WHERE guildid = $1 AND bool = $2', [newMessage.guild.id, 1])).rows[0];
     const cid = (await Client.sql.query('SELECT channelid FROM starchannel WHERE guildid = $1', [newMessage.guild.id])).rows[0];
@@ -30,7 +43,7 @@ async function editStar (Client, oldMessage, newMessage) {
       const msg = await sChannel.messages.fetch(msgRow.editid);
       if (!msg) return;
 
-      const embed = new Client.Discord.MessageEmbed(msg.embeds[0]);
+      const embed = msg.embeds[0];
       if (newMessage.content) embed.setDescription(newMessage.content);
       const img = newMessage.attachments.find(attch => attch.height);
       if (img) embed.setImage(img.proxyURL);
@@ -39,13 +52,16 @@ async function editStar (Client, oldMessage, newMessage) {
   }
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('messageUpdate', (oldMessage, newMessage) => {
     if (oldMessage.partial || newMessage.partial) return;
     if (!oldMessage.guild || !oldMessage.guild.available) return;
 
     logMessage(Client, oldMessage, newMessage);
-    editMsg(Client, oldMessage, newMessage);
-    editStar(Client, oldMessage, newMessage);
+    editMsg(Client, newMessage);
+    editStar(Client, newMessage);
   });
 };

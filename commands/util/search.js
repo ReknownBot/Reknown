@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   if (!args[1]) return message.reply('You have to provide a member for me to search!');
   const member = message.guild.members.get(args[1].replace(/[<>@!?]/g, ''));
