@@ -81,16 +81,6 @@ const client = {
 
   capFirstLetter: (str) => str.charAt(0).toUpperCase() + str.slice(1),
 
-  getFuzz: (str) => {
-    const ordered = [];
-
-    this.commandsList.forEach(cmd => {
-      ordered.push([cmd, fuzz.ratio(str, cmd)]);
-    });
-    ordered.sort((a, b) => b[1] - a[1]);
-    return ordered.slice(0, 3);
-  },
-
   checkPerms: async (pName, pCategory, member) => {
     if (member.guild.owner === member || member.hasPermission('ADMINISTRATOR')) return true;
 
@@ -100,7 +90,7 @@ const client = {
     return !!(row && row.bool);
   },
 
-  checkClientPerms: (channel, ...perms) => channel.permissionsFor(this.bot.user).has(perms),
+  checkClientPerms: (channel, ...perms) => channel.permissionsFor(bot.user).has(perms),
 
   matchInArray: (expression, strings) => strings.some(str => expression.test(str)),
 
@@ -129,6 +119,16 @@ const client = {
       return guild.roles.get(mention);
     }
   }
+};
+
+client.getFuzz = (str) => {
+  const ordered = [];
+
+  client.commandsList.forEach(cmd => {
+    ordered.push([cmd, fuzz.ratio(str, cmd)]);
+  });
+  ordered.sort((a, b) => b[1] - a[1]);
+  return ordered.slice(0, 3);
 };
 
 fs.readdirSync('./commands').forEach(c => {
