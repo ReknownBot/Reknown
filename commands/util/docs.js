@@ -15,8 +15,7 @@ module.exports = async (Client, message, args) => {
   const body = await Client.fetch(`https://djsdocs.sorta.moe/main/${branch}/embed?q=${query}`).then(res => res.json());
   if (!body) return message.reply('I did not find any results from that query.');
 
-  const embed = body;
-  return message.channel.send(embed);
+  return message.channel.send({ embed: body });
 };
 
 module.exports.help = {
