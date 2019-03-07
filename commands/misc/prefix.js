@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   const prefixRow = (await Client.sql.query('SELECT customprefix FROM prefix WHERE guildid = $1 LIMIT 1', [message.guild.id])).rows[0];
   const prefix = prefixRow ? prefixRow.customprefix : '?';

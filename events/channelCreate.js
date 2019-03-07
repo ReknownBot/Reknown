@@ -1,4 +1,8 @@
-async function logMessage (Client, channel) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').GuildChannel} channel
+ */
+async function logMessage(Client, channel) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Channel Created')
     .addField('Channel', `${channel.name} \`(${channel.id})\``, true)
@@ -23,9 +27,12 @@ async function logMessage (Client, channel) {
     }
   }
 
-  return require('../functions/sendlog.js')(Client, embed, channel.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, channel.guild.id);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('channelCreate', channel => {
     if (!channel.guild || !channel.guild.available) return;

@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('setperm', 'misc', message.member)) return message.reply(':x: Sorry, but you do not have the `misc.setperm` permission.');
 

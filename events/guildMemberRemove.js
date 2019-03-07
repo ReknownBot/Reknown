@@ -1,4 +1,8 @@
-async function goodbyeMessage (Client, member) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').GuildMember} member
+ */
+async function goodbyeMessage(Client, member) {
   const guild = member.guild;
 
   const { bool: enabled } = (await Client.sql.query('SELECT bool FROM togglewelcome WHERE guildid = $1 LIMIT 1', [guild.id])).rows[0] || {};
@@ -26,6 +30,10 @@ async function goodbyeMessage (Client, member) {
   return channel.send(embed);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').GuildMember} member
+ */
 function logMessage (Client, member) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Left')
@@ -33,9 +41,14 @@ function logMessage (Client, member) {
     .setTimestamp()
     .setThumbnail(member.user.displayAvatarURL({ size: 2048 }))
     .setDescription(`**${member.user.tag}** (${member.user.id})`);
-  return require('../functions/sendlog.js')(Client, embed, member.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, member.guild.id);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').GuildAuditLogsEntry} entry
+ * @param {import('discord.js').GuildMember} member
+ */
 function kickMessage (Client, entry, member) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Kicked')
@@ -46,9 +59,12 @@ function kickMessage (Client, entry, member) {
     .setAuthor(`${entry.executor.tag} (${entry.executor.id})`, entry.executor.displayAvatarURL());
   if (entry.reason) embed.addField('Reason', entry.reason, true);
 
-  return require('../functions/sendlog.js')(Client, embed, member.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, member.guild.id);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('guildMemberRemove', async member => {
     if (!member.guild.me) return;

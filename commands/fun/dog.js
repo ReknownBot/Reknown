@@ -1,11 +1,18 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+ */
 module.exports = async (Client, message, args) => {
-  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I do not have the "Embed Links" permission! Make sure I have that for this command.');
-  const url = await require('random-puppy')();
+  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
+  const body = await Client.fetch('https://dog.ceo/api/breeds/image/random').then(res => res.json());
+  if (body.status !== 'success') return message.reply('It looks like the API is down, please try again later.');
+
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Doggo!')
-    .setImage(url)
+    .setImage(body.message)
     .setColor(0x00FFFF)
-    .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
+    .setFooter(`Requested by ${message.author.tag} | Powered by https://dog.ceo/dog-api`, message.author.displayAvatarURL());
   return message.channel.send(embed);
 };
 

@@ -1,3 +1,7 @@
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ */
 module.exports = async (Client, message) => {
   const toggleLevel = (await Client.sql.query('SELECT * FROM toggleLevel WHERE guildId = $1 LIMIT 1', [message.guild.id])).rows[0];
   if (!toggleLevel || !toggleLevel.bool) return;

@@ -1,3 +1,6 @@
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('message', async message => {
     if (message.author.bot) return;
@@ -6,9 +9,9 @@ module.exports = (Client) => {
 
     if (!message.channel.permissionsFor(Client.bot.user).has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
 
-    if (!message.edits[1]) require('../functions/level.js')(Client, message);
-    require('../functions/deleteinvite.js')(Client, message);
-    require('../functions/eco.js')(Client, message.member);
+    if (!message.edits[1]) Client.functions.get('level')(Client, message);
+    Client.functions.get('deleteinvite')(Client, message);
+    Client.functions.get('eco')(Client, message.member);
 
     const row = (await Client.sql.query('SELECT customprefix FROM prefix WHERE guildid = $1', [message.guild.id])).rows[0];
 
@@ -36,14 +39,14 @@ module.exports = (Client) => {
       return;
     }
 
-    if (await require('../functions/blacklist.js')(Client, message.member)) {
-      const obj = await require('../functions/blacklist.js')(Client, message.member);
+    if (await Client.functions.get('blacklist')(Client, message.member)) {
+      const obj = await Client.functions.get('blacklist')(Client, message.member);
       if (obj === 'disabled') return;
       return message.reply(`You are blacklisted by ${obj.by} for the reason of \`${Client.escMD(obj.reason)}\`.`);
     }
 
-    if (await require('../functions/gblacklist.js')(Client, message.member)) {
-      const reason = await require('../functions/blacklist.js')(Client, message.member);
+    if (await Client.functions.get('gblacklist')(Client, message.member)) {
+      const reason = await Client.functions.get('gblacklist')(Client, message.member);
       return message.reply(`You are globally blacklisted from me for the reason of \`${Client.escMD(reason)}\`. You may appeal in my support server.`);
     }
 

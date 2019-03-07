@@ -1,10 +1,15 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+ */
 module.exports = async (Client, message, args) => {
   if (!message.member.hasPermission('MANAGE_GUILD')) return message.reply('You do not have the `Manage Server` permission!');
 
   if (!args[1]) return message.reply('You have to provide a channel that the message is in!');
   const channel = Client.getObj(args[1], { guild: message.guild, type: 'channel' });
   if (!channel) return message.reply('The channel you provided is invalid!');
-  if (!Client.checkClientPerms(channel, 'VIEW_CHANNEL')) return message.reply('I need the permission `View Channel` in that channel!');
+  if (!Client.checkClientPerms(channel, 'VIEW_CHANNEL')) return Client.functions.get('noClientPerms')(message, ['View Channels'], channel);
 
   if (!args[2]) return message.reply('You have to provide the ID of the message!');
   const msg = await channel.messages.fetch(args[2]).catch(() => 'failed');

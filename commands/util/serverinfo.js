@@ -1,4 +1,11 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
+  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I am missing the required permission `Embed Links`.');
+
   const embed = new Client.Discord.MessageEmbed()
     .setTitle(`${message.guild.name} Server Info`)
     .setColor(0x00FFFF)

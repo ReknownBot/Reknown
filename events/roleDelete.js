@@ -1,4 +1,8 @@
-async function logMessage (Client, role) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').Role} role
+ */
+async function logMessage(Client, role) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Role Deleted')
     .setColor(0xFF0000)
@@ -20,9 +24,12 @@ async function logMessage (Client, role) {
     }
   }
 
-  return require('../functions/sendlog.js')(Client, embed, role.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, role.guild.id);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('roleDelete', role => {
     if (!role.guild.available) return;

@@ -1,3 +1,9 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
+
 const categoryObj = {
   'bot list': 'Bot List',
   'fun': 'Fun',
@@ -29,10 +35,13 @@ module.exports = async (Client, message, args) => {
       .then(() => message.reply('I have sent a list of commands to your DMs.'))
       .catch(e => {
         if (e == 'DiscordAPIError: Cannot send messages to this user') {
-          message.reply('I could not send the message to you. If you want to view the commands, either hop over to our website (<https://reknownbot.herokuapp.com/commands>) or enable DMs.');
+          if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I could not send a DM message to you, and I do not have the permission `Embed Links` in this channel.');
+          return message.channel.send(embed);
         } else process.emit('unhandledRejection', e);
       });
   } else {
+    if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
+
     if (!Object.keys(Client.allAlias).includes(args[1].toLowerCase())) return message.reply(`I did not find \`${args[1]}\` in my command list.`);
     const cmd = Client.allAlias[args[1].toLowerCase()];
     const cmdInfo = Client.commands[cmd];

@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   if (!args[1]) {
     const rules = (await Client.sql.query('SELECT rule FROM rules WHERE guildid = $1', [message.guild.id])).rows.map((r, index) => `**${index + 1}.** ${r.rule}`);
@@ -12,11 +17,11 @@ module.exports = async (Client, message, args) => {
       return message.author.send(embed)
         .then(() => message.channel.send('Check your DMs!'))
         .catch(() => {
-          if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I do not have the required permission `Embed Links`.');
+          if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
           message.channel.send(embed.setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL()));
         });
     } else {
-      if (!Client.checkClientPerms(message.channel, 'ADD_REACTIONS', 'MANAGE_MESSAGES')) return message.reply('There are multiple pages of bans. I require the permissions `Add Reactions` and `Manage Messages` to do this.');
+      if (!Client.checkClientPerms(message.channel, 'ADD_REACTIONS')) return Client.functions.get('noClientPerms')(message, ['Add Reactions'], message.channel);
 
       let page = 1;
 
@@ -28,7 +33,7 @@ module.exports = async (Client, message, args) => {
 
       let msg = await message.author.send(embed).catch(() => null);
       if (!msg) {
-        if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I do not have the required permission `Embed Links`.');
+        if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
         msg = await message.channel.send(embed);
       } else message.channel.send('Check your DMs!');
       const emojis = ['⏪', '◀', '⏹', '▶', '⏩'];
@@ -73,7 +78,7 @@ module.exports = async (Client, message, args) => {
       });
 
       collector.on('end', () => {
-        if (!msg.deleted) msg.reactions.removeAll();
+        if (!msg.deleted && Client.checkClientPerms(message.channel, 'MANAGE_MESSAGES')) msg.reactions.removeAll();
       });
     }
   } else {

@@ -1,4 +1,11 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
+  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I am missing the required permission `Embed Links`.');
+
   const member = args[1] ? Client.getObj(args[1], { guild: message.guild, type: 'member' }) : message.member;
   if (!member) return message.reply('That is not a valid member!');
 
@@ -15,6 +22,8 @@ module.exports = async (Client, message, args) => {
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
     return message.channel.send(embed);
   } else {
+    if (!Client.checkClientPerms(message.channel, 'ADD_REACTIONS')) return message.reply('I am missing the required permission `Add Reactions`.');
+
     let page = 1;
     const embed = new Client.Discord.MessageEmbed()
       .setTitle(`${member.user.tag}'s Warning Info`)
@@ -66,7 +75,7 @@ module.exports = async (Client, message, args) => {
     });
 
     collector.on('end', () => {
-      if (!msg.deleted) msg.reactions.removeAll();
+      if (!msg.deleted && Client.checkClientPerms(message.channel, 'MANAGE_MESSAGES')) msg.reactions.removeAll();
     });
   }
 };

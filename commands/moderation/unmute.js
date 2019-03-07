@@ -1,5 +1,11 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('unmute', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.unmute` permission.');
+  if (!message.guild.me.hasPermission('MANAGE_ROLES')) return Client.functions.get('noClientPerms')(message, ['Manage Roles']);
 
   const muteRole = message.guild.roles.find(r => r.name.toLowerCase() === 'muted');
   if (!muteRole) return message.reply('I did not find a "Muted" role!');

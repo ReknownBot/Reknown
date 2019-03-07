@@ -1,3 +1,9 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+ */
+
 const playing = new Set();
 function setCharAt (str, index, chr) {
   if (index > str.length - 1) return str;

@@ -1,4 +1,9 @@
-async function logMessage (Client, oldEmoji, newEmoji) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').GuildEmoji} oldEmoji
+ * @param {import('discord.js').GuildEmoji} newEmoji
+ */
+async function logMessage(Client, oldEmoji, newEmoji) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle(`${newEmoji.animated ? 'Animated ' : ''}Emoji Edited`)
     .addField('Emoji ID', newEmoji.id)
@@ -23,9 +28,12 @@ async function logMessage (Client, oldEmoji, newEmoji) {
     }
   }
 
-  return require('../functions/sendlog.js')(Client, embed, newEmoji.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, newEmoji.guild.id);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('emojiUpdate', (oldEmoji, newEmoji) => {
     if (!newEmoji.guild.available) return;

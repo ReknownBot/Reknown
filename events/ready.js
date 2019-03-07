@@ -1,3 +1,6 @@
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('ready', async () => {
     console.log(`Logged in as ${Client.bot.user.tag}!`);

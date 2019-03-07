@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   if (!args[1]) return message.reply('You have to provide a channel for me to rename!');
   const channel = Client.getObj(args[1], { guild: message.guild, type: 'channel' });

@@ -1,5 +1,10 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+ */
 module.exports = async (Client, message, args) => {
-  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I do not have the required permission `Embed Links` in this channel.');
+  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
   const { rows } = await Client.sql.query('SELECT money FROM economy');
 

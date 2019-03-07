@@ -1,4 +1,9 @@
-async function welcomeMessage (Client, member, guild) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').GuildMember} member
+ * @param {import('discord.js').Guild} guild
+ */
+async function welcomeMessage(Client, member, guild) {
   const welcomeToggle = (await Client.sql.query('SELECT bool FROM togglewelcome WHERE guildid = $1', [guild.id])).rows[0];
   const channelRow = (await Client.sql.query('SELECT channel FROM welcomechannel WHERE guildid = $1', [guild.id])).rows[0];
   if (!welcomeToggle || !welcomeToggle.bool) return;
@@ -21,6 +26,11 @@ async function welcomeMessage (Client, member, guild) {
   return welcomeChannel.send(embed);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').GuildMember} member
+ * @param {import('discord.js').Guild} guild
+ */
 function logMessage (Client, member, guild) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Joined')
@@ -28,9 +38,14 @@ function logMessage (Client, member, guild) {
     .setThumbnail(member.user.displayAvatarURL({ size: 2048 }))
     .setTimestamp()
     .setColor(0x00FF00);
-  return require('../functions/sendlog.js')(Client, embed, guild.id);
+  return Client.functions.get('sendlog')(Client, embed, guild.id);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').GuildMember} member
+ * @param {import('discord.js').Guild} guild
+ */
 async function levelrole (Client, member, guild) {
   const toggleLev = (await Client.sql.query('SELECT bool FROM togglelevel WHERE guildid = $1', [guild.id]));
   if (!toggleLev || !toggleLev.bool) return;
@@ -47,6 +62,11 @@ async function levelrole (Client, member, guild) {
   });
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').GuildMember} member
+ * @param {import('discord.js').Guild} guild
+ */
 function mute (Client, member, guild) {
   if (!Client.mutes.has(member.id)) return;
   if (!guild.me.hasPermission('MANAGE_ROLES')) return;
@@ -54,6 +74,9 @@ function mute (Client, member, guild) {
   if (mutedRole && !member.roles.has(mutedRole.id)) member.roles.add(mutedRole);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('guildMemberAdd', member => {
     const guild = member.guild;

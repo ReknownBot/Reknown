@@ -1,6 +1,11 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('ban', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.ban` permission.');
-  if (!message.guild.permissionsFor(message.guild.me).has('BAN_MEMBERS')) return message.reply('I do not have the required permission `Ban Members`!');
+  if (!message.guild.permissionsFor(message.guild.me).has('BAN_MEMBERS')) return Client.functions.get('noClientPerms')(message, ['Ban Members']);
 
   if (!args[1]) return message.reply('You have to provide a member for me to ban!');
 

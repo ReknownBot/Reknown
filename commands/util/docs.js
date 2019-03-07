@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I need the `Embed Links` permission for this command!');
   if (!args[1]) return message.reply('You have to provide a query for me to search!');
@@ -7,15 +12,11 @@ module.exports = async (Client, message, args) => {
 
   const query = args.slice(1).join(' ').replace('#', '.');
 
-  return Client.request(`https://djsdocs.sorta.moe/main/${branch}/embed?q=${query}`, (err, res, body) => {
-    if (err) throw new Error(err);
+  const body = await Client.fetch(`https://djsdocs.sorta.moe/main/${branch}/embed?q=${query}`).then(res => res.json());
+  if (!body) return message.reply('I did not find any results from that query.');
 
-    body = JSON.parse(body);
-    if (!body) return message.reply('I did not find any results from that query.');
-
-    const embed = body;
-    return message.channel.send({ embed: embed });
-  });
+  const embed = body;
+  return message.channel.send(embed);
 };
 
 module.exports.help = {

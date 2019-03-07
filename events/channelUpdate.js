@@ -1,4 +1,9 @@
-async function logMessage (Client, oldChannel, newChannel) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').GuildChannel} oldChannel
+ * @param {import('discord.js').GuildChannel} newChannel
+ */
+async function logMessage(Client, oldChannel, newChannel) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Channel Updated')
     .addField('Name Change', `\`${Client.escMD(oldChannel.name)}\` => \`${Client.escMD(newChannel.name)}\``, true)
@@ -21,9 +26,12 @@ async function logMessage (Client, oldChannel, newChannel) {
     }
   }
 
-  return require('../functions/sendlog.js')(Client, embed, oldChannel.guild.id);
+  return Client.functions.get('sendlog')(Client, embed, oldChannel.guild.id);
 }
 
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('channelUpdate', (oldChannel, newChannel) => {
     if (!oldChannel.guild.available) return;

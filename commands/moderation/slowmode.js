@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('set', 'slowmode', message.member)) return message.reply(':x: Sorry, but you do not have the `slowmode.set` permission.');
 
@@ -10,7 +15,7 @@ module.exports = async (Client, message, args) => {
 
   const channel = args[2] ? Client.getObj(args[2], { guild: message.guild, type: 'channel' }) : message.channel;
   if (!channel || channel.type !== 'text') return message.reply('I did not find a text channel from the channel you provided!');
-  if (!Client.checkClientPerms(channel, 'MANAGE_CHANNELS')) return message.reply('I need the permission `Manage Channels` in that channel for this command!');
+  if (!Client.checkClientPerms(channel, 'MANAGE_CHANNELS')) return Client.functions.get('noClientPerms')(message, ['Manage Channels'], channel);
 
   channel.setRateLimitPerUser(slowmode);
   return message.channel.send(`Successfully set the slowmode to **${slowmode}** in ${channel}.`);

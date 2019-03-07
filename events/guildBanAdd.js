@@ -1,4 +1,9 @@
-async function logMessage (Client, guild, user) {
+/**
+ * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').Guild} guild
+ * @param {import('discord.js').User} user
+ */
+async function logMessage(Client, guild, user) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Banned')
     .addField('Member', `${user.tag} (${user.id})`, true)
@@ -21,9 +26,12 @@ async function logMessage (Client, guild, user) {
     }
   }
 
-  return require('../functions/sendlog.js')(Client, embed, guild.id);
+  return Client.functions.get('sendlog')(Client, embed, guild.id);
 };
 
+/**
+ * @param {import('../structures/client.js')} Client
+ */
 module.exports = (Client) => {
   return Client.bot.on('guildBanAdd', (guild, user) => {
     if (user === Client.bot.user) return;

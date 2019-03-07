@@ -1,3 +1,8 @@
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   const seconds = Math.floor((Client.bot.uptime / 1000) % 60);
   const minutes = Math.floor((Client.bot.uptime / 1000 / 60) % 60);
