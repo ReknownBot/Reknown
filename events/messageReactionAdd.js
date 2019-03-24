@@ -39,7 +39,7 @@ module.exports = (Client) => {
     if (img) embed.setImage(img.proxyURL);
 
     let reactionCount = reaction.count;
-    if (reaction.users.has(user.id)) reactionCount -= 1;
+    if (reaction.users.has(message.author.id)) reactionCount -= 1;
     embed.setFooter(`⭐${reactionCount} | ID: ${message.id}`);
 
     if (!msgRow) {
