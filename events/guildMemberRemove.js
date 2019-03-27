@@ -75,7 +75,7 @@ module.exports = (Client) => {
     if (!member.guild.me.hasPermission('VIEW_AUDIT_LOG')) return logMessage(Client, member);
     else {
       const entry = (await member.guild.fetchAuditLogs({ type: 20, limit: 1 })).entries.first();
-      if (!entry) return;
+      if (!entry) return logMessage(Client, member);
       if (Date.now() - entry.createdTimestamp > 5000) return logMessage(Client, member);
 
       return kickMessage(Client, entry, member);
