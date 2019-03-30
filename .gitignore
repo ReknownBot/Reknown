@@ -7,3 +7,6 @@ node_modules
 
 # Visual Studio Folder
 .vs
+
+# jsconfig
+jsconfig.json
