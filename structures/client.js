@@ -44,6 +44,7 @@ const bot = new Discord.Client({
  * @prop {function(RegExp, String[])} matchInArray
  * @prop {import('moment')} moment
  * @prop {Discord.Collection<String, Number>} mutes
+ * @prop {String} ownerID
  * @prop {Object} permissions
  * @prop {Object} prefixes
  * @prop {import('rollbar')} rollbar
@@ -75,6 +76,7 @@ const client = {
   splitMessage: Discord.Util.splitMessage,
 
   contributors: ['468848409202262027', '284857002977525760'],
+  ownerID: '288831103895076867',
 
   mutes: new Discord.Collection(),
   prefixes: {},

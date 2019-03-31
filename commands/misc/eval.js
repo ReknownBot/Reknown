@@ -13,7 +13,7 @@ function clean(text) {
 }
 
 module.exports = async (Client, message, args) => {
-  if (message.author.id !== '288831103895076867') return message.reply('Only the bot owner may use this command!');
+  if (message.author.id !== Client.ownerID) return message.reply('Only the bot owner may use this command!');
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
   const code = args.slice(1).join(' ');

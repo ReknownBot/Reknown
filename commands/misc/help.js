@@ -22,7 +22,7 @@ module.exports = async (Client, message, args) => {
       .setColor(0x00FFFF);
 
     Object.values(Client.commands).forEach(cmd => {
-      if (cmd.private && message.author.id !== '288831103895076867') return;
+      if (cmd.private && message.author.id !== Client.ownerID) return;
       const name = cmd.help.name;
       const category = categoryObj[cmd.help.category];
       const field = embed.fields.find(field => field.name === category);
@@ -46,7 +46,7 @@ module.exports = async (Client, message, args) => {
     const cmd = Client.allAlias[args[1].toLowerCase()];
     const cmdInfo = Client.commands[cmd];
     const options = cmdInfo.help.options;
-    if (cmdInfo.private && message.author.id !== '288831103895076867') return message.reply('Sorry, but that command is private.');
+    if (cmdInfo.private && message.author.id !== Client.ownerID) return message.reply('Sorry, but that command is private.');
     const embed = new Client.Discord.MessageEmbed()
       .setTitle(`${cmd} Info`)
       .setColor(0x00FFFF)

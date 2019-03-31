@@ -4,7 +4,7 @@
  * @param {String[]} args
  */
 module.exports = async (Client, message, args) => {
-  if (message.author.id !== '288831103895076867') return message.reply('Only the bot owner may use this command!');
+  if (message.author.id !== Client.ownerID) return message.reply('Only the bot owner may use this command!');
 
   if (!args[1]) return message.reply('You have to provide a user for me to reset their economy system!');
   const user = await Client.getObj(args[1], { type: 'user' });
