@@ -5,7 +5,8 @@
 async function logMessage(Client, message) {
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Message Deleted')
-    .addField('Channel', message.channel)
+    .addField('Channel', message.channel, true)
+    .addField('Author', `${Client.escMD(message.author.tag)} (${message.author.id})`, true)
     .setColor(0xFF0000)
     .setTimestamp();
 

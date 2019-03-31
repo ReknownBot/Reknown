@@ -12,5 +12,5 @@ module.exports.help = {
   desc: 'Sends a pong!',
   category: 'misc',
   usage: '?ping',
-  aliases: []
+  aliases: ['pong']
 };

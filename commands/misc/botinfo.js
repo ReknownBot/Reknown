@@ -16,7 +16,7 @@ module.exports = async (Client, message, args) => {
     .setTitle('Bot Information')
     .setColor(0x00FFFF)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
-    .addField('Owner', (await Client.bot.users.fetch('288831103895076867')).tag, true)
+    .addField('Owner', (await Client.bot.users.fetch(Client.ownerID)).tag, true)
     .addField('Contributors', contributors, true)
     .addField('Donate', '[Patreon](https://www.patreon.com/Jyguy)\n[PayPal](https://paypal.me/jyguy)', true)
     .addField('Support', '[Here](https://discord.gg/n45fq9K)', true)

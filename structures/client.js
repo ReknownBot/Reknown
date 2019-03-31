@@ -26,29 +26,30 @@ const bot = new Discord.Client({
 
 /**
  * @typedef {Object} Client
+ * @prop {Discord.Client} bot
+ * @prop {function(str: String): String} capFirstLetter
+ * @prop {function(Discord.GuildChannel, ...String): Boolean} checkClientPerms
+ * @prop {function(String, String, Discord.GuildMember): Boolean} checkPerms
  * @prop {Object} commands
  * @prop {String[]} commandsList
- * @prop {Discord.Collection<String, Function>} functions
- * @prop {String[]} fnList
- * @prop {import('rollbar')} rollbar
+ * @prop {String[]} contributors
  * @prop {import('dateformat')} dateFormat
- * @prop {import('node-fetch')} fetch
- * @prop {import('moment')} moment
- * @prop {import('pg').Pool} sql
- * @prop {Object} permissions
- * @prop {Discord.Client} bot
  * @prop {Discord} Discord
  * @prop {Discord.Util.escapeMarkdown} escMD
- * @prop {Discord.Util.splitMessage} splitMessage
- * @prop {String[]} contributors
- * @prop {Discord.Collection<String, Number>} mutes
- * @prop {Object} prefixes
- * @prop {function(str: String): String} capFirstLetter
+ * @prop {import('node-fetch')} fetch
+ * @prop {String[]} fnList
+ * @prop {Discord.Collection<String, Function>} functions
  * @prop {function(String): Array<Array<String|Number>>} getFuzz
- * @prop {function(String, String, Discord.GuildMember): Boolean} checkPerms
- * @prop {function(Discord.GuildChannel, ...String): Boolean} checkClientPerms
- * @prop {function(RegExp, String[])} matchInArray
  * @prop {function(String, Object): Discord.User|Discord.GuildChannel|Discord.GuildMember|Discord.Role|Boolean} getObj
+ * @prop {function(RegExp, String[])} matchInArray
+ * @prop {import('moment')} moment
+ * @prop {Discord.Collection<String, Number>} mutes
+ * @prop {String} ownerID
+ * @prop {Object} permissions
+ * @prop {Object} prefixes
+ * @prop {import('rollbar')} rollbar
+ * @prop {Discord.Util.splitMessage} splitMessage
+ * @prop {import('pg').Pool} sql
  */
 
 /**
@@ -75,6 +76,7 @@ const client = {
   splitMessage: Discord.Util.splitMessage,
 
   contributors: ['468848409202262027', '284857002977525760'],
+  ownerID: '288831103895076867',
 
   mutes: new Discord.Collection(),
   prefixes: {},

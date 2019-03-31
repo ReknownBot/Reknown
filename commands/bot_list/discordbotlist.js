@@ -16,6 +16,7 @@ module.exports = async (Client, message, args) => {
 
   if (body.error === 'Not Found') return message.reply('The bot you provided was not in discordbots.org!');
 
+  /** @type {String[]} */
   const owners = body.owners.map(id => Client.getObj(id, { type: 'user' }).then(u => u.tag));
   const invite = body.invite || 'Not Specified';
   const website = body.website || 'None';
@@ -27,7 +28,7 @@ module.exports = async (Client, message, args) => {
 
   const embed = new Client.Discord.MessageEmbed()
     .setTitle(botTag)
-    .setURL('https://discordbots.org/bot/338832551278018581')
+    .setURL(`https://discordbots.org/bot/${bot}`)
     .setColor(0x00FFFF)
     .setDescription(shortDesc)
     .addField('Owners', owners.list(), true)
