@@ -4,6 +4,7 @@
  * @param {String[]} args
  */
 module.exports = async (Client, message, args) => {
+  /** @type {import('discord.js').GuildMember} */
   const member = args[1] ? Client.getObj(args[1], { guild: message.guild, type: 'member' }) : message.member;
   if (!member) return message.reply('The member you provided is invalid!');
 
