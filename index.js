@@ -1,6 +1,8 @@
 require('array-utility');
 require('dotenv').config();
 
+// test
+
 const Client = require('./structures/client.js');
 
 process.on('unhandledRejection', error => {
