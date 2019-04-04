@@ -13,7 +13,7 @@ async function logMessage(Client, message) {
   if (!message.content && message.embeds[0]) return;
   else if (message.attachments.first() && message.attachments.first().width) embed.setImage(message.attachments.first().proxyURL);
 
-  if (message.content) embed.addField('Content', message.content);
+  if (message.content) embed.setDescription(message.content);
   else if (!embed.image) return;
 
   if (message.guild.me.hasPermission('VIEW_AUDIT_LOG')) {

@@ -21,4 +21,4 @@ const replies = [
   'Very doubtful.'
 ];
 
-module.exports = replies[Math.floor(Math.random() * replies.length)];
+module.exports = () => replies[Math.floor(Math.random() * replies.length)];

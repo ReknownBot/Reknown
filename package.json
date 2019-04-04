@@ -40,6 +40,6 @@
     "string-math": "^1.2.1"
   },
   "devDependencies": {
-    "eslint-plugin-promise": "^4.0.1"
+    "eslint-plugin-promise": "^4.1.1"
   }
 }
