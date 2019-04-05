@@ -4,7 +4,7 @@
  * @param {String[]} args
  */
 module.exports = async (Client, message, args) => {
-  if (!message.member.hasPermission('MANAGE_GUILD')) return message.reply('You do not have the `Manage Server` permission!');
+  if (!message.member.hasPermission('MANAGE_GUILD')) return Client.functions.get('noPerms')(message, ['Manage Server']);
 
   if (!args[1]) return message.reply('You have to provide a channel that the message is in!');
   const channel = Client.getObj(args[1], { guild: message.guild, type: 'channel' });
