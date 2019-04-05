@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!await Client.checkPerms('setperm', 'misc', message.member)) return message.reply(':x: Sorry, but you do not have the `misc.setperm` permission.');
+  if (!await Client.checkPerms('setperm', 'misc', message.member)) return Client.functions.get('noCustomPerm')(message, 'misc.setperm');
 
   if (!args[1]) return message.reply('You have to provide a permission for me to allow / disallow a role!');
   const perm = args[1];

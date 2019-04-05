@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!await Client.checkPerms('nick', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.nick` permission.');
+  if (!await Client.checkPerms('nick', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.nick');
   if (!message.guild.me.hasPermission('MANAGE_NICKNAMES')) return Client.functions.get('noClientPerms')(message, ['Manage Nicknames']);
 
   if (!args[1]) return message.reply('You have to provide a member for me to nickname!');

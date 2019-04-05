@@ -22,7 +22,7 @@ module.exports = async (Client, message, args) => {
     if (tagName.length > 50) return message.reply('The tag name length cannot exceed 50 characters!');
 
     if (serverTag) { // Server tags
-      if (!await Client.checkPerms('edit', 'tag', message.member)) return message.reply(':x: Sorry, but you do not have the `tag.edit` permission.');
+      if (!await Client.checkPerms('edit', 'tag', message.member)) return Client.functions.get('noCustomPerm')(message, 'tag.edit');
       const exists = (await Client.sql.query('SELECT * FROM guildtag WHERE tagname = $1 AND guildid = $2 LIMIT 1', [tagName, message.guild.id])).rows[0];
       if (exists) return message.reply(`There is already a tag named \`${Client.escMD(tagName)}\` in the server.`);
 
@@ -52,14 +52,14 @@ module.exports = async (Client, message, args) => {
     const tagName = args.slice(2).join(' ').toLowerCase();
 
     if (serverTag) { // Server tags
-      if (!await Client.checkPerms('edit', 'tag', message.member)) return message.reply(':x: Sorry, but you do not have the `tag.edit` permission.');
+      if (!await Client.checkPerms('edit', 'tag', message.member)) return Client.functions.get('noCustomPerm')(message, 'tag.edit');
       const exists = (await Client.sql.query('SELECT * FROM guildtag WHERE tagname = $1 AND guildid = $2 LIMIT 1', [tagName, message.guild.id])).rows[0];
       if (!exists) return message.reply(`There is no server tag named \`${Client.escMD(tagName)}\`.`);
 
       Client.sql.query('DELETE FROM guildtag WHERE guildid = $1 AND tagname = $2', [message.guild.id, tagName]);
       return message.channel.send(`Successfully removed a server tag named ${tagName}.`);
     } else { // Personal tags
-      if (!await Client.checkPerms('edit', 'tag', message.member)) return message.reply(':x: Sorry, but you do not have the `tag.edit` permission.');
+      if (!await Client.checkPerms('edit', 'tag', message.member)) return Client.functions.get('noCustomPerm')(message, 'tag.edit');
       const exists = (await Client.sql.query('SELECT * FROM usertag WHERE userid = $1 AND tagname = $2 LIMIT 1', [message.author.id, tagName])).rows[0];
       if (!exists) return message.reply(`There is no tag named \`${Client.escMD(tagName)}\`.`);
 

@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!await Client.checkPerms('update', 'misc', message.member)) return message.reply(':x: Sorry, but you do not have the `misc.update` permission.');
+  if (!await Client.checkPerms('update', 'misc', message.member)) return Client.functions.get('noCustomPerm')(message, 'misc.update');
 
   if (!args[1]) return message.reply('You have to include a version of the server!');
   const version = args[1];

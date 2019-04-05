@@ -82,7 +82,7 @@ module.exports = async (Client, message, args) => {
       });
     }
   } else {
-    if (!await Client.checkPerms('rules', 'misc', message.member)) return message.reply(':x: Sorry, but you do not have the `misc.rules` permission. Looking for the rules itself? Use `?rules` by itself.');
+    if (!await Client.checkPerms('rules', 'misc', message.member)) return Client.functions.get('noCustomPerm')(message, 'misc.rules');
     const choice = args[1].toLowerCase();
     if (choice === 'add') {
       if (!args[2]) return message.reply('You have to provide a rule for me to add!');

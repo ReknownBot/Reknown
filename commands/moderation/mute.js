@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!await Client.checkPerms('mute', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.mute` permission.');
+  if (!await Client.checkPerms('mute', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.mute');
   if (!message.guild.me.hasPermission('MANAGE_ROLES')) return Client.functions.get('noClientPerms')(message, ['Manage Roles']);
 
   let muteRole = message.guild.roles.find(r => r.name.toLowerCase() === 'muted');

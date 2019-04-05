@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!await Client.checkPerms('purge', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.purge` permission.');
+  if (!await Client.checkPerms('purge', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.purge');
   if (!Client.checkClientPerms(message.channel, 'MANAGE_MESSAGES')) return Client.functions.get('noClientPerms')(message, ['Manage Messages'], message.channel);
 
   let amount = args[1];

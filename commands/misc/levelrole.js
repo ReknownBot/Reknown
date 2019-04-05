@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!await Client.checkPerms('role', 'level', message.member)) return message.reply(':x: Sorry, but you do not have the `level.role` permission.');
+  if (!await Client.checkPerms('role', 'level', message.member)) return Client.functions.get('noCustomPerm')(message, 'level.role');
 
   if (!args[1]) return message.reply('You have to put an action to execute!');
   const options = ['add', 'remove', 'list', 'clear'];

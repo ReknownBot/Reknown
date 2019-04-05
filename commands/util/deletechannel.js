@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!await Client.checkPerms('cdelete', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.cdelete` permission.');
+  if (!await Client.checkPerms('cdelete', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.cdelete');
 
   if (!args[1]) return message.reply('You have to provide a channel for me to delete!');
   const channel = Client.getObj(args[1], { guild: message.guild, type: 'channel' });

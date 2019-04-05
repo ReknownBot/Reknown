@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!await Client.checkPerms('ccreate', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.ccreate` permission.');
+  if (!await Client.checkPerms('ccreate', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.ccreate');
   if (!message.guild.me.hasPermission('MANAGE_CHANNELS')) return message.reply('I do not have permissions to create a channel!');
 
   let type = '';

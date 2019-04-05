@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!await Client.checkPerms('unwarn', 'mod', message.member)) return message.reply(':x: Sorry, but you do not have the `mod.unwarn` permission.');
+  if (!await Client.checkPerms('unwarn', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.unwarn');
 
   if (!args[1]) return message.reply('You have to supply a member for me to unwarn!');
   const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });

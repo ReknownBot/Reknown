@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!await Client.checkPerms('set', 'level', message.member)) return message.reply(':x: Sorry, but you do not have the `level.set` permission.');
+  if (!await Client.checkPerms('set', 'level', message.member)) return Client.functions.get('noCustomPerm')(message, 'level.set');
 
   if (!args[1]) return message.reply('You have to provide a member for me to set points for!');
   const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });

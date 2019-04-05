@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!await Client.checkPerms('set', 'slowmode', message.member)) return message.reply(':x: Sorry, but you do not have the `slowmode.set` permission.');
+  if (!await Client.checkPerms('set', 'slowmode', message.member)) return Client.functions.get('noCustomPerm')(message, 'slowmode.set');
 
   if (!args[1]) return message.reply('You have to provide a slowmode amount for me to set!');
   const slowmode = args[1];
