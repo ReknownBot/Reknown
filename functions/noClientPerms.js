@@ -1,7 +1,7 @@
 /**
- * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
  * @param {String[]} perms
- * @param {import('discord.js').GuildChannel} channel
+ * @param {import('discord.js').GuildChannel} [channel]
  */
 module.exports = (message, perms, channel) => {
   if (channel) {

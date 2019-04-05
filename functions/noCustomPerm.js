@@ -1,5 +1,5 @@
 /**
- * @param {import('../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
  * @param {String} perm
  */
 module.exports = (message, perm) => {
