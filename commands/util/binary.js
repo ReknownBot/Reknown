@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I require the permission `Embed Links` for this command.');
+  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
   if (!args[1]) return message.reply('You have to provide either `encode` or `decode` in the first argument.');
   const choice = args[1].toLowerCase();

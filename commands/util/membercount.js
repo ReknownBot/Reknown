@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I am missing the required permission `Embed Links`.');
+  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
   const embed = new Client.Discord.MessageEmbed()
     .setTitle(`Total Member Count in ${message.guild.name}`)

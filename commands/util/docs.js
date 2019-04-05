@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I need the `Embed Links` permission for this command!');
+  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
   if (!args[1]) return message.reply('You have to provide a query for me to search!');
 
   const branch = args[2] ? args.pop() : 'stable';

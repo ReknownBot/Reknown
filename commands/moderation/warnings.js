@@ -4,7 +4,7 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I am missing the required permission `Embed Links`.');
+  if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
   const member = args[1] ? Client.getObj(args[1], { guild: message.guild, type: 'member' }) : message.member;
   if (!member) return message.reply('That is not a valid member!');
@@ -22,7 +22,7 @@ module.exports = async (Client, message, args) => {
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
     return message.channel.send(embed);
   } else {
-    if (!Client.checkClientPerms(message.channel, 'ADD_REACTIONS')) return message.reply('I am missing the required permission `Add Reactions`.');
+    if (!Client.checkClientPerms(message.channel, 'ADD_REACTIONS')) return Client.functions.get('noClientPerms')(message, ['Add Reactions'], message.channel);
 
     let page = 1;
     const embed = new Client.Discord.MessageEmbed()

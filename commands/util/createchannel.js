@@ -5,7 +5,7 @@
 */
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('ccreate', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.ccreate');
-  if (!message.guild.me.hasPermission('MANAGE_CHANNELS')) return message.reply('I do not have permissions to create a channel!');
+  if (!message.guild.me.hasPermission('MANAGE_CHANNELS')) return Client.functions.get('noClientPerms')(message, ['Manage Channels']);
 
   let type = '';
   const regex = /--type \w+/;

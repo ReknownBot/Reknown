@@ -67,7 +67,7 @@ module.exports = async (Client, message, args) => {
       return message.channel.send(`Successfully removed a tag named ${tagName}.`);
     }
   } else if (option === options[2]) { // List
-    if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I am missing the required permission `Embed Links`.');
+    if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
     let rows;
     if (serverTag) { // Server tags
