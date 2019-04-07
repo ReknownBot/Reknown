@@ -10,6 +10,6 @@ If you manage to find a bug or unexpected behaviour, please let us know in our [
 Dr. Ari Gami#0001
 Activities: Helped with hosting and fuzzy strings.
 
-Vorphixx#3142
+Xenoq#0001
 Activities: GFX and keeping me company when I'm coding my rewrite :P
 ~~~
