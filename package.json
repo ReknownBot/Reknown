@@ -35,7 +35,7 @@
     "moment": "^2.24.0",
     "node-fetch": "^2.3.0",
     "pg": "^7.9.0",
-    "rollbar": "^2.5.4",
+    "rollbar": "^2.5.5",
     "rword": "^2.3.0",
     "string-math": "^1.2.1"
   },
