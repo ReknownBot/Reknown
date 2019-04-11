@@ -6,6 +6,7 @@
 function logMessage(Client, oldMessage, newMessage) {
   if (!oldMessage.content && !newMessage.content) return;
   if (oldMessage.content === newMessage.content) return;
+  if (oldMessage.content.length > 1024 && newMessage.content.length > 1024) return;
 
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Message Edited')
