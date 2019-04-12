@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "array-utility": "0.0.2",
-    "babel-eslint": "^9.0.0",
     "cowsay": "^1.4.0",
     "dateformat": "^3.0.3",
     "discord.js": "github:discordjs/discord.js",
@@ -39,7 +38,5 @@
     "rword": "^2.3.0",
     "string-math": "^1.2.1"
   },
-  "devDependencies": {
-    "eslint-plugin-promise": "^4.1.1"
-  }
+  "devDependencies": {}
 }
