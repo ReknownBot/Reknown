@@ -10,14 +10,14 @@ module.exports = async (Client, message, args) => {
   const minutes = Math.floor((Client.bot.uptime / 1000 / 60) % 60);
   const hours = Math.floor((Client.bot.uptime / 1000 / 60 / 60) % 24);
   const days = Math.floor(Client.bot.uptime / 1000 / 60 / 60 / 24);
-  const contributors = Client.contributors.map(id => Client.bot.users.fetch(id).then(u => u.tag)).list();
+  const contributors = await Promise.all(Client.contributors.map(async id => await Client.getObj(id, { type: 'user' }).then(u => u.tag)));
 
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Bot Information')
     .setColor(0x00FFFF)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .addField('Owner', (await Client.bot.users.fetch(Client.ownerID)).tag, true)
-    .addField('Contributors', contributors, true)
+    .addField('Contributors', contributors.list(), true)
     .addField('Donate', '[Patreon](https://www.patreon.com/Jyguy)\n[PayPal](https://paypal.me/jyguy)', true)
     .addField('Support', '[Here](https://discord.gg/n45fq9K)', true)
     .addField('Uptime', `${days} days, ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`);
