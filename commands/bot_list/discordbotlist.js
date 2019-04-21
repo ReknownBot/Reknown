@@ -17,7 +17,7 @@ module.exports = async (Client, message, args) => {
   if (body.error === 'Not Found') return message.reply('The bot you provided was not in discordbots.org!');
 
   /** @type {String[]} */
-  const owners = body.owners.map(id => Client.getObj(id, { type: 'user' }).then(u => u.tag));
+  const owners = await Promise.all(body.owners.map(id => Client.getObj(id, { type: 'user' }).then(u => u.tag)));
   const invite = body.invite || 'Not Specified';
   const website = body.website || 'None';
   const botTag = `${body.username}#${body.discriminator} (${body.id})`;
