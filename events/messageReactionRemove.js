@@ -42,12 +42,18 @@ module.exports = (Client) => {
     embed.setFooter(`⭐${reactionCount} | ID: ${message.id}`);
 
     if (!msgRow) {
+      if (reactionCount === 0) return;
       const msg = await sChannel.send(embed);
       Client.sql.query('INSERT INTO star (msgid, editid) VALUES ($1, $2)', [message.id, msg.id]);
     } else {
       const sMessage = await sChannel.messages.fetch(msgRow.editid).catch(() => null);
 
-      if (sMessage) sMessage.edit(embed);
+      if (reactionCount === 0) {
+        sMessage.delete();
+        return Client.sql.query('DELETE FROM star WHERE msgid = $1', [message.id]);
+      }
+
+      if (sMessage && !sMessage.deleted) sMessage.edit(embed);
       else {
         const msg = await sChannel.send(embed);
         Client.sql.query('UPDATE star SET editid = $1', [msg.id]);
