@@ -4,7 +4,7 @@
  * @param {String[]} args
  */
 module.exports = async (Client, message, args) => {
-  if (!args[1]) return message.reply('You have to provide a yes/no question!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a yes/no question');
   const reply = Client.functions.get('get8ball')();
   return message.channel.send(reply);
 };
