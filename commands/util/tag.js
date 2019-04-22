@@ -59,7 +59,6 @@ module.exports = async (Client, message, args) => {
       Client.sql.query('DELETE FROM guildtag WHERE guildid = $1 AND tagname = $2', [message.guild.id, tagName]);
       return message.channel.send(`Successfully removed a server tag named ${tagName}.`);
     } else { // Personal tags
-      if (!await Client.checkPerms('edit', 'tag', message.member)) return Client.functions.get('noCustomPerm')(message, 'tag.edit');
       const exists = (await Client.sql.query('SELECT * FROM usertag WHERE userid = $1 AND tagname = $2 LIMIT 1', [message.author.id, tagName])).rows[0];
       if (!exists) return Client.functions.get('argFix')(Client, message.channel, 2, `A tag named \`${Client.escMD(tagName)}\` does not exist in your personal tags.`);
 
