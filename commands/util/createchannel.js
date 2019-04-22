@@ -16,10 +16,10 @@ module.exports = async (Client, message, args) => {
   const types = ['text', 'voice', 'category'];
   if (!types.includes(type)) return message.reply('That type is invalid! It can be `text`, `voice`, or `category`.');
 
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'the name of the created channel');
   const name = args.slice(1).join(' ');
-  if (!name) return message.reply('You have to include a channel name!');
-  if (type === 'text' && name.includes(' ')) return message.reply('The name cannot include a space if the channel is a text channel!');
-  if (name.length > 100) return message.reply('The name cannot exceed 100 characters!');
+  if (type === 'text' && name.includes(' ')) return Client.functions.get('argFix')(Client, message.channel, 2, 'The channel name may not include a space if the type is text.');
+  if (name.length > 100) return Client.functions.get('argFix')(Client, message.channel, 2, 'The channel name my not exceed 100 characters.');
 
   message.guild.channels.create(name, {
     type: type,

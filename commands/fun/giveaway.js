@@ -6,24 +6,24 @@
 module.exports = async (Client, message, args) => {
   if (!message.member.hasPermission('MANAGE_GUILD')) return Client.functions.get('noPerms')(message, ['Manage Server']);
 
-  if (!args[1]) return message.reply('You have to provide a channel that the message is in!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'the channel that the giveaway message is in');
   const channel = Client.getObj(args[1], { guild: message.guild, type: 'channel' });
-  if (!channel) return message.reply('The channel you provided is invalid!');
+  if (!channel) return Client.functions.get('argFix')(Client, message.channel, 1, 'The channel provided was invalid.');
   if (!Client.checkClientPerms(channel, 'VIEW_CHANNEL', 'READ_MESSAGE_HISTORY')) return Client.functions.get('noClientPerms')(message, ['View Channels', 'Read Message History'], channel);
 
-  if (!args[2]) return message.reply('You have to provide the ID of the message!');
+  if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'a message ID that the reactions are held in');
   const msg = await channel.messages.fetch(args[2]).catch(() => 'failed');
-  if (!msg || msg === 'failed') return message.reply('The message ID you provided is invalid! (Make sure the message is in the channel you provided.)');
+  if (!msg || msg === 'failed') return Client.functions.get('argFix')(Client, message.channel, 2, 'I could not find a message with the provided ID, make sure the message is in the provided channel (argument #1).');
 
   const reaction = msg.reactions.get('🎉');
   reaction ? await reaction.users.fetch() : null;
   if (!reaction || reaction.users.filter(u => !u.bot).size === 0) return message.reply('No user reacted with 🎉 in that message!');
 
   const amt = args[3] || '1';
-  if (isNaN(amt)) return message.reply('The amount of winners must be a number!');
-  if (amt > 5) return message.reply('The amount cannot exceed 5!');
-  if (amt < 1) return message.reply('The amount may not be under 1!');
-  if (amt.includes('.')) return message.reply('The amount may not be a decimal!');
+  if (isNaN(amt)) return Client.functions.get('argFix')(Client, message.channel, 3, 'Amount of winners was not a number.');
+  if (amt > 5) return Client.functions.get('argFix')(Client, message.channel, 3, 'Amount of winners may not exceed 5.');
+  if (amt < 1) return Client.functions.get('argFix')(Client, message.channel, 3, 'Amount of winners may not be below 1.');
+  if (amt.includes('.')) return Client.functions.get('argFix')(Client, message.channel, 3, 'Amount of winners may not include a decimal.');
 
   const winners = reaction.users.filter(u => !u.bot).random(amt).filter(u => u).map(u => u.tag);
   return message.channel.send(`The ${winners.length === 1 ? 'winner is' : 'winners are'} ${winners.list()}!`);

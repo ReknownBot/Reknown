@@ -10,12 +10,12 @@ module.exports = async (Client, message, args) => {
   const muteRole = message.guild.roles.find(r => r.name.toLowerCase() === 'muted');
   if (!muteRole) return message.reply('I did not find a "Muted" role!');
 
-  if (!args[1]) return message.reply('You have to provide a member for me to unmute!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a member to unmute');
   const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
-  if (!member) return message.reply('The member you provided was invalid!');
+  if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a member with that query.');
   if (member === message.member) return message.reply('You cannot unmute yourself!');
   if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('You cannot unmute ones that have a higher role than you!');
-  if (!member.roles.has(muteRole.id)) return message.reply('That member is not muted!');
+  if (!member.roles.has(muteRole.id)) return Client.functions.get('argFix')(Client, message.channel, 1, 'That member is not muted.');
 
   Client.sql.query('DELETE FROM mute WHERE userid = $1 AND guildid = $2', [member.id, message.guild.id]);
   clearTimeout(Client.mutes.get(member.id));

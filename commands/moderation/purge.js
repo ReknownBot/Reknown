@@ -8,16 +8,16 @@ module.exports = async (Client, message, args) => {
   if (!Client.checkClientPerms(message.channel, 'MANAGE_MESSAGES')) return Client.functions.get('noClientPerms')(message, ['Manage Messages'], message.channel);
 
   let amount = args[1];
-  if (!amount) return message.reply('Please provide an amount for me to purge.');
-  if (isNaN(amount)) return message.reply('That is not a number!');
-  if (amount < 2) return message.reply('You may not purge less than 2!');
-  if (amount > 100) return message.reply('You may not purge more than 100!');
-  if (amount.includes('.')) return message.reply('I cannot purge decimals!');
+  if (!amount) return Client.functions.get('argMissing')(message.channel, 1, 'an amount to purge');
+  if (isNaN(amount)) return Client.functions.get('argFix')(Client, message.channel, 1, 'The argument was not a number.');
+  if (amount < 2) return Client.functions.get('argFix')(Client, message.channel, 1, 'The amount cannot be lower than 2.');
+  if (amount > 100) return Client.functions.get('argFix')(Client, message.channel, 1, 'The amount may not be above 100.');
+  if (amount.includes('.')) return Client.functions.get('argFix')(Client, message.channel, 1, 'The amount may not include a decimal.');
   amount = parseInt(amount);
 
   if (args[2]) {
     const member = Client.getObj(args[2], { guild: message.guild, type: 'member' });
-    if (!member) return message.reply('That is not a valid member!');
+    if (!member) return Client.functions.get('argFix')(Client, message.channel, 2, 'Did not find a member with that query.');
     let messages = await message.channel.messages.fetch({
       limit: amount,
       before: message.createdTimestamp

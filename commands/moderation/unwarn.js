@@ -6,17 +6,17 @@
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('unwarn', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.unwarn');
 
-  if (!args[1]) return message.reply('You have to supply a member for me to unwarn!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a member to unwarn');
   const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
-  if (!member) return message.reply('That is not a valid member!');
+  if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a member with that query.');
 
   const warnid = args[2];
-  if (!args[2]) return message.reply(`You have to supply a warn ID! Use \`?warnings @${member.user.tag}\` to view the warn IDs.`);
-  if (isNaN(warnid)) return message.reply('That is not a number!');
-  if (warnid < 1) return message.reply('The warn ID cannot be lower than 1!');
+  if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, `a warn ID. Use ${Client.prefixes[message.guild.id]}warnings @${member.user.tag} to view their warn IDs.`);
+  if (isNaN(warnid)) return Client.functions.get('argFix')(Client, message.channel, 2, 'The warning ID must be a number.');
+  if (warnid < 1) return Client.functions.get('argFix')(Client, message.channel, 2, 'The warning ID may not be lower than 1.');
 
   const row = (await Client.sql.query('SELECT * FROM warnings WHERE userid2 = $1 AND warnid = $2', [member.id + message.guild.id, warnid])).rows[0];
-  if (!row) return message.reply('That warning ID is incorrect!');
+  if (!row) return Client.functions.get('argFix')(Client, message.channel, 2, 'The warning ID is incorrect.');
 
   Client.sql.query('DELETE FROM warnings WHERE userid2 = $1 AND warnid = $2', [member.id + message.guild.id, warnid]);
   return message.channel.send(`Successfully deleted a warning from ${member.user.tag} by the warn ID of **${warnid}**.`);

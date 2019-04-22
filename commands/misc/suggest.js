@@ -7,7 +7,7 @@
 const cooldowns = {};
 
 module.exports = async (Client, message, args) => {
-  if (!args[1]) return message.reply('You have to provide a suggestion!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a suggestion');
   const suggestion = args.slice(1).join(' ');
   if (cooldowns[message.author.id]) return message.reply(`Please wait \`${Math.round((600000 - (Date.now() - cooldowns[message.author.id])) / 1000 * 100) / 100}\` more seconds before using this command again.`);
 

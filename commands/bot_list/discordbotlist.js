@@ -4,7 +4,7 @@
  * @param {String[]} args
  */
 module.exports = async (Client, message, args) => {
-  if (!args[1]) return message.reply('You have to provide a bot for me to search!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a bot to search for');
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
   const bot = args[1].replace(/[<>@!?]/g, '');
 
@@ -14,7 +14,7 @@ module.exports = async (Client, message, args) => {
     }
   }).then(res => res.json());
 
-  if (body.error === 'Not Found') return message.reply('The bot you provided was not in discordbots.org!');
+  if (body.error === 'Not Found') return Client.functions.get('argFix')(message.channel, 1, 'Did not find a bot with that query on discordbots.org.');
 
   /** @type {String[]} */
   const owners = await Promise.all(body.owners.map(id => Client.getObj(id, { type: 'user' }).then(u => u.tag)));

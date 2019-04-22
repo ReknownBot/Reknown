@@ -4,11 +4,11 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!args[1]) return message.reply('You have to provide parameters! The valid first ones for this command are `add`, `remove`, `list`, and `view`.');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'an option to run (add, remove, list, or view)');
 
   const options = ['add', 'remove', 'list', 'view'];
   const option = args[1].toLowerCase();
-  if (!options.includes(option)) return message.reply('That was not a valid option! The options are `add`, `remove`, `list`, and `view`.`');
+  if (!options.includes(option)) return Client.functions.get('argFix')(Client, message.channel, 1, 'The option provided was invalid. It must be `add`, `remove`, `list`, or `view`.');
 
   let serverTag = false;
   if (Client.matchInArray(/-s/g, args)) {
@@ -17,14 +17,14 @@ module.exports = async (Client, message, args) => {
   }
 
   if (option === options[0]) { // Add
-    if (!args[2]) return message.reply('You have to provide a tag name!');
+    if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'a tag name');
     const tagName = args.slice(2).join(' ').toLowerCase();
-    if (tagName.length > 50) return message.reply('The tag name length cannot exceed 50 characters!');
+    if (tagName.length > 50) return Client.functions.get('argFix')(Client, message.channel, 2, 'The tag name must not exceed 50 characters.');
 
     if (serverTag) { // Server tags
       if (!await Client.checkPerms('edit', 'tag', message.member)) return Client.functions.get('noCustomPerm')(message, 'tag.edit');
       const exists = (await Client.sql.query('SELECT * FROM guildtag WHERE tagname = $1 AND guildid = $2 LIMIT 1', [tagName, message.guild.id])).rows[0];
-      if (exists) return message.reply(`There is already a tag named \`${Client.escMD(tagName)}\` in the server.`);
+      if (exists) return Client.functions.get('argFix')(Client, message.channel, 2, `There is already a tag named \`${Client.escMD(tagName)}\` in the server.`);
 
       message.reply('What should the tag\'s content be? You can also reply with `cancel`.');
 
@@ -36,7 +36,7 @@ module.exports = async (Client, message, args) => {
       return message.channel.send(`Successfully added a server tag named ${tagName}.`);
     } else { // Personal tags
       const exists = (await Client.sql.query('SELECT * FROM usertag WHERE tagname = $1 AND userid = $2 LIMIT 1', [tagName, message.author.id])).rows[0];
-      if (exists) return message.reply(`There is already a tag named \`${Client.escMD(tagName)}\` in your personal tags.`);
+      if (exists) return Client.functions.get('argFix')(Client, message.channel, 2, `There is already a tag named \`${Client.escMD(tagName)}\` in your personal tags.`);
 
       message.reply('What should the tag\'s content be? You can also reply with `cancel`.');
 
@@ -48,20 +48,20 @@ module.exports = async (Client, message, args) => {
       return message.channel.send(`Successfully added a tag named ${tagName}.`);
     }
   } else if (option === options[1]) { // Remove
-    if (!args[2]) return message.reply('You have to provide a tag name for me to remove.');
+    if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'a tag name to remove');
     const tagName = args.slice(2).join(' ').toLowerCase();
 
     if (serverTag) { // Server tags
       if (!await Client.checkPerms('edit', 'tag', message.member)) return Client.functions.get('noCustomPerm')(message, 'tag.edit');
       const exists = (await Client.sql.query('SELECT * FROM guildtag WHERE tagname = $1 AND guildid = $2 LIMIT 1', [tagName, message.guild.id])).rows[0];
-      if (!exists) return message.reply(`There is no server tag named \`${Client.escMD(tagName)}\`.`);
+      if (!exists) return Client.functions.get('argFix')(Client, message.channel, 2, `A tag named \`${Client.escMD(tagName)}\` does not exist in the server.`);
 
       Client.sql.query('DELETE FROM guildtag WHERE guildid = $1 AND tagname = $2', [message.guild.id, tagName]);
       return message.channel.send(`Successfully removed a server tag named ${tagName}.`);
     } else { // Personal tags
       if (!await Client.checkPerms('edit', 'tag', message.member)) return Client.functions.get('noCustomPerm')(message, 'tag.edit');
       const exists = (await Client.sql.query('SELECT * FROM usertag WHERE userid = $1 AND tagname = $2 LIMIT 1', [message.author.id, tagName])).rows[0];
-      if (!exists) return message.reply(`There is no tag named \`${Client.escMD(tagName)}\`.`);
+      if (!exists) return Client.functions.get('argFix')(Client, message.channel, 2, `A tag named \`${Client.escMD(tagName)}\` does not exist in your personal tags.`);
 
       Client.sql.query('DELETE FROM usertag WHERE userid = $1 AND tagname = $2', [message.author.id, tagName]);
       return message.channel.send(`Successfully removed a tag named ${tagName}.`);
@@ -118,7 +118,7 @@ module.exports = async (Client, message, args) => {
       return message.channel.send(embed);
     }
   } else if (option === options[3]) { // View
-    if (!args[2]) return message.reply('You have to provide a tag name for me to display!');
+    if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'a tag name to display');
     const tagName = args.slice(2).join(' ').toLowerCase();
     let row;
 

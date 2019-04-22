@@ -7,7 +7,7 @@
 const cowsay = require('cowsay');
 
 module.exports = async (Client, message, args) => {
-  if (!args[1]) return message.reply('You have to provide a message for me to say as a cow!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a message for me to say as a cow');
   const msg = args.slice(1).join(' ');
   const cmsg = cowsay.say({
     text: msg

@@ -7,16 +7,16 @@ module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('nick', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.nick');
   if (!message.guild.me.hasPermission('MANAGE_NICKNAMES')) return Client.functions.get('noClientPerms')(message, ['Manage Nicknames']);
 
-  if (!args[1]) return message.reply('You have to provide a member for me to nickname!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a member to change the nickname of');
   const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
-  if (!member) return message.reply('The member you provided was invalid!');
+  if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a member with that query.');
   if (!member.manageable) return message.reply('I cannot nickname that member!');
   if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough!');
 
   const nickname = args.slice(2).join(' ');
-  if (!nickname) return message.reply('You have to provide a new nickname for me to set for that user!');
-  if (nickname.length > 32) return message.reply('The nickname cannot exceed 32 characters!');
-  if (nickname === member.nickname) return message.reply('The nickname you provided is already in use by that user!');
+  if (!nickname) return Client.functions.get('argMissing')(message.channel, 2, 'a new nickname to change to');
+  if (nickname.length > 32) return Client.functions.get('argFix')(Client, message.channel, 2, 'The nickname length may not exceed 32.');
+  if (nickname === member.nickname) return Client.functions.get('argFix')(Client, message.channel, 2, 'The nickname is the same as the current nickname of the member.');
   member.setNickname(nickname);
   return message.channel.send(`Successfully nicknamed ${member.user.tag} to ${nickname}.`);
 };

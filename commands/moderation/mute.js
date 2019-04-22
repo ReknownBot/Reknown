@@ -29,25 +29,25 @@ module.exports = async (Client, message, args) => {
     message.channel.send('Successfully created a role. Proceeding with the command.');
   }
 
-  if (!args[1]) return message.reply('You have to provide a member for me to mute!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a member to mute');
 
   const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
-  if (!member) return message.reply('The member you provided is invalid or is not in the server!');
+  if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a member with that query.');
   if (member === message.member) return message.reply('You cannot mute yourself!');
   if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough for that member!');
   if (member === message.guild.owner) return message.reply('I cannot mute an owner!');
-  if (member.roles.has(muteRole.id)) return message.reply('That member is already muted!');
+  if (member.roles.has(muteRole.id)) return Client.functions.get('argFix')(Client, message.channel, 1, 'Member is already muted.');
 
-  if (!args[2]) return message.reply('You have to provide a length of time for me to mute that member for!');
+  if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'an amount of time to mute for');
   const time = args[2].slice(0, -1);
-  if (isNaN(time)) return message.reply('The time you provided is not a number!');
-  if (time < 1) return message.reply('The time may not be smaller than one!');
-  if (time.includes('.')) return message.reply('The time cannot be a decimal!');
+  if (isNaN(time)) return Client.functions.get('argFix')(Client, message.channel, 2, 'Could not parse an amount from that.');
+  if (time < 1) return Client.functions.get('argFix')(Client, message.channel, 2, 'The amount may not be lower than 1.');
+  if (time.includes('.')) return Client.functions.get('argFix')(Client, message.channel, 2, 'The amount may not include a decimal.');
   const type = args[2].slice(-1).toLowerCase();
-  if (!['s', 'm', 'h'].includes(type)) return message.reply('The type you provided was invalid! The type can be one of the following: `s`, `m`, or `h`.');
-  if (type === 's' && time > 172800) return message.reply('The max amount of seconds is 172,800!');
-  if (type === 'm' && time > 2880) return message.reply('The max amount of minutes is 2,880!');
-  if (type === 'h' && time > 48) return message.reply('The max amount of hours is 48!');
+  if (!['s', 'm', 'h'].includes(type)) return Client.functions.get('argFix')(Client, message.channel, 2, 'The type of time was invalid. It must be one of the following: s, m, or h.');
+  if (type === 's' && time > 172800) return Client.function.get('argFix')(Client, message.channel, 2, 'The maximum amount of seconds is 172,800.');
+  if (type === 'm' && time > 2880) return Client.functions.get('argFix')(Client, message.channel, 2, 'The maximum amount of minutes is 2,880.');
+  if (type === 'h' && time > 48) return Client.functions.get('argFix')(Client, message.channel, 2, 'The maximum amount of hours is 48.');
 
   let ms = time;
   switch (type) {

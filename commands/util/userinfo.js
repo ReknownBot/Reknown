@@ -7,7 +7,7 @@ module.exports = async (Client, message, args) => {
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
   const user = args[1] ? await Client.getObj(args[1], { type: 'user' }) : message.author;
-  if (!user) return message.reply('The user you provided was invalid!');
+  if (!user) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a user with that query.');
 
   const inGuild = message.guild.members.has(user.id);
 
@@ -16,7 +16,7 @@ module.exports = async (Client, message, args) => {
     .setColor(inGuild ? message.guild.members.get(user.id).displayHexColor : 0x00FFFF)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp()
-    .setThumbnail(user.displayAvatarURL())
+    .setThumbnail(user.displayAvatarURL({ size: 2048 }))
     .addField('Created At', Client.dateFormat(user.createdAt), true)
     .addField('Status', Client.capFirstLetter(user.presence.status), true);
 

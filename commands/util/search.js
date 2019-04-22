@@ -4,16 +4,16 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!args[1]) return message.reply('You have to provide a member for me to search!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a member to search with');
   const member = message.guild.members.get(args[1].replace(/[<>@!?]/g, ''));
-  if (!member) return message.reply('The member you provided was invalid!');
+  if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a member with that query.');
 
-  if (!args[2]) return message.reply('You have to include a message amount for me to search!');
+  if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'an amount of messages to search for');
   let amt = args[2];
-  if (isNaN(amt)) return message.reply('The message amount you provided was not a number!');
-  if (amt > 500) return message.reply('The message amount should __not__ exceed 500!');
-  if (amt < 1) return message.reply('The message amount should __not__ be lower than 1!');
-  if (amt.includes('.')) return message.reply('The message amount should __not__ be a decimal!');
+  if (isNaN(amt)) return Client.functions.get('argFix')(Client, message.channel, 2, 'The amount must be a number.');
+  if (amt > 500) return Client.functions.get('argFix')(Client, message.channel, 2, 'The amount may not exceed 500.');
+  if (amt < 1) return Client.functions.get('argFix')(Client, message.channel, 2, 'The amount may not be lower than 1.');
+  if (amt.includes('.')) return Client.functions.get('argFix')(Client, message.channel, 2, 'The amount may not include a decimal.');
 
   const max = Math.ceil(amt / 100);
   const arr = [];

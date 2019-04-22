@@ -4,16 +4,16 @@
  * @param {String[]} args
  */
 module.exports = async (Client, message, args) => {
-  if (!args[1]) return message.reply('You have to provide what I should search!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'what type to search (player, guild, or guildmember)');
   const options = ['player', 'guild', 'guildmember'];
   const option = args[1].toLowerCase();
-  if (!options.includes(option)) return message.reply(`That option is not valid! The options are \`${options.list()}\`.`);
-  if (!args[2]) return message.reply('You have to provide what I should search by!');
+  if (!options.includes(option)) return Client.functions.get('argFix')(Client, message.channel, 1, 'The provided option was none of the types (player, guild, or guildmember).');
+  if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'a query to search with');
 
   if (option === 'player') {
     const json = await Client.fetch(`https://api.hypixel.net/player?key=${process.env.HYPIXEL_KEY}&name=${encodeURIComponent(args[2])}`).then(res => res.json());
     if (!json.success) return message.reply('Either the Hypixel API is down, or the API key is incorrect. Please report this in my support server.');
-    if (!json.player) return message.reply('That player name is not valid!');
+    if (!json.player) return Client.functions.get('argFix')(Client, message.channel, 2, 'Did not find a player with that username.');
     const player = json.player;
 
     const embed = new Client.Discord.MessageEmbed()
@@ -30,7 +30,7 @@ module.exports = async (Client, message, args) => {
     const info = await Client.fetch(`https://api.hypixel.net/guild?key=${process.env.HYPIXEL_KEY}&name=${encodeURIComponent(args.slice(2).join(' '))}`);
     const json = await info.json();
     if (!json.success) return message.reply('Either the Hypixel API is down, or the API key is incorrect. Please report this in my support server.');
-    if (!json.guild) return message.reply('I did not find a guild by that name!');
+    if (!json.guild) return Client.functions.get('argFix')(Client, message.channel, 2, 'Did not find a guild with that name.');
     const guild = json.guild;
 
     const embed = new Client.Discord.MessageEmbed()
@@ -46,12 +46,12 @@ module.exports = async (Client, message, args) => {
     const playerInfo = await Client.fetch(`https://api.hypixel.net/player?key=${process.env.HYPIXEL_KEY}&name=${encodeURIComponent(args[2])}`);
     const playerJSON = await playerInfo.json();
     if (!playerJSON.success) return message.reply('Either the Hypixel API is down, or the API key is incorrect. Please report this in my support server.');
-    if (!playerJSON.player) return message.reply('That player name is not valid!');
+    if (!playerJSON.player) return Client.functions.get('argFix')(Client, message.channel, 2, 'Did not find a player with that username.');
     const uuid = playerJSON.player.uuid;
 
     const info = await Client.fetch(`https://api.hypixel.net/guild?key=${process.env.HYPIXEL_KEY}&player=${encodeURIComponent(uuid)}`);
     const json = await info.json();
-    if (!json.guild) return message.reply('I did not find a guild by that member name!');
+    if (!json.guild) return Client.functions.get('argFix')(Client, message.channel, 2, 'Did not find a guild that the player is in.');
     const guild = json.guild;
 
     const embed = new Client.Discord.MessageEmbed()

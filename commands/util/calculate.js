@@ -4,13 +4,13 @@
  * @param {String[]} args
 */
 module.exports = async (Client, message, args) => {
-  if (!args[1]) return message.reply('You have to provide an equation for me to solve!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'an equation to solve');
   const eq = args.slice(1).join(' ');
   let result;
   try {
     result = require('string-math')(eq);
   } catch (e) {
-    return message.reply('The formula you put in was incorrect!');
+    return Client.functions.get('argFix')(Client, message.channel, 1, 'Something was wrong with the equation.');
   }
 
   return message.channel.send(`The result from **${Client.escMD(eq)}** was **${Client.escMD(result.toString())}**!`);

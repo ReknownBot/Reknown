@@ -6,37 +6,37 @@
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('role', 'level', message.member)) return Client.functions.get('noCustomPerm')(message, 'level.role');
 
-  if (!args[1]) return message.reply('You have to put an action to execute!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'an action to execute (add, remove, list, or clear)');
   const options = ['add', 'remove', 'list', 'clear'];
   const choice = args[1].toLowerCase();
-  if (!options.includes(choice)) return message.reply('That action is invalid!');
+  if (!options.includes(choice)) return Client.functions.get('argFix')(Client, message.channel, 1, 'That action is invalid. It must be `add`, `remove`, `list`, or `clear`.');
 
   if (choice === options[0]) { // Add
-    if (!args[2]) return message.reply('You have to provide a role for me to add to the level role!');
+    if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'a role to add for levelling rewards');
 
     const role = Client.getObj(args[2], { guild: message.guild, type: 'role' });
-    if (!role) return message.reply('The role you provided was invalid!');
+    if (!role) return Client.functions.get('argFix')(Client, message.channel, 2, 'Did not find a role with that argument.');
 
     const exists = (await Client.sql.query('SELECT * FROM levelrole WHERE guildid = $1 AND roleid = $2 LIMIT 1', [message.guild.id, role.id])).rows[0];
-    if (exists) return message.reply('That role is already on the levelrole list!');
+    if (exists) return Client.functions.get('argFix')(Client, message.channel, 2, 'Role is already on the level role list.');
 
-    if (!args[3]) return message.reply('You have to provide a level requirement for when the members receive the role!');
+    if (!args[3]) return Client.functions.get('argMissing')(message.channel, 3, 'a level requirement for when the members receive the role');
 
     const level = args[3];
-    if (isNaN(level)) return message.reply('The level requirement you provided was not a number!');
-    if (level < 1) return message.reply('The level requirement may not be lower than 1!');
-    if (level.includes('.')) return message.reply('The level requirement may not be a decimal!');
+    if (isNaN(level)) return Client.functions.get('argFix')(Client, message.channel, 3, 'The level requirement provided was not a number.');
+    if (level < 1) return Client.functions.get('argFix')(Client, message.channel, 3, 'The level requirement may not be lower than 1.');
+    if (level.includes('.')) return Client.functions.get('argFix')(Client, message.channel, 3, 'The level requirement may not include a decimal.');
 
     Client.sql.query('INSERT INTO levelrole (guildid, roleid, level) VALUES ($1, $2, $3)', [message.guild.id, role.id, level]);
     return message.channel.send(`Successfully added \`${role.name}\` to the level role with the level requirement of ${level}.`);
   } else if (choice === options[1]) { // Remove
-    if (!args[2]) return message.reply('You have to provide a role for me to remove!');
+    if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'a role to remove from levelling rewards');
 
     const role = Client.getObj(args[2], { guild: message.guild, type: 'role' });
-    if (!role) return message.reply('The role you provided was invalid!');
+    if (!role) return Client.functions.get('argFix')(Client, message.channel, 2, 'Did not find a role with that argument.');
 
     const exists = (await Client.sql.query('SELECT * FROM levelrole WHERE guildid = $1 AND roleid = $2 LIMIT 1', [message.guild.id, role.id])).rows[0];
-    if (!exists) return message.reply('That role is not in the level role list!');
+    if (!exists) return Client.functions.get('argFix')(Client, message.channel, 2, 'The role is not on the levelling rewards.');
 
     Client.sql.query('DELETE FROM levelrole WHERE guildid = $1 AND roleid = $2', [message.guild.id, role.id]);
     return message.channel.send(`Successfully removed \`${role.name}\` from the level role list.`);

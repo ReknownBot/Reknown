@@ -7,7 +7,7 @@ module.exports = async (Client, message, args) => {
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
   const member = args[1] ? Client.getObj(args[1], { guild: message.guild, type: 'member' }) : message.member;
-  if (!member) return message.reply('That is not a valid member!');
+  if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a member with that query.');
 
   const { rows } = await Client.sql.query('SELECT * FROM warnings WHERE userid2 = $1 ORDER BY warnid DESC', [member.id + message.guild.id]);
   if (!rows[0]) return message.reply(`${message.member === member ? 'You do' : 'That user does'} not have any warnings!`);

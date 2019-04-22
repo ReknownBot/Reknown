@@ -24,10 +24,10 @@ module.exports = async (Client, message, args) => {
     return message.channel.send(embed);
   } else {
     const permCategory = args[1].toLowerCase().split('.')[0];
-    if (!Object.keys(Client.permissions).includes(permCategory)) return message.reply('The permission category you provided was invalid!');
+    if (!Object.keys(Client.permissions).includes(permCategory)) return Client.functions.get('argFix')(Client, message.channel, 1, 'The category you provided was invalid. The format should be category.permission.');
     const permName = args[1].toLowerCase().split('.')[1];
-    if (!permName) return message.reply('You have to provide a permission name!\n\n`Eg. ?listperms mod.ban`');
-    if (!Object.keys(Client.permissions[permCategory]).includes(permName)) return message.reply('The permission name you provided was invalid!');
+    if (!permName) return Client.functions.get('argFix')(Client, message.channel, 1, 'You have to provide a permission name. The format should be category.permission.');
+    if (!Object.keys(Client.permissions[permCategory]).includes(permName)) return Client.functions.get('argFix')(Client, message.channel, 1, 'The permission name you provided was not in the category. The format should be category.permission.');
     return message.channel.send(`\`${permCategory}.${permName}\` **${Client.permissions[permCategory][permName]}**`);
   }
 };

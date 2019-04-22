@@ -6,7 +6,7 @@
 module.exports = async (Client, message, args) => {
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
-  if (!args[1]) return message.reply('Please specify one of the modes; standard, taiko, ctb, or mania.');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'an osu! mode (standard, taiko, ctb, or mania)');
   const mode = args[1].toLowerCase();
   const modeChoices = {
     standard: 0,
@@ -14,13 +14,15 @@ module.exports = async (Client, message, args) => {
     ctb: 2,
     mania: 3
   };
+  if (!Object.keys(modeChoices).includes(mode)) return Client.functions.get('argFix')(Client, message.channel, 1, 'Was not a valid osu! type. The following are allowed: standard, taiko, ctb, and mania.');
+
+  if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'an osu! username to search for');
   const user = args.slice(2).join(' ').toLowerCase();
-  if (!Object.keys(modeChoices).includes(mode)) return message.reply('That is not a valid mode! The modes are standard, taiko, ctb, and mania.');
-  if (!user) return message.reply('Please specify a player for me to get stats on.');
+
   let info = await Client.fetch(`https://osu.ppy.sh/api/get_user?k=${process.env.OSU_KEY}&u=${encodeURIComponent(user)}&m=${modeChoices[mode]}`).then(res => res.json());
   info = info[0];
 
-  if (!info) return message.reply('I did not find a user with that query.');
+  if (!info) return Client.functions.get('argFix')(Client, message.channel, 2, 'Did not find an osu! user with that query.');
 
   const embed = new Client.Discord.MessageEmbed()
     .setTitle(`${info.username}'s osu!${mode !== 'standard' ? mode : ''} Stats`)

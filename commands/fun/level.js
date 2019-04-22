@@ -10,7 +10,7 @@ module.exports = async (Client, message, args) => {
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
   const member = args[1] ? Client.getObj(args[1], { guild: message.guild, type: 'member' }) : message.member;
-  if (!member) return message.reply('The member you provided was invalid!');
+  if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'The member provided was invalid.');
 
   const level = (await Client.sql.query('SELECT points, level FROM scores WHERE userid = $1 AND guildid = $2 LIMIT 1', [member.id, message.guild.id])).rows[0];
   if (!level) return message.reply('That user has not been recorded in the database yet!');

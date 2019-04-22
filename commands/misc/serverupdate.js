@@ -6,10 +6,10 @@
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('update', 'misc', message.member)) return Client.functions.get('noCustomPerm')(message, 'misc.update');
 
-  if (!args[1]) return message.reply('You have to include a version of the server!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a version of the update');
   const version = args[1];
 
-  if (!args[2]) return message.reply('You have to include an update message!');
+  if (!args[2]) return Client.functions.get('argFix')(Client, message.channel, 1, 'a message about the update');
   const updatemsg = args.slice(2).join(' ');
 
   const updateRow = (await Client.sql.query('SELECT channelid FROM updatechannel WHERE guildid = $1 LIMIT 1', [message.guild.id])).rows[0];

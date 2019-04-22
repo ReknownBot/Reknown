@@ -7,13 +7,13 @@ module.exports = async (Client, message, args) => {
   const ecoRow = (await Client.sql.query('SELECT money FROM economy WHERE userid = $1', [message.author.id])).rows[0];
   if (!ecoRow) return message.reply(`You need to be registered to use this command! Use \`${Client.prefixes[message.guild.id]}register\` to do so.`);
 
-  if (!args[1]) return message.reply('You have to provide an amount to gamble!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'an amount to gamble');
   const amt = args[1];
-  if (isNaN(amt)) return message.reply('The amount you provided is not a number!');
-  if (amt.includes('.')) return message.reply('The amount cannot be a decimal!');
+  if (isNaN(amt)) return Client.functions.get('argFix')(Client, message.channel, 1, 'The amount provided was not a number.');
+  if (amt.includes('.')) return Client.functions.get('argFix')(Client, message.channel, 1, 'The amount provided included a decimal.');
   if (amt > ecoRow.money) return message.reply('You do not have enough money!');
-  if (amt < 10) return message.reply('The amount needs to be at least 10!');
-  if (amt > 5000) return message.reply('The maximum amount of credits you can gamble is 5,000!');
+  if (amt < 10) return Client.functions.get('argFix')(Client, message.channel, 1, 'The amount must be 10 or above.');
+  if (amt > 5000) return Client.functions.get('argFix')(Client, message.channel, 1, 'The amount cannot be over 5,000.');
 
   const won = Math.random() < 0.5;
   if (won) {

@@ -6,13 +6,13 @@
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('unblacklist', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.unblacklist');
 
-  if (!args[1]) return message.reply('You have to provide a member for me to blacklist!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a member to unblacklist');
   const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
-  if (!member) return message.reply('That is not a valid member!');
+  if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a member with that query.');
   if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough!');
 
   const blacklisted = (await Client.sql.query('SELECT * FROM blacklist WHERE guildid = $1 AND userid = $2', [message.guild.id, member.id])).rows[0];
-  if (!blacklisted) return message.reply('That member is not blacklisted!');
+  if (!blacklisted) return Client.functions.get('argFix')(Client, message.channel, 1, 'That member is not blacklisted.');
 
   Client.sql.query('DELETE FROM blacklist WHERE guildid = $1 AND userid = $2');
   return message.channel.send(`Successfully unblacklisted ${member.user.tag}.`);

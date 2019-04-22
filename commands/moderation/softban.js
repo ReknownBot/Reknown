@@ -7,7 +7,7 @@ module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('softban', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.softban');
   if (!message.guild.me.hasPermission('BAN_MEMBERS')) return Client.functions.get('noClientPerms')(message, ['Ban Members']);
 
-  if (!args[1]) return message.reply('You have to supply a member for me to softban!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a member to softban');
   const regex = new RegExp('--days [0-9]+');
   let days;
   if (!regex.test(args.join(' '))) days = 7;
@@ -19,7 +19,7 @@ module.exports = async (Client, message, args) => {
   }
 
   const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
-  if (!member) return message.reply('The member you provided was invalid!');
+  if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a member with that query.');
   if (member === message.member) return message.reply('You cannot softban yourself!');
   if (message.member.roles.highest.position <= member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough to softban that member!');
   if (message.guild.me.roles.highest.position <= member.roles.highest.position) return message.reply('My role position is not high enough to softban that member!');

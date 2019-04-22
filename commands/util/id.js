@@ -13,7 +13,7 @@ module.exports = async (Client, message, args) => {
     if (possibleMember) x = possibleMember;
     else if (possibleRole) x = possibleRole;
     else if (possibleChannel) x = possibleChannel;
-    else return message.reply('The value you provided did not match anything on the server!');
+    else return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find anything with that query.');
   }
 
   return message.channel.send(`${message.member === x ? 'Your' : 'The'} ID is \`${x.id}\`.`);

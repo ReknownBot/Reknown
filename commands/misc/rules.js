@@ -85,19 +85,19 @@ module.exports = async (Client, message, args) => {
     if (!await Client.checkPerms('rules', 'misc', message.member)) return Client.functions.get('noCustomPerm')(message, 'misc.rules');
     const choice = args[1].toLowerCase();
     if (choice === 'add') {
-      if (!args[2]) return message.reply('You have to provide a rule for me to add!');
+      if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'a rule to add');
       const rule = args.slice(2).join(' ');
-      if (rule.length > 1000) return message.reply('The rule may not exceed 1000 characters!');
-      if (rule.includes('\n')) return message.reply('The rule may not include line breaks!');
+      if (rule.length > 1000) return Client.functions.get('argFix')(Client, message.channel, 2, 'The rule\'s character length should not exceed 1,000.');
+      if (rule.includes('\n')) return Client.functions.get('argFix')(Client, message.channel, 2, 'The rule may not include line breaks.');
       const curRules = (await Client.sql.query('SELECT rule FROM rules WHERE guildid = $1', [message.guild.id])).rows.map(r => r.rule);
-      if (curRules.includes(rule)) return message.reply('That rule is already in the list!');
+      if (curRules.includes(rule)) return Client.functions.get('argFix')(Client, message.channel, 2, 'That rule is already on the list.');
       Client.sql.query('INSERT INTO rules (guildid, rule) VALUES ($1, $2)', [message.guild.id, rule]);
       return message.channel.send('Successfully added a rule.');
     } else if (choice === 'remove') {
-      if (!args[2]) return message.reply('You have to provide a rule for me to remove!');
+      if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'a rule to remove');
       const rule = args.slice(2).join(' ');
       const curRules = (await Client.sql.query('SELECT rule FROM rules WHERE guildid = $1', [message.guild.id])).rows.map(r => r.rule);
-      if (!curRules.includes(rule)) return message.reply('That rule is not in the list!');
+      if (!curRules.includes(rule)) return Client.functions.get('argFix')(Client, message.channel, 2, 'The rule is not on the list.');
       Client.sql.query('DELETE FROM rules WHERE guildid = $1 AND rule = $2', [message.guild.id, rule]);
       return message.channel.send('Successfully removed a rule.');
     } else if (choice === 'clear') {
@@ -105,7 +105,7 @@ module.exports = async (Client, message, args) => {
       if (!ruleExists) return message.reply('There are no rules for me to clear!');
       Client.sql.query('DELETE FROM rules WHERE guildid = $1', [message.guild.id]);
       return message.channel.send('Successfully cleared the rules.');
-    } else return message.reply('None of the options matches your option. The options are `add`, `remove`, and `clear`.');
+    } else return Client.functions.get('argFix')(Client, message.channel, 1, 'The action you provided was invalid. The available actions are: add, remove, and clear.');
   }
 };
 

@@ -17,7 +17,7 @@ module.exports = async (Client, message, args) => {
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
   const code = args.slice(1).join(' ');
-  if (!code) return message.reply('Please give me code to evaluate.');
+  if (!code) return Client.functions.get('argMissing')(message.channel, 1, 'code to evaluate');
 
   try {
     // eslint-disable-next-line no-eval

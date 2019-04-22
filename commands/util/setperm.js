@@ -6,25 +6,25 @@
 module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('setperm', 'misc', message.member)) return Client.functions.get('noCustomPerm')(message, 'misc.setperm');
 
-  if (!args[1]) return message.reply('You have to provide a permission for me to allow / disallow a role!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a permission to enable/disable');
   const perm = args[1];
   let permCateg, permName;
   if (perm !== '*') {
     permCateg = args[1].toLowerCase().split('.')[0];
     permName = args[1].toLowerCase().split('.')[1];
-    if (!Object.keys(Client.permissions).includes(permCateg)) return message.reply('The permission category you provided was invalid!');
+    if (!Object.keys(Client.permissions).includes(permCateg)) return Client.functions.get('argFix')(Client, message.channel, 1, 'The permission category you provided was invalid.');
 
-    if (permName && !Object.keys(Client.permissions[permCateg]).includes(permName)) return message.reply('The permission name you provided was invalid!');
+    if (permName && !Object.keys(Client.permissions[permCateg]).includes(permName)) return Client.functions.get('argFix')(Client, message.channel, 1, 'The permission name you provided was invalid.');
   }
 
-  if (!args[2]) return message.reply('You have to provide a role to change permissions!');
+  if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'a role to change permissions with');
   const role = Client.getObj(args[2], { guild: message.guild, type: 'role' });
-  if (!role) return message.reply('The role you provided was invalid!');
+  if (!role) return Client.functions.get('argFix')(Client, message.channel, 2, 'Did not find a role with that query.');
   if (role.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough for that role!');
 
-  if (!args[3]) return message.reply('Please provide a boolean for the role. (True or False)');
+  if (!args[3]) return Client.functions.get('argMissing')(message.channel, 3, 'a value to set the permission (true or false)');
   let bool = args[3].toLowerCase();
-  if (bool !== 'true' && bool !== 'false') return message.reply('Your third argument is not "true" or "false"!');
+  if (bool !== 'true' && bool !== 'false') return Client.functions.get('argFix')(Client, message.channel, 3, 'The value must be "true" or "false".');
   bool = bool === 'true' ? 1 : 0;
 
   if (perm === '*') {

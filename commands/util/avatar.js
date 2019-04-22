@@ -8,7 +8,7 @@ module.exports = async (Client, message, args) => {
 
   /** @type {import('discord.js').User} */
   const user = args[1] ? await Client.getObj(args[1], { type: 'user' }) : message.author;
-  if (!user) return message.reply('That user does not exist!');
+  if (!user) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a user with that query.');
 
   const isAnimated = user.displayAvatarURL().endsWith('.gif');
   const embed = new Client.Discord.MessageEmbed()

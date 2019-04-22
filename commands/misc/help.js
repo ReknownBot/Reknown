@@ -42,11 +42,11 @@ module.exports = async (Client, message, args) => {
   } else {
     if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
-    if (!Object.keys(Client.allAlias).includes(args[1].toLowerCase())) return message.reply(`I did not find \`${args[1]}\` in my command list.`);
+    if (!Object.keys(Client.allAlias).includes(args[1].toLowerCase())) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find that command in my commands list.');
     const cmd = Client.allAlias[args[1].toLowerCase()];
     const cmdInfo = Client.commands[cmd];
     const options = cmdInfo.help.options;
-    if (cmdInfo.private && message.author.id !== Client.ownerID) return message.reply('Sorry, but that command is private.');
+    if (cmdInfo.private && message.author.id !== Client.ownerID) return Client.functions.get('argFix')(Client, message.channel, 1, 'That command is private.');
     const embed = new Client.Discord.MessageEmbed()
       .setTitle(`${cmd} Info`)
       .setColor(0x00FFFF)

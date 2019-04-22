@@ -6,9 +6,9 @@
 module.exports = async (Client, message, args) => {
   if (message.author.id !== Client.ownerID) return message.reply('Only the bot owner can use this command!');
 
-  if (!args[1]) return message.reply('You have to provide a user to globally blacklist!');
+  if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a user to globally blacklist');
   const user = await Client.getObj(args[1], { type: 'user' });
-  if (!user) return message.reply('The user you provided was invalid!');
+  if (!user) return Client.functions.get('argFix')(Client, message.channel, 1, 'User provided was invalid.');
   if (user.id === Client.ownerID) return message.reply('Don\'t... Blacklist yourself...');
 
   const reason = args[2] ? args.slice(2).join(' ') : 'None';
