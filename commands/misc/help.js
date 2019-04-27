@@ -1,9 +1,3 @@
-/**
- * @param {import('../../structures/client.js')} Client
- * @param {import('discord.js').Message} message
- * @param {String[]} args
-*/
-
 const categoryObj = {
   'bot list': 'Bot List',
   'fun': 'Fun',
@@ -15,6 +9,11 @@ const categoryObj = {
   'economy': 'Economy'
 };
 
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   if (!args[1]) {
     const embed = new Client.Discord.MessageEmbed()
@@ -28,7 +27,7 @@ module.exports = async (Client, message, args) => {
       const field = embed.fields.find(field => field.name === category);
       if (!field) {
         embed.addField(category, name);
-      } else field.value += `\n${name}`;
+      } else field.value += `, \`${name}\``;
     });
 
     return message.author.send(embed)
