@@ -1,11 +1,10 @@
+const isAFK = new Set();
+
 /**
  * @param {import('../../structures/client.js')} Client
  * @param {import('discord.js').Message} message
  * @param {String[]} args
  */
-
-const isAFK = new Set();
-
 module.exports = async (Client, message, args) => {
   if (isAFK.has(message.author.id + message.guild.id)) return message.reply('You are already AFK!');
 
