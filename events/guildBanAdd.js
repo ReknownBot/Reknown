@@ -19,6 +19,8 @@ async function logMessage(Client, guild, user) {
 
     if (entry) {
       const executor = entry.executor;
+      if (executor.partial) await executor.fetch();
+
       const reason = entry.reason || 'None';
 
       embed.setAuthor(`${executor.tag} (${executor.id})`, executor.displayAvatarURL())
@@ -33,7 +35,8 @@ async function logMessage(Client, guild, user) {
  * @param {import('../structures/client.js')} Client
  */
 module.exports = (Client) => {
-  return Client.bot.on('guildBanAdd', (guild, user) => {
+  return Client.bot.on('guildBanAdd', async (guild, user) => {
+    if (user.partial) await user.fetch();
     if (user === Client.bot.user) return;
     if (!guild || !guild.available) return;
 

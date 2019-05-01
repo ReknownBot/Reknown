@@ -24,6 +24,8 @@ async function logMessage(Client, message) {
 
     if (entry) {
       const executor = entry.executor;
+      if (executor.partial) await executor.fetch();
+
       const reason = entry.reason || 'None';
 
       if (Date.now() - entry.createdTimestamp < 7000) embed.setAuthor(`${executor.tag} (${executor.id})`, executor.displayAvatarURL()).addField('Author', message.author, true);
@@ -59,8 +61,9 @@ async function delStar (Client, message) {
  * @param {import('../structures/client.js')} Client
  */
 module.exports = (Client) => {
-  return Client.bot.on('messageDelete', message => {
+  return Client.bot.on('messageDelete', async message => {
     if (message.partial) return;
+    if (message.author.partial) await message.author.fetch();
     if (!message.guild || !message.guild.available) return;
     if (message.author.bot) return;
 

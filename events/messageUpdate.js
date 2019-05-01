@@ -57,8 +57,10 @@ async function editStar (Client, newMessage) {
  * @param {import('../structures/client.js')} Client
  */
 module.exports = (Client) => {
-  return Client.bot.on('messageUpdate', (oldMessage, newMessage) => {
+  return Client.bot.on('messageUpdate', async (oldMessage, newMessage) => {
     if (oldMessage.partial || newMessage.partial) return;
+    if (newMessage.member.partial) await newMessage.member.fetch();
+    if (newMessage.author.partial) await newMessage.author.fetch();
     if (!oldMessage.guild || !oldMessage.guild.available) return;
 
     logMessage(Client, oldMessage, newMessage);

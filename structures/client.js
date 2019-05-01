@@ -21,7 +21,7 @@ const bot = new Discord.Client({
     'USER_NOTE_UPDATE',
     'GUILD_SYNC'
   ],
-  partials: ['MESSAGE']
+  partials: ['MESSAGE', 'USER', 'GUILD_MEMBER']
 });
 
 /**

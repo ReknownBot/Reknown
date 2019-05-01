@@ -3,6 +3,9 @@
  */
 module.exports = (Client) => {
   return Client.bot.on('message', async message => {
+    if (message.author.partial) return message.author.fetch();
+    if (message.member.partial) return message.member.fetch();
+
     if (message.author.bot) return;
     if (message.channel.type === 'dm') return message.channel.send('You cannot use me in a DM, please use a server.');
     if (!message.guild.available) return;

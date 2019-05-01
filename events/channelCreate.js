@@ -20,6 +20,8 @@ async function logMessage(Client, channel) {
 
     if (entry) {
       const executor = entry.executor;
+      if (executor.partial) await executor.fetch();
+
       const reason = entry.reason || 'None';
 
       embed.setAuthor(`${executor.tag} (${executor.id})`, executor.displayAvatarURL())
