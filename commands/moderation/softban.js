@@ -32,7 +32,7 @@ module.exports = async (Client, message, args) => {
   });
   const msg = await message.channel.send('Awaiting unban...');
   await message.guild.members.unban(member.id);
-  return msg.deleted ? msg.edit(`Successfully softbanned ${Client.escMD(member.user.tag)} for \`${Client.escMD(reason)}\`.`) : null;
+  return !msg.deleted ? msg.edit(`Successfully softbanned ${Client.escMD(member.user.tag)} for \`${Client.escMD(reason)}\`.`) : null;
 };
 
 module.exports.help = {
