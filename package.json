@@ -32,7 +32,7 @@
     "fs": "0.0.1-security",
     "fuzzball": "^1.2.0",
     "moment": "^2.24.0",
-    "node-fetch": "^2.4.1",
+    "node-fetch": "^2.5.0",
     "pg": "^7.10.0",
     "rollbar": "^2.6.1",
     "rword": "^2.3.0",
