@@ -13,6 +13,8 @@ module.exports = (Client) => {
     Client.functions.get('deleteinvite')(Client, message);
     Client.functions.get('eco')(Client, message.member);
 
+    if (!message.content) return;
+
     const row = (await Client.sql.query('SELECT customprefix FROM prefix WHERE guildid = $1', [message.guild.id])).rows[0];
 
     if (!Client.prefixes[message.guild.id]) {
