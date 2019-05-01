@@ -6,6 +6,9 @@ module.exports = async (Client, message) => {
   const toggleLevel = (await Client.sql.query('SELECT * FROM toggleLevel WHERE guildId = $1 LIMIT 1', [message.guild.id])).rows[0];
   if (!toggleLevel || !toggleLevel.bool) return;
 
+  const levelBlock = (await Client.sql.query('SELECT * FROM levelblock WHERE channelid = $1', [message.channel.id])).rows[0];
+  if (levelBlock && levelBlock.bool) return;
+
   const scoreCount = (await Client.sql.query('SELECT * FROM scores WHERE userID = $1 AND guildID = $2 LIMIT 1', [message.author.id, message.guild.id])).rows[0];
   if (!scoreCount) return Client.sql.query('INSERT INTO scores (userID, guildID, points, level) VALUES ($1, $2, $3, $4)', [message.author.id, message.guild.id, 1, 0]);
 

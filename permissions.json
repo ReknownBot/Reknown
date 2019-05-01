@@ -20,7 +20,8 @@
   "level": {
     "role": "Allows the use of ?levelrole.",
     "options": "Allows the ability to modify level-related settings.",
-    "set": "Allows the ability of ?setlevel and ?setpoints."
+    "set": "Allows the ability of ?setlevel and ?setpoints.",
+    "block": "Allows the ability to use ?blocklevel."
   },
   "slowmode": {
     "set": "Allows the ability to set a slowmode."

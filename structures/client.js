@@ -98,7 +98,6 @@ const client = {
 
   getObj: (mention, options) => {
     const type = options.type;
-
     const guild = options.guild;
 
     if (type === 'member' || type === 'user') {
