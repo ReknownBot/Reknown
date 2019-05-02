@@ -12,7 +12,7 @@ function clean(text) {
   return text;
 }
 
-module.exports = async (Client, message, args) => {
+module.exports = (Client, message, args) => {
   if (message.author.id !== Client.ownerID) return message.reply('Only the bot owner may use this command!');
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
 
@@ -21,7 +21,7 @@ module.exports = async (Client, message, args) => {
 
   try {
     // eslint-disable-next-line no-eval
-    let evaled = await eval(code);
+    let evaled = eval(code);
     if (typeof (evaled) !== 'string') evaled = require('util').inspect(evaled);
 
     const embed = new Client.Discord.MessageEmbed()
