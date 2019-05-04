@@ -2,7 +2,7 @@
  * @param {import('../structures/client.js')} Client
  */
 module.exports = (Client) => {
-  return Client.bot.on('ready', async () => {
+  return Client.bot.once('ready', async () => {
     console.log(`Logged in as ${Client.bot.user.tag}!`);
 
     Client.bot.user.setActivity(`${Client.bot.users.filter(u => !u.bot).size} Users and ${Client.bot.guilds.size} Servers`, {
