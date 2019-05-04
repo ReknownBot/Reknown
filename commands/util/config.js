@@ -8,6 +8,7 @@ const obj = {
   cmdnotfound: ['misc', 'togglemsg'],
   deleteinvite: ['mod', 'minvite'],
   goodbyemsg: ['misc', 'welcome'],
+  levelmsg: ['level', 'options'],
   logchannel: ['mod', 'log'],
   prefix: ['misc', 'prefix'],
   starchannel: ['misc', 'star'],
@@ -27,6 +28,7 @@ const options = {
   cmdnotfound: 'Toggles the unknown command message.',
   deleteinvite: 'Deletes all invites by users without the `misc.invite` permission.',
   goodbyemsg: 'Sets the message sent when someone leaves the server.',
+  levelmsg: 'Toggles levelup messages.',
   logchannel: 'Sets the channel to send logs in.',
   prefix: 'Sets the prefix for the bot.',
   starchannel: 'Sets the channel for starboard messages.',
@@ -101,6 +103,15 @@ module.exports = async (Client, message, args) => {
       if (!row) Client.sql.query('INSERT INTO goodbyemessages (guildid, custommessage) VALUES ($1, $2)', [message.guild.id, msg]);
       else Client.sql.query('UPDATE goodbyemessages SET custommessage = $1 WHERE guildid = $2', [msg, message.guild.id]);
       return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escMD(msg)}\`.`);
+    }
+    case 'levelmsg': {
+      if (value !== 'true' && value !== 'false') return Client.functions.get('argFix')(Client, message.channel, 2, 'The value you provided is invalid. That option takes `true` or `false`.');
+      const row = (await Client.sql.query('SELECT bool FROM levelmsg WHERE guildid = $1', [message.guild.id])).rows[0];
+      if ((!row && bool === 1) || (row && row.bool === bool)) return Client.functions.get('argFix')(Client, message.channel, 2, 'The value provided is the same as the current one.');
+
+      if (!row) Client.sql.query('INSERT INTO levelmsg (guildid, bool) VALUES ($1, $2)', [message.guild.id, bool]);
+      else Client.sql.query('UPDATE levelmsg SET bool = $1 WHERE guildid = $2', [bool, message.guild.id]);
+      return message.channel.send(`Successfully updated \`${option}\` to \`${value}\`.`);
     }
     case 'logchannel': {
       const channel = Client.getObj(value, { guild: message.guild, type: 'channel' });

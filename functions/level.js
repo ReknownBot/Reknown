@@ -19,7 +19,11 @@ module.exports = async (Client, message) => {
 
   if (curLevel > scoreCount.level) {
     Client.sql.query('UPDATE scores SET level = $1, points = $2 WHERE userID = $3 AND guildID = $4', [curLevel, curPoints, message.author.id, message.guild.id]);
-    const msg = await message.channel.send(`GG ${message.author}! You are now level ${curLevel}.`);
+
+    const toggleLevel = (await Client.sql.query('SELECT * FROM toggleLevel WHERE guildId = $1 LIMIT 1', [message.guild.id])).rows[0];
+    let msg;
+    if (!toggleLevel || toggleLevel.bool) msg = await message.channel.send(`GG ${message.author}! You are now level ${curLevel}.`);
+
     setTimeout(() => {
       if (!msg.deleted) msg.delete();
     }, 5000);
