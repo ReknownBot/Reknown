@@ -24,7 +24,7 @@ async function logMessage(Client, message) {
 
     if (entry) {
       const executor = entry.executor;
-      if (executor.partial) await executor.fetch();
+      if (!executor || executor.partial) await executor.fetch();
 
       const reason = entry.reason || 'None';
 
@@ -63,7 +63,7 @@ async function delStar (Client, message) {
 module.exports = (Client) => {
   return Client.bot.on('messageDelete', async message => {
     if (message.partial) return;
-    if (message.author.partial) await message.author.fetch();
+    if (!message.author || message.author.partial) await message.author.fetch();
     if (!message.guild || !message.guild.available) return;
     if (message.author.bot) return;
 

@@ -19,7 +19,7 @@ async function logMessage(Client, guild, user) {
 
     if (entry) {
       const executor = entry.executor;
-      if (executor.partial) await executor.fetch();
+      if (!executor || executor.partial) await executor.fetch();
 
       const reason = entry.reason || 'None';
 
@@ -36,7 +36,7 @@ async function logMessage(Client, guild, user) {
  */
 module.exports = (Client) => {
   return Client.bot.on('guildBanRemove', async (guild, user) => {
-    if (user.partial) await user.fetch();
+    if (!user || user.partial) await user.fetch();
     if (user === Client.bot.user) return;
     if (!guild || !guild.available) return;
 

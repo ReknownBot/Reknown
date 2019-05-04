@@ -79,7 +79,7 @@ function mute (Client, member, guild) {
  */
 module.exports = (Client) => {
   return Client.bot.on('guildMemberAdd', async member => {
-    if (member.partial) await member.fetch();
+    if (!member || member.partial) await member.fetch();
     const guild = member.guild;
     if (!guild.available) return;
     if (member === guild.me) return;

@@ -3,12 +3,12 @@
  */
 module.exports = (Client) => {
   return Client.bot.on('messageReactionAdd', async (reaction, user) => {
-    if (user.partial) await user.fetch();
+    if (!user || user.partial) await user.fetch();
     if (reaction.message.partial) await reaction.message.fetch();
     const message = reaction.message;
     if (!message.content && !message.attachments.find(attch => attch.height)) return;
 
-    if (message.author.partial) await message.author.fetch();
+    if (!message.author || message.author.partial) await message.author.fetch();
 
     const channel = message.channel;
     if (channel.type !== 'text') return;
