@@ -8,6 +8,7 @@ const obj = {
   cmdnotfound: ['misc', 'togglemsg'],
   deleteinvite: ['mod', 'minvite'],
   goodbyemsg: ['misc', 'welcome'],
+  levelmodifier: ['level', 'options'],
   levelmsg: ['level', 'options'],
   logchannel: ['mod', 'log'],
   prefix: ['misc', 'prefix'],
@@ -28,6 +29,7 @@ const options = {
   cmdnotfound: 'Toggles the unknown command message.',
   deleteinvite: 'Deletes all invites by users without the `misc.invite` permission.',
   goodbyemsg: 'Sets the message sent when someone leaves the server.',
+  levelmodifier: 'Changes the levelling amount multiplier.',
   levelmsg: 'Toggles levelup messages.',
   logchannel: 'Sets the channel to send logs in.',
   prefix: 'Sets the prefix for the bot.',
@@ -103,6 +105,16 @@ module.exports = async (Client, message, args) => {
       if (!row) Client.sql.query('INSERT INTO goodbyemessages (guildid, custommessage) VALUES ($1, $2)', [message.guild.id, msg]);
       else Client.sql.query('UPDATE goodbyemessages SET custommessage = $1 WHERE guildid = $2', [msg, message.guild.id]);
       return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escMD(msg)}\`.`);
+    }
+    case 'levelmodifier': {
+      if (isNaN(value)) return Client.functions.get('argFix')(Client, message.channel, 2, 'Value was not an integer.');
+      if (value <= 0) return Client.functions.get('argFix')(Client, message.channel, 2, 'Value must be above 0.');
+      if (value > 5) return Client.functions.get('argFix')(Client, message.channel, 2, 'Value must not exceed 5.');
+
+      const row = (await Client.sql.query('SELECT * FROM levelmodifier WHERE guildid = $1', [message.guild.id])).rows[0];
+      if (!row) Client.sql.query('INSERT INTO levelmodifier (guildid, amount) VALUES ($1, $2)', [message.guild.id, value]);
+      else Client.sql.query('UPDATE levelmodifier SET amount = $1 WHERE guildid = $2', [value, message.guild.id]);
+      return message.channel.send(`Successfully updated \`${option}\` to ${value}.`);
     }
     case 'levelmsg': {
       if (value !== 'true' && value !== 'false') return Client.functions.get('argFix')(Client, message.channel, 2, 'The value you provided is invalid. That option takes `true` or `false`.');

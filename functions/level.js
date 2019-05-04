@@ -14,8 +14,12 @@ module.exports = async (Client, message) => {
 
   if (scoreCount.points > 25000000) return;
 
+  let modifier;
+  const levelModifier = (await Client.sql.query('SELECT amount FROM levelmodifier WHERE guildid = $1', [message.guild.id])).rows[0];
+  if (!levelModifier) modifier = 1;
+  else modifier = levelModifier.amount;
   const curLevel = Math.floor(0.2 * Math.sqrt(scoreCount.points + message.content.length));
-  const curPoints = message.content.length + scoreCount.points;
+  const curPoints = modifier * message.content.length + scoreCount.points;
 
   if (curLevel > scoreCount.level) {
     Client.sql.query('UPDATE scores SET level = $1, points = $2 WHERE userID = $3 AND guildID = $4', [curLevel, curPoints, message.author.id, message.guild.id]);
