@@ -1,9 +1,3 @@
-/**
- * @param {import('../../structures/client.js')} Client
- * @param {import('discord.js').Message} message
- * @param {String[]} args
- */
-
 function clean(text) {
   if (typeof (text) === 'string') {
     return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203));
@@ -12,6 +6,11 @@ function clean(text) {
   return text;
 }
 
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+ */
 module.exports = (Client, message, args) => {
   if (message.author.id !== Client.ownerID) return message.reply('Only the bot owner may use this command!');
   if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
