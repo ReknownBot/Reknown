@@ -5,7 +5,7 @@
  */
 module.exports = async (Client, message, args) => {
   /** @type {import('discord.js').GuildMember} */
-  const member = args[1] ? Client.getObj(args[1], { guild: message.guild, type: 'member' }) : message.member;
+  const member = args[1] ? await Client.getObj(args[1], { guild: message.guild, type: 'member' }) : message.member;
   if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find the member provided.');
 
   const row = (await Client.sql.query('SELECT money FROM economy WHERE userid = $1', [member.id])).rows[0];

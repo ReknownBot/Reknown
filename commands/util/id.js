@@ -7,7 +7,7 @@ module.exports = async (Client, message, args) => {
   let x;
   if (!args[1]) x = message.member;
   else {
-    const possibleMember = Client.getObj(args[1], { guild: message.guild, type: 'member' });
+    const possibleMember = await Client.getObj(args[1], { guild: message.guild, type: 'member' });
     const possibleRole = Client.getObj(args[1], { guild: message.guild, type: 'role' }) || message.guild.roles.find(r => r.name.toLowerCase() === args.slice(1).join(' ').toLowerCase());
     const possibleChannel = Client.getObj(args[1], { guild: message.guild, type: 'channel' });
     if (possibleMember) x = possibleMember;

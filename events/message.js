@@ -3,20 +3,17 @@
  */
 module.exports = (Client) => {
   return Client.bot.on('message', async message => {
-    if (!message.author || message.author.partial) await message.author.fetch();
-    if (!message.member || message.member.partial) await message.member.fetch();
-
     if (message.author.bot) return;
-    if (message.channel.type === 'dm') return message.channel.send('You cannot use me in a DM, please use a server.');
-    if (!message.guild.available) return;
+    if (!message.guild || !message.guild.available) return;
+
+    if (message.author.partial) await message.author.fetch();
+    if (message.member.partial) await message.member.fetch();
 
     if (!message.channel.permissionsFor(Client.bot.user).has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
 
     if (!message.edits[1]) Client.functions.get('level')(Client, message);
     Client.functions.get('deleteinvite')(Client, message);
     Client.functions.get('eco')(Client, message.member);
-
-    if (!message.content) return;
 
     const row = (await Client.sql.query('SELECT customprefix FROM prefix WHERE guildid = $1', [message.guild.id])).rows[0];
 

@@ -3,15 +3,15 @@
  */
 module.exports = (Client) => {
   return Client.bot.on('messageReactionAdd', async (reaction, user) => {
-    if (!user || user.partial) await user.fetch();
+    if (user.partial) await user.fetch();
     if (reaction.message.partial) await reaction.message.fetch();
     const message = reaction.message;
+    if (!message.guild || !message.guild.available) return;
     if (!message.content && !message.attachments.find(attch => attch.height)) return;
 
-    if (!message.author || message.author.partial) await message.author.fetch();
+    if (message.author.partial) await message.author.fetch();
 
     const channel = message.channel;
-    if (channel.type !== 'text') return;
     if (!Client.checkClientPerms(channel, 'VIEW_CHANNEL', 'SEND_MESSAGES')) return;
     const emoji = reaction.emoji.name;
     if (emoji !== '⭐') return;

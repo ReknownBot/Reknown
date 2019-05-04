@@ -7,7 +7,7 @@ module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('unwarn', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.unwarn');
 
   if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a member to unwarn');
-  const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
+  const member = await Client.getObj(args[1], { guild: message.guild, type: 'member' });
   if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a member with that query.');
 
   const warnid = args[2];

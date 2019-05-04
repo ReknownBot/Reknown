@@ -16,7 +16,7 @@ module.exports = async (Client, message, args) => {
   amount = parseInt(amount);
 
   if (args[2]) {
-    const member = Client.getObj(args[2], { guild: message.guild, type: 'member' });
+    const member = await Client.getObj(args[2], { guild: message.guild, type: 'member' });
     if (!member) return Client.functions.get('argFix')(Client, message.channel, 2, 'Did not find a member with that query.');
     let messages = await message.channel.messages.fetch({
       limit: amount,

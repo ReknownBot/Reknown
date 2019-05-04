@@ -106,7 +106,7 @@ const client = {
         if (mention.startsWith('!')) mention = mention.slice(1);
       }
 
-      if (type === 'member') return guild.members.get(mention);
+      if (type === 'member') return guild.members.fetch(mention).catch(() => false);
       return bot.users.fetch(mention).catch(() => false);
     } else if (type === 'channel') {
       const filter = options.filter;

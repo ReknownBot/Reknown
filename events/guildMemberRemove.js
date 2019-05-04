@@ -50,7 +50,7 @@ function logMessage (Client, member) {
  * @param {import('discord.js').GuildMember} member
  */
 async function kickMessage (Client, entry, member) {
-  if (!entry.executor || entry.executor.partial) await entry.executor.fetch();
+  if (entry.executor.partial) await entry.executor.fetch();
   const embed = new Client.Discord.MessageEmbed()
     .setTitle('Member Kicked')
     .setColor(0xFF0000)
@@ -68,10 +68,10 @@ async function kickMessage (Client, entry, member) {
  */
 module.exports = (Client) => {
   return Client.bot.on('guildMemberRemove', async member => {
-    if (!member || member.partial) await member.fetch();
-    if (!member.user || member.user.partial) await member.user.fetch();
+    if (!member.guild.available) return;
+    if (member.partial) await member.fetch();
+    if (member.user.partial) await member.user.fetch();
     if (!member.guild.me) return;
-    if (!member.guild || !member.guild.available) return;
 
     goodbyeMessage(Client, member);
 

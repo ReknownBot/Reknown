@@ -7,7 +7,7 @@ module.exports = async (Client, message, args) => {
   if (!await Client.checkPerms('blacklist', 'mod', message.member)) return Client.functions.get('noCustomPerm')(message, 'mod.blacklist');
 
   if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a member to blacklist');
-  const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
+  const member = await Client.getObj(args[1], { guild: message.guild, type: 'member' });
   if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'The member provided was invalid.');
   if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough!');
   if (member === message.member) return message.reply('You cannot blacklist yourself!');

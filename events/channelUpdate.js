@@ -19,7 +19,7 @@ async function logMessage(Client, oldChannel, newChannel) {
 
     if (entry) {
       const executor = entry.executor;
-      if (!executor || executor.partial) await executor.fetch();
+      if (executor.partial) await executor.fetch();
 
       const reason = entry.reason || 'None';
 

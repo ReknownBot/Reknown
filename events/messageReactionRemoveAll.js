@@ -4,8 +4,8 @@
 module.exports = (Client) => {
   return Client.bot.on('messageReactionRemoveAll', async message => {
     if (message.partial) await message.fetch();
-    if (!message.author || message.author.partial) await message.author.fetch();
-    if (message.channel.type !== 'text') return;
+    if (message.author.partial) await message.author.fetch();
+    if (!message.guild || !message.guild.available) return;
 
     const toggled = (await Client.sql.query('SELECT bool FROM togglestar WHERE guildid = $1 AND bool = $2', [message.guild.id, 1])).rows[0];
     if (!toggled) return;

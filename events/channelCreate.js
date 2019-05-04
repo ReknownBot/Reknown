@@ -20,7 +20,7 @@ async function logMessage(Client, channel) {
 
     if (entry) {
       const executor = entry.executor;
-      if (!executor || executor.partial) await executor.fetch();
+      if (executor.partial) await executor.fetch();
 
       const reason = entry.reason || 'None';
 
@@ -37,7 +37,7 @@ async function logMessage(Client, channel) {
  */
 module.exports = (Client) => {
   return Client.bot.on('channelCreate', channel => {
-    if (!channel.guild || !channel.guild.available) return;
+    if (!channel.guild.available) return;
 
     logMessage(Client, channel);
   });

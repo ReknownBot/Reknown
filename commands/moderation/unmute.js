@@ -11,7 +11,7 @@ module.exports = async (Client, message, args) => {
   if (!muteRole) return message.reply('I did not find a "Muted" role!');
 
   if (!args[1]) return Client.functions.get('argMissing')(message.channel, 1, 'a member to unmute');
-  const member = Client.getObj(args[1], { guild: message.guild, type: 'member' });
+  const member = await Client.getObj(args[1], { guild: message.guild, type: 'member' });
   if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a member with that query.');
   if (member === message.member) return message.reply('You cannot unmute yourself!');
   if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('You cannot unmute ones that have a higher role than you!');

@@ -66,7 +66,8 @@ function roleChange (Client, oldMember, newMember) {
  */
 module.exports = (Client) => {
   return Client.bot.on('guildMemberUpdate', (oldMember, newMember) => {
-    if (!oldMember || oldMember.partial || !newMember || newMember.partial) return newMember.fetch();
+    if (!newMember.guild.available) return;
+    if (oldMember.partial || newMember.partial) return newMember.fetch();
 
     if (oldMember.nickname !== newMember.nickname) nickChange(Client, oldMember.nickname || 'None', newMember.nickname, oldMember.guild, newMember);
     if (oldMember.roles.size !== newMember.roles.size) roleChange(Client, oldMember, newMember);
