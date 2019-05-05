@@ -6,7 +6,6 @@ module.exports = (Client) => {
     if (message.author.bot) return;
     if (!message.guild || !message.guild.available) return;
 
-    if (message.author.partial) await message.author.fetch();
     if (message.member.partial) await message.member.fetch();
 
     if (!message.channel.permissionsFor(Client.bot.user).has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;

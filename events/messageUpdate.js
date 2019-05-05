@@ -61,7 +61,6 @@ module.exports = (Client) => {
     if (oldMessage.partial || newMessage.partial) return;
     if (!oldMessage.guild || !oldMessage.guild.available) return;
     if (newMessage.member.partial) await newMessage.member.fetch();
-    if (newMessage.author.partial) await newMessage.author.fetch();
 
     logMessage(Client, oldMessage, newMessage);
     editMsg(Client, newMessage);
