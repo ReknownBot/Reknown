@@ -4,6 +4,7 @@
     "softban": "Allows the use of ?softban.",
     "unban": "Allows the use of ?unban.",
     "kick": "Allows the use of ?kick.",
+    "kickvc": "Allows the use of ?kickvc",
     "mute": "Allows the use of ?mute.",
     "unmute": "Allows the use of ?unmute.",
     "warn": "Allows the use of ?warn.",
