@@ -27,7 +27,7 @@
     "array-utility": "0.0.2",
     "cowsay": "^1.4.0",
     "dateformat": "^3.0.3",
-    "discord.js": "github:discordjs/discord.js",
+    "discord.js": "github:izexi/discord.js#partials-fix",
     "dotenv": "^6.2.0",
     "fs": "0.0.1-security",
     "fuzzball": "^1.2.0",
