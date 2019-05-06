@@ -19,7 +19,7 @@ module.exports = async (Client, message) => {
   if (!levelModifier) modifier = 1;
   else modifier = levelModifier.amount;
   const curLevel = Math.floor(0.2 * Math.sqrt(scoreCount.points + message.content.length));
-  const curPoints = modifier * message.content.length + scoreCount.points;
+  const curPoints = Math.round(modifier * message.content.length + scoreCount.points);
 
   if (curLevel > scoreCount.level) {
     Client.sql.query('UPDATE scores SET level = $1, points = $2 WHERE userID = $3 AND guildID = $4', [curLevel, curPoints, message.author.id, message.guild.id]);
