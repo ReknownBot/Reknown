@@ -6,6 +6,7 @@
 const obj = {
   blacklistmsg: ['misc', 'blacklist'],
   cmdnotfound: ['misc', 'togglemsg'],
+  cooldownmsg: ['misc', 'cooldownmsg'],
   deleteinvite: ['mod', 'minvite'],
   goodbyemsg: ['misc', 'welcome'],
   levelmodifier: ['level', 'options'],
@@ -27,6 +28,7 @@ const obj = {
 const options = {
   blacklistmsg: 'Toggles the blacklisted message.',
   cmdnotfound: 'Toggles the unknown command message.',
+  cooldownmsg: 'Toggles the command cooldown message.',
   deleteinvite: 'Deletes all invites by users without the `misc.invite` permission.',
   goodbyemsg: 'Sets the message sent when someone leaves the server.',
   levelmodifier: 'Changes the levelling amount multiplier.',
@@ -86,6 +88,15 @@ module.exports = async (Client, message, args) => {
 
       if (!row) Client.sql.query('INSERT INTO cmdnotfound (guildid, bool) VALUES ($1, $2)', [message.guild.id, bool]);
       else Client.sql.query('UPDATE cmdnotfound SET bool = $1 WHERE guildid = $2', [bool, message.guild.id]);
+      return message.channel.send(`Successfully updated \`${option}\` to \`${value}\`.`);
+    }
+    case 'cooldownmsg': {
+      if (value !== 'true' && value !== 'false') return Client.functions.get('argFix')(Client, message.channel, 2, 'The value you provided is invalid. That option takes `true` or `false`.');
+      const row = (await Client.sql.query('SELECT bool FROM cooldownmsg WHERE guildid = $1', [message.guild.id])).rows[0];
+      if ((!row && bool === 0) || (row && row.bool === bool)) return Client.functions.get('argFix')(Client, message.channel, 2, 'The value provided is the same as the current one.');
+
+      if (!row) Client.sql.query('INSERT INTO cooldownmsg (guildid, bool) VALUES ($1, $2)', [message.guild.id, bool]);
+      else Client.sql.query('UPDATE cooldownmsg SET bool = $1 WHERE guildid = $2', [bool, message.guild.id]);
       return message.channel.send(`Successfully updated \`${option}\` to \`${value}\`.`);
     }
     case 'deleteinvite': {

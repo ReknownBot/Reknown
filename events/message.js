@@ -1,3 +1,5 @@
+const cooldowns = {};
+
 /**
  * @param {import('../structures/client.js')} Client
  */
@@ -50,6 +52,15 @@ module.exports = (Client) => {
       const reason = await Client.functions.get('gblacklist')(Client, message.member);
       return message.reply(`You are globally blacklisted from me for the reason of \`${Client.escMD(reason)}\`. You may appeal in my support server.`);
     }
+
+    if (cooldowns[message.author.id]) {
+      const now = Date.now();
+      const cooldownMsg = (await Client.sql.query('SELECT * FROM cooldownmsg WHERE guildid = $1 AND bool = $2', [message.guild.id, 1])).rows[0];
+      if (cooldownMsg) message.reply(`You are still on cooldown! Please try again in \`${Math.round((1000 - (now - cooldowns[message.author.id])) / 10) / 100}s\`.`);
+      return;
+    }
+    cooldowns[message.author.id] = Date.now();
+    setTimeout(() => delete cooldowns[message.author.id], 1000);
 
     if (command in Client.commands) return Client.commands[command](Client, message, args);
     else {
