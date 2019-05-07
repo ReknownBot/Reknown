@@ -5,7 +5,7 @@
  */
 module.exports = async (Client, message, args) => {
   const cooldown = (await Client.sql.query('SELECT time FROM daily WHERE userid = $1 LIMIT 1', [message.author.id])).rows[0];
-  if (cooldown && Date.now() - cooldown.time < 57600000) return message.reply(`You need to wait ${Math.floor((57600000 - (Date.now() - cooldown.time)) / 1000)} more seconds to use this command again.`);
+  if (cooldown && Date.now() - cooldown.time < 57600000) return message.reply(`You need to wait \`${Client.functions.get('getTime')(cooldown.time, 57600000)}\` to use this command again.`);
 
   if (cooldown) await Client.sql.query('DELETE FROM daily WHERE userid = $1', [message.author.id]);
 

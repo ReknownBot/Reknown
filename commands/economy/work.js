@@ -10,7 +10,7 @@ module.exports = async (Client, message, args) => {
   if (!registered) return message.reply(`You are not registered! Use \`${Client.escMD(Client.prefixes[message.guild.id])}register\` to do so.`);
 
   const cooldown = (await Client.sql.query('SELECT time FROM work WHERE userid = $1', [message.author.id])).rows[0];
-  if (cooldown && Date.now() - cooldown.time < 21600000) return message.reply(`This command is still in cooldown! Please wait ${Math.floor((21600000 - (Date.now() - cooldown.time)) / 1000)} more seconds.`);
+  if (cooldown && Date.now() - cooldown.time < 21600000) return message.reply(`This command is still in cooldown! Please wait ${Client.functions.get('getTime')(cooldown.time, 21600000)} more seconds.`);
 
   if (cooldown) Client.sql.query('DELETE FROM work WHERE userid = $1', [message.author.id]);
 
