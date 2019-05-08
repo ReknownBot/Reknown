@@ -37,7 +37,7 @@ async function logMessage(Client, channel) {
  */
 module.exports = (Client) => {
   return Client.bot.on('channelDelete', channel => {
-    if (!channel.guild.available) return;
+    if (!channel.guild || !channel.guild.available) return;
 
     logMessage(Client, channel);
   });
