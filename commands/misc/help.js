@@ -26,7 +26,7 @@ module.exports = async (Client, message, args) => {
       const category = categoryObj[cmd.help.category];
       const field = embed.fields.find(field => field.name === category);
       if (!field) {
-        embed.addField(category, name);
+        embed.addField(category, `\`${name}\``);
       } else field.value += `, \`${name}\``;
     });
 
