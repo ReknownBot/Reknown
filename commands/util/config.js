@@ -112,9 +112,9 @@ module.exports = async (Client, message, args) => {
       const msg = args.slice(2).join(' ');
       if (msg.length >= 1000) return Client.functions.get('argFix')(Client, message.channel, 2, 'The message length exceeded 1,000 characters.');
 
-      const row = (await Client.sql.query('SELECT custommessage FROM goodbyemessages WHERE guildid = $1', [message.guild.id])).rows[0];
-      if (!row) Client.sql.query('INSERT INTO goodbyemessages (guildid, custommessage) VALUES ($1, $2)', [message.guild.id, msg]);
-      else Client.sql.query('UPDATE goodbyemessages SET custommessage = $1 WHERE guildid = $2', [msg, message.guild.id]);
+      const row = (await Client.sql.query('SELECT msg FROM goodbyemsg WHERE guildid = $1', [message.guild.id])).rows[0];
+      if (!row) Client.sql.query('INSERT INTO goodbyemsg (guildid, msg) VALUES ($1, $2)', [message.guild.id, msg]);
+      else Client.sql.query('UPDATE goodbyemsg SET msg = $1 WHERE guildid = $2', [msg, message.guild.id]);
       return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escMD(msg)}\`.`);
     }
     case 'levelmodifier': {
@@ -244,9 +244,9 @@ module.exports = async (Client, message, args) => {
       const msg = args.slice(2).join(' ');
       if (msg.length >= 1000) return Client.functions.get('argFix')(Client, message.channel, 2, 'The message length exceeded 1,000 characters.');
 
-      const row = (await Client.sql.query('SELECT custommessage FROM custommessages WHERE guildid = $1', [message.guild.id])).rows[0];
-      if (!row) Client.sql.query('INSERT INTO custommessages (guildid, custommessage) VALUES ($1, $2)', [message.guild.id, msg]);
-      else Client.sql.query('UPDATE custommessages SET custommessage = $1 WHERE guildid = $2', [msg, message.guild.id]);
+      const row = (await Client.sql.query('SELECT msg FROM welcomemsg WHERE guildid = $1', [message.guild.id])).rows[0];
+      if (!row) Client.sql.query('INSERT INTO welcomemsg (guildid, msg) VALUES ($1, $2)', [message.guild.id, msg]);
+      else Client.sql.query('UPDATE welcomemsg SET msg = $1 WHERE guildid = $2', [msg, message.guild.id]);
       return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escMD(msg)}\`.`);
     }
   }

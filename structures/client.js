@@ -94,7 +94,7 @@ const client = {
     'cmdnotfound',
     'cooldownmsg',
     'deleteinvite',
-    'goodbyemessages',
+    'goodbyemsg',
     'levelmodifier',
     'levelmsg',
     'logchannel',
@@ -108,7 +108,7 @@ const client = {
     'togglewelcome',
     'updatechannel',
     'welcomechannel',
-    'custommessages'
+    'welcomemsg'
   ],
 
   capFirstLetter: (str) => str.charAt(0).toUpperCase() + str.slice(1),
