@@ -21,13 +21,13 @@ module.exports = async (Client, message, args) => {
     if (amt < 0) return Client.functions.get('argFix')(Client, message.channel, 2, 'The total amount of warnings may not be below 0.');
     if (amt.includes('.')) return Client.functions.get('argFix')(Client, message.channel, 2, 'The total amount of warnings may not include a decimal.');
   } else {
-    const warnAmtRow = (await Client.sql.query('SELECT * FROM warnings WHERE userid2 = $1', [member.id + message.guild.id])).rows[0];
+    const warnAmtRow = (await Client.sql.query('SELECT * FROM warnings WHERE userid = $1 AND guildid = $2', [member.id, message.guild.id])).rows[0];
     amt = warnAmtRow ? warnAmtRow.warnamount : 1;
   }
 
   const reason = args[3] ? args.slice(3).join(' ') : 'None';
 
-  Client.sql.query('INSERT INTO warnings (userid2, warnamount, warnreason) VALUES ($1, $2, $3)', [member.id + message.guild.id, amt, reason]);
+  Client.sql.query('INSERT INTO warnings (userid, warnamount, warnreason, guildid) VALUES ($1, $2, $3, $4)', [member.id, amt, reason, message.guild.id]);
   return message.channel.send(`Successfully warned ${member.user.tag} for \`${Client.escMD(reason)}\` with ${amt} total warnings.`);
 };
 

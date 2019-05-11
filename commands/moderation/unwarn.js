@@ -15,10 +15,10 @@ module.exports = async (Client, message, args) => {
   if (isNaN(warnid)) return Client.functions.get('argFix')(Client, message.channel, 2, 'The warning ID must be a number.');
   if (warnid < 1) return Client.functions.get('argFix')(Client, message.channel, 2, 'The warning ID may not be lower than 1.');
 
-  const row = (await Client.sql.query('SELECT * FROM warnings WHERE userid2 = $1 AND warnid = $2', [member.id + message.guild.id, warnid])).rows[0];
+  const row = (await Client.sql.query('SELECT * FROM warnings WHERE userid = $1 AND warnid = $2 AND guildid = $3', [member.id, warnid, message.guild.id])).rows[0];
   if (!row) return Client.functions.get('argFix')(Client, message.channel, 2, 'The warning ID is incorrect.');
 
-  Client.sql.query('DELETE FROM warnings WHERE userid2 = $1 AND warnid = $2', [member.id + message.guild.id, warnid]);
+  Client.sql.query('DELETE FROM warnings WHERE userid = $1 AND warnid = $2 AND guildid = $3', [member.id, warnid, message.guild.id]);
   return message.channel.send(`Successfully deleted a warning from ${member.user.tag} by the warn ID of **${warnid}**.`);
 };
 
