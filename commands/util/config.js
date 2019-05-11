@@ -112,7 +112,7 @@ module.exports = async (Client, message, args) => {
       const msg = args.slice(2).join(' ');
       if (msg.length >= 1000) return Client.functions.get('argFix')(Client, message.channel, 2, 'The message length exceeded 1,000 characters.');
 
-      const row = (await Client.sql.query('SELECT goodbyemessage FROM goodbyemessages WHERE guildid = $1', [message.guild.id])).rows[0];
+      const row = (await Client.sql.query('SELECT custommessage FROM goodbyemessages WHERE guildid = $1', [message.guild.id])).rows[0];
       if (!row) Client.sql.query('INSERT INTO goodbyemessages (guildid, custommessage) VALUES ($1, $2)', [message.guild.id, msg]);
       else Client.sql.query('UPDATE goodbyemessages SET custommessage = $1 WHERE guildid = $2', [msg, message.guild.id]);
       return message.channel.send(`Successfully updated \`${option}\` to \`${Client.escMD(msg)}\`.`);
