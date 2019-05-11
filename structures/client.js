@@ -48,6 +48,7 @@ const bot = new Discord.Client({
  * @prop {Object} permissions
  * @prop {Object} prefixes
  * @prop {import('rollbar')} rollbar
+ * @prop {Array} rows
  * @prop {Discord.Util.splitMessage} splitMessage
  * @prop {import('pg').Pool} sql
  */
@@ -81,12 +82,41 @@ const client = {
   mutes: new Discord.Collection(),
   prefixes: {},
 
+  rows: [
+    'scores',
+    'blacklist',
+    'warnings',
+    'permissions',
+    'levelblock',
+    'levelrole',
+
+    'blacklistmsg',
+    'cmdnotfound',
+    'cooldownmsg',
+    'deleteinvite',
+    'goodbyemessages',
+    'levelmodifier',
+    'levelmsg',
+    'logchannel',
+    'prefix',
+    'starchannel',
+    'ticketcategory',
+    'togglelevel',
+    'actionlog',
+    'togglestar',
+    'toggletickets',
+    'togglewelcome',
+    'updatechannel',
+    'welcomechannel',
+    'custommessages'
+  ],
+
   capFirstLetter: (str) => str.charAt(0).toUpperCase() + str.slice(1),
 
   checkPerms: async (pName, pCategory, member) => {
     if (member.guild.owner === member || member.hasPermission('ADMINISTRATOR')) return true;
 
-    const { rows } = await sql.query('SELECT roleid,bool FROM permissions WHERE pName = $1 AND pCategory = $2', [pName, pCategory]);
+    const { rows } = await sql.query('SELECT roleid,bool FROM permissions WHERE pName = $1 AND pCategory = $2 AND guildid = $3', [pName, pCategory, member.guild.id]);
     const row = rows.find(r => member.roles.has(r.roleid));
 
     return !!(row && row.bool);
