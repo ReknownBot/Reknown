@@ -11,7 +11,7 @@ module.exports = async (Client, message, args) => {
   const member = await Client.getObj(args[1], { guild: message.guild, type: 'member' });
   if (!member) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find a member with that query.');
   if (!member.manageable) return message.reply('I cannot nickname that member!');
-  if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner) return message.reply('Your role position is not high enough!');
+  if (member.roles.highest.position >= message.member.roles.highest.position && message.member !== message.guild.owner && message.member !== member) return message.reply('Your role position is not high enough!');
 
   const nickname = args.slice(2).join(' ');
   if (!nickname) return Client.functions.get('argMissing')(message.channel, 2, 'a new nickname to change to');
