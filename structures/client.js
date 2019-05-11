@@ -74,7 +74,7 @@ const client = {
   Discord: Discord,
 
   escMD: Discord.Util.escapeMarkdown,
-  splitMessage: Discord.Util.splitMessage,
+  splitMessage: Discord.Util.splitMessage.bind(Discord.Util),
 
   contributors: ['468848409202262027', '284857002977525760'],
   ownerID: '288831103895076867',
