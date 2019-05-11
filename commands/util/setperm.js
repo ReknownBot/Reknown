@@ -1,5 +1,19 @@
 /**
  * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Guild} guild
+ * @param {Boolean} bool
+ * @param {String} id
+ * @param {String} name
+ * @param {String} category
+ */
+async function addPerm(Client, guild, bool, id, name, category) {
+  const exists = (await Client.sql.query('SELECT * FROM permissions WHERE roleid = $1 AND pcategory = $2 AND pname = $3 LIMIT 1', [id, category, name])).rows[0];
+  if (exists) Client.sql.query('UPDATE permissions SET bool = $1 WHERE roleid = $2 AND pcategory = $3 AND pname = $4', [bool, id, category, name]);
+  else Client.sql.query('INSERT INTO permissions (roleid, pcategory, pname, bool, guildid) VALUES ($1, $2, $3, $4, $5)', [id, category, name, bool, guild.id]);
+}
+
+/**
+ * @param {import('../../structures/client.js')} Client
  * @param {import('discord.js').Message} message
  * @param {String[]} args
 */
@@ -31,25 +45,19 @@ module.exports = async (Client, message, args) => {
     Object.values(Client.permissions).forEach(obj => {
       Object.keys(obj).forEach(async pName => {
         const pCategory = Object.keys(Client.permissions).find(key => Client.permissions[key] === obj);
-        const exists = (await Client.sql.query('SELECT * FROM permissions WHERE roleid = $1 AND pcategory = $2 AND pname = $3 LIMIT 1', [role.id, pCategory, pName])).rows[0];
-        if (exists) Client.sql.query('UPDATE permissions SET bool = $1 WHERE roleid = $2 AND pcategory = $3 AND pname = $4', [bool, role.id, pCategory, pName]);
-        else Client.sql.query('INSERT INTO permissions (roleid, pcategory, pname, bool) VALUES ($1, $2, $3, $4)', [role.id, pCategory, pName, bool]);
+        addPerm(Client, message.guild, bool, role.id, pName, pCategory);
       });
     });
 
     return message.channel.send(`Successfully set all of ${role.name}'s permissions to ${bool ? 'true' : 'false'}.`);
   } else if (!permName) {
     Object.keys(Client.permissions[permCateg]).forEach(async pName => {
-      const exists = (await Client.sql.query('SELECT * FROM permissions WHERE roleid = $1 AND pcategory = $2 AND pname = $3 LIMIT 1', [role.id, permCateg, pName])).rows[0];
-      if (exists) Client.sql.query('UPDATE permissions SET bool = $1 WHERE roleid = $2 AND pcategory = $3 AND pname = $4', [bool, role.id, permCateg, pName]);
-      else Client.sql.query('INSERT INTO permissions (roleid, pcategory, pname, bool) VALUES ($1, $2, $3, $4)', [role.id, permCateg, pName, bool]);
+      addPerm(Client, message.guild, bool, role.id, pName, permCateg);
     });
 
     return message.channel.send(`Successfully ${bool ? 'enabled' : 'disabled'} all of ${permCateg}'s permissions for ${role.name}.`);
   } else {
-    const exists = (await Client.sql.query('SELECT * FROM permissions WHERE roleid = $1 AND pcategory = $2 AND pname = $3 LIMIT 1', [role.id, permCateg, permName])).rows[0];
-    if (exists) Client.sql.query('UPDATE permissions SET bool = $1 WHERE roleid = $2 AND pcategory = $3 AND pname = $4', [bool, role.id, permCateg, permName]);
-    else Client.sql.query('INSERT INTO permissions (roleid, pcategory, pname, bool) VALUES ($1, $2, $3, $4)', [role.id, permCateg, permName, bool]);
+    addPerm(Client, message.guild, bool, role.id, permName, permCateg);
 
     return message.channel.send(`Successfully set ${role.name}'s permission \`${permCateg}.${permName}\` to ${bool ? 'true' : 'false'}.`);
   }
