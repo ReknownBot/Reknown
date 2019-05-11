@@ -30,10 +30,10 @@
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^6.2.0",
     "fs": "0.0.1-security",
-    "fuzzball": "^1.2.0",
+    "fuzzball": "^1.2.1",
     "moment": "^2.24.0",
     "node-fetch": "^2.5.0",
-    "pg": "^7.10.0",
+    "pg": "^7.11.0",
     "rollbar": "^2.6.1",
     "rword": "^2.3.0",
     "string-math": "^1.2.1"
