@@ -3,7 +3,7 @@ const cooldowns = {};
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('message', async message => {
     if (message.author.bot) return;
     if (!message.guild || !message.guild.available) return;

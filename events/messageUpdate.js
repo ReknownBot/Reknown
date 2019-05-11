@@ -56,7 +56,7 @@ async function editStar (Client, newMessage) {
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('messageUpdate', async (oldMessage, newMessage) => {
     if (oldMessage.partial) return;
     if (!oldMessage.guild || !oldMessage.guild.available) return;

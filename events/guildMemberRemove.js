@@ -66,7 +66,7 @@ async function kickMessage (Client, entry, member) {
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('guildMemberRemove', async member => {
     if (!member.guild.available) return;
     if (member.partial) await member.fetch();

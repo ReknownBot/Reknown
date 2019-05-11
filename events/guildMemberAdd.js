@@ -77,7 +77,7 @@ function mute (Client, member, guild) {
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('guildMemberAdd', async member => {
     const guild = member.guild;
     if (!guild.available) return;

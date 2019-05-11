@@ -32,7 +32,7 @@ async function logMessage(Client, role) {
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('roleCreate', role => {
     if (!role.guild.available) return;
 

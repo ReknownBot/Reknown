@@ -1,7 +1,7 @@
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('messageReactionRemoveAll', async message => {
     if (message.partial) await message.fetch();
     if (message.author.partial) await message.author.fetch();

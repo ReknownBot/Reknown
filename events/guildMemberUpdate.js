@@ -64,7 +64,7 @@ function roleChange (Client, oldMember, newMember) {
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('guildMemberUpdate', (oldMember, newMember) => {
     if (!newMember.guild.available) return;
     if (oldMember.partial || newMember.partial) return newMember.fetch();

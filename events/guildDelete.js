@@ -9,7 +9,7 @@ function deleteRows(Client, guild) {
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('guildDelete', guild => {
     if (!guild.available) return;
 

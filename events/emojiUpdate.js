@@ -36,7 +36,7 @@ async function logMessage(Client, oldEmoji, newEmoji) {
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('emojiUpdate', (oldEmoji, newEmoji) => {
     if (!newEmoji.guild.available) return;
 

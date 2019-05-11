@@ -35,7 +35,7 @@ async function logMessage(Client, channel) {
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('channelDelete', channel => {
     if (!channel.guild || !channel.guild.available) return;
 

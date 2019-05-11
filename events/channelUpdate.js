@@ -34,7 +34,7 @@ async function logMessage(Client, oldChannel, newChannel) {
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('channelUpdate', (oldChannel, newChannel) => {
     if (!oldChannel.guild.available) return;
     if (oldChannel.name === newChannel.name) return;

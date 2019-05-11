@@ -111,7 +111,7 @@ const client = {
     'welcomemsg'
   ],
 
-  capFirstLetter: (str) => str.charAt(0).toUpperCase() + str.slice(1),
+  capFirstLetter: str => str.charAt(0).toUpperCase() + str.slice(1),
 
   checkPerms: async (pName, pCategory, member) => {
     if (member.guild.owner === member || member.hasPermission('ADMINISTRATOR')) return true;
@@ -152,7 +152,7 @@ const client = {
   }
 };
 
-client.getFuzz = (str) => {
+client.getFuzz = str => {
   const ordered = [];
 
   client.commandsList.forEach(cmd => {

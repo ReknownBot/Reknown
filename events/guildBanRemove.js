@@ -34,7 +34,7 @@ async function logMessage(Client, guild, user) {
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('guildBanRemove', async (guild, user) => {
     if (!guild.available) return;
     if (user.partial) await user.fetch();

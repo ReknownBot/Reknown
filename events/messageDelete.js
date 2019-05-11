@@ -60,7 +60,7 @@ async function delStar (Client, message) {
 /**
  * @param {import('../structures/client.js')} Client
  */
-module.exports = (Client) => {
+module.exports = Client => {
   return Client.bot.on('messageDelete', async message => {
     if (!message.guild || !message.guild.available) return;
     if (message.partial) return;
