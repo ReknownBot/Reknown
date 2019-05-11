@@ -4,9 +4,3 @@ node_modules
 
 # .env file
 .env
-
-# Visual Studio Folder
-.vs
-
-# jsconfig
-jsconfig.json
