@@ -9,7 +9,7 @@ module.exports = async (Client, message, args) => {
   const { rows } = await Client.sql.query('SELECT money FROM economy');
 
   const embed = new Client.Discord.MessageEmbed()
-    .setDescription(`The total balance for the economy system is **${rows.map(r => r.money).reduce((a, b) => a + b, 0)}** credits.`)
+    .setDescription(`The total balance for the economy system is **${Client.formatNum(rows.map(r => r.money).reduce((a, b) => a + b, 0))}** credits.`)
     .setColor(0x00FFFF)
     .setTimestamp()
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());

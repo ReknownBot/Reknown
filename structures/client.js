@@ -38,6 +38,7 @@ const bot = new Discord.Client({
  * @prop {Discord.Util.escapeMarkdown} escMD
  * @prop {import('node-fetch')} fetch
  * @prop {String[]} fnList
+ * @prop {function(Number): String} formatNum
  * @prop {Discord.Collection<String, Function>} functions
  * @prop {function(String): Array<Array<String|Number>>} getFuzz
  * @prop {function(String, Object): Discord.User|Discord.GuildChannel|Discord.GuildMember|Discord.Role|Boolean} getObj
@@ -123,6 +124,8 @@ const client = {
   },
 
   checkClientPerms: (channel, ...perms) => channel.permissionsFor(bot.user).has(perms),
+
+  formatNum: num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'),
 
   matchInArray: (expression, strings) => strings.some(str => expression.test(str)),
 

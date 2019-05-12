@@ -20,9 +20,9 @@ module.exports = async (Client, message, args) => {
       .setTitle(`${Client.escMD(player.displayname)}'s Hypixel Stats`)
       .setURL(`https://hypixel.net/player/${player.displayname}/`)
       .addField('Achievements Completed', Object.values(player.achievements).reduce((a, b) => a + b, 0), true)
-      .addField('Network Exp', player.networkExp, true)
-      .addField('Karma', player.karma, true)
-      .addField('Votes', player.voting ? player.voting.total : '0', true)
+      .addField('Network Exp', Client.formatNum(player.networkExp), true)
+      .addField('Karma', Client.formatNum(player.karma), true)
+      .addField('Votes', player.voting ? Client.formatNum(player.voting.total) : '0', true)
       .setColor(0x00FFFF);
 
     return message.channel.send(embed);
@@ -36,9 +36,9 @@ module.exports = async (Client, message, args) => {
     const embed = new Client.Discord.MessageEmbed()
       .setTitle(`${Client.escMD(guild.name)} Guild Stats`)
       .setURL(`https://hypixel.net/guilds/${encodeURIComponent(guild.name)}/`)
-      .addField('Member Count', guild.members.length)
+      .addField('Member Count', Client.formatNum(guild.members.length))
       .addField('Guild Tag', guild.tag ? guild.tag : 'None')
-      .addField('XP', guild.exp)
+      .addField('XP', Client.formatNum(guild.exp))
       .setColor(0x00FFFF);
 
     return message.channel.send(embed);
@@ -57,9 +57,9 @@ module.exports = async (Client, message, args) => {
     const embed = new Client.Discord.MessageEmbed()
       .setTitle(`${Client.escMD(guild.name)} Guild Stats`)
       .setURL(`https://hypixel.net/guilds/${encodeURIComponent(guild.name)}/`)
-      .addField('Member Count', guild.members.length)
+      .addField('Member Count', Client.formatNum(guild.members.length))
       .addField('Guild Tag', guild.tag ? guild.tag : 'None')
-      .addField('XP', guild.exp)
+      .addField('XP', Client.formatNum(guild.exp))
       .setColor(0x00FFFF);
 
     return message.channel.send(embed);

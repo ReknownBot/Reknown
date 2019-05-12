@@ -29,20 +29,20 @@ module.exports = async (Client, message, args) => {
     .setURL(`https://osu.ppy.sh/users/${info.user_id}`)
     .setColor(0x00FFFF)
     .setFooter(`User ID: ${info.user_id} | Requested by ${message.author.tag}`, message.author.displayAvatarURL())
-    .addField('PP (Performance Points)', info.pp_raw, true)
-    .addField('Global Rank', info.pp_rank, true)
-    .addField('Country Rank', info.pp_country_rank, true)
+    .addField('PP (Performance Points)', Client.formatNum(info.pp_raw), true)
+    .addField('Global Rank', `#${Client.formatNum(info.pp_rank)}`, true)
+    .addField('Country Rank', `#${Client.formatNum(info.pp_country_rank)}`, true)
     .addField('Country', info.country, true)
-    .addField('Level', Math.round(info.level * 10) / 10, true)
-    .addField('Accuracy', Math.round(info.accuracy * 100) / 100, true)
-    .addField('Total Score', info.total_score, true)
-    .addField('Ranked Score', info.ranked_score, true)
-    .addField('SS Count', info.count_rank_ss, true)
-    .addField('SSH Count', info.count_rank_ssh, true)
-    .addField('S Count', info.count_rank_s, true)
-    .addField('SH Count', info.count_rank_sh, true)
-    .addField('A Count', info.count_rank_a, true)
-    .addField('Play Count', info.playcount, true);
+    .addField('Level', Client.formatNum(Math.round(info.level * 10) / 10), true)
+    .addField('Accuracy', Client.formatNum(Math.round(info.accuracy * 100) / 100), true)
+    .addField('Total Score', Client.formatNum(info.total_score), true)
+    .addField('Ranked Score', Client.formatNum(info.ranked_score), true)
+    .addField('SS Count', Client.formatNum(info.count_rank_ss), true)
+    .addField('SSH Count', Client.formatNum(info.count_rank_ssh), true)
+    .addField('S Count', Client.formatNum(info.count_rank_s), true)
+    .addField('SH Count', Client.formatNum(info.count_rank_sh), true)
+    .addField('A Count', Client.formatNum(info.count_rank_a), true)
+    .addField('Play Count', Client.formatNum(info.playcount), true);
 
   return message.channel.send(embed);
 };

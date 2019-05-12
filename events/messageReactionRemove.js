@@ -42,7 +42,7 @@ module.exports = Client => {
 
     let reactionCount = reaction.count;
     if (reactionCount > 0 && reaction.users.has(user.id)) reactionCount -= 1;
-    embed.setFooter(`⭐${reactionCount} | ID: ${message.id}`);
+    embed.setFooter(`⭐${Client.formatNum(reactionCount)} | ID: ${message.id}`);
 
     if (!msgRow) {
       if (reactionCount === 0) return;

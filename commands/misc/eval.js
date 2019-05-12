@@ -26,7 +26,7 @@ module.exports = (Client, message, args) => {
     const embed = new Client.Discord.MessageEmbed()
       .setAuthor('Evaluation')
       .setTitle('Output')
-      .setDescription(`\`\`\`xl\n${clean(evaled).length <= 2048 ? clean(evaled) : 'Over 2048 Characters'}\n\`\`\``)
+      .setDescription(`\`\`\`xl\n${clean(evaled).length <= 2048 ? clean(evaled) : 'Over 2,048 Characters'}\n\`\`\``)
       .setColor(0x00FFFF)
       .setTimestamp();
     message.channel.send(embed);

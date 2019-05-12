@@ -19,8 +19,8 @@ async function goodbyeMessage(Client, member) {
   const msg = msgRow ? msgRow.custommessage
     .replace('<Guild>', guild.name)
     .replace('<User>', member.toString())
-    .replace('<MemberCount>', guild.memberCount)
-    : `${member} left **${member.guild.name}**. There are ${member.guild.memberCount} members now.`;
+    .replace('<MemberCount>', Client.formatNum(guild.memberCount))
+    : `${member} left **${member.guild.name}**. There are ${Client.formatNum(member.guild.memberCount)} members now.`;
 
   const embed = new Client.Discord.MessageEmbed()
     .setDescription(msg)

@@ -33,7 +33,7 @@ module.exports = async (Client, message, args) => {
     const letters = args.slice(2).join(' ').split('');
     const encoded = letters.map(letter => ('0000000' + letter.charCodeAt().toString(2)).slice(-8)).join(' ');
 
-    if (encoded.length > 2048) return Client.functions.get('argFix')(Client, message.channel, 2, 'The encoded charater length was too big for me to send (2048).');
+    if (encoded.length > 2048) return Client.functions.get('argFix')(Client, message.channel, 2, 'The encoded character length was too big for me to send (2,048).');
 
     const embed = new Client.Discord.MessageEmbed()
       .setTitle('Succeeded in Encoding!')

@@ -11,7 +11,7 @@ module.exports = async (Client, message, args) => {
   const row = (await Client.sql.query('SELECT money FROM economy WHERE userid = $1', [member.id])).rows[0];
   if (!row) return message.reply(`${message.member === member ? 'You are' : 'That member is'} not registered! Use \`${Client.escMD(Client.prefixes[message.guild.id])}register\` to do so.`);
 
-  return message.channel.send(`${message.member === member ? 'You have' : `${member.user.tag} has`} **${row.money}** Credits.`);
+  return message.channel.send(`${message.member === member ? 'You have' : `${member.user.tag} has`} **${Client.formatNum(row.money)}** Credits.`);
 };
 
 module.exports.help = {

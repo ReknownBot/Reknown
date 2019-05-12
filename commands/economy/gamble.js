@@ -18,10 +18,10 @@ module.exports = async (Client, message, args) => {
   const won = Math.random() < 0.5;
   if (won) {
     Client.sql.query('UPDATE economy SET money = money + $1 WHERE userid = $2', [amt, message.author.id]);
-    return message.channel.send(`You won! **${amt} Credits** were added to your account.`);
+    return message.channel.send(`You won! **${Client.formatNum(amt)} Credits** were added to your account.`);
   } else {
     Client.sql.query('UPDATE economy SET money = money - $1 WHERE userid = $2', [amt, message.author.id]);
-    return message.channel.send(`You lost! **${amt} Credits** were removed from your account.`);
+    return message.channel.send(`You lost! **${Client.formatNum(amt)} Credits** were removed from your account.`);
   }
 };
 

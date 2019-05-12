@@ -147,7 +147,7 @@ module.exports = async (Client, message, args) => {
     }
     case 'prefix': {
       const prefix = args.slice(2).join(' ');
-      if (prefix.length > 15) return Client.functions.get('argFix')(Client, message.channel, 2, 'The prefix length exceeded  16 characters.');
+      if (prefix.length > 15) return Client.functions.get('argFix')(Client, message.channel, 2, 'The prefix length exceeded 16 characters.');
 
       const row = (await Client.sql.query('SELECT customprefix FROM prefix WHERE guildid = $1', [message.guild.id])).rows[0];
       if (prefix === (row ? row.customprefix : '?')) return Client.functions.get('argFix')(Client, message.channel, 2, 'The value provided is the same as the current one.');

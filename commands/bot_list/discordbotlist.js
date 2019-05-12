@@ -24,7 +24,7 @@ module.exports = async (Client, message, args) => {
   const certified = body.certified ? 'True' : 'False';
   const tags = body.tags.list();
   const library = body.lib;
-  const shortDesc = body.shortdesc.length > 2048 ? 'Over 2048 Char.' : body.shortdesc;
+  const shortDesc = body.shortdesc.length > 2048 ? 'Over 2,048 Characters' : body.shortdesc;
 
   const embed = new Client.Discord.MessageEmbed()
     .setTitle(botTag)

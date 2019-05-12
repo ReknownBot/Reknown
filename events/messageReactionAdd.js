@@ -43,7 +43,7 @@ module.exports = Client => {
 
     let reactionCount = reaction.count;
     if (reaction.users.has(message.author.id)) reactionCount -= 1;
-    embed.setFooter(`⭐${reactionCount} | ID: ${message.id}`);
+    embed.setFooter(`⭐${Client.formatNum(reactionCount)} | ID: ${message.id}`);
 
     if (reactionCount === 0) return Client.sql.query('DELETE FROM star WHERE msgid = $1', message.id);
 

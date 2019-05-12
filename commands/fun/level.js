@@ -21,7 +21,7 @@ module.exports = async (Client, message, args) => {
     .setTitle(`${member.user.tag}'s Level Info`)
     .setColor(member.displayHexColor)
     .addField('Level', level.level > 1000 ? 'Max' : level.level, true)
-    .addField('Points', level.points > 25000000 ? 'Max' : `${level.points}/${Math.pow((level.level + 1) / 0.2, 2)}`, true)
+    .addField('Points', level.points > 25000000 ? 'Max' : `${Client.formatNum(level.points)}/${Client.formatNum(Math.pow((level.level + 1) / 0.2, 2))}`, true)
     .addField('Rank', rank ? `#${rank}` : 'N/A')
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
 

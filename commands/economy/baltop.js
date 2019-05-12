@@ -10,7 +10,7 @@ module.exports = async (Client, message, args) => {
   const desc = await Promise.all(rows.map(async (r, i) => {
     const user = await Client.bot.users.fetch(r.userid);
     const emoji = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '🎀';
-    return `${emoji} ${Client.escMD(user.tag)} - $${r.money}`;
+    return `${emoji} ${Client.escMD(user.tag)} - **$${Client.formatNum(r.money)}**`;
   }));
 
   const embed = new Client.Discord.MessageEmbed()

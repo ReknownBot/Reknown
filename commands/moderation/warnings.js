@@ -12,7 +12,7 @@ module.exports = async (Client, message, args) => {
   const { rows } = await Client.sql.query('SELECT * FROM warnings WHERE userid = $1 AND guildid = $2 ORDER BY warnid DESC', [member.id, message.guild.id]);
   if (!rows[0]) return message.reply(`${message.member === member ? 'You do' : 'That user does'} not have any warnings!`);
 
-  const pages = Client.splitMessage(rows.map(r => `${Client.escMD(r.warnreason)} \`Warn ID: ${r.warnid}\``).join('\n'), { maxLength: 2048 });
+  const pages = Client.splitMessage(rows.map(r => `${Client.escMD(r.warnreason)} \`Warn ID: ${Client.formatNum(r.warnid)}\``).join('\n'), { maxLength: 2048 });
   if (typeof pages === 'string') {
     const embed = new Client.Discord.MessageEmbed()
       .setTitle(`${member.user.tag}'s Warning Info`)

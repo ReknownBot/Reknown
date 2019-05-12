@@ -11,7 +11,7 @@ module.exports = async (Client, message, args) => {
     .setColor(0x00FFFF)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setThumbnail(message.guild.iconURL)
-    .addField('Member Count', message.guild.memberCount, true)
+    .addField('Member Count', Client.formatNum(message.guild.memberCount), true)
     .addField('Owner', message.guild.owner.user.tag, true)
     .addField('Server Created', Client.dateFormat(message.guild.createdAt, 'mmmm dS, yyyy, h:MM:ss TT'), true)
     .addField('Role Count', message.guild.roles.size, true)

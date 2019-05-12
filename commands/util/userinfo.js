@@ -33,7 +33,7 @@ module.exports = async (Client, message, args) => {
     }
 
     embed.addField('Joined At', Client.dateFormat(member.joinedAt), true)
-      .addField('Joined Position', position, true);
+      .addField('Joined Position', Client.formatNum(position), true);
   }
 
   if (user.presence.activity) embed.addField('Game', user.presence.activity.name);
