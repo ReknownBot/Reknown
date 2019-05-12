@@ -1,8 +1,3 @@
-/**
- * @param {import('../../structures/client.js')} Client
- * @param {import('discord.js').Message} message
- * @param {String[]} args
-*/
 const obj = {
   blacklistmsg: ['misc', 'blacklist'],
   cmdnotfound: ['misc', 'togglemsg'],
@@ -47,6 +42,11 @@ const options = {
   welcomemsg: 'Sets the message sent when someone joins the server.'
 };
 
+/**
+ * @param {import('../../structures/client.js')} Client
+ * @param {import('discord.js').Message} message
+ * @param {String[]} args
+*/
 module.exports = async (Client, message, args) => {
   const option = args[1] ? args[1].toLowerCase() : null;
   if (!option) {
@@ -65,7 +65,7 @@ module.exports = async (Client, message, args) => {
     return message.channel.send(embed);
   }
   if (!Object.keys(obj).includes(option)) return Client.functions.get('argFix')(Client, message.channel, 1, `That option is not valid. Use \`${Client.prefixes[message.guild.id]}config\` to see all the options.`);
-  if (!await Client.checkPerms(option, obj[option][1], message.member)) return message.reply(`:x: Sorry, but you do not have the \`${obj[option][0]}.${obj[option][1]}\` permission.`);
+  if (!await Client.checkPerms(obj[option][1], obj[option][0], message.member)) return Client.functions.get('noCustomPerm')(message, `${obj[option][0]}.${obj[option][1]}`);
 
   const value = args[2] ? args[2].toLowerCase() : null;
   if (!value) return Client.functions.get('argMissing')(message.channel, 2, 'a value for the config');
