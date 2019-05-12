@@ -16,7 +16,7 @@ async function goodbyeMessage(Client, member) {
   if (!Client.checkClientPerms(channel, 'EMBED_LINKS', 'SEND_MESSAGES')) return;
 
   const msgRow = (await Client.sql.query('SELECT msg FROM goodbyemsg WHERE guildid = $1', [guild.id])).rows[0];
-  const msg = msgRow ? msgRow.custommessage
+  const msg = msgRow ? msgRow.msg
     .replace('<Guild>', guild.name)
     .replace('<User>', member.toString())
     .replace('<MemberCount>', Client.formatNum(guild.memberCount))

@@ -12,7 +12,7 @@ async function welcomeMessage(Client, member, guild) {
   if (!Client.checkClientPerms(welcomeChannel, 'SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS')) return;
 
   const msgRow = (await Client.sql.query('SELECT msg FROM welcomemsg WHERE guildid = $1', [guild.id])).rows[0];
-  const msg = msgRow ? msgRow.custommessage
+  const msg = msgRow ? msgRow.msg
     .replace('<Guild>', guild.name)
     .replace('<User>', member.toString())
     .replace('<MemberCount>', Client.formatNum(guild.memberCount))
