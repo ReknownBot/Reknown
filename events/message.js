@@ -7,6 +7,7 @@ module.exports = Client => {
   return Client.bot.on('message', async message => {
     if (message.author.bot) return;
     if (!message.guild || !message.guild.available) return;
+    if (message.webhookID) return;
 
     if (message.member.partial) await message.member.fetch();
 
