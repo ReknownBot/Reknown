@@ -7,6 +7,7 @@ module.exports = Client => {
     if (reaction.message.partial) await reaction.message.fetch();
     const message = reaction.message;
     if (!message.guild || !message.guild.available) return;
+    if (message.webhookID) return;
     if (!message.content && !message.attachments.find(attch => attch.height)) return;
 
     if (message.author.partial) await message.author.fetch();

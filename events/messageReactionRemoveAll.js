@@ -4,6 +4,7 @@
 module.exports = Client => {
   return Client.bot.on('messageReactionRemoveAll', async message => {
     if (message.partial) await message.fetch();
+    if (message.webhookID) return;
     if (message.author.partial) await message.author.fetch();
     if (!message.guild || !message.guild.available) return;
 

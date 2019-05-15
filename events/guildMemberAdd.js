@@ -81,7 +81,6 @@ module.exports = Client => {
   return Client.bot.on('guildMemberAdd', async member => {
     const guild = member.guild;
     if (!guild.available) return;
-    if (member.partial) await member.fetch();
     if (member === guild.me) return;
 
     logMessage(Client, member, guild);
