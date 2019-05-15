@@ -69,7 +69,7 @@ async function kickMessage (Client, entry, member) {
 module.exports = Client => {
   return Client.bot.on('guildMemberRemove', async member => {
     if (!member.guild.available) return;
-    if (member.partial) await member.fetch();
+    if (member.partial) return;
     if (!member.guild.me) return;
 
     goodbyeMessage(Client, member);
