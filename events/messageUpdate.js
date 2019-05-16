@@ -60,6 +60,7 @@ module.exports = Client => {
   return Client.bot.on('messageUpdate', async (oldMessage, newMessage) => {
     if (oldMessage.partial) return;
     if (!oldMessage.guild || !oldMessage.guild.available) return;
+    if (newMessage.webhookID) return;
     if (!newMessage.member) await newMessage.guild.members.fetch(newMessage.author);
 
     logMessage(Client, oldMessage, newMessage);
