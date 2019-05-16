@@ -1,3 +1,5 @@
+const ms = require('ms');
+
 /**
  * @param {import('../../structures/client.js')} Client
  * @param {import('discord.js').Message} message
@@ -39,27 +41,10 @@ module.exports = async (Client, message, args) => {
   if (member.roles.has(muteRole.id)) return Client.functions.get('argFix')(Client, message.channel, 1, 'Member is already muted.');
 
   if (!args[2]) return Client.functions.get('argMissing')(message.channel, 2, 'an amount of time to mute for');
-  const time = args[2].slice(0, -1);
-  if (isNaN(time)) return Client.functions.get('argFix')(Client, message.channel, 2, 'Could not parse an amount from that.');
-  if (time < 1) return Client.functions.get('argFix')(Client, message.channel, 2, 'The amount may not be lower than 1.');
-  if (time.includes('.')) return Client.functions.get('argFix')(Client, message.channel, 2, 'The amount may not include a decimal.');
-  const type = args[2].slice(-1).toLowerCase();
-  if (!['s', 'm', 'h'].includes(type)) return Client.functions.get('argFix')(Client, message.channel, 2, 'The type of time was invalid. It must be one of the following: s, m, or h.');
-  if (type === 's' && time > 172800) return Client.function.get('argFix')(Client, message.channel, 2, 'The maximum amount of seconds is 172,800.');
-  if (type === 'm' && time > 2880) return Client.functions.get('argFix')(Client, message.channel, 2, 'The maximum amount of minutes is 2,880.');
-  if (type === 'h' && time > 48) return Client.functions.get('argFix')(Client, message.channel, 2, 'The maximum amount of hours is 48.');
-
-  let ms = time;
-  switch (type) {
-    case 's':
-      ms *= 1000;
-      break;
-    case 'm':
-      ms *= 60000;
-      break;
-    case 'h':
-      ms *= 3600000;
-  }
+  const milli = ms(args[2]);
+  if (milli === undefined) return Client.functions.get('argFix')(Client, message.channel, 2, 'Could not parse an amount from that.');
+  if (milli < 60000) return Client.functions.get('argFix')(Client, message.channel, 2, 'The time may not be lower than 1 minute.');
+  if (milli > 1000 * 60 * 60 * 24 * 3) return Client.functions.get('argFix')(Client, message.channel, 2, 'The maximum time to mute for is 3 days..');
 
   const reason = args[3] ? args.slice(3).join(' ') : 'None';
 
@@ -72,11 +57,11 @@ module.exports = async (Client, message, args) => {
     if (muteRole.position >= message.guild.me.roles.position) return;
 
     return member.roles.remove(muteRole);
-  }, ms);
-  Client.sql.query('INSERT INTO mute (userid, guildid, time, mutedat) VALUES ($1, $2, $3, $4)', [member.id, message.guild.id, ms, Date.now()]);
+  }, milli);
+  Client.sql.query('INSERT INTO mute (userid, guildid, time, mutedat) VALUES ($1, $2, $3, $4)', [member.id, message.guild.id, milli, Date.now()]);
   Client.mutes.set(member.id, timeout);
   member.roles.add(muteRole);
-  return message.channel.send(`Successfully muted ${member.user.tag} for \`${Client.escMD(reason)}\` and will be unmuted in ${time + type}.`);
+  return message.channel.send(`Successfully muted ${member.user.tag} for \`${Client.escMD(reason)}\` and will be unmuted in ${args[2]}.`);
 };
 
 module.exports.help = {
