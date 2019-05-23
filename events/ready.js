@@ -21,6 +21,15 @@ module.exports = Client => {
       type: 'WATCHING'
     });
 
+    Client.fetch(`https://discord.bots.gg/api/v1/bots/${Client.bot.user.id}/stats`, {
+      body: JSON.stringify({ guildCount: Client.bot.guilds.size }),
+      headers: {
+        'Authorization': process.env.DISCORD_BOTS_KEY,
+        'Content-Type': 'application/json'
+      },
+      method: 'POST'
+    });
+
     const { rows: muteRows } = await Client.sql.query('SELECT * FROM mute');
     muteRows.forEach(row => {
       if (Date.now() - row.mutedat > row.time) unmute(Client, row);

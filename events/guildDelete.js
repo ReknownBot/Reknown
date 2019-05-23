@@ -9,9 +9,18 @@ function deleteRows(Client, guild) {
 /**
  * @param {import('../structures/client.js')} Client
  */
-function updateActivity(Client) {
+function updateStats(Client) {
   Client.bot.user.setActivity(`${Client.bot.users.filter(u => !u.bot).size} Users and ${Client.bot.guilds.size} Servers`, {
     type: 'WATCHING'
+  });
+
+  Client.fetch(`https://discord.bots.gg/api/v1/bots/${Client.bot.user.id}/stats`, {
+    body: JSON.stringify({ guildCount: Client.bot.guilds.size }),
+    headers: {
+      'Authorization': process.env.DISCORD_BOTS_KEY,
+      'Content-Type': 'application/json'
+    },
+    method: 'POST'
   });
 }
 
@@ -23,6 +32,6 @@ module.exports = Client => {
     if (!guild.available) return;
 
     deleteRows(Client, guild);
-    updateActivity(Client);
+    updateStats(Client);
   });
 };
