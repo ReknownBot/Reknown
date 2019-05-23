@@ -20,7 +20,7 @@ module.exports = async (Client, message, args) => {
     toggle = args[2].toLowerCase() === 'on';
   }
 
-  if (!row) Client.sql.query('INSERT INTO levelblock (channelid, bool) VALUES ($1, $2)', [channel.id, toggle ? 1 : 0]);
+  if (!row) Client.sql.query('INSERT INTO levelblock (guildid, channelid, bool) VALUES ($1, $2, $3)', [message.guild.id, channel.id, toggle ? 1 : 0]);
   else Client.sql.query('UPDATE levelblock SET bool = $1 WHERE channelid = $2', [toggle ? 1 : 0, channel.id]);
 
   return message.channel.send(`Successfully ${toggle ? 'blocked' : 'allowed'} levelling up in ${channel}.`);
