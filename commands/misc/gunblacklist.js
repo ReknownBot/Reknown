@@ -13,7 +13,7 @@ module.exports = async (Client, message, args) => {
   const exists = (await Client.sql.query('SELECT reason FROM gblacklist WHERE memberid = $1', [user.id])).rows[0];
   if (!exists) return message.reply('That user is not globally blacklisted!');
 
-  Client.sql.query('DELETE FROM gblacklist WHERE memberid = $1 LIMIT 1', [user.id]);
+  Client.sql.query('DELETE FROM gblacklist WHERE memberid = $1', [user.id]);
   return message.channel.send(`Successfully removed a global blacklist from ${user.tag}.`);
 };
 
