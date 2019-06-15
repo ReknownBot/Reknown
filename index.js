@@ -34,6 +34,8 @@ client.commands.forEach((obj, name) => {
   client.aliases[name] = name;
 });
 
-client.events.forEach((obj, name) => obj.run(client));
+client.events.forEach((obj, name) => client.on(name, (...args) => obj.run(client, ...args)));
+
+process.on('unhandledRejection', console.log);
 
 client.login(process.env.BOT_TOKEN);
