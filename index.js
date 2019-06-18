@@ -25,7 +25,9 @@ client.splitMsg = Discord.Util.splitMessage;
 
 client.query = pool.query.bind(pool);
 
-client.commands = new Discord.Collection(fs.readdirSync('./commands').map(f => [f.slice(0, -3), require(`./commands/${f}`)]));
+client.categories = fs.readdirSync('./commands');
+client.commands = new Discord.Collection();
+client.categories.forEach(name => fs.readdirSync(`./commands/${name}`).forEach(f => client.commands.set(f.slice(0, -3), require(`./commands/${name}/${f}`))));
 client.events = new Discord.Collection(fs.readdirSync('./events').map(f => [f.slice(0, -3), require(`./events/${f}`)]));
 client.functions = {};
 fs.readdirSync('./functions').forEach(f => client.functions[f.slice(0, -3)] = require(`./functions/${f}`));
