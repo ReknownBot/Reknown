@@ -42,6 +42,7 @@ module.exports = Client => {
     const img = message.attachments.find(attch => attch.height);
     if (img) embed.setImage(img.proxyURL);
 
+    await reaction.users.fetch();
     let reactionCount = reaction.count;
     if (reaction.users.has(message.author.id)) reactionCount -= 1;
     embed.setFooter(`⭐${Client.formatNum(reactionCount)} | ID: ${message.id}`);
