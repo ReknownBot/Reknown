@@ -4,7 +4,7 @@ module.exports.run = async (client, message, args) => {
 };
 
 module.exports.help = {
-  aliases: ['pong'],
+  aliases: [ 'pong' ],
   category: 'Miscellaneous',
   desc: 'Displays the ping of the bot.',
   usage: 'ping'

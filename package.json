@@ -34,5 +34,7 @@
     "pg": "^7.11.0",
     "string-math": "^1.2.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^6.1.0"
+  }
 }
