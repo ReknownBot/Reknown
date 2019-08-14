@@ -73,7 +73,7 @@ module.exports = exports = {
         "no-new-wrappers": ERROR,
         "no-new": ERROR,
         "no-octal-escape": ERROR,
-        "no-param-reassign": ERROR,
+        "no-param-reassign": OFF,
         "no-process-env": OFF,
         "no-proto": ERROR,
         "no-redeclare": ERROR,
@@ -101,7 +101,7 @@ module.exports = exports = {
         "strict": [ ERROR, "never" ],
 
         // Variables
-        "init-declarations": [ ERROR, "always" ],
+        "init-declarations": OFF,
         "no-catch-shadow": WARN,
         "no-delete-var": ERROR,
         "no-label-var": ERROR,

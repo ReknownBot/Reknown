@@ -7,7 +7,7 @@ module.exports.run = async (client, message, args) => {
 
     if (message.author.id !== client.config.ownerID) commands = commands.filter(c => !client.commands.get(c).help.private);
 
-    const embed = new client.Discord.MessageEmbed()
+    const embed = new client.MessageEmbed()
       .setColor(client.config.embedColor)
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
       .setTimestamp()
@@ -28,7 +28,7 @@ module.exports.run = async (client, message, args) => {
 
   const cmd = client.commands.get(query);
   if (cmd) {
-    const embed = new client.Discord.MessageEmbed()
+    const embed = new client.MessageEmbed()
       .addField('Usage', prefix + cmd.help.usage, true)
       .addField('Category', cmd.help.category, true)
       .addField('Aliases', cmd.help.aliases.map(alias => `\`${prefix + alias}\``).join(', '), true)
@@ -42,7 +42,7 @@ module.exports.run = async (client, message, args) => {
 
   const category = client.categories.find(c => c.toLowerCase() === query);
   const cCommands = client.commands.keyArray().filter(c => client.commands.get(c).help.category.toLowerCase() === query);
-  const embed = new client.Discord.MessageEmbed()
+  const embed = new client.MessageEmbed()
     .setColor(client.config.embedColor)
     .setDescription(cCommands.map(c => `- \`${prefix + c}\``).join('\n'))
     .setFooter(`${cCommands.length} Category Commands | Requested by ${message.author.tag}`, message.author.displayAvatarURL())
