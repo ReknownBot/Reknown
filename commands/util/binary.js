@@ -14,7 +14,7 @@ function text2Binary (str) {
 }
 
 function binary2Text (str) {
-  let chr, 
+  let chr,
     output = '';
 
   for (let i = 0; i < str.length; i += 8) {
