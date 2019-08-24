@@ -23,6 +23,7 @@ client.Discord = Discord;
 client.config = require('./config.json');
 client.dateformat = require('dateformat');
 client.escMD = Discord.Util.escapeMarkdown;
+client.fetch = require('node-fetch');
 client.MessageEmbed = Discord.MessageEmbed;
 client.splitMsg = Discord.Util.splitMessage;
 
