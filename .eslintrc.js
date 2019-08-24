@@ -160,7 +160,7 @@ module.exports = exports = {
         "func-names": [ WARN, "as-needed" ],
         "func-style": [ WARN, "declaration" ],
         "id-length": OFF,
-        "indent": [ WARN, 2 ],
+        "indent": [ WARN, 2, { "SwitchCase": 1 } ],
         "jsx-quotes": [ WARN, "prefer-single" ],
         "keyword-spacing": [ ERROR, { before: true, after: true } ],
         "linebreak-style": [ WARN, "unix" ],
