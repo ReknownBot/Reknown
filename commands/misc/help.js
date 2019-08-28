@@ -1,69 +1,60 @@
-const categoryObj = {
-  'bot list': 'Bot List',
-  'fun': 'Fun',
-  'music': 'Music',
-  'moderation': 'Moderation',
-  'misc': 'Miscellaneous',
-  'minigames': 'Minigames',
-  'util': 'Utility',
-  'economy': 'Economy'
-};
+module.exports.run = async (client, message, args) => {
+  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms.run(message, message.channel, [ 'Embed Links' ]);
 
-/**
- * @param {import('../../structures/client.js')} Client
- * @param {import('discord.js').Message} message
- * @param {String[]} args
-*/
-module.exports = async (Client, message, args) => {
+  const prefix = await client.functions.getPrefix.run(client, message.guild.id);
   if (!args[1]) {
-    const embed = new Client.Discord.MessageEmbed()
-      .setTitle('Command List')
-      .setColor(0x00FFFF);
+    let commands = client.commands.keyArray();
 
-    Object.values(Client.commands).forEach(cmd => {
-      if (cmd.private && message.author.id !== Client.ownerID) return;
-      const name = cmd.help.name;
-      const category = categoryObj[cmd.help.category];
-      const field = embed.fields.find(field => field.name === category);
-      if (!field) {
-        embed.addField(category, `\`${name}\``);
-      } else field.value += `, \`${name}\``;
+    if (message.author.id !== client.config.ownerID) commands = commands.filter(c => !client.commands.get(c).help.private);
+
+    const embed = new client.MessageEmbed()
+      .setColor(client.config.embedColor)
+      .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
+      .setTimestamp()
+      .setTitle('Commands List');
+
+    commands.forEach(cmd => {
+      const info = client.commands.get(cmd).help;
+      const field = embed.fields.find(f => f.name === info.category);
+      if (field) embed.fields[embed.fields.indexOf(field)].value += `\n- \`${prefix + cmd}\``;
+      else embed.addField(info.category, `- \`${prefix + cmd}\``, true);
     });
-
-    return message.author.send(embed)
-      .then(() => message.reply('I have sent a list of commands to your DMs.'))
-      .catch(e => {
-        if (e == 'DiscordAPIError: Cannot send messages to this user') {
-          if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return message.reply('I could not send a DM message to you, and I do not have the permission `Embed Links` in this channel.');
-          return message.channel.send(embed);
-        } else process.emit('unhandledRejection', e);
-      });
-  } else {
-    if (!Client.checkClientPerms(message.channel, 'EMBED_LINKS')) return Client.functions.get('noClientPerms')(message, ['Embed Links'], message.channel);
-
-    if (!Object.keys(Client.allAlias).includes(args[1].toLowerCase())) return Client.functions.get('argFix')(Client, message.channel, 1, 'Did not find that command in my commands list.');
-    const cmd = Client.allAlias[args[1].toLowerCase()];
-    const cmdInfo = Client.commands[cmd];
-    const options = cmdInfo.help.options;
-    if (cmdInfo.private && message.author.id !== Client.ownerID) return Client.functions.get('argFix')(Client, message.channel, 1, 'That command is private.');
-    const embed = new Client.Discord.MessageEmbed()
-      .setTitle(`${cmd} Info`)
-      .setColor(0x00FFFF)
-      .addField('Aliases', cmdInfo.help.aliases[0] ? cmdInfo.help.aliases.list() : 'None', true)
-      .addField('Description', cmdInfo.help.desc, true)
-      .addField('Category', categoryObj[cmdInfo.help.category], true)
-      .addField('Usage', cmdInfo.help.usage, true)
-      .addField('Options', typeof options === 'object' ? Object.keys(options).map(option => `--${option} | ${cmdInfo.help.options[option]}`) : 'None', true)
-      .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
 
     return message.channel.send(embed);
   }
+
+  const query = args.slice(1).join(' ').toLowerCase();
+  if (!client.commands.has(query) && !client.categories.some(c => c.toLowerCase() === query)) return client.functions.badArg.run(message, 1, 'The query provided was neither a category or a command.');
+
+  const cmd = client.commands.get(query);
+  if (cmd) {
+    const embed = new client.MessageEmbed()
+      .addField('Usage', prefix + cmd.help.usage, true)
+      .addField('Category', cmd.help.category, true)
+      .addField('Aliases', cmd.help.aliases.map(alias => `\`${prefix + alias}\``).join(', '), true)
+      .setColor(client.config.embedColor)
+      .setDescription(cmd.help.desc)
+      .setFooter('[Arg] = Optional | <Arg> = Required', message.author.displayAvatarURL())
+      .setTitle(`${prefix + query} Command Information`);
+
+    return message.channel.send(embed);
+  }
+
+  const category = client.categories.find(c => c.toLowerCase() === query);
+  const cCommands = client.commands.keyArray().filter(c => client.commands.get(c).help.category.toLowerCase() === query);
+  const embed = new client.MessageEmbed()
+    .setColor(client.config.embedColor)
+    .setDescription(cCommands.map(c => `- \`${prefix + c}\``).join('\n'))
+    .setFooter(`${cCommands.length} Category Commands | Requested by ${message.author.tag}`, message.author.displayAvatarURL())
+    .setTimestamp()
+    .setTitle(`${category} Category Information`);
+
+  return message.channel.send(embed);
 };
 
 module.exports.help = {
-  name: 'help',
-  desc: 'Displays commands.',
-  category: 'misc',
-  usage: '?help [Command Name]',
-  aliases: ['commands']
+  aliases: [ 'commands', 'command' ],
+  category: 'Miscellaneous',
+  desc: 'Displays the help menu or shows information about a command or category.',
+  usage: 'help [Command or Category]'
 };

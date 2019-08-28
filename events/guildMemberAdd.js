@@ -1,91 +1,38 @@
-/**
- * @param {import('../structures/client.js')} Client
- * @param {import('discord.js').GuildMember} member
- * @param {import('discord.js').Guild} guild
- */
-async function welcomeMessage(Client, member, guild) {
-  const welcomeToggle = (await Client.sql.query('SELECT bool FROM togglewelcome WHERE guildid = $1', [guild.id])).rows[0];
-  const channelRow = (await Client.sql.query('SELECT channel FROM welcomechannel WHERE guildid = $1', [guild.id])).rows[0];
-  if (!welcomeToggle || !welcomeToggle.bool) return;
-  const welcomeChannel = channelRow ? guild.channels.get(channelRow.channel) : guild.channels.find(c => c.type === 'text' && c.name === 'action-log');
-  if (!welcomeChannel) return;
-  if (!Client.checkClientPerms(welcomeChannel, 'SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS')) return;
-
-  const msgRow = (await Client.sql.query('SELECT msg FROM welcomemsg WHERE guildid = $1', [guild.id])).rows[0];
-  const msg = msgRow ? msgRow.msg
-    .replace('<Guild>', guild.name)
-    .replace('<User>', member.toString())
-    .replace('<MemberCount>', Client.formatNum(guild.memberCount))
-    : `${member}, Welcome to **${member.guild.name}!** There are ${Client.formatNum(member.guild.memberCount)} members now.`;
-
-  const embed = new Client.Discord.MessageEmbed()
-    .setDescription(msg)
-    .setColor(0x00FF00)
-    .setTimestamp();
-
-  return welcomeChannel.send(embed);
-}
-
-/**
- * @param {import('../structures/client.js')} Client
- * @param {import('discord.js').GuildMember} member
- * @param {import('discord.js').Guild} guild
- */
-function logMessage (Client, member, guild) {
-  const embed = new Client.Discord.MessageEmbed()
-    .setTitle('Member Joined')
-    .addField('Member', `${member.user.tag} (${member.id})`)
-    .setThumbnail(member.user.displayAvatarURL({ size: 2048 }))
+function sendLog (client, member) {
+  const embed = new client.MessageEmbed()
+    .addField('Created at', client.dateformat(member.user.createdAt, 'mmmm d, yyyy @ HH:MM:ss UTC'))
+    .setColor(client.config.embedColor)
+    .setFooter(`ID: ${member.id}`)
     .setTimestamp()
-    .setColor(0x00FF00);
-  return Client.functions.get('sendlog')(Client, embed, guild.id);
+    .setTitle('Member Joined');
+
+  return client.functions.sendLog.run(client, embed, member.guild);
 }
 
-/**
- * @param {import('../structures/client.js')} Client
- * @param {import('discord.js').GuildMember} member
- * @param {import('discord.js').Guild} guild
- */
-async function levelrole (Client, member, guild) {
-  const toggleLev = (await Client.sql.query('SELECT bool FROM togglelevel WHERE guildid = $1', [guild.id]));
-  if (!toggleLev || !toggleLev.bool) return;
-  const { rows } = await Client.sql.query('SELECT roleid, level FROM levelrole WHERE guildid = $1', [guild.id]);
-  if (rows.length === 0) return;
-  rows.forEach(async row => {
-    const levelRole = guild.roles.get(row.roleid);
-    if (!levelRole) Client.sql.query('DELETE FROM levelrole WHERE guildid = $1 AND roleid = $2', [guild.id, row.roleid]);
-    else if (levelrole.position < guild.me.roles.highest.position) {
-      const curLevel = (await Client.sql.query('SELECT level FROM scores WHERE userid = $1', [member.id])).rows[0].level;
-      if (curLevel < row.level) return;
-      member.roles.add(levelrole, 'Level Role');
-    }
-  });
+async function welcomeMsg (client, member) {
+  const toggledRow = (await client.query('SELECT bool FROM togglewelcome WHERE guildid = $1', [ member.guild.id ])).rows[0];
+  if (!toggledRow || !toggledRow.bool) return;
+
+  const channelRow = (await client.query('SELECT channel FROM welcomechannel WHERE guildid = $1', [ member.guild.id ])).rows[0];
+  const channel = channelRow ? member.guild.channels.get(channelRow.channel) : member.guild.channels.find(c => c.name === 'action-log' && c.type === 'text');
+  if (!channel) return;
+  if (!channel.permissionsFor(client.user).has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
+
+  const msgRow = (await client.query('SELECT msg FROM welcomemsg WHERE guildid = $1', [ member.guild.id ])).rows[0];
+  const msg = msgRow ? msgRow.msg : '<User>, Welcome to **<Server>**! There are <MemberCount> members now.';
+
+  const embed = new client.MessageEmbed()
+    .setColor(client.config.embedColor)
+    .setDescription(msg.replace(/<MemberCount>/g, member.guild.memberCount).replace(/<Server>/g, member.guild.name).replace(/<User>/g, member.toString()))
+    .setFooter(`ID: ${member.id}`)
+    .setTimestamp();
+  return channel.send(embed);
 }
 
-/**
- * @param {import('../structures/client.js')} Client
- * @param {import('discord.js').GuildMember} member
- * @param {import('discord.js').Guild} guild
- */
-function mute (Client, member, guild) {
-  if (!Client.mutes.has(member.id)) return;
-  if (!guild.me.hasPermission('MANAGE_ROLES')) return;
-  const mutedRole = guild.roles.find(r => r.name === 'Muted');
-  if (mutedRole && !member.roles.has(mutedRole.id)) member.roles.add(mutedRole);
-}
+module.exports.run = (client, member) => {
+  if (!member.guild.available) return;
+  if (member.id === client.user.id) return;
 
-/**
- * @param {import('../structures/client.js')} Client
- */
-module.exports = Client => {
-  return Client.bot.on('guildMemberAdd', async member => {
-    const guild = member.guild;
-    if (!guild.available) return;
-    if (member === guild.me) return;
-
-    logMessage(Client, member, guild);
-    welcomeMessage(Client, member, guild);
-    levelrole(Client, member, guild);
-    mute(Client, member, guild);
-  });
+  sendLog(client, member);
+  welcomeMsg(client, member);
 };

@@ -1,16 +1,11 @@
-/**
- * @param {import('../../structures/client.js')} Client
- * @param {import('discord.js').Message} message
- * @param {String[]} args
-*/
-module.exports = (Client, message, args) => {
-  return message.channel.send(`:ping_pong: Pong! \`${Math.round(message.client.ws.ping)}ms\``);
+module.exports.run = async (client, message, args) => {
+  const msg = await message.channel.send(`Pong! :heartbeat: \`${Math.round(client.ws.ping * 10) / 10}ms\``);
+  return msg.edit(`${msg.content} :stopwatch: \`${Date.now() - msg.createdTimestamp}ms\``);
 };
 
 module.exports.help = {
-  name: 'ping',
-  desc: 'Sends a pong!',
-  category: 'misc',
-  usage: '?ping',
-  aliases: ['pong']
+  aliases: [ 'pong' ],
+  category: 'Miscellaneous',
+  desc: 'Displays the ping of the bot.',
+  usage: 'ping'
 };

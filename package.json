@@ -1,11 +1,9 @@
 {
   "name": "reknown",
-  "version": "1.0.0",
-  "description": "A bot with many features.",
+  "version": "3.0.0",
+  "description": "A Discord bot with created with Discord.JS (master branch).",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Jyguy/Reknown.git"
@@ -21,27 +19,25 @@
   },
   "homepage": "https://github.com/Jyguy/Reknown#readme",
   "engines": {
-    "node": "10.11.0"
+    "node": ">=10.0.0"
   },
   "dependencies": {
-    "array-utility": "0.0.2",
+    "atob": "^2.1.2",
+    "btoa": "^1.2.1",
     "cowsay": "^1.4.0",
     "dateformat": "^3.0.3",
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^6.2.0",
     "erlpack": "^0.1.2",
     "fs": "0.0.1-security",
-    "fuzzball": "^1.2.2",
-    "libsodium-wrappers": "^0.7.4",
     "moment": "^2.24.0",
-    "ms": "^2.1.1",
+    "ms": "^2.1.2",
     "node-fetch": "^2.6.0",
-    "pg": "^7.11.0",
-    "rollbar": "^2.7.1",
-    "rword": "^3.1.1",
-    "string-math": "^1.2.1",
-    "uws": "^100.0.1",
-    "zlib-sync": "^0.1.4"
+    "pg": "^7.12.1",
+    "querystring": "^0.2.0",
+    "string-math": "^1.2.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^6.2.2"
+  }
 }
