@@ -38,6 +38,6 @@
     "string-math": "^1.2.1"
   },
   "devDependencies": {
-    "eslint": "^6.2.1"
+    "eslint": "^6.2.2"
   }
 }
