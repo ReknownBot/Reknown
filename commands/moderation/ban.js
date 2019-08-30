@@ -2,7 +2,7 @@ module.exports.run = async (client, message, args) => {
   if (!message.channel.permissionsFor(client.user).has('BAN_MEMBERS')) return client.functions.noClientPerms.run(message, message.channel, [ 'Ban Members' ]);
 
   if (!args[0]) return client.functions.noArg.run(message, 1, 'a user to ban.');
-  const member = await client.functions.parseMention.run(args[0], message.guild, { type: 'member' });
+  const member = await client.functions.parseMention.run(args[0], message.guild, { type: 'member' }).catch(() => false);
   const reason = args[2] ? args.slice(2).join(' ') : null;
   if (member) {
     if (!member.bannable) return client.functions.badArg.run(message, 1, 'I do not have enough powers to ban that member. Please check my permissions and my role position. Note that I cannot ban owners.');
