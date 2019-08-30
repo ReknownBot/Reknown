@@ -6,7 +6,7 @@ module.exports.run = async (client, message, args) => {
 
   const row = (await client.query('SELECT * FROM scores WHERE userid = $1 AND guildid = $2', [ member.id, message.guild.id ])).rows[0];
   const points = row ? client.functions.formatNum.run(row.points) : 0;
-  const level = row ? client.functions.formatNum(row.level) : 0;
+  const level = row ? client.functions.formatNum.run(row.level) : 0;
   const reqPoints = client.functions.formatNum.run(Math.pow((level + 1) / 0.2, 2));
   const { rows: all } = await client.query('SELECT * FROM scores WHERE guildid = $1 ORDER BY points DESC', [ message.guild.id ]);
   const rank = all.indexOf(all.find(r => r.userid === member.id)) + 1;
