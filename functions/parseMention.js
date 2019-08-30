@@ -2,7 +2,7 @@ module.exports = (id, guild, options) => {
   let parsedId;
 
   if (isNaN(id)) {
-    if (!id.endsWith('>') || id.replace(/[<>@!&#]/g, '').length === 0) return;
+    if (!id.endsWith('>') || id.replace(/[<>@!&#]/g, '').length === 0) return Promise.reject(false);
     parsedId = id.slice(2, -1);
     if (id.startsWith('<@!') || id.startsWith('<@&')) parsedId = id.slice(3, -1);
   } else parsedId = id;
