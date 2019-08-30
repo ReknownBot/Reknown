@@ -1,7 +1,11 @@
 module.exports.run = (id, guild, options) => {
-  if (!id.endsWith('>') || id.replace(/[<>@!&#]/g, '').length === 0) return;
-  let parsedId = id.slice(2, -1);
-  if (id.startsWith('<@!') || id.startsWith('<@&')) parsedId = id.slice(3, -1);
+  let parsedId;
+
+  if (isNaN(id)) {
+    if (!id.endsWith('>') || id.replace(/[<>@!&#]/g, '').length === 0) return;
+    parsedId = id.slice(2, -1);
+    if (id.startsWith('<@!') || id.startsWith('<@&')) parsedId = id.slice(3, -1);
+  } else parsedId = id;
   const cType = options.cType || 'text';
 
   switch (options.type) {
