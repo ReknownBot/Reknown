@@ -1,7 +1,7 @@
 module.exports.run = async (client, message, args) => {
-  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms.run(message, message.channel, [ 'Embed Links' ]);
+  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, message.channel, [ 'Embed Links' ]);
 
-  const prefix = await client.functions.getPrefix.run(client, message.guild.id);
+  const prefix = await client.functions.getPrefix(client, message.guild.id);
   if (!args[1]) {
     let commands = client.commands.keyArray();
 
@@ -24,7 +24,7 @@ module.exports.run = async (client, message, args) => {
   }
 
   const query = args.slice(1).join(' ').toLowerCase();
-  if (!client.commands.has(query) && !client.categories.some(c => c.toLowerCase() === query)) return client.functions.badArg.run(message, 1, 'The query provided was neither a category or a command.');
+  if (!client.commands.has(query) && !client.categories.some(c => c.toLowerCase() === query)) return client.functions.badArg(message, 1, 'The query provided was neither a category or a command.');
 
   const cmd = client.commands.get(query);
   if (cmd) {

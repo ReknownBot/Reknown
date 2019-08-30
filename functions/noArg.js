@@ -1,7 +1,7 @@
 const config = require('../config.json');
 const { MessageEmbed } = require('discord.js');
 
-module.exports.run = (message, argNum, desc) => {
+module.exports = (message, argNum, desc) => {
   if (!message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) return message.channel.send(`:x: Argument **#${argNum}** was missing. It is supposed to be **${desc}**`);
 
   const embed = new MessageEmbed()

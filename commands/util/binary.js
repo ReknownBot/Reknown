@@ -30,22 +30,22 @@ function binary2Text (str) {
 }
 
 module.exports.run = (client, message, args) => {
-  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms.run(message, message.channel, [ 'Embed Links' ]);
+  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, message.channel, [ 'Embed Links' ]);
 
   const method = args[1] ? args[1].toLowerCase() : null;
-  if (!method) return client.functions.noArg.run(message, 1, 'an action to do, either decode / encode.');
-  if (method !== 'decode' && method !== 'encode') return client.functions.badArg.run(message, 1, 'The action provided was not a valid choice. It must be either decode or encode.');
+  if (!method) return client.functions.noArg(message, 1, 'an action to do, either decode / encode.');
+  if (method !== 'decode' && method !== 'encode') return client.functions.badArg(message, 1, 'The action provided was not a valid choice. It must be either decode or encode.');
 
   const input = args.slice(2).join(' ');
-  if (!input) return client.functions.noArg.run(message, 2, 'an input to decode or encode.');
+  if (!input) return client.functions.noArg(message, 2, 'an input to decode or encode.');
 
   let result;
 
   if (method === 'decode') result = binary2Text(input.replace(/\s/g, ''));
   else result = text2Binary(input);
 
-  if (!result) return client.functions.badArg.run(message, 2, 'The input provided was not a valid binary string.');
-  if (result.length > 2048) return client.functions.badArg.run(message, 2, 'The output was longer than 2048 characters, which is more than a message can hold. Please shorten the input.');
+  if (!result) return client.functions.badArg(message, 2, 'The input provided was not a valid binary string.');
+  if (result.length > 2048) return client.functions.badArg(message, 2, 'The output was longer than 2048 characters, which is more than a message can hold. Please shorten the input.');
 
   const embed = new client.MessageEmbed()
     .setColor(client.config.embedColor)

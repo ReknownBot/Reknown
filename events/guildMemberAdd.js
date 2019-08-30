@@ -6,7 +6,7 @@ function sendLog (client, member) {
     .setTimestamp()
     .setTitle('Member Joined');
 
-  return client.functions.sendLog.run(client, embed, member.guild);
+  return client.functions.sendLog(client, embed, member.guild);
 }
 
 async function welcomeMsg (client, member) {

@@ -1,4 +1,4 @@
-module.exports.run = async (client, embed, guild) => {
+module.exports = async (client, embed, guild) => {
   const toggledRow = (await client.query('SELECT bool FROM actionlog WHERE guildid = $1', [ guild.id ])).rows[0];
   if (!toggledRow || !toggledRow.bool) return;
 

@@ -1,4 +1,4 @@
-module.exports.run = (id, guild, options) => {
+module.exports = (id, guild, options) => {
   let parsedId;
 
   if (isNaN(id)) {
