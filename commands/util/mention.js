@@ -7,7 +7,10 @@ module.exports.run = async (client, message, args) => {
 
   const mentionable = role.mentionable;
   if (!mentionable) {
-    if (!message.member.hasPermission('MANAGE_ROLES') || role.position >= message.member.roles.highest.position) return message.channel.send('You do not have enough permissions to mention that role. You need the `Manage Roles` permission and also have to be above the mentioning role.');
+    if ((!message.member.hasPermission('MANAGE_ROLES') ||
+    role.position >= message.member.roles.highest.position) &&
+    message.author.id !== message.guild.ownerID) return message.channel.send('You do not have enough permissions to mention that role. You need the `Manage Roles` permission and also have to be above the mentioning role.');
+
     await role.setMentionable(true);
   }
   await message.channel.send(`**Mentioned by ${client.escMD(message.author.tag)}** - ${role}`);
