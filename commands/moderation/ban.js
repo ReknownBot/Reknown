@@ -1,5 +1,5 @@
 module.exports.run = async (client, message, args) => {
-  if (!message.channel.permissionsFor(client.user).has('BAN_MEMBERS')) return client.functions.noClientPerms(message, message.channel, [ 'Ban Members' ]);
+  if (!message.channel.permissionsFor(client.user).has('BAN_MEMBERS')) return client.functions.noClientPerms(message, [ 'Ban Members' ], message.channel);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'a user to ban.');
   const member = await client.functions.parseMention(args[1], message.guild, { type: 'member' }).catch(() => false);

@@ -30,7 +30,7 @@ function binary2Text (str) {
 }
 
 module.exports.run = (client, message, args) => {
-  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, message.channel, [ 'Embed Links' ]);
+  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const method = args[1] ? args[1].toLowerCase() : null;
   if (!method) return client.functions.noArg(message, 1, 'an action to do, either decode / encode.');

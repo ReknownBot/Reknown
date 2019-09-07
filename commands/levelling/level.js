@@ -1,5 +1,5 @@
 module.exports.run = async (client, message, args) => {
-  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, message.channel, [ 'Embed Links' ]);
+  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const member = args[1] ? await client.functions.parseMention(args[1], message.guild, { type: 'member' }).catch(() => false) : message.member;
   if (!member) return client.functions.badArg(message, 1, 'I did not find a member by that query.');

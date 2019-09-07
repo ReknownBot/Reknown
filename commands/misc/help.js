@@ -1,5 +1,5 @@
 module.exports.run = async (client, message, args) => {
-  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, message.channel, [ 'Embed Links' ]);
+  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const prefix = await client.functions.getPrefix(client, message.guild.id);
   if (!args[1]) {

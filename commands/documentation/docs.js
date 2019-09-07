@@ -10,7 +10,7 @@ const sources = [
 ];
 
 module.exports.run = async (client, message, args) => {
-  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, message.channel, [ 'Embed Links' ]);
+  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const q = args[1];
   let branch = args[2] || 'stable';
