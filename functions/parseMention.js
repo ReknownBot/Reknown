@@ -1,8 +1,10 @@
-module.exports = (id, guild, options) => {
-  let parsedId;
+const regexArr = [ /<@!?(\d{17,19})>/, /<@&(\d{17,19})>/, /<#(\d{17,19})>/ ];
 
+module.exports = (id, guild, options) => {
+  if (isNaN(id) && !regexArr.some(regex => regex.test(id))) return Promise.reject(false);
+
+  let parsedId;
   if (isNaN(id)) {
-    if (!id.endsWith('>') || id.replace(/[<>@!&#]/g, '').length === 0) return Promise.reject(false);
     parsedId = id.slice(2, -1);
     if (id.startsWith('<@!') || id.startsWith('<@&')) parsedId = id.slice(3, -1);
   } else parsedId = id;
