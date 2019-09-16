@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires, global-require */
+
 import * as Discord from 'discord.js';
 import { readdirSync } from 'fs';
 import ReknownClient from './structures/client';
@@ -8,9 +10,13 @@ const client = new ReknownClient();
 const categories = readdirSync('./commands');
 categories.forEach(name => readdirSync(`./commands/${name}`).forEach(f => client.commands.set(f.slice(0, -3), require(`./commands/${name}/${f}`))));
 client.events = new Discord.Collection(readdirSync('./events').map(f => [ f.slice(0, -3), require(`./events/${f}`) ]));
-readdirSync('./functions').forEach(f => client.functions[f.slice(0, -3)] = require(`./functions/${f}`));
+readdirSync('./functions').forEach(f => {
+  client.functions[f.slice(0, -3)] = require(`./functions/${f}`);
+});
 client.commands.forEach((obj, name) => {
-  obj.help.aliases.forEach(alias => client.aliases[alias] = name);
+  obj.help.aliases.forEach(alias => {
+    client.aliases[alias] = name;
+  });
   client.aliases[name] = name;
 });
 const temp = [];

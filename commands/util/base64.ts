@@ -4,7 +4,6 @@ import atob from 'atob';
 import btoa from 'btoa';
 
 module.exports.run = (client: ReknownClient, message: Message, args: string[]): void => {
-  // eslint-disable-next-line no-extra-parens
   if (!(message.channel as TextChannel).permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const method = args[1] ? args[1].toLowerCase() : null;

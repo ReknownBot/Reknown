@@ -14,7 +14,6 @@ const sources = [
 ];
 
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]): Promise<void> => {
-  // eslint-disable-next-line no-extra-parens
   if (!(message.channel as TextChannel).permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const q = args[1];

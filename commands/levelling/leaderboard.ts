@@ -3,7 +3,6 @@ import ReknownClient from '../../structures/client';
 import { LevelRow } from 'ReknownBot';
 
 module.exports.run = async (client: ReknownClient, message: Message): Promise<void> => {
-  // eslint-disable-next-line no-extra-parens
   if (!(message.channel as TextChannel).permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const res = await client.query('SELECT * FROM scores WHERE guildid = $1 ORDER BY points DESC', [ message.guild.id ]);

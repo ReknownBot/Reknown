@@ -2,7 +2,6 @@ import ReknownClient from '../../structures/client';
 import { Message, TextChannel, MessageEmbed } from 'discord.js';
 
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]): Promise<void> => {
-  // eslint-disable-next-line no-extra-parens
   if (!(message.channel as TextChannel).permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const prefix: string = await client.functions.getPrefix(client, message.guild.id) as unknown as string;

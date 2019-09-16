@@ -26,7 +26,7 @@ module.exports = exports = {
 
     "rules": {
         // Possible Errors (overrides from recommended set)
-        "no-extra-parens": ERROR,
+        "no-extra-parens": OFF,
         "no-unexpected-multiline": ERROR,
         // All JSDoc comments must be valid
         "valid-jsdoc": [ ERROR, {
