@@ -7,7 +7,6 @@ import polyfill from 'promise-polyfill';
 const pool = new Pool({
   database: process.env.SQL_DB,
   host: process.env.SQL_HOST,
-  password: process.env.SQL_PASS,
   port: process.env.SQL_PORT as unknown as number,
   Promise: polyfill,
   user: process.env.SQL_USER,
