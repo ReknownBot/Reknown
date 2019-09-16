@@ -8,11 +8,21 @@ module.exports = exports = {
         "es6": true
     },
 
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+
+    "parser": "@typescript-eslint/parser",
 
     "parserOptions": {
-        "ecmaVersion": 8
+        "ecmaVersion": 8,
+        "sourceType": "module"
     },
+
+    "plugins": [
+        "@typescript-eslint/eslint-plugin"
+    ],
 
     "rules": {
         // Possible Errors (overrides from recommended set)
@@ -85,7 +95,7 @@ module.exports = exports = {
         "no-unused-expressions": ERROR,
         "no-useless-call": ERROR,
         "no-useless-concat": ERROR,
-        "no-void": WARN,
+        "no-void": OFF,
         // Produce warnings when something is commented as TODO or FIXME
         "no-warning-comments": [ WARN, {
             "terms": [ "TODO", "FIXME" ],

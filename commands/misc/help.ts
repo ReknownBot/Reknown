@@ -1,13 +1,17 @@
-module.exports.run = async (client, message, args) => {
-  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+import ReknownClient from '../../structures/client';
+import { Message, TextChannel, MessageEmbed } from 'discord.js';
 
-  const prefix = await client.functions.getPrefix(client, message.guild.id);
+module.exports.run = async (client: ReknownClient, message: Message, args: string[]): Promise<void> => {
+  // eslint-disable-next-line no-extra-parens
+  if (!(message.channel as TextChannel).permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+
+  const prefix: string = await client.functions.getPrefix(client, message.guild.id) as unknown as string;
   if (!args[1]) {
     let commands = client.commands.keyArray();
 
     if (message.author.id !== client.config.ownerID) commands = commands.filter(c => !client.commands.get(c).help.private);
 
-    const embed = new client.MessageEmbed()
+    const embed = new MessageEmbed()
       .setColor(client.config.embedColor)
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
       .setTimestamp()
@@ -20,7 +24,7 @@ module.exports.run = async (client, message, args) => {
       else embed.addField(info.category, `- \`${prefix + cmd}\``, true);
     });
 
-    return message.channel.send(embed);
+    return void message.channel.send(embed);
   }
 
   const query = args.slice(1).join(' ').toLowerCase();
@@ -28,7 +32,7 @@ module.exports.run = async (client, message, args) => {
 
   const cmd = client.commands.get(query);
   if (cmd) {
-    const embed = new client.MessageEmbed()
+    const embed = new MessageEmbed()
       .addField('Usage', prefix + cmd.help.usage, true)
       .addField('Category', cmd.help.category, true)
       .addField('Aliases', cmd.help.aliases.map(alias => `\`${prefix + alias}\``).join(', '), true)
@@ -37,19 +41,19 @@ module.exports.run = async (client, message, args) => {
       .setFooter('[Arg] = Optional | <Arg> = Required', message.author.displayAvatarURL())
       .setTitle(`${prefix + query} Command Information`);
 
-    return message.channel.send(embed);
+    return void message.channel.send(embed);
   }
 
   const category = client.categories.find(c => c.toLowerCase() === query);
   const cCommands = client.commands.keyArray().filter(c => client.commands.get(c).help.category.toLowerCase() === query);
-  const embed = new client.MessageEmbed()
+  const embed = new MessageEmbed()
     .setColor(client.config.embedColor)
     .setDescription(cCommands.map(c => `- \`${prefix + c}\``).join('\n'))
     .setFooter(`${cCommands.length} Category Commands | Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp()
     .setTitle(`${category} Category Information`);
 
-  return message.channel.send(embed);
+  return void message.channel.send(embed);
 };
 
 module.exports.help = {

@@ -1,12 +1,18 @@
-module.exports.run = async (client, message, args) => {
-  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+import { Message, TextChannel, MessageEmbed } from 'discord.js';
+import ReknownClient from '../../structures/client';
+import { LevelRow } from 'ReknownBot';
 
-  const { rows } = await client.query('SELECT * FROM scores WHERE guildid = $1 ORDER BY points DESC', [ message.guild.id ]);
-  if (rows.length === 0) return message.reply(':x: There was no levelling data found for this server.');
+module.exports.run = async (client: ReknownClient, message: Message): Promise<void> => {
+  // eslint-disable-next-line no-extra-parens
+  if (!(message.channel as TextChannel).permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+
+  const res = await client.query('SELECT * FROM scores WHERE guildid = $1 ORDER BY points DESC', [ message.guild.id ]);
+  const rows: LevelRow[] = res.rows;
+  if (rows.length === 0) return void message.reply(':x: There was no levelling data found for this server.');
 
   const users = rows.map(async (r, i) => {
     const user = await client.users.fetch(r.userid);
-    let place;
+    let place: string;
     if (i === 0) place = ':first_place:';
     else if (i === 1) place = ':second_place:';
     else if (i === 2) place = ':third_place:';
@@ -15,14 +21,14 @@ module.exports.run = async (client, message, args) => {
   });
   const desc = (await Promise.all(users)).join('\n');
 
-  const embed = new client.MessageEmbed()
+  const embed = new MessageEmbed()
     .setColor(client.config.embedColor)
     .setDescription(desc)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp()
     .setTitle(`Levelling Leaderboard for ${message.guild.name}`);
 
-  return message.channel.send(embed);
+  return void message.channel.send(embed);
 };
 
 module.exports.help = {

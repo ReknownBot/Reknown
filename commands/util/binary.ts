@@ -1,4 +1,7 @@
-function text2Binary (str) {
+import ReknownClient from '../../structures/client';
+import { Message, TextChannel, MessageEmbed } from 'discord.js';
+
+function text2Binary (str: string): string {
   str = unescape(encodeURIComponent(str));
 
   let chr;
@@ -13,8 +16,8 @@ function text2Binary (str) {
   return output.join(' ');
 }
 
-function binary2Text (str) {
-  let chr,
+function binary2Text (str: string): string | boolean {
+  let chr: string,
     output = '';
 
   for (let i = 0; i < str.length; i += 8) {
@@ -29,8 +32,9 @@ function binary2Text (str) {
   }
 }
 
-module.exports.run = (client, message, args) => {
-  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+module.exports.run = (client: ReknownClient, message: Message, args: string[]): void => {
+  // eslint-disable-next-line no-extra-parens
+  if (!(message.channel as TextChannel).permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const method = args[1] ? args[1].toLowerCase() : null;
   if (!method) return client.functions.noArg(message, 1, 'an action to do, either decode / encode.');
@@ -39,22 +43,22 @@ module.exports.run = (client, message, args) => {
   const input = args.slice(2).join(' ');
   if (!input) return client.functions.noArg(message, 2, 'an input to decode or encode.');
 
-  let result;
+  let result: string | boolean;
 
   if (method === 'decode') result = binary2Text(input.replace(/\s/g, ''));
   else result = text2Binary(input);
 
-  if (!result) return client.functions.badArg(message, 2, 'The input provided was not a valid binary string.');
+  if (typeof result !== 'string') return client.functions.badArg(message, 2, 'The input provided was not a valid binary string.');
   if (result.length > 2048) return client.functions.badArg(message, 2, 'The output was longer than 2048 characters, which is more than a message can hold. Please shorten the input.');
 
-  const embed = new client.MessageEmbed()
+  const embed = new MessageEmbed()
     .setColor(client.config.embedColor)
     .setDescription(client.escMD(result))
     .setFooter(`Successfully ${method}d! | Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp()
     .setTitle('Output');
 
-  return message.channel.send(embed);
+  return void message.channel.send(embed);
 };
 
 module.exports.help = {
