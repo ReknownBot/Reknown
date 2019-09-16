@@ -5,12 +5,7 @@ import { ConfigObject, ReknownEvent, ReknownCommand, CommandCategory } from 'Rek
 import polyfill from 'promise-polyfill';
 
 const pool = new Pool({
-  database: process.env.SQL_DB,
-  host: process.env.SQL_HOST,
-  port: process.env.SQL_PORT as unknown as number,
-  Promise: polyfill,
-  user: process.env.SQL_USER,
-  ssl: true
+  Promise: polyfill
 });
 
 export default class ReknownClient extends Client {
