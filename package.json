@@ -3,7 +3,9 @@
   "version": "3.0.0",
   "description": "A Discord bot with created with Discord.JS (master branch).",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "node -r esm ."
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Jyguy/Reknown.git"
@@ -29,11 +31,13 @@
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^8.1.0",
     "erlpack": "^0.1.2",
+    "esm": "^3.2.25",
     "fs": "0.0.1-security",
     "moment": "^2.24.0",
     "ms": "^2.1.2",
     "node-fetch": "^2.6.0",
     "pg": "^7.12.1",
+    "promise-polyfill": "^8.1.3",
     "querystring": "^0.2.0",
     "string-math": "^1.2.1"
   },

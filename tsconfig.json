@@ -1,6 +1,13 @@
 {
   "compilerOptions": {
+    "declaration": false,
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "moduleResolution": "node",
+    "pretty": true,
+    "resolveJsonModule": true,
+    "target": "es6"
   }
 }
+
+// we need this -jyguy -- written by xenoq, approved by jyguy --- written approved by xenoq, sentence approved by squirrel ---- world is gone,
+// the earth has since disappeared, it is not 221X. humanity is a t the peak of extinction.
