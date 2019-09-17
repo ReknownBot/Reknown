@@ -35,13 +35,14 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
     const embed = new MessageEmbed()
       .addField('Usage', prefix + cmd.help.usage, true)
       .addField('Category', cmd.help.category, true)
-      .addField('Aliases', cmd.help.aliases.map(alias => `\`${prefix + alias}\``).join(', '), true)
       .setColor(client.config.embedColor)
       .setDescription(cmd.help.desc)
       .setFooter('[Arg] = Optional | <Arg> = Required', message.author.displayAvatarURL())
       .setTitle(`${prefix + query} Command Information`);
+    if (cmd.help.aliases.length !== 0) embed.addField('Aliases', cmd.help.aliases.map(alias => `\`${prefix + alias}\``).join(', '), true);
 
-    return void message.channel.send(embed);
+    message.channel.send(embed);
+    return;
   }
 
   const category = client.categories.find(c => c.toLowerCase() === query);
