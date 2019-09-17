@@ -1,5 +1,50 @@
 declare module 'ReknownBot' {
-  import { Message, Snowflake } from 'discord.js';
+  import { Message, Snowflake, GuildChannel, Guild, GuildMember, Role, User, MessageEmbed } from 'discord.js';
+
+  export class ReknownFunctions {
+    public badArg(
+      message: Message,
+      argNum: number,
+      desc: string
+    ): void;
+
+    public formatNum(
+      num: number
+    ): string;
+
+    public getPrefix(
+      client: import('../structures/client').default,
+      id: Snowflake
+    ): Promise<string>;
+
+    public noArg(
+      message: Message,
+      argNum: number,
+      desc: string
+    ): void;
+
+    public noClientPerms(
+      message: Message,
+      perms: string[],
+      channel?: GuildChannel
+    ): void;
+
+    public parseMention(
+      id: Snowflake,
+      guild: Guild,
+      options: ParseMentionOptions
+    ): Promise<GuildMember> | Promise<User> | Role | GuildChannel | Promise<false> | false;
+
+    public sendLog(
+      client: import('../structures/client').default,
+      embed: MessageEmbed,
+      guild: Guild
+    ): Promise<void>;
+
+    public uppercase(
+      str: string
+    ): string;
+  }
 
   type CommandCategory = 'Documentation' | 'Fun' | 'Levelling' | 'Miscellaneous' | 'Moderation' | 'Utility';
 
@@ -29,6 +74,12 @@ declare module 'ReknownBot' {
   interface LogChannelRow {
     channelid: Snowflake;
     guildid: Snowflake;
+  }
+
+  interface ParseMentionOptions {
+    client?: import('../structures/client').default;
+    cType?: 'text' | 'voice' | 'category';
+    type: 'member' | 'user' | 'role' | 'channel';
   }
 
   interface PrefixRow {

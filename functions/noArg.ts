@@ -12,5 +12,5 @@ module.exports = (message: Message, argNum: number, desc: string): void => {
     .setTimestamp()
     .setTitle(`Argument #${argNum} Missing`);
 
-  return void message.channel.send(embed);
+  message.channel.send(embed);
 };

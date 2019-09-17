@@ -6,7 +6,10 @@ import ReknownClient from './structures/client';
 
 require('dotenv').config();
 
-const client = new ReknownClient();
+const client = new ReknownClient({
+  disableEveryone: true,
+  partials: [ 'GUILD_MEMBER', 'MESSAGE', 'USER' ]
+});
 const categories = readdirSync('./commands');
 categories.forEach(name => readdirSync(`./commands/${name}`).forEach(f => client.commands.set(f.slice(0, -3), require(`./commands/${name}/${f}`))));
 client.events = new Discord.Collection(readdirSync('./events').map(f => [ f.slice(0, -3), require(`./events/${f}`) ]));

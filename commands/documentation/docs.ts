@@ -14,7 +14,7 @@ const sources = [
 ];
 
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]): Promise<void> => {
-  if (!(message.channel as TextChannel).permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const q = args[1];
   let branch = args[2] || 'stable';
@@ -28,7 +28,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   if (!raw) return client.functions.badArg(message, 1, 'I did not find anything with that query.');
 
   const embed = new MessageEmbed(raw);
-  return void message.channel.send({ embed: embed });
+  message.channel.send({ embed: embed });
 };
 
 module.exports.help = {

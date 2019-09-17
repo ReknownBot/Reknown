@@ -1,9 +1,10 @@
-import { Message, TextChannel, MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed, DMChannel } from 'discord.js';
 import ReknownClient from '../../structures/client';
 import { LevelRow } from 'ReknownBot';
 
 module.exports.run = async (client: ReknownClient, message: Message): Promise<void> => {
-  if (!(message.channel as TextChannel).permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+  if (message.channel instanceof DMChannel) return void message.reply(':x: This command is only available in servers.');
+  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const res = await client.query('SELECT * FROM scores WHERE guildid = $1 ORDER BY points DESC', [ message.guild.id ]);
   const rows: LevelRow[] = res.rows;
@@ -27,7 +28,7 @@ module.exports.run = async (client: ReknownClient, message: Message): Promise<vo
     .setTimestamp()
     .setTitle(`Levelling Leaderboard for ${message.guild.name}`);
 
-  return void message.channel.send(embed);
+  message.channel.send(embed);
 };
 
 module.exports.help = {

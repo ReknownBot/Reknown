@@ -102,7 +102,7 @@ module.exports = exports = {
             "location": "start"
         }],
         "no-with": WARN,
-        "radix": WARN,
+        "radix": [ WARN, "as-needed" ],
         "vars-on-top": ERROR,
         // Enforces the style of wrapped functions
         "wrap-iife": [ ERROR, "outside" ],

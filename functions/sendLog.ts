@@ -13,5 +13,5 @@ module.exports = async (client: ReknownClient, embed: MessageEmbed, guild: Guild
   if (!channel) return;
   if (!channel.permissionsFor(client.user).has([ 'SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS' ])) return;
 
-  return void channel.send(embed);
+  channel.send(embed);
 };

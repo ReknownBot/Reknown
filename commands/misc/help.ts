@@ -2,9 +2,9 @@ import ReknownClient from '../../structures/client';
 import { Message, TextChannel, MessageEmbed } from 'discord.js';
 
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]): Promise<void> => {
-  if (!(message.channel as TextChannel).permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
-  const prefix: string = await client.functions.getPrefix(client, message.guild.id) as unknown as string;
+  const prefix = await client.functions.getPrefix(client, message.guild.id);
   if (!args[1]) {
     let commands = client.commands.keyArray();
 
@@ -23,7 +23,8 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
       else embed.addField(info.category, `- \`${prefix + cmd}\``, true);
     });
 
-    return void message.channel.send(embed);
+    message.channel.send(embed);
+    return;
   }
 
   const query = args.slice(1).join(' ').toLowerCase();
@@ -52,7 +53,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
     .setTimestamp()
     .setTitle(`${category} Category Information`);
 
-  return void message.channel.send(embed);
+  message.channel.send(embed);
 };
 
 module.exports.help = {

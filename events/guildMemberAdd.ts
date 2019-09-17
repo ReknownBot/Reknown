@@ -11,7 +11,7 @@ function sendLog (client: ReknownClient, member: GuildMember): void {
     .setTimestamp()
     .setTitle('Member Joined');
 
-  return client.functions.sendLog(client, embed, member.guild);
+  client.functions.sendLog(client, embed, member.guild);
 }
 
 async function welcomeMsg (client: ReknownClient, member: GuildMember): Promise<void> {
@@ -31,10 +31,10 @@ async function welcomeMsg (client: ReknownClient, member: GuildMember): Promise<
     .setDescription(msg.replace(/<MemberCount>/g, member.guild.memberCount.toString()).replace(/<Server>/g, member.guild.name).replace(/<User>/g, member.toString()))
     .setFooter(`ID: ${member.id}`)
     .setTimestamp();
-  return void channel.send(embed);
+  channel.send(embed);
 }
 
-module.exports.run = (client: ReknownClient, member: GuildMember): undefined => {
+module.exports.run = (client: ReknownClient, member: GuildMember): void => {
   if (!member.guild.available) return;
   if (member.id === client.user.id) return;
 
