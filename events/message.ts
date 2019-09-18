@@ -5,7 +5,7 @@ module.exports.run = async (client: ReknownClient, message: Message): Promise<vo
   if (message.author.bot || !message.guild.available) return;
   if (message.member.partial) await message.member.fetch();
 
-  const prefix = await client.functions.getPrefix(client, message.guild.id);
+  const prefix = message.guild ? await client.functions.getPrefix(client, message.guild.id) : client.config.prefix;
   const regexp = new RegExp(`^<@!?${message.client.user.id}> `);
   if ((!message.content.startsWith(prefix) && !message.content.match(regexp)) || message.content === prefix) return;
 
