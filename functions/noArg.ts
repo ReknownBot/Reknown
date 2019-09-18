@@ -3,7 +3,7 @@ import { embedColor } from '../config.json';
 
 
 module.exports = (message: Message, argNum: number, desc: string): void => {
-  if (!(message.channel as TextChannel).permissionsFor(message.guild.me).has('EMBED_LINKS')) return void message.channel.send(`:x: Argument **#${argNum}** was missing. It is supposed to be **${desc}**`);
+  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(message.guild.me).has('EMBED_LINKS')) return void message.channel.send(`:x: Argument **#${argNum}** was missing. It is supposed to be **${desc}**`);
 
   const embed = new MessageEmbed()
     .setColor(embedColor)
