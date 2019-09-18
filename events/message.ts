@@ -6,8 +6,12 @@ module.exports.run = async (client: ReknownClient, message: Message): Promise<vo
   if (message.member.partial) await message.member.fetch();
 
   const prefix = await client.functions.getPrefix(client, message.guild.id);
-  if (!message.content.startsWith(prefix) || message.content === prefix) return;
-  const args = message.content.slice(prefix.length).split(/ +/g);
+  const regexp = new RegExp(`^<@!?${message.client.user.id}> `);
+  if ((!message.content.startsWith(prefix) && !message.content.match(regexp)) || message.content === prefix) return;
+
+  let args: string[];
+  if (message.content.match(regexp)) args = message.content.slice(message.content.match(regexp)[0].length).split(/ +/g);
+  else args = message.content.slice(prefix.length).split(/ +/g);
   let cmd = args[0].toLowerCase();
   if (!Object.keys(client.aliases).includes(cmd)) return;
   cmd = client.aliases[cmd];
