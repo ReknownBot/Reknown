@@ -3,7 +3,7 @@ import { Message } from 'discord.js';
 
 module.exports.run = async (client: ReknownClient, message: Message): Promise<void> => {
   if (message.author.bot || message.guild && !message.guild.available) return;
-  if (message.member.partial) await message.member.fetch();
+  if (message.guild && message.member.partial) await message.member.fetch();
 
   const prefix = message.guild ? await client.functions.getPrefix(client, message.guild.id) : client.config.prefix;
   const regexp = new RegExp(`^<@!?${message.client.user.id}> `);
