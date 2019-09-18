@@ -30,6 +30,12 @@ declare module 'ReknownBot' {
       channel?: GuildChannel
     ): void;
 
+    public noPerms(
+      message: Message,
+      perms: string[],
+      channel?: GuildChannel
+    ): void;
+
     public parseMention(
       id: Snowflake,
       guild: Guild,
