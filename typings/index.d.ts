@@ -1,5 +1,6 @@
 declare module 'ReknownBot' {
   import { Message, Snowflake, GuildChannel, Guild, GuildMember, Role, User, MessageEmbed } from 'discord.js';
+  type ReknownClient = import('../structures/client').default;
 
   export class ReknownFunctions {
     public badArg(
@@ -13,7 +14,7 @@ declare module 'ReknownBot' {
     ): string;
 
     public getPrefix(
-      client: import('../structures/client').default,
+      client: ReknownClient,
       id: Snowflake
     ): Promise<string>;
 
@@ -36,7 +37,7 @@ declare module 'ReknownBot' {
     ): Promise<GuildMember> | Promise<User> | Role | GuildChannel | Promise<false> | false;
 
     public sendLog(
-      client: import('../structures/client').default,
+      client: ReknownClient,
       embed: MessageEmbed,
       guild: Guild
     ): Promise<void>;
@@ -77,7 +78,7 @@ declare module 'ReknownBot' {
   }
 
   interface ParseMentionOptions {
-    client?: import('../structures/client').default;
+    client?: ReknownClient;
     cType?: 'text' | 'voice' | 'category';
     type: 'member' | 'user' | 'role' | 'channel';
   }
@@ -89,7 +90,7 @@ declare module 'ReknownBot' {
 
   interface ReknownCommand {
     help: HelpObj;
-    run: (client: import('../structures/client').default, message: Message, args: string[]) => void;
+    run: (client: ReknownClient, message: Message, args: string[]) => void;
   }
 
   interface ReknownEvent {
