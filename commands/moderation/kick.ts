@@ -7,7 +7,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   if (!message.member.hasPermission('KICK_MEMBERS')) return client.functions.noPerms(message, [ 'Kick Members' ]);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'a user to kick.');
-  const member: GuildMember | boolean = await (client.functions.parseMention(args[1], message.guild, { type: 'member' }) as Promise<GuildMember>).catch(() => false);
+  const member: GuildMember | boolean = await client.functions.parseMention(args[1], message.guild, { type: 'member' }).catch(() => false);
   const reason = args[2] ? args.slice(2).join(' ') : null;
   if (!(member instanceof GuildMember)) return client.functions.badArg(message, 1, `I did not find a member by that query (${client.escMD(args[0])}).`);
   if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== message.guild.ownerID) return client.functions.badArg(message, 1, 'Your role position is not high enough to kick that member.');

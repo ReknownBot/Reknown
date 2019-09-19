@@ -5,7 +5,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   if (message.channel instanceof DMChannel) return void message.reply(':x: This command is only available in servers.');
   if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
-  const member: GuildMember | boolean = args[1] ? await (client.functions.parseMention(args[1], message.guild, { type: 'member' }) as Promise<GuildMember>).catch(() => false) : message.member;
+  const member: GuildMember | boolean = args[1] ? await client.functions.parseMention(args[1], message.guild, { type: 'member' }).catch(() => false) : message.member;
   if (!(member instanceof GuildMember)) return client.functions.badArg(message, 1, 'I did not find a member by that query.');
 
   const row = (await client.query('SELECT * FROM scores WHERE userid = $1 AND guildid = $2', [ member.id, message.guild.id ])).rows[0];

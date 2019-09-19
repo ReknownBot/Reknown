@@ -1,59 +1,30 @@
 declare module 'ReknownBot' {
-  import { Message, Snowflake, GuildChannel, Guild, GuildMember, Role, User, MessageEmbed } from 'discord.js';
+  import { Message, Snowflake, GuildChannel, Guild, GuildMember, Role, User, MessageEmbed, TextChannel, VoiceChannel, CategoryChannel } from 'discord.js';
   type ReknownClient = import('../structures/client').default;
 
   export class ReknownFunctions {
-    public badArg(
-      message: Message,
-      argNum: number,
-      desc: string
-    ): void;
-
-    public formatNum(
-      num: number
-    ): string;
-
-    public getPrefix(
-      client: ReknownClient,
-      id: Snowflake
-    ): Promise<string>;
-
-    public noArg(
-      message: Message,
-      argNum: number,
-      desc: string
-    ): void;
-
-    public noClientPerms(
-      message: Message,
-      perms: string[],
-      channel?: GuildChannel
-    ): void;
-
-    public noPerms(
-      message: Message,
-      perms: string[],
-      channel?: GuildChannel
-    ): void;
-
-    public parseMention(
-      id: Snowflake,
-      guild: Guild,
-      options: ParseMentionOptions
-    ): Promise<GuildMember> | Promise<User> | Role | GuildChannel | Promise<false> | false;
-
-    public sendLog(
-      client: ReknownClient,
-      embed: MessageEmbed,
-      guild: Guild
-    ): Promise<void>;
-
-    public uppercase(
-      str: string
-    ): string;
+    public badArg(message: Message, argNum: number, desc: string): void;
+    public formatNum(num: number): string;
+    public getPrefix(client: ReknownClient, id: Snowflake): Promise<string>;
+    public noArg(message: Message, argNum: number, desc: string): void;
+    public noClientPerms(message: Message, perms: string[], channel?: GuildChannel): void;
+    public noPerms(message: Message, perms: string[], channel?: GuildChannel): void;
+    public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'member' }): Promise<GuildMember> | Promise<false>;
+    public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'user' }): Promise<User> | Promise<false>;
+    public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'role' }): Promise<Role> | Promise<false> | false;
+    public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'channel', cType?: 'text' }): Promise<TextChannel> | Promise<false> | false;
+    public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'channel', cType?: 'voice' }): Promise<VoiceChannel> | Promise<false> | false;
+    public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'channel', cType?: 'category' }): Promise<CategoryChannel> | Promise<false> | false;
+    public sendLog(client: ReknownClient, embed: MessageEmbed, guild: Guild): Promise<void>;
+    public uppercase(str: string): string;
   }
 
-  type CommandCategory = 'Documentation' | 'Fun' | 'Levelling' | 'Miscellaneous' | 'Moderation' | 'Utility';
+  type CommandCategory = 'Documentation'
+      | 'Fun'
+      | 'Levelling'
+      | 'Miscellaneous'
+      | 'Moderation'
+      | 'Utility';
 
   interface ConfigObject {
     contributors: Snowflake[];

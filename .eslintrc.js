@@ -148,7 +148,7 @@ module.exports = exports = {
         "no-class-assign": ERROR,
         "no-confusing-arrow": ERROR,
         "no-const-assign": ERROR,
-        "no-dupe-class-members": ERROR,
+        "no-dupe-class-members": OFF,
         "no-this-before-super": ERROR,
         "no-var": ERROR,
         "object-shorthand": [ WARN, "never" ],

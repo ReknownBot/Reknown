@@ -7,7 +7,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   if (!message.member.hasPermission('BAN_MEMBERS')) return client.functions.noPerms(message, [ 'Ban Members' ]);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'a user to ban.');
-  const member: GuildMember | boolean = await (client.functions.parseMention(args[1], message.guild, { type: 'member' }) as Promise<GuildMember>).catch(() => false);
+  const member: GuildMember | boolean = await client.functions.parseMention(args[1], message.guild, { type: 'member' }).catch(() => false);
   const reason = args[2] ? args.slice(2).join(' ') : null;
   if (member instanceof GuildMember) {
     if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== message.guild.ownerID) return client.functions.badArg(message, 1, 'Your role position is not high enough to ban that member.');
@@ -17,7 +17,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
     return;
   }
 
-  const user: User | boolean = await (client.functions.parseMention(args[1], message.guild, { type: 'user', client: client }) as Promise<User>).catch(() => false);
+  const user: User | boolean | any = await client.functions.parseMention(args[1], message.guild, { type: 'user', client: client }).catch(() => false);
   if (!(user instanceof User)) return client.functions.badArg(message, 1, `I did not find a user by that query (${client.escMD(args[0])}).`);
   message.guild.members.ban(user, { reason: reason });
   message.channel.send(`Successfully banned user ${client.escMD(user.tag)} (ID: ${user.id})${reason ? ` for reason \`${client.escMD(reason)}\`` : ''}.`);
