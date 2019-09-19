@@ -1,10 +1,13 @@
-import { Snowflake, Guild, GuildChannel, Role, GuildMember, User } from 'discord.js';
+import { Snowflake, Guild } from 'discord.js';
 import { ParseMentionOptions } from 'ReknownBot';
 
 const regexArr = [ /<@!?(\d{17,19})>/, /<@&(\d{17,19})>/, /<#(\d{17,19})>/ ];
 
-module.exports = (id: Snowflake, guild: Guild, options: ParseMentionOptions): Promise<GuildMember> | Promise<User> | Role | GuildChannel | Promise<false> | false => {
-  if (!parseInt(id) && !regexArr.some(regex => regex.test(id))) return Promise.reject<false>();
+module.exports = (id: Snowflake, guild: Guild, options: ParseMentionOptions) => {
+  if (!parseInt(id) && !regexArr.some(regex => regex.test(id))) {
+    if ([ 'member', 'user' ].includes(options.type)) return Promise.reject(null);
+    return null;
+  }
 
   let parsedId: string;
   if (!parseInt(id)) {
@@ -16,8 +19,8 @@ module.exports = (id: Snowflake, guild: Guild, options: ParseMentionOptions): Pr
   switch (options.type) {
     case 'member': return guild.members.fetch(parsedId);
     case 'user': return options.client.users.fetch(parsedId);
-    case 'role': return guild.roles.get(parsedId) || false;
-    case 'channel': return guild.channels.find(c => c.id === parsedId && c.type === cType) || false;
+    case 'role': return guild.roles.get(parsedId);
+    case 'channel': return guild.channels.find(c => c.id === parsedId && c.type === cType);
     default: return false;
   }
 };

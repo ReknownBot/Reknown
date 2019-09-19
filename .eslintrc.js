@@ -215,6 +215,10 @@ module.exports = exports = {
         "space-infix-ops": [ WARN, { "int32Hint": true } ],
         "space-unary-ops": ERROR,
         "spaced-comment": [ WARN, "always" ],
-        "wrap-regex": WARN
+        "wrap-regex": WARN,
+
+        // Typescript Rules
+        "@typescript-eslint/explicit-function-return-type": OFF,
+        "@typescript-eslint/no-explicit-any": OFF
     }
 };
