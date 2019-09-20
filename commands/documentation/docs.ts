@@ -1,5 +1,5 @@
 import { Message, TextChannel, MessageEmbed } from 'discord.js';
-import * as fetch from 'node-fetch';
+import fetch from 'node-fetch';
 import { stringify } from 'querystring';
 import ReknownClient from '../../structures/client';
 
