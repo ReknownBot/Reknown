@@ -13,7 +13,7 @@ const sources = [
   '11.5-dev'
 ];
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]): Promise<void> => {
+module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
   if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const q = args[1];

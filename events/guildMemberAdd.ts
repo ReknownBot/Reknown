@@ -3,7 +3,7 @@ import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
 import dateformat from 'dateformat';
 import { ToggleRow, WelcomeChannelRow } from 'ReknownBot';
 
-function sendLog (client: ReknownClient, member: GuildMember): void {
+function sendLog (client: ReknownClient, member: GuildMember) {
   const embed = new MessageEmbed()
     .addField('Created at', dateformat(member.user.createdAt, 'mmmm d, yyyy @ HH:MM:ss UTC'))
     .setColor(client.config.embedColor)
@@ -14,7 +14,7 @@ function sendLog (client: ReknownClient, member: GuildMember): void {
   client.functions.sendLog(client, embed, member.guild);
 }
 
-async function welcomeMsg (client: ReknownClient, member: GuildMember): Promise<void> {
+async function welcomeMsg (client: ReknownClient, member: GuildMember) {
   const toggledRow: ToggleRow = (await client.query('SELECT bool FROM togglewelcome WHERE guildid = $1', [ member.guild.id ])).rows[0];
   if (!toggledRow || !toggledRow.bool) return;
 
@@ -34,7 +34,7 @@ async function welcomeMsg (client: ReknownClient, member: GuildMember): Promise<
   channel.send(embed);
 }
 
-module.exports.run = (client: ReknownClient, member: GuildMember): void => {
+module.exports.run = (client: ReknownClient, member: GuildMember) => {
   if (!member.guild.available) return;
   if (member.id === client.user.id) return;
 

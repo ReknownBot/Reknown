@@ -1,8 +1,8 @@
 import { GuildMember, Message, User, DMChannel } from 'discord.js';
 import ReknownClient from '../../structures/client';
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]): Promise<void> => {
-  if (message.channel instanceof DMChannel) return void message.reply(':x: This command is only available in servers.');
+module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+  if (message.channel instanceof DMChannel) return message.reply(':x: This command is only available in servers.');
   if (!message.channel.permissionsFor(client.user).has('BAN_MEMBERS')) return client.functions.noClientPerms(message, [ 'Ban Members' ], message.channel);
   if (!message.member.hasPermission('BAN_MEMBERS')) return client.functions.noPerms(message, [ 'Ban Members' ]);
 

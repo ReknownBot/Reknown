@@ -32,7 +32,7 @@ function binary2Text (str: string): string | boolean {
   }
 }
 
-module.exports.run = (client: ReknownClient, message: Message, args: string[]): void => {
+module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
   if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const method = args[1] ? args[1].toLowerCase() : null;

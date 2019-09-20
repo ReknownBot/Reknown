@@ -1,7 +1,7 @@
 import ReknownClient from '../structures/client';
 import { Message } from 'discord.js';
 
-module.exports.run = async (client: ReknownClient, message: Message): Promise<void> => {
+module.exports.run = async (client: ReknownClient, message: Message) => {
   if (message.author.bot || message.guild && !message.guild.available) return;
   if (message.guild && message.member.partial) await message.member.fetch();
 
