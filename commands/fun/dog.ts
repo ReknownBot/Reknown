@@ -1,5 +1,5 @@
-import { ReknownClient } from "ReknownBot";
-import { Message, MessageEmbed } from "discord.js";
+import { ReknownClient } from 'ReknownBot';
+import { Message, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 
 interface DogResult {

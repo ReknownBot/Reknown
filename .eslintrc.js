@@ -219,6 +219,7 @@ module.exports = exports = {
 
         // Typescript Rules
         "@typescript-eslint/explicit-function-return-type": OFF,
-        "@typescript-eslint/no-explicit-any": OFF
+        "@typescript-eslint/no-explicit-any": OFF,
+        "@typescript-eslint/no-unused-vars": [ WARN, { args: "none" }]
     }
 };
