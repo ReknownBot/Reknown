@@ -47,6 +47,7 @@
     "@types/btoa": "^1.2.3",
     "@types/dateformat": "^3.0.0",
     "@types/node": "^12.7.5",
+    "@types/node-fetch": "^2.5.1",
     "@types/pg": "^7.11.1",
     "@typescript-eslint/eslint-plugin": "^2.3.0",
     "@typescript-eslint/parser": "^2.3.0",
