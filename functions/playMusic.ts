@@ -9,8 +9,8 @@ module.exports = async (client: ReknownClient, guild: Guild, vc: VoiceChannel, m
   await music.player.join(vc.id);
   music.player.play(track);
 
-  music.player.once('end', () => {
-    if (!guild.voice.channel) return client.functions.endSession(music);
+  music.player.once('event', d => {
+    if (!guild.voice.channel || d.reason === 'STOPPED') return client.functions.endSession(music);
     if (music.looping) music.queue.push(music.queue.shift());
     else music.queue.shift();
 
