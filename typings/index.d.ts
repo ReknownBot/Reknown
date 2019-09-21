@@ -1,9 +1,11 @@
 declare module 'ReknownBot' {
-  import { Message, Snowflake, GuildChannel, Guild, GuildMember, Role, User, MessageEmbed, TextChannel, VoiceChannel, CategoryChannel } from 'discord.js';
+  import { Message, Snowflake, GuildChannel, Guild, GuildMember, Role, User, MessageEmbed, TextChannel, VoiceChannel, CategoryChannel, VoiceConnection } from 'discord.js';
+  import { Player } from 'discord.js-lavalink';
   type ReknownClient = import('../structures/client').default;
 
   export class ReknownFunctions {
     public badArg(message: Message, argNum: number, desc: string): void;
+    public endSession(music: MusicObject, client: ReknownClient): void;
     public formatNum(num: number): string;
     public getPrefix(client: ReknownClient, id: Snowflake): Promise<string>;
     public noArg(message: Message, argNum: number, desc: string): void;
@@ -15,6 +17,7 @@ declare module 'ReknownBot' {
     public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'channel'; cType?: 'text' }): TextChannel | null;
     public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'channel'; cType?: 'voice' }): VoiceChannel | null;
     public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'channel'; cType?: 'category' }): CategoryChannel | null;
+    public playMusic(client: ReknownClient, guild: Guild, vc: VoiceChannel, music: MusicObject, track: string): void;
     public sendLog(client: ReknownClient, embed: MessageEmbed, guild: Guild): Promise<void>;
     public uppercase(str: string): string;
   }
@@ -52,6 +55,13 @@ declare module 'ReknownBot' {
   interface LogChannelRow {
     channelid: Snowflake;
     guildid: Snowflake;
+  }
+
+  interface MusicObject {
+    looping: boolean;
+    player?: Player;
+    queue: string[];
+    volume: number;
   }
 
   interface ParseMentionOptions {
