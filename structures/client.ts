@@ -3,6 +3,7 @@ import { Client, Collection, Util } from 'discord.js';
 import { Pool } from 'pg';
 import { ConfigObject, ReknownEvent, ReknownCommand, CommandCategory, ReknownFunctions } from 'ReknownBot';
 import { readdirSync } from 'fs';
+import { PlayerManager } from 'discord.js-lavalink';
 
 const pool = new Pool();
 
@@ -29,4 +30,6 @@ export default class ReknownClient extends Client {
   public functions: ReknownFunctions = functions as ReknownFunctions;
 
   public query = pool.query.bind(pool);
+
+  public manager?: PlayerManager = null;
 }
