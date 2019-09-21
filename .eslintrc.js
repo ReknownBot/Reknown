@@ -26,7 +26,7 @@ module.exports = exports = {
 
     "rules": {
         // Possible Errors (overrides from recommended set)
-        "no-extra-parens": OFF,
+        "no-extra-parens": WARN,
         "no-unexpected-multiline": ERROR,
         // All JSDoc comments must be valid
         "valid-jsdoc": [ ERROR, {
@@ -71,7 +71,7 @@ module.exports = exports = {
             "string": true
         }],
         "no-implied-eval": ERROR,
-        "no-invalid-this": ERROR,
+        "no-invalid-this": OFF,
         "no-iterator": ERROR,
         "no-labels": WARN,
         "no-lone-blocks": WARN,
@@ -126,6 +126,7 @@ module.exports = exports = {
         "no-unused-vars": [ ERROR, { args: "none" }],
         // Disallow hoisting - let & const don't allow hoisting anyhow
         "no-use-before-define": ERROR,
+        "require-atomic-updates": OFF,
 
         // Node.js and CommonJS
         "callback-return": [ WARN, [ "callback", "next" ]],
