@@ -3,7 +3,7 @@ import { Client, Collection, Util } from 'discord.js';
 import { Pool } from 'pg';
 import { ConfigObject, ReknownEvent, ReknownCommand, CommandCategory, ReknownFunctions, MusicObject } from 'ReknownBot';
 import { readdirSync } from 'fs';
-import { PlayerManager } from 'discord.js-lavalink';
+import Node from 'lavalink';
 
 const pool = new Pool();
 
@@ -29,9 +29,9 @@ export default class ReknownClient extends Client {
 
   public functions: ReknownFunctions = functions as ReknownFunctions;
 
-  public query = pool.query.bind(pool);
+  public lavalink?: Node = null;
 
-  public manager?: PlayerManager = null;
+  public query = pool.query.bind(pool);
 
   public music: { [ id: string ]: MusicObject } = {};
 }
