@@ -31,6 +31,7 @@
     "cowsay": "^1.4.0",
     "dateformat": "^3.0.3",
     "discord.js": "github:discordjs/discord.js",
+    "discord.js-lavalink": "^2.2.3",
     "dotenv": "^8.1.0",
     "erlpack": "^0.1.2",
     "esm": "^3.2.25",
