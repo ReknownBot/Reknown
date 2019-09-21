@@ -6,16 +6,16 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
 
   const music = client.music[message.guild.id];
 
-  if (!music || !music.player || !music.player.playing) return message.reply(':x: I am not playing anything!');
+  if (!music || !music.player.playing) return message.reply(':x: I am not playing anything!');
   if (message.guild.voice.channelID !== message.member.voice.channelID) return message.reply(':x: You must be in the same voice channel as me to run that command.');
 
-  client.functions.endSession(music);
-  message.channel.send('Successfully stopped the music and left the voice channel.');
+  music.player.emit('end');
+  message.channel.send('Successfully skipped a song.');
 };
 
 module.exports.help = {
-  aliases: [],
+  aliases: [ 'skipsong' ],
   category: 'Music',
-  desc: 'Stops the music.',
-  usage: 'stop'
+  desc: 'Skips a song.',
+  usage: 'skip'
 };

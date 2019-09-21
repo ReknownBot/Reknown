@@ -1,9 +1,5 @@
 import ReknownClient from '../structures/client';
-import { PlayerManager } from 'discord.js-lavalink';
-
-const nodes = [
-  { host: 'localhost', port: 2333, password: 'youshallnotpass' }
-];
+import { Node } from 'lavalink';
 
 module.exports.run = (client: ReknownClient) => {
   console.log(`Successfully logged in as ${client.user.tag} (${client.user.id}).`);
@@ -12,8 +8,12 @@ module.exports.run = (client: ReknownClient) => {
     type: 'WATCHING'
   });
 
-  client.manager = new PlayerManager(client, nodes, {
-    user: client.user.id,
-    shards: 1
+  client.lavalink = new Node({
+    password: 'youshallnotpass',
+    userID: client.user.id,
+    host: 'localhost:2333',
+    send: function (guild, packet) {
+      if (client.guilds.has(guild)) return client.ws.shards.first().send(packet);
+    },
   });
 };
