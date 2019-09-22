@@ -1,14 +1,12 @@
-import { Guild, VoiceChannel } from 'discord.js';
+import { Guild } from 'discord.js';
 import { ReknownClient, MusicObject } from 'ReknownBot';
 
-module.exports = async (client: ReknownClient, guild: Guild, vc: VoiceChannel, music: MusicObject, track: string, ended?: boolean) => {
+module.exports = async (client: ReknownClient, guild: Guild, music: MusicObject, track: string, ended?: boolean) => {
   if (!ended) {
     music.queue.push(track);
     if (music.queue.length > 1) return;
   }
 
-  music.player = client.lavalink.players.get(guild.id);
-  if (!music.player.playing) await music.player.join(vc.id);
   music.player.play(track);
 
   music.player.once('event', d => {
@@ -17,7 +15,7 @@ module.exports = async (client: ReknownClient, guild: Guild, vc: VoiceChannel, m
     if (music.looping) music.queue.push(music.queue.shift());
     else music.queue.shift();
 
-    if (music.queue.length > 0) return module.exports(client, guild, vc, music, music.queue[0], true);
+    if (music.queue.length > 0) return module.exports(client, guild, music, music.queue[0], true);
     client.functions.endSession(music);
   });
 };
