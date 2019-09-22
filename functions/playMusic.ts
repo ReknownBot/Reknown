@@ -2,8 +2,7 @@ import { Guild, VoiceChannel } from 'discord.js';
 import { ReknownClient, MusicObject } from 'ReknownBot';
 
 module.exports = async (client: ReknownClient, guild: Guild, vc: VoiceChannel, music: MusicObject, track: string, ended?: boolean) => {
-  music.queue.push(track);
-  if (!ended && music.queue.length > 1) return;
+  if (!ended && music.queue.length > 0) return music.queue.push(track);
 
   music.player = client.lavalink.players.get(guild.id);
   await music.player.join(vc.id);
