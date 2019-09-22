@@ -8,7 +8,7 @@ module.exports = async (client: ReknownClient, guild: Guild, vc: VoiceChannel, m
   }
 
   music.player = client.lavalink.players.get(guild.id);
-  await music.player.join(vc.id);
+  if (!music.player.playing) await music.player.join(vc.id);
   music.player.play(track);
 
   music.player.once('event', d => {
