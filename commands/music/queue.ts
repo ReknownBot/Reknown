@@ -5,7 +5,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
   if (message.channel instanceof DMChannel) return message.reply(':x: This command is only available in servers.');
 
   const music = client.music[message.guild.id];
-  if (!music || !music.queue || music.queue.length === 0) return message.reply(':x: The queue is empty.');
+  if (!music || !music.queue || music.queue.length === 0 || !message.guild.voice.channel) return message.reply(':x: The queue is empty.');
 
   let msg: MessageEmbed | string;
   if (message.channel.permissionsFor(client.user).has('EMBED_LINKS')) {
