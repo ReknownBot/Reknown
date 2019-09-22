@@ -12,7 +12,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
     volume: 20
   };
   if (!message.member.voice.channel) return message.reply(':x: You must be in a voice channel to do this.');
-  if (music.player && music.player.playing && message.guild.voice.channel && message.guild.voice.channelID !== message.member.voice.channelID) return message.reply(':x: You must be in the same voice channel as me to run that command.');
+  if (music.player && music.player.playing && message.guild.voice.channelID !== message.member.voice.channelID) return message.reply(':x: You must be in the same voice channel as me to run that command.');
   const vc = message.member.voice.channel;
   if (!vc.permissionsFor(client.user).has([ 'CONNECT', 'SPEAK' ])) return client.functions.noClientPerms(message, [ 'Connect', 'Speak' ], vc);
 
