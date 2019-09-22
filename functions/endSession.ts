@@ -5,4 +5,5 @@ module.exports = (music: MusicObject) => {
   music.looping = false;
   music.volume = 20;
   music.player.leave();
+  music.player.stop();
 };
