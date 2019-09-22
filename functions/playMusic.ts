@@ -4,7 +4,7 @@ import { ReknownClient, MusicObject } from 'ReknownBot';
 module.exports = async (client: ReknownClient, guild: Guild, vc: VoiceChannel, music: MusicObject, track: string, ended?: boolean) => {
   if (!ended) {
     music.queue.push(track);
-    if (music.queue.length > 0) return;
+    if (music.queue.length > 1) return;
   }
 
   music.player = client.lavalink.players.get(guild.id);
