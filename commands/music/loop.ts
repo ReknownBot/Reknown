@@ -6,7 +6,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
 
   const music = client.music[message.guild.id];
   const bool = args[1] ? args[1].toLowerCase() === 'on' : !music.looping;
-  if (!bool && args[1].toLowerCase() !== 'off') return client.functions.badArg(message, 1, 'This must be either "on" or "off".');
+  if (!bool && args[1] && args[1].toLowerCase() !== 'off') return client.functions.badArg(message, 1, 'This must be either "on" or "off".');
   music.looping = bool;
 
   message.channel.send(`Successfully toggled looping ${bool ? 'on' : 'off'}.`);
