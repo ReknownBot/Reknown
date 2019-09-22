@@ -28,7 +28,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   if (!music.player.playing) await music.player.join(vc.id);
 
   client.functions.sendSong(music, message, song, client.user);
-  client.functions.playMusic(client, message.guild, music, song.track);
+  client.functions.playMusic(client, message.guild, music, song);
 };
 
 module.exports.help = {
