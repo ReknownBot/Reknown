@@ -1,13 +1,14 @@
 import { Guild } from 'discord.js';
 import { ReknownClient, MusicObject } from 'ReknownBot';
+import { Track } from 'lavalink';
 
-module.exports = async (client: ReknownClient, guild: Guild, music: MusicObject, track: string, ended?: boolean) => {
+module.exports = async (client: ReknownClient, guild: Guild, music: MusicObject, song: Track, ended?: boolean) => {
   if (!ended) {
-    music.queue.push(track);
+    music.queue.push(song);
     if (music.queue.length > 1) return;
   }
 
-  music.player.play(track);
+  music.player.play(song.track);
 
   music.player.once('event', async d => {
     if (d.reason === 'REPLACED') return;
