@@ -24,8 +24,11 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   if (music.queue.includes(song.track)) return client.functions.badArg(message, 1, 'That song is already in the queue.');
   if (music.queue.length > 15) return client.functions.badArg(message, 1, 'The queue is full! You cannot go over 15 songs at a time.');
 
+  if (!music.player) music.player = client.lavalink.players.get(message.guild.id);
+  if (!music.player.playing) await music.player.join(vc.id);
+
   client.functions.sendSong(music, message, song, client.user);
-  client.functions.playMusic(client, message.guild, vc, music, song.track);
+  client.functions.playMusic(client, message.guild, music, song.track);
 };
 
 module.exports.help = {

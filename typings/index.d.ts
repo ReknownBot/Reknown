@@ -17,7 +17,7 @@ declare module 'ReknownBot' {
     public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'channel'; cType?: 'text' }): TextChannel | null;
     public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'channel'; cType?: 'voice' }): VoiceChannel | null;
     public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'channel'; cType?: 'category' }): CategoryChannel | null;
-    public playMusic(client: ReknownClient, guild: Guild, vc: VoiceChannel, music: MusicObject, track: string, ended?: boolean): void;
+    public playMusic(client: ReknownClient, guild: Guild, music: MusicObject, track: string, ended?: boolean): void;
     public sendLog(client: ReknownClient, embed: MessageEmbed, guild: Guild): Promise<void>;
     public sendSong(music: MusicObject, message: Message, song: Track, user: ClientUser): void;
     public uppercase(str: string): string;
