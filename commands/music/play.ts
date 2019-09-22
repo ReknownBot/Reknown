@@ -21,7 +21,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   if (!res) return message.reply(':x: Something went wrong while executing the command. This error has been logged.');
   const song = res.tracks[0];
   if (!song) return client.functions.badArg(message, 1, 'I did not find a song with that query.');
-  if (music.queue.includes(song.track)) return client.functions.badArg(message, 1, 'That song is already in the queue.');
+  if (music.queue.includes(song)) return client.functions.badArg(message, 1, 'That song is already in the queue.');
   if (music.queue.length > 15) return client.functions.badArg(message, 1, 'The queue is full! You cannot go over 15 songs at a time.');
 
   if (!music.player) music.player = client.lavalink.players.get(message.guild.id);

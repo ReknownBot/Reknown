@@ -61,7 +61,7 @@ declare module 'ReknownBot' {
   interface MusicObject {
     looping: boolean;
     player?: Player;
-    queue: string[];
+    queue: Track[];
     volume: number;
   }
 
