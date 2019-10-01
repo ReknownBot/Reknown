@@ -7,27 +7,32 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
   const music = client.music[message.guild.id];
   if (!music || !music.queue || music.queue.length === 0) return message.reply(':x: The queue is empty.');
 
-  let msg: MessageEmbed | string;
-  if (message.channel.permissionsFor(client.user).has('EMBED_LINKS')) {
-    let desc = music.queue.map((song, i) => `${i + 1}. [\`${client.escMD(song.info.title)}\`](${client.escMD(song.info.uri)})`).join('\n');
-    if (desc.length > 2048) desc = `${desc.slice(0, -3)}...`;
+  if (args[0].toLowerCase() !== 'clear') {
+    let msg: MessageEmbed | string;
+    if (message.channel.permissionsFor(client.user).has('EMBED_LINKS')) {
+      let desc = music.queue.map((song, i) => `${i + 1}. [\`${client.escMD(song.info.title)}\`](${client.escMD(song.info.uri)})`).join('\n');
+      if (desc.length > 2048) desc = `${desc.slice(0, -3)}...`;
 
-    msg = new MessageEmbed()
-      .setColor(client.config.embedColor)
-      .setDescription(desc)
-      .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
-      .setTitle('Current Queue');
+      msg = new MessageEmbed()
+        .setColor(client.config.embedColor)
+        .setDescription(desc)
+        .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
+        .setTitle('Current Queue');
+    } else {
+      msg = music.queue.map((song, i) => `${i + 1}. \`${client.escMD(song.info.title)}\``).join('\n');
+      if (msg.length > 2048) msg = `${msg.slice(0, -3)}...`;
+    }
+
+    message.channel.send(msg);
   } else {
-    msg = music.queue.map((song, i) => `${i + 1}. \`${client.escMD(song.info.title)}\``).join('\n');
-    if (msg.length > 2048) msg = `${msg.slice(0, -3)}...`;
+    music.queue = [ music.queue[0] ];
+    message.channel.send(`Successfully cleared the queue.`);
   }
-
-  message.channel.send(msg);
 };
 
 module.exports.help = {
   aliases: [ 'songlist' ],
   category: 'Music',
   desc: 'Shows the queue.',
-  usage: 'queue'
+  usage: 'queue [clear]'
 };
