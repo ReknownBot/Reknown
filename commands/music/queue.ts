@@ -7,7 +7,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
   const music = client.music[message.guild.id];
   if (!music || !music.queue || music.queue.length === 0) return message.reply(':x: The queue is empty.');
 
-  if (args[0].toLowerCase() !== 'clear') {
+  if (args[1].toLowerCase() !== 'clear') {
     let msg: MessageEmbed | string;
     if (message.channel.permissionsFor(client.user).has('EMBED_LINKS')) {
       let desc = music.queue.map((song, i) => `${i + 1}. [\`${client.escMD(song.info.title)}\`](${client.escMD(song.info.uri)})`).join('\n');
