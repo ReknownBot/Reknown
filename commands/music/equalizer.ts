@@ -1,6 +1,6 @@
-import { ReknownClient } from "ReknownBot";
-import { Message, DMChannel } from "discord.js";
-import { EqualizerBand } from "lavalink";
+import { ReknownClient } from 'ReknownBot';
+import { Message, DMChannel } from 'discord.js';
+import { EqualizerBand } from 'lavalink';
 
 module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
   if (message.channel instanceof DMChannel) return message.reply(':x: This command is only available in servers.');
@@ -16,7 +16,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
   if (isNaN(eq)) return client.functions.badArg(message, 1, 'The provided equalizer was not a number.');
   if (eq < -3 || eq > 3) return client.functions.badArg(message, 1, `The maximum equalizer range is \`-3\` to \`3\`. Provided value: \`${eq}\``);
 
-  let bands: EqualizerBand[] = [];
+  const bands: EqualizerBand[] = [];
   for (let i = 0; i < 15; i++) {
     bands.push({
       band: i,
