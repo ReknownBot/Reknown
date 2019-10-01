@@ -26,7 +26,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
     message.channel.send(msg);
   } else {
     music.queue = [ music.queue[0] ];
-    message.channel.send(`Successfully cleared the queue.`);
+    message.channel.send('Successfully cleared the queue.');
   }
 };
 
