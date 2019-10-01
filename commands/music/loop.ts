@@ -6,6 +6,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
 
   let music = client.music[message.guild.id];
   if (!music) music = client.music[message.guild.id] = {
+    equalizer: 0,
     looping: false,
     player: null,
     queue: [],
