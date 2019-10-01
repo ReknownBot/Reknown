@@ -12,7 +12,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
 
   if (!args[1]) return message.channel.send(`The current equalizer level is at \`${music.equalizer}\`.`);
 
-  const eq = parseInt(args[0]);
+  const eq = parseInt(args[1]);
   if (isNaN(eq)) return client.functions.badArg(message, 1, 'The provided equalizer was not a number.');
   if (eq < -3 || eq > 3) return client.functions.badArg(message, 1, `The maximum equalizer range is \`-3\` to \`3\`. Provided value: \`${eq}\``);
 
