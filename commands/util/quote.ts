@@ -21,12 +21,13 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   const msg = await channel.messages.fetch(res[2]).catch(() => false);
   if (!(msg instanceof Message)) return client.functions.badArg(message, 1, 'I did not find the message provided.');
 
-  const img = msg.attachments.first();
+  let img = msg.attachments.first();
+  if (img && !img.height) img = null;
 
   const embed = new MessageEmbed()
     .setColor(client.config.embedColor)
     .setDescription(msg.content)
-    .setImage(img.height ? img.url : null)
+    .setImage(img ? img.url : null)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp()
     .setTitle('Successfully quoted message!');
