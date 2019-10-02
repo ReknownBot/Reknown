@@ -29,7 +29,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
 
   music.equalizer = eq;
   music.player.setEqualizer(bands);
-  message.channel.send(`Successfully set the equalizer to \`${eq}\`.`);
+  message.channel.send(`Successfully set the equalizer to \`${eq * 100}\`.`);
 };
 
 module.exports.help = {
