@@ -15,11 +15,11 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
   let eq = parseInt(args[1]);
   if (isNaN(eq)) return client.functions.badArg(message, 1, 'The provided equalizer was not a number.');
   if (eq < -3 || eq > 3) return client.functions.badArg(message, 1, `The maximum equalizer range is \`-3\` to \`3\`. Provided value: \`${eq}\``);
-  eq = eq / 100;
+  eq /= 100;
 
   const bands: EqualizerBand[] = [];
   for (let i = 0; i < 15; i++) {
-    const gain = (eq * (7 - i)) * -1;
+    const gain = eq * (7 - i) * -1;
 
     bands.push({
       band: i,
@@ -29,7 +29,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
 
   music.equalizer = eq;
   music.player.setEqualizer(bands);
-  message.channel.send(`Successfully set the equalizer to \`${eq}\`.`);
+  message.channel.send(`Successfully set the equalizer to \`${eq * 100}\`.`);
 };
 
 module.exports.help = {
