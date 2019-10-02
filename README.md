@@ -8,7 +8,7 @@ If you manage to find a bug or unexpected behaviour, please let us know in our [
 # Contributors
 ~~~
 Dr. Ari Gami#0001:
-Helped with hosting and fuzzy strings. Also a huge help in website hosting.
+Helped with hosting and fuzzy strings. Also a huge help in website development and Lavalink setup.
 
 Xenoq#0001:
 Partial development.
