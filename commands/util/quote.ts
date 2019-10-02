@@ -8,7 +8,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
 
   if (!args[1]) return client.functions.noArg(message, 1, 'a message URL to quote.');
   if (!regex.test(args[1])) return client.functions.badArg(message, 1, 'The provided argument was not a message URL.');
-  const res = args[1].match(regex);
+  const res = args[1].match(regex).slice(1);
 
   const guild = client.guilds.get(res[0]);
   if (!guild) return client.functions.badArg(message, 1, 'I am not in that server! I must be in the server to quote a message from it.');
