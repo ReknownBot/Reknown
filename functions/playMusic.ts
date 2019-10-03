@@ -8,7 +8,8 @@ module.exports = async (client: ReknownClient, guild: Guild, music: MusicObject,
     if (music.queue.length > 1) return;
   }
 
-  music.player.play(song.track);
+  await music.player.play(song.track);
+  music.player.setVolume(music.volume);
 
   music.player.once('event', async d => {
     if (d.reason === 'REPLACED') return;
