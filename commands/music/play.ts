@@ -33,7 +33,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
 };
 
 module.exports.help = {
-  aliases: [ 'playmusic' ],
+  aliases: [ 'p', 'playmusic' ],
   category: 'Music',
   desc: 'Plays music.',
   usage: 'play <Query>'
