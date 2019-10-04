@@ -14,7 +14,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
 };
 
 module.exports.help = {
-  aliases: [],
+  aliases: [ 'dis', 'disconnect' ],
   category: 'Music',
   desc: 'Stops the music.',
   usage: 'stop'
