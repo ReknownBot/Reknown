@@ -9,7 +9,7 @@ module.exports.run = (client: ReknownClient) => {
   });
 
   client.lavalink = new Node({
-    password: 'youshallnotpass',
+    password: process.env.LAVALINK_PASS,
     userID: client.user.id,
     host: 'localhost:2333',
     send: function (guild, packet) {
