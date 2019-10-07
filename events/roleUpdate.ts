@@ -1,6 +1,5 @@
 import ReknownClient from '../structures/client';
-import { GuildMember, MessageEmbed, Role } from 'discord.js';
-import dateformat from 'dateformat';
+import { MessageEmbed, Role } from 'discord.js';
 
 function sendLog (client: ReknownClient, oldRole: Role, newRole: Role) {
   if (oldRole.name === newRole.name) return;

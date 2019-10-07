@@ -1,5 +1,5 @@
-import ReknownClient from "../../structures/client";
-import { Message } from "discord.js";
+import ReknownClient from '../../structures/client';
+import { Message } from 'discord.js';
 import fetch from 'node-fetch';
 
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
