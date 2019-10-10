@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/df1f5827f5ec471189c626d76557b1a4)](https://www.codacy.com/manual/Computer-Man497/Reknown?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Computer-Man497/Reknown&amp;utm_campaign=Badge_Grade)
 # About Reknown
 ![Reknown's Banner](./assets/images/banner.jpg)
 
