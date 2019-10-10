@@ -1,4 +1,4 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/df1f5827f5ec471189c626d76557b1a4)](https://www.codacy.com/manual/Computer-Man497/Reknown?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Computer-Man497/Reknown&amp;utm_campaign=Badge_Grade) [![GitHub pull-requests](https://img.shields.io/github/issues-pr/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/pull/)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/df1f5827f5ec471189c626d76557b1a4)](https://www.codacy.com/manual/Computer-Man497/Reknown?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Computer-Man497/Reknown&amp;utm_campaign=Badge_Grade) [![GitHub pull-requests](https://img.shields.io/github/issues-pr/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/pull/) [![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 # About Reknown
 ![Reknown's Banner](./assets/images/banner.jpg)
