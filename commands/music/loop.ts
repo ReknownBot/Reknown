@@ -4,11 +4,11 @@ import { Message, DMChannel } from 'discord.js';
 module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
   if (message.channel instanceof DMChannel) return message.reply(':x: This command is only available in servers.');
 
-  let music = client.music[message.guild.id];
-  if (!music) music = client.music[message.guild.id] = {
+  let music = client.music[message.guild!.id];
+  if (!music) music = client.music[message.guild!.id] = {
     equalizer: 0,
     looping: false,
-    player: null,
+    player: undefined,
     queue: [],
     volume: 20
   };

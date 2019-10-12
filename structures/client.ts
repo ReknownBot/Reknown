@@ -8,7 +8,7 @@ import Node from 'lavalink';
 const pool = new Pool();
 
 const fnList = readdirSync('./functions').map(f => f.slice(0, -3));
-const functions = {};
+const functions: ReknownFunctions | { [ fn: string ]: { run: Function }} = {};
 fnList.forEach(fn => {
   // eslint-disable-next-line global-require
   functions[fn] = require(`../functions/${fn}.js`);
@@ -17,7 +17,7 @@ fnList.forEach(fn => {
 export default class ReknownClient extends Client {
   public aliases: { [ command: string ]: string } = {};
 
-  public categories: CommandCategory[];
+  public categories: CommandCategory[] = [];
 
   public commands = new Collection<string, ReknownCommand>();
 
@@ -29,7 +29,7 @@ export default class ReknownClient extends Client {
 
   public functions: ReknownFunctions = functions as ReknownFunctions;
 
-  public lavalink?: Node = null;
+  public lavalink: Node | null = null;
 
   public query = pool.query.bind(pool);
 
