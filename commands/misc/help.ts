@@ -2,13 +2,13 @@ import ReknownClient from '../../structures/client';
 import { Message, TextChannel, MessageEmbed } from 'discord.js';
 
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
-  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
-  const prefix = await client.functions.getPrefix(client, message.guild.id);
+  const prefix = message.guild ? await client.functions.getPrefix(client, message.guild.id) : client.config.prefix;
   if (!args[1]) {
     let commands = client.commands.keyArray();
 
-    if (message.author.id !== client.config.ownerID) commands = commands.filter(c => !client.commands.get(c).help.private);
+    if (message.author.id !== client.config.ownerID) commands = commands.filter(c => !client.commands.get(c)!.help.private);
 
     const embed = new MessageEmbed()
       .setColor(client.config.embedColor)
@@ -17,7 +17,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
       .setTitle('Commands List');
 
     commands.forEach(cmd => {
-      const info = client.commands.get(cmd).help;
+      const info = client.commands.get(cmd)!.help;
       const field = embed.fields.find(f => f.name === info.category);
       if (field) embed.fields[embed.fields.indexOf(field)].value += `\n- \`${prefix + cmd}\``;
       else embed.addField(info.category, `- \`${prefix + cmd}\``, true);
@@ -46,7 +46,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   }
 
   const category = client.categories.find(c => c.toLowerCase() === query);
-  const cCommands = client.commands.keyArray().filter(c => client.commands.get(c).help.category.toLowerCase() === query);
+  const cCommands = client.commands.keyArray().filter(c => client.commands.get(c)!.help.category.toLowerCase() === query);
   const embed = new MessageEmbed()
     .setColor(client.config.embedColor)
     .setDescription(cCommands.map(c => `- \`${prefix + c}\``).join('\n'))

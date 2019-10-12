@@ -4,12 +4,12 @@ import { Message, DMChannel, MessageEmbed } from 'discord.js';
 module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
   if (message.channel instanceof DMChannel) return message.reply(':x: This command is only available in servers.');
 
-  const music = client.music[message.guild.id];
+  const music = client.music[message.guild!.id];
   if (!music || !music.queue || music.queue.length === 0) return message.reply(':x: The queue is empty.');
 
   if (!args[1] || args[1].toLowerCase() !== 'clear') {
     let msg: MessageEmbed | string;
-    if (message.channel.permissionsFor(client.user).has('EMBED_LINKS')) {
+    if (message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) {
       let desc = music.queue.map((song, i) => `${i + 1}. [\`${client.escMD(song.info.title)}\`](${client.escMD(song.info.uri)})`).join('\n');
       if (desc.length > 2048) desc = `${desc.slice(0, -3)}...`;
 
