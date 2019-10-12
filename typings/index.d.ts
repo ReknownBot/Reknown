@@ -20,7 +20,7 @@ declare module 'ReknownBot' {
     public playMusic(client: ReknownClient, guild: Guild, music: MusicObject, track: Track, ended?: boolean): void;
     public sendLog(client: ReknownClient, embed: MessageEmbed, guild: Guild): Promise<void>;
     public sendSong(music: MusicObject, message: Message, song: Track, user: ClientUser): void;
-    public updateRow(client: ReknownClient, table: string, changes: { [ column: string ]: any }, filters: { [ column: string ]: any });
+    public updateRow(client: ReknownClient, table: string, changes: { [ column: string ]: any }, filters: { [ column: string ]: any }): void;
     public uppercase(str: string): string;
   }
 
@@ -72,11 +72,6 @@ declare module 'ReknownBot' {
     cType?: 'text' | 'voice' | 'category';
     guild?: Guild;
     type: 'member' | 'user' | 'role' | 'channel';
-  }
-
-  interface PrefixRow {
-    customprefix: string;
-    guildid: Snowflake;
   }
 
   interface ReknownCommand {
