@@ -17,7 +17,7 @@ const defaultValues: { [ key: string ]: any } = {
 };
 
 const filters: { [ key: string ]: Function } = {
-  levelmodifier: (value: number): true | string => (!isNaN(value) && value > 0 && value < 6) || 'The value was not a number, or it was out of range [1-5].',
+  levelmodifier: (value: number): true | string => !isNaN(value) && value > 0 && value < 6 || 'The value was not a number, or it was out of range [1-5].',
   prefix: (value: string): true | string => value.length < 16 || 'The value was too long to be a prefix [15 characters].',
   togglelog: (value: string): true | string => [ 'true', 'false' ].includes(value.toString()) || 'The value needs to be either `true` or `false`.',
   togglewelcome: (value: string): true | string => [ 'true', 'false' ].includes(value.toString()) || 'The value needs to be either `true` or `false`.'
