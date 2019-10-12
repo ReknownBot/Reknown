@@ -3,7 +3,7 @@ import { MessageEmbed, Guild, TextChannel } from 'discord.js';
 import { ToggleRow, LogChannelRow } from 'ReknownBot';
 
 module.exports = async (client: ReknownClient, embed: MessageEmbed, guild: Guild) => {
-  const toggledRow: ToggleRow = (await client.query('SELECT bool FROM actionlog WHERE guildid = $1', [ guild.id ])).rows[0];
+  const toggledRow: ToggleRow = (await client.query('SELECT bool FROM togglelog WHERE guildid = $1', [ guild.id ])).rows[0];
   if (!toggledRow || !toggledRow.bool) return;
 
   const channelRow: LogChannelRow = (await client.query('SELECT channelid FROM logchannel WHERE guildid = $1', [ guild.id ])).rows[0];
