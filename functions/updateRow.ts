@@ -1,6 +1,6 @@
 import { ReknownClient } from 'ReknownBot';
 
-module.exports.run = async (client: ReknownClient, table: string, changes: { [ column: string ]: any }, filters: { [ column: string ]: any }) => {
+module.exports = async (client: ReknownClient, table: string, changes: { [ column: string ]: any }, filters: { [ column: string ]: any }) => {
   const columns = Object.keys(changes);
   const values = Object.values(changes);
   const fColumns = Object.keys(filters);
