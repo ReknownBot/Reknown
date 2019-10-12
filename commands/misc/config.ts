@@ -9,7 +9,7 @@ const configs: { [ key: string ]: string } = {
   togglewelcome: 'Toggle for welcoming messages.'
 };
 
-const defaultValues: { [ key: string ]: any } = {
+const defaultValues: { [ key: string ]: [ string, number | string | false ] } = {
   levelmodifier: [ 'modifier', 1 ],
   prefix: [ 'customprefix', prefix ],
   togglelog: [ 'bool', false ],
@@ -44,9 +44,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   const row = (await client.query(`SELECT * FROM ${table} WHERE guildid = $1`, [ message.guild!.id ])).rows[0];
 
   if (!args[2]) {
-    const value = row ? row[Object.keys(row).find(r => r !== 'guildid')!] : defaultValues[table][1];
+    const value: number | string | boolean = row ? row[Object.keys(row).find(r => r !== 'guildid')!] : defaultValues[table][1];
 
-    return message.channel.send(`Current value for \`${table}\` is \`${client.escMD(value)}\`.`);
+    return message.channel.send(`Current value for \`${table}\` is \`${client.escMD(value.toString())}\`.`);
   }
 
   const value = args.slice(2).join(' ');
