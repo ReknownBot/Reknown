@@ -1,4 +1,3 @@
-CREATE TABLE IF NOT EXISTS actionlog (bool BOOLEAN, guildid TEXT);
 CREATE TABLE IF NOT EXISTS blacklist (executor TEXT, guildid TEXT, reason TEXT, userid TEXT);
 CREATE TABLE IF NOT EXISTS blacklistmsg (bool BOOLEAN, guildid TEXT);
 CREATE TABLE IF NOT EXISTS cmdnotfound (bool BOOLEAN, guildid TEXT);
@@ -22,6 +21,7 @@ CREATE TABLE IF NOT EXISTS star (editid TEXT, msgid TEXT);
 CREATE TABLE IF NOT EXISTS starchannel (channelid TEXT, guildid TEXT);
 CREATE TABLE IF NOT EXISTS ticketcategory (channelid TEXT, guildid TEXT);
 CREATE TABLE IF NOT EXISTS togglelevel (bool BOOLEAN, guildid TEXT);
+CREATE TABLE IF NOT EXISTS togglelog (bool BOOLEAN, guildid TEXT);
 CREATE TABLE IF NOT EXISTS togglestar (bool BOOLEAN, guildid TEXT);
 CREATE TABLE IF NOT EXISTS toggletickets (bool BOOLEAN, guildid TEXT);
 CREATE TABLE IF NOT EXISTS togglewelcome (bool BOOLEAN, guildid TEXT);
