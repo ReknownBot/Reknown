@@ -88,7 +88,7 @@ module.exports = exports = {
         "no-process-env": OFF,
         "no-proto": ERROR,
         "no-redeclare": ERROR,
-        "no-return-assign": ERROR,
+        "no-return-assign": OFF,
         "no-script-url": ERROR,
         "no-self-compare": ERROR,
         "no-throw-literal": ERROR,
