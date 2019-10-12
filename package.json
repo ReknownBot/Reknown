@@ -6,6 +6,7 @@
   "scripts": {
     "compile": "tsc",
     "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
     "start": "node -r esm ."
   },
   "repository": {
