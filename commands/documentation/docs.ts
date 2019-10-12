@@ -14,7 +14,7 @@ const sources = [
 ];
 
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
-  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const q = args[1];
   let branch = args[2] || 'stable';

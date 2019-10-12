@@ -5,7 +5,7 @@ import { ToggleRow, WelcomeChannelRow } from 'ReknownBot';
 
 function sendLog (client: ReknownClient, member: GuildMember) {
   const embed = new MessageEmbed()
-    .addField('Joined at', dateformat(member.joinedAt, 'mmmm d, yyyy @ HH:MM:ss UTC'))
+    .addField('Joined at', dateformat(member.joinedAt!, 'mmmm d, yyyy @ HH:MM:ss UTC'))
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${member.id}`)
     .setTimestamp()
@@ -21,7 +21,7 @@ async function goodbyeMsg (client: ReknownClient, member: GuildMember) {
   const channelRow: WelcomeChannelRow = (await client.query('SELECT channel FROM welcomechannel WHERE guildid = $1', [ member.guild.id ])).rows[0];
   const channel = (channelRow ? member.guild.channels.find(c => c.id === channelRow.channel && c.type === 'text') : member.guild.channels.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
   if (!channel) return;
-  if (!channel.permissionsFor(client.user).has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
+  if (!channel.permissionsFor(client.user!)!.has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
 
   const msgRow = (await client.query('SELECT msg FROM goodbyemsg WHERE guildid = $1', [ member.guild.id ])).rows[0];
   const msg: string = msgRow ? msgRow.msg : '<User> has left **<Server>**. There are <MemberCount> members now.';
@@ -36,7 +36,7 @@ async function goodbyeMsg (client: ReknownClient, member: GuildMember) {
 
 module.exports.run = (client: ReknownClient, member: GuildMember) => {
   if (!member.guild.available) return;
-  if (member.id === client.user.id) return;
+  if (member.id === client.user!.id) return;
 
   sendLog(client, member);
   goodbyeMsg(client, member);
