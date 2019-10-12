@@ -31,6 +31,8 @@ export default class ReknownClient extends Client {
 
   public lavalink: Node | null = null;
 
+  public prefixes: { [ id: string ]: string } = {};
+
   public query = pool.query.bind(pool);
 
   public music: { [ id: string ]: MusicObject } = {};
