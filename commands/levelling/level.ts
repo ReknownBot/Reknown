@@ -3,16 +3,16 @@ import { Message, GuildMember, MessageEmbed, DMChannel } from 'discord.js';
 
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
   if (message.channel instanceof DMChannel) return message.reply(':x: This command is only available in servers.');
-  if (!message.channel.permissionsFor(client.user).has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+  if (!message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
-  const member: GuildMember | boolean = args[1] ? await client.functions.parseMention(args[1], message.guild, { type: 'member' }).catch(() => false) : message.member;
+  const member = args[1] ? await client.functions.parseMention(args[1], { guild: message.guild!, type: 'member' }).catch(() => false) : message.member;
   if (!(member instanceof GuildMember)) return client.functions.badArg(message, 1, 'I did not find a member by that query.');
 
-  const row = (await client.query('SELECT * FROM scores WHERE userid = $1 AND guildid = $2', [ member.id, message.guild.id ])).rows[0];
+  const row = (await client.query('SELECT * FROM scores WHERE userid = $1 AND guildid = $2', [ member.id, message.guild!.id ])).rows[0];
   const points = row ? row.points : 0;
   const level = row ? row.level : 0;
   const reqPoints = client.functions.formatNum(Math.pow((level + 1) / 0.2, 2));
-  const { rows: all } = await client.query('SELECT * FROM scores WHERE guildid = $1 ORDER BY points DESC', [ message.guild.id ]);
+  const { rows: all } = await client.query('SELECT * FROM scores WHERE guildid = $1 ORDER BY points DESC', [ message.guild!.id ]);
   const rank = all.indexOf(all.find(r => r.userid === member.id)) + 1;
 
   const embed = new MessageEmbed()

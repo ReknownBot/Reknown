@@ -11,7 +11,7 @@ module.exports = async (client: ReknownClient, embed: MessageEmbed, guild: Guild
 
   const channel = (client.channels.get(channelRow.channelid) || guild.channels.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
   if (!channel) return;
-  if (!channel.permissionsFor(client.user).has([ 'SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS' ])) return;
+  if (!channel.permissionsFor(client.user!)!.has([ 'SEND_MESSAGES', 'VIEW_CHANNEL', 'EMBED_LINKS' ])) return;
 
   channel.send(embed);
 };

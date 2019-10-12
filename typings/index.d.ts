@@ -11,12 +11,12 @@ declare module 'ReknownBot' {
     public noArg(message: Message, argNum: number, desc: string): void;
     public noClientPerms(message: Message, perms: string[], channel?: GuildChannel): void;
     public noPerms(message: Message, perms: string[], channel?: GuildChannel): void;
-    public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'member' }): Promise<GuildMember | null>;
-    public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'user' }): Promise<User | null>;
-    public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'role' }): Promise<Role | null>;
-    public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'channel'; cType?: 'text' }): TextChannel | null;
-    public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'channel'; cType?: 'voice' }): VoiceChannel | null;
-    public parseMention(id: Snowflake, guild: Guild, options: ParseMentionOptions & { type: 'channel'; cType?: 'category' }): CategoryChannel | null;
+    public parseMention(id: Snowflake, options: ParseMentionOptions & { type: 'member' }): Promise<GuildMember | null>;
+    public parseMention(id: Snowflake, options: ParseMentionOptions & { type: 'user' }): Promise<User | null>;
+    public parseMention(id: Snowflake, options: ParseMentionOptions & { type: 'role' }): Promise<Role | null>;
+    public parseMention(id: Snowflake, options: ParseMentionOptions & { type: 'channel'; cType?: 'text' }): TextChannel | null;
+    public parseMention(id: Snowflake, options: ParseMentionOptions & { type: 'channel'; cType?: 'voice' }): VoiceChannel | null;
+    public parseMention(id: Snowflake, options: ParseMentionOptions & { type: 'channel'; cType?: 'category' }): CategoryChannel | null;
     public playMusic(client: ReknownClient, guild: Guild, music: MusicObject, track: Track, ended?: boolean): void;
     public sendLog(client: ReknownClient, embed: MessageEmbed, guild: Guild): Promise<void>;
     public sendSong(music: MusicObject, message: Message, song: Track, user: ClientUser): void;
@@ -69,6 +69,7 @@ declare module 'ReknownBot' {
   interface ParseMentionOptions {
     client?: ReknownClient;
     cType?: 'text' | 'voice' | 'category';
+    guild?: Guild;
     type: 'member' | 'user' | 'role' | 'channel';
   }
 
@@ -83,7 +84,7 @@ declare module 'ReknownBot' {
   }
 
   interface ReknownEvent {
-    run: (...args) => void;
+    run: (...args: any) => void;
   }
 
   interface ToggleRow {
