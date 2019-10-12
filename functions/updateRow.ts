@@ -1,4 +1,4 @@
-import { ReknownClient } from "ReknownBot";
+import { ReknownClient } from 'ReknownBot';
 
 module.exports.run = async (client: ReknownClient, table: string, changes: { [ column: string ]: any }, filters: { [ column: string ]: any }) => {
   const columns = Object.keys(changes);
