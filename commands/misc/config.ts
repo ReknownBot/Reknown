@@ -39,7 +39,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
     return message.channel.send(embed);
   }
 
-  const table = args[2].toLowerCase();
+  const table = args[1].toLowerCase();
   if (!Object.keys(configs).includes(table)) return client.functions.badArg(message, 1, 'That configuration value does not exist.');
   const row = (await client.query(`SELECT * FROM ${table} WHERE guildid = $1`, [ message.guild!.id ])).rows[0];
 
