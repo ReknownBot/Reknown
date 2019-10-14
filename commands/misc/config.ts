@@ -1,8 +1,9 @@
 import { ReknownClient } from 'ReknownBot';
-import { Message, DMChannel, MessageEmbed } from 'discord.js';
+import { Message, DMChannel, MessageEmbed, Guild } from 'discord.js';
 import { prefix } from '../../config.json';
 
 const configs: { [ key: string ]: string } = {
+  channellog: 'The channel to send logs to.',
   levelmodifier: 'The level modifier for levelling up.',
   prefix: 'The prefix for bot commands.',
   togglelog: 'Toggle for the action log.',
@@ -10,17 +11,35 @@ const configs: { [ key: string ]: string } = {
 };
 
 const defaultValues: { [ key: string ]: [ string, number | string | false ] } = {
+  channellog: [ 'channelid', '#action-log' ],
   levelmodifier: [ 'modifier', 1 ],
   prefix: [ 'customprefix', prefix ],
   togglelog: [ 'bool', false ],
   togglewelcome: [ 'bool', false ]
 };
 
-const filters: { [ key: string ]: Function } = {
-  levelmodifier: (value: number): true | string => !isNaN(value) && !value.toString().includes('.') && value > 0 && value < 6 || 'The value was not a number, was a decimal, or was out of range [1-5].',
-  prefix: (value: string): true | string => value.length < 16 || 'The value was too long to be a prefix [15 characters].',
-  togglelog: (value: string): true | string => [ 'true', 'false' ].includes(value.toString()) || 'The value needs to be either `true` or `false`.',
-  togglewelcome: (value: string): true | string => [ 'true', 'false' ].includes(value.toString()) || 'The value needs to be either `true` or `false`.'
+const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Guild) => any } = {
+  channellog: (value: string, client, guild) => {
+    const channel = client.functions.parseMention(value, { cType: 'text', guild: guild, type: 'channel' });
+    if (!channel) return [ 'That channel does not exist or is not a text channel.' ];
+    return channel.id;
+  },
+  levelmodifier: (value: number): number | string[] => {
+    if (!isNaN(value) && !value.toString().includes('.') && value > 0 && value < 6) return [ 'The value was not a number, was a decimal, or was out of range [1-5].' ];
+    return value;
+  },
+  prefix: (value: string): string | string[] => {
+    if (value.length < 16) return [ 'The value was too long to be a prefix [15 characters].' ];
+    return value;
+  },
+  togglelog: (value: string): boolean | string[] => {
+    if ([ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
+    return Boolean(value);
+  },
+  togglewelcome: (value: string): boolean | string[] => {
+    if ([ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
+    return Boolean(value);
+  }
 };
 
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
@@ -49,8 +68,10 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
     return message.channel.send(`Current value for \`${table}\` is \`${client.escMD(value.toString())}\`.`);
   }
 
-  const value = args.slice(2).join(' ');
-  if (filters[table](value) !== true) return client.functions.badArg(message, 2, filters[table](value));
+  let value = args.slice(2).join(' ');
+  const filter = filters[table](value, client, message.guild!);
+  if (filter instanceof Array) return client.functions.badArg(message, 2, filter[0]);
+  value = filter;
 
   const newRow: { [ key: string ]: any } = { guildid: message.guild!.id };
   newRow[defaultValues[table][0]] = value;
