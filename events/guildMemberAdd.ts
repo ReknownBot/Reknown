@@ -5,6 +5,7 @@ import { ToggleRow, WelcomeChannelRow } from 'ReknownBot';
 
 function sendLog (client: ReknownClient, member: GuildMember) {
   const embed = new MessageEmbed()
+    .addField('User', member.user.tag)
     .addField('Created at', dateformat(member.user.createdAt, 'mmmm d, yyyy @ HH:MM:ss UTC'))
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${member.id}`)
