@@ -1,5 +1,5 @@
 import ReknownClient from '../structures/client';
-import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
+import { GuildMember, MessageEmbed, TextChannel, User } from 'discord.js';
 import dateformat from 'dateformat';
 import { ToggleRow, WelcomeChannelRow } from 'ReknownBot';
 
@@ -28,16 +28,17 @@ async function goodbyeMsg (client: ReknownClient, member: GuildMember) {
 
   const embed = new MessageEmbed()
     .setColor(client.config.embedColor)
-    .setDescription(msg.replace(/<MemberCount>/g, member.guild.memberCount.toString()).replace(/<Server>/g, member.guild.name).replace(/<User>/g, member.toString()))
+    .setDescription(msg.replace(/<MemberCount>/g, member.guild.memberCount.toString()).replace(/<Server>/g, member.guild.name).replace(/<User>/g, member.user.toString()))
     .setFooter(`ID: ${member.id}`)
     .setThumbnail(member.user.displayAvatarURL({ size: 512 }))
     .setTimestamp();
   channel.send(embed);
 }
 
-module.exports.run = (client: ReknownClient, member: GuildMember) => {
+module.exports.run = async (client: ReknownClient, member: GuildMember) => {
   if (!member.guild.available) return;
   if (member.id === client.user!.id) return;
+  if (member.user.partial) member.user = await member.user.fetch();
 
   sendLog(client, member);
   goodbyeMsg(client, member);
