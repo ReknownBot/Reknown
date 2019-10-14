@@ -3,30 +3,30 @@ import { Message, DMChannel, MessageEmbed, Guild } from 'discord.js';
 import { prefix } from '../../config.json';
 
 const configs: { [ key: string ]: string } = {
-  channellog: 'The channel to send logs to.',
   levelmodifier: 'The level modifier for levelling up.',
+  logchannel: 'The channel to send logs to.',
   prefix: 'The prefix for bot commands.',
   togglelog: 'Toggle for the action log.',
   togglewelcome: 'Toggle for welcoming messages.'
 };
 
 const defaultValues: { [ key: string ]: [ string, number | string | false ] } = {
-  channellog: [ 'channelid', '#action-log' ],
   levelmodifier: [ 'modifier', 1 ],
+  logchannel: [ 'channelid', '#action-log' ],
   prefix: [ 'customprefix', prefix ],
   togglelog: [ 'bool', false ],
   togglewelcome: [ 'bool', false ]
 };
 
 const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Guild) => any } = {
-  channellog: (value: string, client, guild) => {
-    const channel = client.functions.parseMention(value, { cType: 'text', guild: guild, type: 'channel' });
-    if (!channel) return [ 'That channel does not exist or is not a text channel.' ];
-    return channel.id;
-  },
   levelmodifier: (value: number): number | string[] => {
     if (isNaN(value) || value.toString().includes('.') || value < 1 || value > 5) return [ 'The value was not a number, was a decimal, or was out of range [1-5].' ];
     return value;
+  },
+  logchannel: (value: string, client, guild) => {
+    const channel = client.functions.parseMention(value, { cType: 'text', guild: guild, type: 'channel' });
+    if (!channel) return [ 'That channel does not exist or is not a text channel.' ];
+    return channel.id;
   },
   prefix: (value: string): string | string[] => {
     if (value.length > 15) return [ 'The value was too long to be a prefix [15 characters].' ];
