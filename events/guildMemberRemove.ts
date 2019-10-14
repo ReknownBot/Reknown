@@ -1,10 +1,11 @@
 import ReknownClient from '../structures/client';
-import { GuildMember, MessageEmbed, TextChannel, User } from 'discord.js';
+import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
 import dateformat from 'dateformat';
 import { ToggleRow, WelcomeChannelRow } from 'ReknownBot';
 
 function sendLog (client: ReknownClient, member: GuildMember) {
   const embed = new MessageEmbed()
+    .addField('User', member.user.tag)
     .addField('Joined at', dateformat(member.joinedAt!, 'mmmm d, yyyy @ HH:MM:ss UTC'))
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${member.id}`)
