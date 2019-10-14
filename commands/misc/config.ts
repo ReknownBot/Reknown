@@ -25,19 +25,19 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
     return channel.id;
   },
   levelmodifier: (value: number): number | string[] => {
-    if (!isNaN(value) && !value.toString().includes('.') && value > 0 && value < 6) return [ 'The value was not a number, was a decimal, or was out of range [1-5].' ];
+    if (isNaN(value) || value.toString().includes('.') || value < 1 || value > 5) return [ 'The value was not a number, was a decimal, or was out of range [1-5].' ];
     return value;
   },
   prefix: (value: string): string | string[] => {
-    if (value.length < 16) return [ 'The value was too long to be a prefix [15 characters].' ];
+    if (value.length > 15) return [ 'The value was too long to be a prefix [15 characters].' ];
     return value;
   },
   togglelog: (value: string): boolean | string[] => {
-    if ([ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
+    if (![ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
     return Boolean(value);
   },
   togglewelcome: (value: string): boolean | string[] => {
-    if ([ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
+    if (![ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
     return Boolean(value);
   }
 };
