@@ -30,6 +30,7 @@ async function welcomeMsg (client: ReknownClient, member: GuildMember) {
     .setColor(client.config.embedColor)
     .setDescription(msg.replace(/<MemberCount>/g, member.guild.memberCount.toString()).replace(/<Server>/g, member.guild.name).replace(/<User>/g, member.toString()))
     .setFooter(`ID: ${member.id}`)
+    .setThumbnail(member.user.displayAvatarURL({ size: 512 }))
     .setTimestamp();
   channel.send(embed);
 }
