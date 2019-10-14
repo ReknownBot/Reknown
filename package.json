@@ -33,7 +33,6 @@
     "dateformat": "^3.0.3",
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^8.1.0",
-    "erlpack": "^0.1.2",
     "esm": "^3.2.25",
     "fs": "0.0.1-security",
     "lavalink": "^2.8.1",
@@ -55,5 +54,8 @@
     "@typescript-eslint/parser": "^2.3.3",
     "eslint": "^6.5.1",
     "typescript": "^3.6.4"
+  },
+  "optionalDependencies": {
+    "erlpack": "^0.1.2"
   }
 }
