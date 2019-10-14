@@ -1,9 +1,9 @@
 import ReknownClient from '../structures/client';
-import { MessageEmbed, User, Guild, PartialUser } from 'discord.js';
+import { MessageEmbed, User, Guild } from 'discord.js';
 
 async function sendLog (client: ReknownClient, guild: Guild, user: User) {
   const bans = await guild.fetchBans();
-  const ban = bans.find(ban => ban.user.id === user.id)!;
+  const ban = bans.find(b => b.user.id === user.id)!;
 
   const embed = new MessageEmbed()
     .addField('User', user.tag)
