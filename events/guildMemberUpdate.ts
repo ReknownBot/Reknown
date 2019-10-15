@@ -1,7 +1,7 @@
-import { ReknownClient } from "ReknownBot";
-import { GuildMember, MessageEmbed } from "discord.js";
+import { ReknownClient } from 'ReknownBot';
+import { GuildMember, MessageEmbed } from 'discord.js';
 
-function nickUpdate(client: ReknownClient, oldMember: GuildMember, newMember: GuildMember) {
+function nickUpdate (client: ReknownClient, oldMember: GuildMember, newMember: GuildMember) {
   if (oldMember.displayName === newMember.displayName) return;
 
   const embed = new MessageEmbed()
@@ -11,7 +11,7 @@ function nickUpdate(client: ReknownClient, oldMember: GuildMember, newMember: Gu
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${newMember.id}`)
     .setTimestamp()
-    .setTitle(`Nickname Updated`);
+    .setTitle('Nickname Updated');
 
   client.functions.sendLog(client, embed, newMember.guild);
 }
