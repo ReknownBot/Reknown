@@ -65,7 +65,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   if (!args[2]) {
     const value: number | string | boolean = row ? row[Object.keys(row).find(r => r !== 'guildid')!] : defaultValues[table][1];
 
-    return message.channel.send(`Current value for \`${table}\` is \`${client.escInline(value.toString())}\`.`);
+    return message.channel.send(`Current value for \`${table}\` is \`\`${client.escInline(value.toString())}\`\`.`);
   }
 
   let value = args.slice(2).join(' ');
@@ -79,7 +79,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
     guildid: message.guild!.id
   });
 
-  return message.channel.send(`Successfully updated \`${table}\` to \`${client.escInline(value)}\`.`);
+  return message.channel.send(`Successfully updated \`${table}\` to \`\`${client.escInline(value)}\`\`.`);
 };
 
 module.exports.help = {
