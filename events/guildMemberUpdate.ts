@@ -10,6 +10,7 @@ function nickUpdate (client: ReknownClient, oldMember: GuildMember, newMember: G
     .addField('New Nickname', newMember.displayName, true)
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${newMember.id}`)
+    .setThumbnail(newMember.user.displayAvatarURL({ size: 512 }))
     .setTimestamp()
     .setTitle('Nickname Updated');
 
@@ -26,6 +27,7 @@ function roleUpdate (client: ReknownClient, oldMember: GuildMember, newMember: G
     .addField('Roles Changed', `${addedRoles.map(r => `+ \`${client.escMD(r.name)}\``)}\n${removedRoles.map(r => `- \`${client.escMD(r.name)}\``)}`)
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${newMember.id}`)
+    .setThumbnail(newMember.user.displayAvatarURL({ size: 512 }))
     .setTimestamp()
     .setTitle('Member Role Update');
 
