@@ -25,6 +25,8 @@ export default class ReknownClient extends Client {
 
   public escMD = Util.escapeMarkdown;
 
+  public escInline = (str: string) => str.replace('`', '\u200B`');
+
   public events = new Collection<string, ReknownEvent>();
 
   public functions: ReknownFunctions = functions as ReknownFunctions;

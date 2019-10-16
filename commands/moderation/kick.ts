@@ -13,7 +13,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   if (member.roles.highest.position >= message.member!.roles.highest.position && message.author.id !== message.guild!.ownerID) return client.functions.badArg(message, 1, 'Your role position is not high enough to kick that member.');
   if (!member.kickable) return client.functions.badArg(message, 1, 'I do not have enough powers to kick that member. Please check my permissions and my role position. Note that I cannot kick owners.');
   member.kick(reason);
-  message.channel.send(`Successfully kicked member ${client.escMD(member.user.tag)} (ID: ${member.id})${reason ? ` for reason \`${client.escMD(reason)}\`` : ''}.`);
+  message.channel.send(`Successfully kicked member ${client.escMD(member.user.tag)} (ID: ${member.id})${reason ? ` for reason \`${client.escInline(reason)}\`` : ''}.`);
 };
 
 module.exports.help = {
