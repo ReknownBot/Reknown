@@ -10,7 +10,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
   if (!args[1] || args[1].toLowerCase() !== 'clear') {
     let msg: MessageEmbed | string;
     if (message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) {
-      let desc = music.queue.map((song, i) => `${i + 1}. [\`${client.escMD(song.info.title)}\`](${client.escMD(song.info.uri)})`).join('\n');
+      let desc = music.queue.map((song, i) => `${i + 1}. [\`${client.escInline(song.info.title)}\`](${song.info.uri})`).join('\n');
       if (desc.length > 2048) desc = `${desc.slice(0, -3)}...`;
 
       msg = new MessageEmbed()
@@ -19,7 +19,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
         .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
         .setTitle('Current Queue');
     } else {
-      msg = music.queue.map((song, i) => `${i + 1}. \`${client.escMD(song.info.title)}\``).join('\n');
+      msg = music.queue.map((song, i) => `${i + 1}. \`${client.escInline(song.info.title)}\``).join('\n');
       if (msg.length > 2048) msg = `${msg.slice(0, -3)}...`;
     }
 
