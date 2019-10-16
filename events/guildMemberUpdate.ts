@@ -24,7 +24,7 @@ function roleUpdate (client: ReknownClient, oldMember: GuildMember, newMember: G
 
   const embed = new MessageEmbed()
     .addField('Member', newMember.user.tag)
-    .addField('Roles Changed', `${addedRoles.map(r => `+ \`\`${client.escInline(r.name)}\`\``)}\n${removedRoles.map(r => `- \`\`${client.escInline(r.name)}\`\``)}`)
+    .addField('Roles Changed', `${addedRoles.map(r => `+ \`\`${client.escInline(r.name)}\`\``).join('\n')}\n${removedRoles.map(r => `- \`\`${client.escInline(r.name)}\`\``).join('\n')}`)
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${newMember.id}`)
     .setThumbnail(newMember.user.displayAvatarURL({ size: 512 }))
