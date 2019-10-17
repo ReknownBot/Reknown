@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 declare module 'Hypixel-API' {
   interface Player {
     _id: string;
