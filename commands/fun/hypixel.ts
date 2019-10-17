@@ -38,11 +38,11 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
       if (!hypixelJson.success) return client.functions.badArg(message, 2, 'That player has not joined the server yet, or the request has failed.');
       const { player } = hypixelJson;
       const embed = new MessageEmbed()
-        .addField('Network XP', client.functions.formatNum(player.networkExp), true)
-        .addField('Karma', client.functions.formatNum(player.karma), true)
-        .addField('Achievement Points', client.functions.formatNum(player.achievementPoints), true)
-        .addField('Total Votes', client.functions.formatNum(player.voting.total), true)
-        .addField('Pet Food Count', client.functions.formatNum(Object.values(player.petConsumables).reduce((a, b) => a + b, 0)), true)
+        .addField('Network XP', client.functions.formatNum(player.networkExp || 0), true)
+        .addField('Karma', client.functions.formatNum(player.karma || 0), true)
+        .addField('Achievement Points', client.functions.formatNum(player.achievementPoints || 0), true)
+        .addField('Total Votes', client.functions.formatNum(player.voting ? player.voting.total : 0), true)
+        .addField('Pet Food Count', client.functions.formatNum(Object.values(player.petConsumables || { temp: 0 }).reduce((a, b) => a + b, 0)), true)
         .setColor(client.config.embedColor)
         .setAuthor(`General Stats for ${player.displayname}`, undefined, `https://hypixel.net/player/${player.displayname}`);
 
