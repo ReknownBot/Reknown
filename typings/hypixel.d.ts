@@ -176,6 +176,7 @@ declare module 'Hypixel-API' {
     completed_christmas_quests_2018?: number;
     completed_christmas_quests_2019?: number;
     currentGadget: string;
+    displayname: string;
     eugene: {
       dailyTwoKExp: number;
     };
@@ -253,6 +254,7 @@ declare module 'Hypixel-API' {
     };
     petJourneyTimestamp: number;
     petStats: {};
+    playername: string;
     quests: {
       arcade_gamer: {};
       arcade_specialist: {};
