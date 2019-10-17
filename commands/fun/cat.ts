@@ -1,5 +1,5 @@
 import { ReknownClient } from 'ReknownBot';
-import { Message, MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
 
 interface CatResult {
@@ -7,6 +7,8 @@ interface CatResult {
 }
 
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+
   const json: CatResult = await fetch('https://aws.random.cat/meow').then(res => res.json());
   if (!json || !json.file) return message.reply('Seems like the API is down, please try again later. If this problem persists, let us know in our Discord server.');
 
