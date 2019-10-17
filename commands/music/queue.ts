@@ -34,5 +34,5 @@ module.exports.help = {
   aliases: [ 'songlist' ],
   category: 'Music',
   desc: 'Shows the queue.',
-  usage: 'queue [clear]'
+  usage: 'queue ["clear"]'
 };
