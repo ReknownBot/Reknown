@@ -6,7 +6,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
   if (!args[1]) return client.functions.noArg(message, 1, 'a message for a cow to say.');
   const msg = args.slice(1).join(' ');
 
-  return message.channel.send(`\`\`\`${say({ text: msg })}\`\`\``);
+  message.channel.send(`\`\`\`${say({ text: msg })}\`\`\``);
 };
 
 module.exports.help = {

@@ -23,8 +23,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
       else embed.addField(info.category, `- \`${prefix + cmd}\``, true);
     });
 
-    message.channel.send(embed);
-    return;
+    return message.channel.send(embed);
   }
 
   const query = args.slice(1).join(' ').toLowerCase();
@@ -41,8 +40,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
       .setTitle(`${prefix + query} Command Information`);
     if (cmd.help.aliases.length !== 0) embed.addField('Aliases', cmd.help.aliases.map(alias => `\`${prefix + alias}\``).join(', '), true);
 
-    message.channel.send(embed);
-    return;
+    return message.channel.send(embed);
   }
 
   const category = client.categories.find(c => c.toLowerCase() === query);
