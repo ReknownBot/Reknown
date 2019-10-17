@@ -1,7 +1,6 @@
 import { ReknownClient } from 'ReknownBot';
 import { Message, TextChannel, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
-import { Response } from 'node-fetch';
 import { stringify } from 'querystring';
 import { Player } from 'Hypixel-API';
 
@@ -21,9 +20,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
 
   switch (args[1].toLowerCase()) {
     case 'player': {
-      const uuidRes: Response | false = await fetch(`${minecraftEndpoint}/users/profiles/minecraft/${args[2]}`).catch(() => false);
-      if (uuidRes === false) return client.functions.badArg(message, 1, 'That Minecraft player does not exist.');
-      const uuidJson: UUIDJson = await uuidRes.json();
+      const uuidRes = await fetch(`${minecraftEndpoint}/users/profiles/minecraft/${args[2]}`);
+      const uuidJson: UUIDJson | false = await uuidRes.json().catch(() => false);
+      if (uuidJson === false) return client.functions.badArg(message, 1, 'That Minecraft player does not exist.');
       const uuid = uuidJson.id;
 
       const queries = stringify({
