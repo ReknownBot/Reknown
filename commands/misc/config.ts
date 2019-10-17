@@ -79,7 +79,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
     guildid: message.guild!.id
   });
 
-  return message.channel.send(`Successfully updated \`${table}\` to \`\`${client.escInline(value)}\`\`.`);
+  message.channel.send(`Successfully updated \`${table}\` to \`\`${client.escInline(value)}\`\`.`);
 };
 
 module.exports.help = {
