@@ -12,9 +12,12 @@ interface UUIDJson {
 const hypixelEndpoint = 'https://api.hypixel.net';
 const minecraftEndpoint = 'https://api.mojang.com';
 
+let ratelimit = 0;
+
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
   if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
+  if (ratelimit >= 115) return message.reply('I am getting close to the ratelimit for the Hypixel API. Please try again in a moment.');
   if (!args[1]) return client.functions.noArg(message, 1, 'a type of statistic to look up, it can be: player.');
   if (!args[2]) return client.functions.noArg(message, 2, 'a value to search by.');
 
@@ -30,6 +33,8 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
         uuid: uuid
       });
       const hypixelJson: { success: boolean; player: Player } = await fetch(`${hypixelEndpoint}/player?${queries}`).then(res => res.json());
+      ratelimit += 1;
+      setTimeout(() => ratelimit -= 1, 60000);
       if (!hypixelJson.success) return client.functions.badArg(message, 2, 'That player has not joined the server yet, or the request has failed.');
       const { player } = hypixelJson;
       const embed = new MessageEmbed()
