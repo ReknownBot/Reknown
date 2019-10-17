@@ -5,8 +5,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   if (message.channel instanceof DMChannel) return message.reply(':x: This command is only available in servers.');
   if (!args[1]) {
     const prefix = await client.functions.getPrefix(client, message.guild!.id);
-    message.channel.send(`The prefix for **${client.escMD(message.guild!.name)}** is: \`\`${client.escInline(prefix)}\`\``);
-    return;
+    return message.channel.send(`The prefix for **${client.escMD(message.guild!.name)}** is: \`\`${client.escInline(prefix)}\`\``);
   }
 
   if (!message.member!.hasPermission('ADMINISTRATOR')) return client.functions.noPerms(message, [ 'Administrator' ]);
