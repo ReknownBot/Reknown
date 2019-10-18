@@ -1,4 +1,4 @@
-import { ReknownClient } from 'ReknownBot';
+import ReknownClient from '../../structures/client';
 import { Message, DMChannel } from 'discord.js';
 import { EqualizerBand } from 'lavalink';
 

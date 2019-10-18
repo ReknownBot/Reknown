@@ -1,4 +1,4 @@
-import { ReknownClient } from 'ReknownBot';
+import ReknownClient from '../../structures/client';
 import { Message, DMChannel } from 'discord.js';
 
 module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {

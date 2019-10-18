@@ -8,6 +8,7 @@
     "outDir": "./build",
     "pretty": true,
     "resolveJsonModule": true,
+    "rootDir": "./src",
     "skipLibCheck": true,
     "strict": true,
     "target": "es6"

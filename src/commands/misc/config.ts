@@ -1,4 +1,4 @@
-import { ReknownClient } from 'ReknownBot';
+import ReknownClient from '../../structures/client';
 import { Message, DMChannel, MessageEmbed, Guild } from 'discord.js';
 import { prefix } from '../../config.json';
 
