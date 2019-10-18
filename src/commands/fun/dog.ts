@@ -1,4 +1,4 @@
-import { ReknownClient } from 'ReknownBot';
+import ReknownClient from '../../structures/client';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
 

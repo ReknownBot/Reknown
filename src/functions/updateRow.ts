@@ -1,4 +1,4 @@
-import { ReknownClient } from 'ReknownBot';
+import ReknownClient from '../structures/client';
 
 module.exports = async (client: ReknownClient, table: string, changes: { [ column: string ]: any }, filters: { [ column: string ]: any }) => {
   const columns = Object.keys(changes);
