@@ -2,11 +2,11 @@
   "name": "reknown",
   "version": "3.0.0",
   "description": "A Discord bot with created with Discord.JS (master branch).",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "compile": "tsc",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix",
+    "lint": "eslint ./src --ext .ts",
+    "lint:fix": "eslint ./src --ext .ts --fix",
     "start": "node -r esm ."
   },
   "repository": {

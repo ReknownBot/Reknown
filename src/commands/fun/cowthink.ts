@@ -1,4 +1,4 @@
-import { ReknownClient } from 'ReknownBot';
+import ReknownClient from '../../structures/client';
 import { Message } from 'discord.js';
 import { think } from 'cowsay';
 
