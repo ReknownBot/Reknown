@@ -7,7 +7,7 @@ import Node from 'lavalink';
 
 const pool = new Pool();
 
-const fnList = readdirSync('./functions').map(f => f.slice(0, -3));
+const fnList = readdirSync('./build/functions').map(f => f.slice(0, -3));
 const functions: ReknownFunctions | { [ fn: string ]: { run: Function }} = {};
 fnList.forEach(fn => {
   // eslint-disable-next-line global-require
