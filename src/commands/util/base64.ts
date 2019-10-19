@@ -31,5 +31,5 @@ module.exports.help = {
   aliases: [],
   category: 'Utility',
   desc: 'Encodes or decodes into Base64.',
-  usage: 'base64 <Encode/Decode> <Input>'
+  usage: 'base64 <"decode"/"encode"> <Input>'
 };

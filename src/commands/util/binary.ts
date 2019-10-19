@@ -64,5 +64,5 @@ module.exports.help = {
   aliases: [ 'binary' ],
   category: 'Utility',
   desc: 'Either decodes or encodes into binary.',
-  usage: 'binary <decode/encode> <Input>'
+  usage: 'binary <"decode"/"encode"> <Input>'
 };
