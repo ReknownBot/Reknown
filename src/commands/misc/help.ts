@@ -14,7 +14,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
       .setColor(client.config.embedColor)
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
       .setTimestamp()
-      .setAuthor('Commands List', undefined, 'https://docs.reknown.xyz/v/v3.0.0-dev/general-use/list-of-commands');
+      .setAuthor('Commands List', undefined, 'https://reknown.xyz/commands');
 
     commands.forEach(cmd => {
       const info = client.commands.get(cmd)!.help;
