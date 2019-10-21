@@ -35,7 +35,7 @@
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "fs": "0.0.1-security",
-    "lavalink": "^2.8.1",
+    "lavalink": "^2.8.2",
     "moment": "^2.24.0",
     "ms": "^2.1.2",
     "node-fetch": "^2.6.0",
