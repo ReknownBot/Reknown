@@ -2,7 +2,7 @@ import ReknownClient from '../../structures/client';
 import { Message, DMChannel } from 'discord.js';
 
 module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
-  if (message.channel instanceof DMChannel) return message.reply(':x: This command is only available in servers.');
+  if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
 
   let music = client.music[message.guild!.id];
   if (!music) music = client.music[message.guild!.id] = {
