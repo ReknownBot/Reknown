@@ -19,7 +19,7 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
 
   if (!args[1]) return client.functions.noArg(message, 1, 'a query to search for.');
   const res = await client.lavalink!.load(`ytsearch:${args.slice(1).join(' ')}`);
-  if (res.loadType === 'LOAD_FAILED') return message.reply('Something went wrong while executing the command. This error has been logged.');
+  if (res.loadType === 'LOAD_FAILED') return message.reply('Something went wrong while fetching the song. Please try again later.');
   const song = res.tracks[0];
   if (!song) return client.functions.badArg(message, 1, 'I did not find a song with that query.');
   if (music.queue.some(s => s.track === song.track)) return client.functions.badArg(message, 1, 'That song is already in the queue.');
