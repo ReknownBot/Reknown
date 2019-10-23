@@ -1,5 +1,5 @@
 import ReknownClient from '../structures/client';
-import { MessageEmbed, User, Guild, PartialUser } from 'discord.js';
+import { Guild, MessageEmbed, PartialUser, User } from 'discord.js';
 
 function sendLog (client: ReknownClient, guild: Guild, user: User) {
   const embed = new MessageEmbed()

@@ -1,5 +1,5 @@
-import ReknownClient from '../structures/client';
 import { Message } from 'discord.js';
+import ReknownClient from '../structures/client';
 
 module.exports.run = async (client: ReknownClient, message: Message) => {
   if (message.author!.bot || message.guild && !message.guild.available) return;

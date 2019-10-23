@@ -1,6 +1,6 @@
 import ReknownClient from '../../structures/client';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
 import fetch from 'node-fetch';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 interface DogResult {
   message: string;

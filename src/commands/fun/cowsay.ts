@@ -1,5 +1,5 @@
-import ReknownClient from '../../structures/client';
 import { Message } from 'discord.js';
+import ReknownClient from '../../structures/client';
 import { say } from 'cowsay';
 
 module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {

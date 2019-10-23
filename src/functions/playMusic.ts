@@ -1,6 +1,6 @@
 import { Guild } from 'discord.js';
-import { ReknownClient, MusicObject } from 'ReknownBot';
 import { Track } from 'lavalink';
+import { MusicObject, ReknownClient } from 'ReknownBot';
 
 module.exports = async (client: ReknownClient, guild: Guild, music: MusicObject, song: Track, ended?: boolean) => {
   if (!ended) {

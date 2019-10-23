@@ -1,5 +1,5 @@
-import { Snowflake } from 'discord.js';
 import { ParseMentionOptions } from 'ReknownBot';
+import { Snowflake } from 'discord.js';
 
 const regexArr = [ /<@!?(\d{17,19})>/, /<@&(\d{17,19})>/, /<#(\d{17,19})>/ ];
 

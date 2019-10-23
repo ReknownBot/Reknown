@@ -1,5 +1,5 @@
 import ReknownClient from '../../structures/client';
-import { Message, GuildMember, DMChannel } from 'discord.js';
+import { DMChannel, GuildMember, Message } from 'discord.js';
 
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');

@@ -1,6 +1,5 @@
-import { Message, TextChannel, MessageEmbed } from 'discord.js';
 import { embedColor } from '../config.json';
-
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 module.exports = (message: Message, argNum: number, desc: string) => {
   if (message.channel instanceof TextChannel && !message.channel.permissionsFor(message.guild!.me!)!.has('EMBED_LINKS')) return message.channel.send(`Argument **#${argNum}** was missing. It is supposed to be **${desc}**`);
