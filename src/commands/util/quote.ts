@@ -1,5 +1,5 @@
 import ReknownClient from '../../structures/client';
-import { Message, TextChannel, MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 const regex = /(?:discordapp.com\/channels)\/(?:(\d{17,19})\/(\d{17,19})\/(\d{17,19}))/;
 

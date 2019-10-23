@@ -1,5 +1,5 @@
 import ReknownClient from '../../structures/client';
-import { Message, TextChannel, MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 function text2Binary (str: string): string {
   str = unescape(encodeURIComponent(str));

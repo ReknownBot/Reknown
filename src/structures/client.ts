@@ -1,9 +1,9 @@
 import * as config from '../config.json';
-import { Client, Collection, Util } from 'discord.js';
-import { Pool } from 'pg';
-import { ConfigObject, ReknownEvent, ReknownCommand, CommandCategory, ReknownFunctions, MusicObject } from 'ReknownBot';
-import { readdirSync } from 'fs';
 import Node from 'lavalink';
+import { Pool } from 'pg';
+import { readdirSync } from 'fs';
+import { Client, Collection, Util } from 'discord.js';
+import { CommandCategory, ConfigObject, MusicObject, ReknownCommand, ReknownEvent, ReknownFunctions } from 'ReknownBot';
 
 const pool = new Pool();
 

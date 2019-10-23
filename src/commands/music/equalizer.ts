@@ -1,6 +1,6 @@
-import ReknownClient from '../../structures/client';
-import { Message, DMChannel } from 'discord.js';
 import { EqualizerBand } from 'lavalink';
+import ReknownClient from '../../structures/client';
+import { DMChannel, Message } from 'discord.js';
 
 module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');

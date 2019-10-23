@@ -1,5 +1,5 @@
 import ReknownClient from '../../structures/client';
-import { Message, DMChannel, MessageEmbed } from 'discord.js';
+import { DMChannel, Message, MessageEmbed } from 'discord.js';
 
 module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');

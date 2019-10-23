@@ -1,7 +1,7 @@
-import { Message, TextChannel, MessageEmbed } from 'discord.js';
+import ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
 import { stringify } from 'querystring';
-import ReknownClient from '../../structures/client';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 const sources = [
   'stable',

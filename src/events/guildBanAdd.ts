@@ -1,5 +1,5 @@
 import ReknownClient from '../structures/client';
-import { MessageEmbed, User, Guild } from 'discord.js';
+import { Guild, MessageEmbed, User } from 'discord.js';
 
 async function sendLog (client: ReknownClient, guild: Guild, user: User) {
   const bans = await guild.fetchBans();

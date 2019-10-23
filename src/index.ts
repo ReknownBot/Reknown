@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires, global-require */
 
 import * as Discord from 'discord.js';
-import { readdirSync } from 'fs';
 import ReknownClient from './structures/client';
+import { readdirSync } from 'fs';
 
 require('dotenv').config();
 
