@@ -1,7 +1,7 @@
-import { MusicObject } from 'ReknownBot';
-import { ClientUser, Util, MessageEmbed, Message, DMChannel } from 'discord.js';
 import * as config from '../config.json';
+import { MusicObject } from 'ReknownBot';
 import { Track } from 'lavalink';
+import { ClientUser, DMChannel, Message, MessageEmbed, Util } from 'discord.js';
 
 module.exports = (music: MusicObject, message: Message, song: Track, user: ClientUser) => {
   if (message.channel instanceof DMChannel) return;

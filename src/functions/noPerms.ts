@@ -1,4 +1,4 @@
-import { Message, GuildChannel, Util } from 'discord.js';
+import { GuildChannel, Message, Util } from 'discord.js';
 
 module.exports = (message: Message, perms: string[], channel?: GuildChannel) => {
   const formatted = perms.map(p => `\`${p}\``).join('\n');

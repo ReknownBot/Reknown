@@ -1,6 +1,6 @@
 import ReknownClient from '../structures/client';
-import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
 import dateformat from 'dateformat';
+import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
 import { ToggleRow, WelcomeChannelRow } from 'ReknownBot';
 
 function sendLog (client: ReknownClient, member: GuildMember) {

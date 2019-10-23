@@ -1,5 +1,5 @@
-import ReknownClient from '../../structures/client';
 import { Message } from 'discord.js';
+import ReknownClient from '../../structures/client';
 
 module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
   if (!args[1]) return client.functions.noArg(message, 1, 'either "f" or "c" to convert to.');

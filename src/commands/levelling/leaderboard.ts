@@ -1,6 +1,6 @@
-import { Message, MessageEmbed, DMChannel } from 'discord.js';
-import ReknownClient from '../../structures/client';
 import { LevelRow } from 'ReknownBot';
+import ReknownClient from '../../structures/client';
+import { DMChannel, Message, MessageEmbed } from 'discord.js';
 
 module.exports.run = async (client: ReknownClient, message: Message) => {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');

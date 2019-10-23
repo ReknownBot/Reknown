@@ -209,6 +209,12 @@ module.exports = exports = {
         "require-jsdoc": OFF,
         "semi-spacing": [ WARN, { "before": false, "after": true }],
         "semi": [ ERROR, "always" ],
+        "sort-imports": [ WARN, {
+            "ignoreCase": false,
+            "ignoreDeclarationSort": false,
+            "ignoreMemberSort": false,
+            "memberSyntaxSortOrder": [ 'none', 'all', 'single', 'multiple' ]
+        }],
         "sort-vars": OFF,
         "space-before-blocks": [ WARN, "always" ],
         "space-before-function-paren": [ WARN, "always" ],
