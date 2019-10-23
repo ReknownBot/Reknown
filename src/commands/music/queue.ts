@@ -2,10 +2,10 @@ import ReknownClient from '../../structures/client';
 import { Message, DMChannel, MessageEmbed } from 'discord.js';
 
 module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
-  if (message.channel instanceof DMChannel) return message.reply(':x: This command is only available in servers.');
+  if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
 
   const music = client.music[message.guild!.id];
-  if (!music || !music.queue || music.queue.length === 0) return message.reply(':x: The queue is empty.');
+  if (!music || !music.queue || music.queue.length === 0) return message.reply('The queue is empty.');
 
   if (!args[1] || args[1].toLowerCase() !== 'clear') {
     let msg: MessageEmbed | string;
