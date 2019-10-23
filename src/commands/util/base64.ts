@@ -1,7 +1,7 @@
 import ReknownClient from '../../structures/client';
-import { Message, TextChannel, MessageEmbed } from 'discord.js';
 import atob from 'atob';
 import btoa from 'btoa';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
   if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);

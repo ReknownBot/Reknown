@@ -1,5 +1,5 @@
 declare module 'ReknownBot' {
-  import { Message, Snowflake, GuildChannel, Guild, GuildMember, Role, User, MessageEmbed, TextChannel, VoiceChannel, CategoryChannel, ClientUser } from 'discord.js';
+  import { CategoryChannel, ClientUser, Guild, GuildChannel, GuildMember, Message, MessageEmbed, Role, Snowflake, TextChannel, User, VoiceChannel } from 'discord.js';
   import { Player, Track } from 'lavalink';
   type ReknownClient = import('../structures/client').default;
 

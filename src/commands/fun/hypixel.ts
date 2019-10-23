@@ -1,8 +1,8 @@
+import { Player } from 'Hypixel-API';
 import ReknownClient from '../../structures/client';
-import { Message, TextChannel, MessageEmbed } from 'discord.js';
 import fetch from 'node-fetch';
 import { stringify } from 'querystring';
-import { Player } from 'Hypixel-API';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 interface UUIDJson {
   id: string;

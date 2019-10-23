@@ -1,6 +1,6 @@
 import ReknownClient from '../structures/client';
-import { MessageEmbed, Guild, TextChannel } from 'discord.js';
-import { ToggleRow, LogChannelRow } from 'ReknownBot';
+import { Guild, MessageEmbed, TextChannel } from 'discord.js';
+import { LogChannelRow, ToggleRow } from 'ReknownBot';
 
 module.exports = async (client: ReknownClient, embed: MessageEmbed, guild: Guild) => {
   const toggledRow: ToggleRow = (await client.query('SELECT bool FROM togglelog WHERE guildid = $1', [ guild.id ])).rows[0];

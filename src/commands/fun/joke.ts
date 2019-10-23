@@ -1,5 +1,5 @@
-import ReknownClient from '../../structures/client';
 import { Message } from 'discord.js';
+import ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
 
 interface JokeResult {
