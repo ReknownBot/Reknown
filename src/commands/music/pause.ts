@@ -6,7 +6,7 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
 
   const music = client.music[message.guild!.id];
 
-  if (!music || !music.player || !music.player.playing) return message.reply('I am not playing anything.');
+  if (!music || !music.player || (!music.player.playing && !music.player.paused)) return message.reply('I am not playing anything.');
 
   let bool = !music.player.paused;
   if (args[1] && args[1].toLowerCase() !== 'auto') {
