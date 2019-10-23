@@ -43,7 +43,7 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
 };
 
 module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
-  if (message.channel instanceof DMChannel) return message.reply(':x: This command is only available in servers.');
+  if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
 
   if (!args[1]) {
     if (!message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
