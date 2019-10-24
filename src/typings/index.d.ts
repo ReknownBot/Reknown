@@ -88,6 +88,12 @@ declare module 'ReknownBot' {
     guildid: Snowflake;
   }
 
+  interface WebhookRow {
+    channelid: Snowflake;
+    guildid: Snowflake;
+    webhookid: Snowflake;
+  }
+
   interface WelcomeChannelRow {
     channel: Snowflake;
     guildid: Snowflake;
