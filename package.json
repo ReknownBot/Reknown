@@ -7,7 +7,7 @@
     "compile": "tsc",
     "lint": "eslint ./src --ext .ts",
     "lint:fix": "eslint ./src --ext .ts --fix",
-    "start": "node -r esm ."
+    "start": "node --experimental-modules ."
   },
   "repository": {
     "type": "git",
@@ -24,8 +24,9 @@
   },
   "homepage": "https://github.com/Jyguy/Reknown#readme",
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=12.0.0"
   },
+  "type": "module",
   "dependencies": {
     "atob": "^2.1.2",
     "btoa": "^1.2.1",
@@ -33,7 +34,6 @@
     "dateformat": "^3.0.3",
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^8.2.0",
-    "esm": "^3.2.25",
     "fs": "0.0.1-security",
     "lavalink": "^2.8.2",
     "moment": "^2.24.0",
