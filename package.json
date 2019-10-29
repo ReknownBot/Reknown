@@ -56,6 +56,6 @@
     "typescript": "^3.6.4"
   },
   "optionalDependencies": {
-    "erlpack": "^0.1.2"
+    "erlpack": "^0.1.3"
   }
 }
