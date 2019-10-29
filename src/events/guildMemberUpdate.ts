@@ -11,7 +11,7 @@ function avatarUpdate (client: ReknownClient, oldUser: User, newUser: User, guil
     .setImage(newUser.displayAvatarURL({ size: 2048 }))
     .setThumbnail(oldUser.displayAvatarURL({ size: 2048 }))
     .setTimestamp()
-    .setTitle('Username Changed');
+    .setTitle('Avatar Updated');
 
   client.functions.sendLog(client, embed, guild);
 }
@@ -58,7 +58,7 @@ function usernameUpdate (client: ReknownClient, oldUser: User, newUser: User, gu
     .setFooter(`ID: ${newUser.id}`)
     .setThumbnail(newUser.displayAvatarURL({ size: 512 }))
     .setTimestamp()
-    .setTitle('Username Changed');
+    .setTitle('Username Updated');
 
   client.functions.sendLog(client, embed, guild);
 }
