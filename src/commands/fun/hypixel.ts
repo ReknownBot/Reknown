@@ -14,7 +14,7 @@ const minecraftEndpoint = 'https://api.mojang.com';
 
 let ratelimit = 0;
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   if (ratelimit >= 115) return message.reply('I am getting close to the ratelimit for the Hypixel API. Please try again in a moment.');
@@ -52,9 +52,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
 
     // no default
   }
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [],
   category: 'Fun',
   desc: 'Gets a variety of stats from the Minecraft server [Hypixel](https://hypixel.net/).',

@@ -1,7 +1,7 @@
 import { Node } from 'lavalink';
 import ReknownClient from '../structures/client';
 
-module.exports.run = async (client: ReknownClient) => {
+export async function run (client: ReknownClient) {
   console.log(`Successfully logged in as ${client.user!.tag} (${client.user!.id}).`);
   client.user!.setActivity({
     name: `${client.guilds.size} Servers`,
@@ -16,4 +16,4 @@ module.exports.run = async (client: ReknownClient) => {
       if (client.guilds.has(guild)) return client.ws.shards.first()!.send(packet);
     },
   });
-};
+}

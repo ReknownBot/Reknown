@@ -3,7 +3,7 @@ import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 const regex = /(?:discordapp.com\/channels)\/(?:(\d{17,19})\/(\d{17,19})\/(\d{17,19}))/;
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'a message URL to quote.');
@@ -33,9 +33,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
     .setTitle('Successfully quoted message!');
 
   message.channel.send(embed);
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [ 'quotemessage' ],
   category: 'Utility',
   desc: 'Quotes a message. You must have access to the channel.',

@@ -1,7 +1,7 @@
 import ReknownClient from '../../structures/client';
 import { DMChannel, Message } from 'discord.js';
 
-module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
 
   const music = client.music[message.guild!.id];
@@ -11,9 +11,9 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
 
   client.functions.endSession(music);
   message.channel.send('Successfully stopped the music and left the voice channel.');
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [ 'dis', 'disconnect' ],
   category: 'Music',
   desc: 'Stops the music.',

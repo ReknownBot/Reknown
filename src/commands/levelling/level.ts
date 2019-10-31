@@ -1,7 +1,7 @@
 import ReknownClient from '../../structures/client';
 import { DMChannel, GuildMember, Message, MessageEmbed } from 'discord.js';
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
   if (!message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
@@ -25,9 +25,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
     .setTitle(`${message.member === member ? 'Your' : `${member.user.tag}'s`} Levelling Information`);
 
   message.channel.send(embed);
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [ 'rank' ],
   category: 'Levelling',
   desc: 'Shows levelling information of a user.',

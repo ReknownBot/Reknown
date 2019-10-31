@@ -2,7 +2,7 @@ import ReknownClient from '../structures/client';
 import { Guild, MessageEmbed, TextChannel } from 'discord.js';
 import { LogChannelRow, ToggleRow, WebhookRow } from 'ReknownBot';
 
-module.exports = async (client: ReknownClient, embed: MessageEmbed, guild: Guild) => {
+export async function run (client: ReknownClient, embed: MessageEmbed, guild: Guild) {
   const toggledRow: ToggleRow = (await client.query('SELECT bool FROM togglelog WHERE guildid = $1', [ guild.id ])).rows[0];
   if (!toggledRow || !toggledRow.bool) return;
 
@@ -24,4 +24,4 @@ module.exports = async (client: ReknownClient, embed: MessageEmbed, guild: Guild
   } else webhook = webhooks.get(webhookRow.webhookid)!;
 
   webhook.send(embed);
-};
+}
