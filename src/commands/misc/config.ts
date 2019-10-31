@@ -34,11 +34,11 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
   },
   togglelog: (value: string): boolean | string[] => {
     if (![ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
-    return Boolean(value);
+    return value === 'true';
   },
   togglewelcome: (value: string): boolean | string[] => {
     if (![ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
-    return Boolean(value);
+    return value === 'true';
   }
 };
 
@@ -71,7 +71,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   let value = args.slice(2).join(' ');
   const filter = filters[table](value, client, message.guild!);
   if (filter instanceof Array) return client.functions.badArg(message, 2, filter[0]);
-  value = filter.toString();
+  value = filter;
 
   const newRow: { [ key: string ]: any } = { guildid: message.guild!.id };
   newRow[defaultValues[table][0]] = value;
@@ -79,7 +79,7 @@ export async function run (client: ReknownClient, message: Message, args: string
     guildid: message.guild!.id
   });
 
-  message.channel.send(`Successfully updated \`${table}\` to \`\`${client.escInline(value)}\`\`.`);
+  message.channel.send(`Successfully updated \`${table}\` to \`\`${client.escInline(value.toString())}\`\`.`);
 }
 
 export const help = {
