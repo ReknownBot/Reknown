@@ -1,7 +1,7 @@
 import ReknownClient from '../../structures/client';
 import { DMChannel, GuildMember, Message, User } from 'discord.js';
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
   if (!message.channel.permissionsFor(client.user!)!.has('BAN_MEMBERS')) return client.functions.noClientPerms(message, [ 'Ban Members' ], message.channel);
   if (!message.member!.hasPermission('BAN_MEMBERS')) return client.functions.noPerms(message, [ 'Ban Members' ]);
@@ -20,9 +20,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   if (!(user instanceof User)) return client.functions.badArg(message, 1, `I did not find a user by that query (${client.escMD(args[0])}).`);
   message.guild!.members.ban(user, { reason: reason });
   message.channel.send(`Successfully banned user ${client.escMD(user.tag)} (ID: ${user.id})${reason ? ` for reason \`\`${client.escInline(reason)}\`\`` : ''}.`);
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [ 'banish' ],
   category: 'Moderation',
   desc: 'Bans a user.',

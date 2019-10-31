@@ -1,7 +1,7 @@
 import { MusicObject } from 'ReknownBot';
 
-module.exports = (music: MusicObject) => {
+export function run (music: MusicObject) {
   music.queue = [];
   music.player!.leave();
   music.player!.stop();
-};
+}

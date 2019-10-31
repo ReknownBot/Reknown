@@ -1,3 +1,5 @@
 import ReknownClient from '../structures/client';
 
-module.exports.run = (client: ReknownClient, err: Error) => console.log(err);
+export async function run (client: ReknownClient, err: Error) {
+  console.log(err);
+}

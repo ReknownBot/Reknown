@@ -19,9 +19,9 @@ async function sendLog (client: ReknownClient, guild: Guild, user: User) {
   client.functions.sendLog(client, embed, guild);
 }
 
-module.exports.run = async (client: ReknownClient, guild: Guild, user: User) => {
+export async function run (client: ReknownClient, guild: Guild, user: User) {
   if (!guild.available) return;
   if (user.id === client.user!.id) return;
 
   sendLog(client, guild, user);
-};
+}

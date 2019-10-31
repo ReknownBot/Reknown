@@ -3,7 +3,7 @@ import { Snowflake } from 'discord.js';
 
 const regexArr = [ /<@!?(\d{17,19})>/, /<@&(\d{17,19})>/, /<#(\d{17,19})>/ ];
 
-module.exports = (id: Snowflake, options: ParseMentionOptions) => {
+export function run (id: Snowflake, options: ParseMentionOptions) {
   if (!parseInt(id) && !regexArr.some(regex => regex.test(id))) {
     if ([ 'member', 'user' ].includes(options.type)) return Promise.reject(null);
     return null;
@@ -23,4 +23,4 @@ module.exports = (id: Snowflake, options: ParseMentionOptions) => {
     case 'channel': return options.guild!.channels.find(c => c.id === parsedId && c.type === cType);
     default: return false;
   }
-};
+}

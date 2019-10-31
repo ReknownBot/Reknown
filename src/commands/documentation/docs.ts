@@ -13,7 +13,7 @@ const sources = [
   '11.5-dev'
 ];
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const q = args[1];
@@ -29,9 +29,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
 
   const embed = new MessageEmbed(raw);
   message.channel.send({ embed: embed });
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [],
   category: 'Documentation',
   desc: 'Displays documentation for Discord.JS.',
