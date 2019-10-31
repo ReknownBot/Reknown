@@ -15,8 +15,8 @@ function sendLog (client: ReknownClient, oldRole: Role, newRole: Role) {
   client.functions.sendLog(client, embed, newRole.guild);
 }
 
-module.exports.run = (client: ReknownClient, oldRole: Role, newRole: Role) => {
+export async function run (client: ReknownClient, oldRole: Role, newRole: Role) {
   if (!newRole.guild.available) return;
 
   sendLog(client, oldRole, newRole);
-};
+}

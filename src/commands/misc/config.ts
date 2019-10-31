@@ -42,7 +42,7 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
   }
 };
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
 
   if (!args[1]) {
@@ -80,9 +80,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   });
 
   message.channel.send(`Successfully updated \`${table}\` to \`\`${client.escInline(value)}\`\`.`);
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [ 'configuration' ],
   category: 'Miscellaneous',
   desc: 'Shows or changes configuration values for the server.',

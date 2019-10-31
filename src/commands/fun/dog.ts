@@ -7,7 +7,7 @@ interface DogResult {
   status: string;
 }
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const json: DogResult = await fetch('https://dog.ceo/api/breeds/image/random').then(res => res.json());
@@ -20,9 +20,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
     .setTitle('Doggo!');
 
   message.channel.send(embed);
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [],
   category: 'Fun',
   desc: 'Shows a picture of a dog.',

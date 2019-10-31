@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 import ReknownClient from '../../structures/client';
 
-module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'either "f" or "c" to convert to.');
   if (![ 'f', 'c' ].includes(args[1].toLowerCase())) return client.functions.badArg(message, 1, 'The value must be either "f" or "c".');
   const convertTo = args[1].toLowerCase();
@@ -13,9 +13,9 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
   const newVal = convertTo === 'f' ? val * (9 / 5) + 32 : (val - 32) * (5 / 9);
 
   message.channel.send(`The result is **${newVal}** degrees ${convertTo === 'f' ? 'fahrenheit' : 'celsius'}.`);
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [ 'temp' ],
   category: 'Utility',
   desc: 'Converts temperature from fahrenheit to celsius and vice-versa.',

@@ -3,7 +3,7 @@ import { MusicObject } from 'ReknownBot';
 import { Track } from 'lavalink';
 import { ClientUser, DMChannel, Message, MessageEmbed, Util } from 'discord.js';
 
-module.exports = (music: MusicObject, message: Message, song: Track, user: ClientUser) => {
+export function run (music: MusicObject, message: Message, song: Track, user: ClientUser) {
   if (message.channel instanceof DMChannel) return;
   if (!message.channel.permissionsFor(user)!.has('EMBED_LINKS')) {
     if (music.queue.length === 0) return message.channel.send(`**Now Playing:** ${Util.escapeMarkdown(song.info.title)} by \`${Util.escapeMarkdown(song.info.author)}\``);
@@ -22,4 +22,4 @@ module.exports = (music: MusicObject, message: Message, song: Track, user: Clien
   if (thumbnail) embed.setThumbnail(thumbnail);
 
   message.channel.send(embed);
-};
+}

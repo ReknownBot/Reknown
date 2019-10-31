@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 import ReknownClient from '../structures/client';
 
-module.exports.run = async (client: ReknownClient, message: Message) => {
+export async function run (client: ReknownClient, message: Message) {
   if (message.author!.bot || message.guild && !message.guild.available) return;
   if (message.guild && message.member!.partial) await message.member!.fetch();
   if (message.guild && message.guild.me!.partial) await message.guild.me!.fetch();
@@ -18,4 +18,4 @@ module.exports.run = async (client: ReknownClient, message: Message) => {
   cmd = client.aliases[cmd];
 
   client.commands.get(cmd)!.run(client, message, args);
-};
+}

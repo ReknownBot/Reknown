@@ -1,7 +1,7 @@
 import ReknownClient from '../../structures/client';
 import { DMChannel, Message, MessageEmbed } from 'discord.js';
 
-module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
 
   const music = client.music[message.guild!.id];
@@ -28,9 +28,9 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
     music.queue = [ music.queue[0] ];
     message.channel.send('Successfully cleared the queue.');
   }
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [ 'songlist' ],
   category: 'Music',
   desc: 'Shows the queue.',

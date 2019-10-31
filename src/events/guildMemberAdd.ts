@@ -36,10 +36,10 @@ async function welcomeMsg (client: ReknownClient, member: GuildMember) {
   channel.send(embed);
 }
 
-module.exports.run = (client: ReknownClient, member: GuildMember) => {
+export async function run (client: ReknownClient, member: GuildMember) {
   if (!member.guild.available) return;
   if (member.id === client.user!.id) return;
 
   sendLog(client, member);
   welcomeMsg(client, member);
-};
+}

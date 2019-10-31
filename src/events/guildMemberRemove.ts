@@ -36,11 +36,11 @@ async function goodbyeMsg (client: ReknownClient, member: GuildMember) {
   channel.send(embed);
 }
 
-module.exports.run = async (client: ReknownClient, member: GuildMember) => {
+export async function run (client: ReknownClient, member: GuildMember) {
   if (!member.guild.available) return;
   if (member.id === client.user!.id) return;
   if (member.user.partial) member.user = await member.user.fetch();
 
   sendLog(client, member);
   goodbyeMsg(client, member);
-};
+}
