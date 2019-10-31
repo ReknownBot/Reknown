@@ -1,7 +1,7 @@
 import ReknownClient from '../../structures/client';
 import { DMChannel, GuildMember, Message } from 'discord.js';
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
   if (!message.channel.permissionsFor(client.user!)!.has('KICK_MEMBERS')) return client.functions.noClientPerms(message, [ 'Kick Members' ], message.channel);
   if (!message.member!.hasPermission('KICK_MEMBERS')) return client.functions.noPerms(message, [ 'Kick Members' ]);
@@ -14,9 +14,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   if (!member.kickable) return client.functions.badArg(message, 1, 'I do not have enough powers to kick that member. Please check my permissions and my role position. Note that I cannot kick owners.');
   member.kick(reason);
   message.channel.send(`Successfully kicked member ${client.escMD(member.user.tag)} (ID: ${member.id})${reason ? ` for reason \`\`${client.escInline(reason)}\`\`` : ''}.`);
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [],
   category: 'Moderation',
   desc: 'Kicks a user.',

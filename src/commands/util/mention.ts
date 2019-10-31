@@ -1,7 +1,7 @@
 import ReknownClient from '../../structures/client';
 import { DMChannel, Message } from 'discord.js';
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
   if (!message.guild!.me!.hasPermission('MANAGE_ROLES')) return client.functions.noClientPerms(message, [ 'Manage Roles' ]);
   if (!args[1]) return client.functions.noArg(message, 1, 'a role to mention.');
@@ -19,9 +19,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   }
   await message.channel.send(`**Mentioned by ${client.escMD(message.author.tag)}** - ${role}`);
   if (!mentionable) await role.setMentionable(false);
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [],
   category: 'Utility',
   desc: 'Mentions a provided role in the current channel.',

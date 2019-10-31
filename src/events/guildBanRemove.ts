@@ -13,10 +13,10 @@ function sendLog (client: ReknownClient, guild: Guild, user: User) {
   client.functions.sendLog(client, embed, guild);
 }
 
-module.exports.run = async (client: ReknownClient, guild: Guild, user: User | PartialUser) => {
+export async function run (client: ReknownClient, guild: Guild, user: User | PartialUser) {
   if (!guild.available) return;
   if (user.id === client.user!.id) return;
   if (user.partial) user = await user.fetch();
 
   sendLog(client, guild, user);
-};
+}

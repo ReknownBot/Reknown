@@ -1,7 +1,7 @@
 import ReknownClient from '../../structures/client';
 import { DMChannel, Message } from 'discord.js';
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
   if (!args[1]) {
     const prefix = await client.functions.getPrefix(client, message.guild!.id);
@@ -19,9 +19,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
   });
 
   message.channel.send(`Successfully updated the prefix to \`\`${client.escInline(prefix)}\`\`.`);
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [],
   category: 'Miscellaneous',
   desc: 'Displays the prefix of the server.',

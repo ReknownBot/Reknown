@@ -2,7 +2,7 @@ import { EqualizerBand } from 'lavalink';
 import ReknownClient from '../../structures/client';
 import { DMChannel, Message } from 'discord.js';
 
-module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
 
   const music = client.music[message.guild!.id];
@@ -30,9 +30,9 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
   music.equalizer = eq;
   music.player.setEqualizer(bands);
   message.channel.send(`Successfully set the equalizer to \`${eq * 100}\`.`);
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [ 'eq' ],
   category: 'Music',
   desc: 'Displays or changes the equalizer.',

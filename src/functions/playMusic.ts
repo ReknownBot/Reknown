@@ -2,7 +2,7 @@ import { Guild } from 'discord.js';
 import { Track } from 'lavalink';
 import { MusicObject, ReknownClient } from 'ReknownBot';
 
-module.exports = async (client: ReknownClient, guild: Guild, music: MusicObject, song: Track, ended?: boolean) => {
+export async function run (client: ReknownClient, guild: Guild, music: MusicObject, song: Track, ended?: boolean) {
   if (!ended) {
     music.queue.push(song);
     if (music.queue.length > 1) return;
@@ -17,7 +17,8 @@ module.exports = async (client: ReknownClient, guild: Guild, music: MusicObject,
     if (music.looping) music.queue.push(music.queue.shift()!);
     else music.queue.shift();
 
+    // eslint-disable-next-line import/no-commonjs
     if (music.queue.length > 0) return setTimeout(module.exports, 500, client, guild, music, music.queue[0], true);
     client.functions.endSession(music);
   });
-};
+}

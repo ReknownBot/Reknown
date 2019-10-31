@@ -1,7 +1,7 @@
 import ReknownClient from '../../structures/client';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-module.exports.run = async (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const prefix = message.guild ? await client.functions.getPrefix(client, message.guild.id) : client.config.prefix;
@@ -53,9 +53,9 @@ module.exports.run = async (client: ReknownClient, message: Message, args: strin
     .setTitle(`${category} Category Information`);
 
   message.channel.send(embed);
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [ 'commands', 'command' ],
   category: 'Miscellaneous',
   desc: 'Displays the help menu or shows information about a command or category.',

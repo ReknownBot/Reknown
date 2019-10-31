@@ -3,7 +3,7 @@ import atob from 'atob';
 import btoa from 'btoa';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
-module.exports.run = (client: ReknownClient, message: Message, args: string[]) => {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const method = args[1] ? args[1].toLowerCase() : null;
@@ -25,9 +25,9 @@ module.exports.run = (client: ReknownClient, message: Message, args: string[]) =
     .setTitle('Output');
 
   message.channel.send(embed);
-};
+}
 
-module.exports.help = {
+export const help = {
   aliases: [],
   category: 'Utility',
   desc: 'Encodes or decodes into Base64.',

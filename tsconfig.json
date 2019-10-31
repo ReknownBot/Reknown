@@ -6,7 +6,6 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./build",
-    "pretty": true,
     "resolveJsonModule": true,
     "rootDir": "./src",
     "skipLibCheck": true,

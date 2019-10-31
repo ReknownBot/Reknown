@@ -63,11 +63,11 @@ function usernameUpdate (client: ReknownClient, oldUser: User, newUser: User, gu
   client.functions.sendLog(client, embed, guild);
 }
 
-module.exports.run = (client: ReknownClient, oldMember: GuildMember, newMember: GuildMember) => {
+export async function run (client: ReknownClient, oldMember: GuildMember, newMember: GuildMember) {
   if (!newMember.guild.available) return;
 
   avatarUpdate(client, oldMember.user, newMember.user, newMember.guild);
   nickUpdate(client, oldMember, newMember);
   roleUpdate(client, oldMember, newMember);
   usernameUpdate(client, oldMember.user, newMember.user, newMember.guild);
-};
+}
