@@ -21,7 +21,8 @@ module.exports = exports = {
     },
 
     "plugins": [
-        "@typescript-eslint/eslint-plugin"
+        "@typescript-eslint/eslint-plugin",
+        "import"
     ],
 
     "rules": {
@@ -228,6 +229,8 @@ module.exports = exports = {
         "@typescript-eslint/explicit-function-return-type": OFF,
         "@typescript-eslint/no-explicit-any": OFF,
         "@typescript-eslint/no-non-null-assertion": OFF,
-        "@typescript-eslint/no-unused-vars": [ WARN, { args: "none" }]
+        "@typescript-eslint/no-unused-vars": [ WARN, { args: "none" }],
+
+        "import/no-commonjs": [ ERROR, { allowRequire: true } ]
     }
 };
