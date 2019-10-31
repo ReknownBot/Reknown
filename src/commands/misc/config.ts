@@ -71,7 +71,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   let value = args.slice(2).join(' ');
   const filter = filters[table](value, client, message.guild!);
   if (filter instanceof Array) return client.functions.badArg(message, 2, filter[0]);
-  value = filter;
+  value = filter.toString();
 
   const newRow: { [ key: string ]: any } = { guildid: message.guild!.id };
   newRow[defaultValues[table][0]] = value;
