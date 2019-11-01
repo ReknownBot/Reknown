@@ -1,5 +1,5 @@
 import ReknownClient from '../../structures/client';
-import { DMChannel, GuildMember, Message, User, TextChannel } from 'discord.js';
+import { GuildMember, Message, TextChannel, User } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!message.channel.permissionsFor(client.user!)!.has('BAN_MEMBERS')) return client.functions.noClientPerms(message, [ 'Ban Members' ], message.channel);

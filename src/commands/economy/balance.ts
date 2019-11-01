@@ -1,5 +1,5 @@
-import { ReknownClient } from "ReknownBot";
-import { Message } from "discord.js";
+import { Message } from 'discord.js';
+import { ReknownClient } from 'ReknownBot';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const user = args[1] ? await client.functions.parseMention(args[1], {
@@ -22,4 +22,4 @@ export const help = {
   desc: 'Displays a user\'s balance.',
   dm: true,
   usage: 'balance [User]'
-}
+};
