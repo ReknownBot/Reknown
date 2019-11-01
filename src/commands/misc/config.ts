@@ -58,7 +58,9 @@ export async function run (client: ReknownClient, message: Message & { channel: 
 
   const table = args[1].toLowerCase();
   if (!Object.keys(configs).includes(table)) return client.functions.badArg(message, 1, 'That configuration value does not exist.');
-  const row = (await client.query(`SELECT * FROM ${table} WHERE guildid = $1`, [ message.guild!.id ])).rows[0];
+  const row = await client.functions.getRow(client, table, {
+    guildid: message.guild!.id
+  });
 
   if (!args[2]) {
     const value: number | string | boolean = row ? row[Object.keys(row).find(r => r !== 'guildid')!] : defaultValues[table][1];
