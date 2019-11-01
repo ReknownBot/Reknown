@@ -1,4 +1,4 @@
-import { ReknownClient } from "ReknownBot";
+import { ReknownClient } from 'ReknownBot';
 
 export async function run (client: ReknownClient, table: string, filters: { [ rowName: string ]: any }) {
   const query = `SELECT * FROM ${table} WHERE ${Object.keys(filters).map((rowName, i) => `${rowName} = $${i + 1}`).join(' AND ')}`;

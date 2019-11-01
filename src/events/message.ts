@@ -1,5 +1,5 @@
-import { Message, DMChannel } from 'discord.js';
 import ReknownClient from '../structures/client';
+import { DMChannel, Message } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message) {
   if (message.author!.bot || message.guild && !message.guild.available) return;
