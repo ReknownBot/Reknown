@@ -1,21 +1,6 @@
 import ReknownClient from '../structures/client';
 import { Guild, GuildMember, MessageEmbed, User } from 'discord.js';
 
-function avatarUpdate (client: ReknownClient, oldUser: User, newUser: User, guild: Guild) {
-  if (oldUser.displayAvatarURL() === newUser.displayAvatarURL()) return;
-
-  const embed = new MessageEmbed()
-    .setColor(client.config.embedColor)
-    .setDescription(`[Old Avatar](${oldUser.displayAvatarURL({ size: 2048 })}) => [New Avatar](${newUser.displayAvatarURL({ size: 2048 })})`)
-    .setFooter(`ID: ${newUser.id} | Tip: The larger one is the new one!`)
-    .setImage(newUser.displayAvatarURL({ size: 2048 }))
-    .setThumbnail(oldUser.displayAvatarURL({ size: 2048 }))
-    .setTimestamp()
-    .setTitle('Avatar Updated');
-
-  client.functions.sendLog(client, embed, guild);
-}
-
 function nickUpdate (client: ReknownClient, oldMember: GuildMember, newMember: GuildMember) {
   if (oldMember.displayName === newMember.displayName) return;
 
@@ -66,7 +51,6 @@ function usernameUpdate (client: ReknownClient, oldUser: User, newUser: User, gu
 export async function run (client: ReknownClient, oldMember: GuildMember, newMember: GuildMember) {
   if (!newMember.guild.available) return;
 
-  avatarUpdate(client, oldMember.user, newMember.user, newMember.guild);
   nickUpdate(client, oldMember, newMember);
   roleUpdate(client, oldMember, newMember);
   usernameUpdate(client, oldMember.user, newMember.user, newMember.guild);
