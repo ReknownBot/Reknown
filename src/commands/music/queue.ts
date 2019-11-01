@@ -1,9 +1,7 @@
 import ReknownClient from '../../structures/client';
-import { DMChannel, Message, MessageEmbed } from 'discord.js';
+import { DMChannel, Message, MessageEmbed, TextChannel } from 'discord.js';
 
-export async function run (client: ReknownClient, message: Message, args: string[]) {
-  if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
-
+export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   const music = client.music[message.guild!.id];
   if (!music || !music.queue || music.queue.length === 0) return message.reply('The queue is empty.');
 

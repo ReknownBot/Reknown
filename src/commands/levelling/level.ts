@@ -1,8 +1,7 @@
 import ReknownClient from '../../structures/client';
-import { DMChannel, GuildMember, Message, MessageEmbed } from 'discord.js';
+import { DMChannel, GuildMember, Message, MessageEmbed, TextChannel } from 'discord.js';
 
-export async function run (client: ReknownClient, message: Message, args: string[]) {
-  if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
+export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
   const member = args[1] ? await client.functions.parseMention(args[1], { guild: message.guild!, type: 'member' }).catch(() => false) : message.member;

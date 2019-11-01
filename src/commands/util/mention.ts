@@ -1,8 +1,7 @@
 import ReknownClient from '../../structures/client';
-import { DMChannel, Message } from 'discord.js';
+import { DMChannel, Message, TextChannel } from 'discord.js';
 
-export async function run (client: ReknownClient, message: Message, args: string[]) {
-  if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
+export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!message.guild!.me!.hasPermission('MANAGE_ROLES')) return client.functions.noClientPerms(message, [ 'Manage Roles' ]);
   if (!args[1]) return client.functions.noArg(message, 1, 'a role to mention.');
   const role = message.guild!.roles.find(r => r.name === args.slice(1).join(' ')) || message.guild!.roles.get(args[1]);

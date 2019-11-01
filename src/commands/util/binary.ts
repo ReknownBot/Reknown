@@ -64,5 +64,6 @@ export const help = {
   aliases: [ 'binary' ],
   category: 'Utility',
   desc: 'Either decodes or encodes into binary.',
+  dm: true,
   usage: 'binary <"decode"/"encode"> <Input>'
 };

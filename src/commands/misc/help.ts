@@ -34,6 +34,7 @@ export async function run (client: ReknownClient, message: Message, args: string
     const embed = new MessageEmbed()
       .addField('Usage', prefix + cmd.help.usage, true)
       .addField('Category', cmd.help.category, true)
+      .addField('Usable in DMs', cmd.help.dm ? 'Yes' : 'No', true)
       .setColor(client.config.embedColor)
       .setDescription(cmd.help.desc)
       .setFooter('[Arg] = Optional | <Arg> = Required', message.author.displayAvatarURL())
@@ -59,5 +60,6 @@ export const help = {
   aliases: [ 'commands', 'command' ],
   category: 'Miscellaneous',
   desc: 'Displays the help menu or shows information about a command or category.',
+  dm: true,
   usage: 'help [Command or Category]'
 };

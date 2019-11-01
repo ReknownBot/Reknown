@@ -58,5 +58,6 @@ export const help = {
   aliases: [],
   category: 'Fun',
   desc: 'Gets a variety of stats from the Minecraft server [Hypixel](https://hypixel.net/).',
+  dm: true,
   usage: 'hypixel <"player"> <In-Game Name>'
 };

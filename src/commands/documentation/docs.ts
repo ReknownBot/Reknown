@@ -35,5 +35,6 @@ export const help = {
   aliases: [],
   category: 'Documentation',
   desc: 'Displays documentation for Discord.JS.',
+  dm: true,
   usage: 'docs <Query> [Branch]'
 };
