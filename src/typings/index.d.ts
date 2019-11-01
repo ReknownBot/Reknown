@@ -43,6 +43,7 @@ declare module 'ReknownBot' {
     aliases: string[];
     category: CommandCategory;
     desc: string;
+    dm?: true;
     private?: boolean;
     usage: string;
   }

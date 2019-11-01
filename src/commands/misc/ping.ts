@@ -10,5 +10,6 @@ export const help = {
   aliases: [ 'pong' ],
   category: 'Miscellaneous',
   desc: 'Displays the ping of the bot.',
+  dm: true,
   usage: 'ping'
 };

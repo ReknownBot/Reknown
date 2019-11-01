@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, DMChannel } from 'discord.js';
 import ReknownClient from '../structures/client';
 
 export async function run (client: ReknownClient, message: Message) {
@@ -17,5 +17,7 @@ export async function run (client: ReknownClient, message: Message) {
   if (!Object.keys(client.aliases).includes(cmd)) return;
   cmd = client.aliases[cmd];
 
-  client.commands.get(cmd)!.run(client, message, args);
+  const cmdInfo = client.commands.get(cmd)!;
+  if (message.channel instanceof DMChannel && !cmdInfo.help.dm) return message.reply('This command is only available in servers.');
+  cmdInfo.run(client, message, args);
 }

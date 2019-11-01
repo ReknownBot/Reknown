@@ -13,5 +13,6 @@ export const help = {
   aliases: [],
   category: 'Fun',
   desc: 'Makes a cow say something.',
+  dm: true,
   usage: 'cowsay <Message>'
 };

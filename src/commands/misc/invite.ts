@@ -9,5 +9,6 @@ export const help = {
   aliases: [ 'botinvite' ],
   category: 'Miscellaneous',
   desc: 'Provides you with the bot invite.',
+  dm: true,
   usage: 'invite'
 };
