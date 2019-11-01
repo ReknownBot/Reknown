@@ -1,5 +1,5 @@
 import ReknownClient from '../../structures/client';
-import { DMChannel, Message, TextChannel } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!message.guild!.me!.hasPermission('MANAGE_ROLES')) return client.functions.noClientPerms(message, [ 'Manage Roles' ]);

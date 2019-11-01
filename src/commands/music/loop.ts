@@ -1,7 +1,7 @@
 import ReknownClient from '../../structures/client';
 import { Message, TextChannel } from 'discord.js';
 
-export async function run (client: ReknownClient, message: Message & { channel: TextChannel } , args: string[]) {
+export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   let music = client.music[message.guild!.id];
   if (!music) music = client.music[message.guild!.id] = {
     equalizer: 0,

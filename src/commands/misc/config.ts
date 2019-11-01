@@ -1,6 +1,6 @@
 import ReknownClient from '../../structures/client';
 import { prefix } from '../../config.json';
-import { DMChannel, Guild, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Guild, Message, MessageEmbed, TextChannel } from 'discord.js';
 
 const configs: { [ key: string ]: string } = {
   levelmodifier: 'The level modifier for levelling up.',
