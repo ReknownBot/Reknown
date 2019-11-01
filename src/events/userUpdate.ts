@@ -1,5 +1,5 @@
-import { ReknownClient } from "ReknownBot";
-import { User, MessageEmbed, Guild } from "discord.js";
+import { ReknownClient } from 'ReknownBot';
+import { Guild, MessageEmbed, User } from 'discord.js';
 
 function avatarUpdate (client: ReknownClient, oldUser: User, newUser: User, guild: Guild) {
   if (oldUser.displayAvatarURL() === newUser.displayAvatarURL()) return;
