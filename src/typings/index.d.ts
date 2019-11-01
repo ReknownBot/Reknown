@@ -8,6 +8,7 @@ declare module 'ReknownBot' {
     public endSession(music: MusicObject): void;
     public formatNum(num: number): string;
     public getPrefix(client: ReknownClient, id: Snowflake): Promise<string>;
+    public getRow(client: ReknownClient, table: string, filters: { [ rowName: string ]: any }): Promise<any>;
     public noArg(message: Message, argNum: number, desc: string): void;
     public noClientPerms(message: Message, perms: string[], channel?: GuildChannel): void;
     public noPerms(message: Message, perms: string[], channel?: GuildChannel): void;
@@ -25,6 +26,7 @@ declare module 'ReknownBot' {
   }
 
   type CommandCategory = 'Documentation'
+      | 'Economy'
       | 'Fun'
       | 'Levelling'
       | 'Miscellaneous'

@@ -7,7 +7,10 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   const member = args[1] ? await client.functions.parseMention(args[1], { guild: message.guild!, type: 'member' }).catch(() => false) : message.member;
   if (!(member instanceof GuildMember)) return client.functions.badArg(message, 1, 'I did not find a member by that query.');
 
-  const row = (await client.query('SELECT * FROM scores WHERE userid = $1 AND guildid = $2', [ member.id, message.guild!.id ])).rows[0];
+  const row = await client.functions.getRow(client, 'scores', {
+    userid: member.id,
+    guildid: message.guild!.id
+  })
   const points = row ? row.points : 0;
   const level = row ? row.level : 0;
   const reqPoints = client.functions.formatNum(Math.pow((level + 1) / 0.2, 2));
