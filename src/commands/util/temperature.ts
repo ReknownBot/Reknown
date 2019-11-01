@@ -19,5 +19,6 @@ export const help = {
   aliases: [ 'temp' ],
   category: 'Utility',
   desc: 'Converts temperature from fahrenheit to celsius and vice-versa.',
+  dm: true,
   usage: 'temperature <"f"/"c"> <Input>'
 };

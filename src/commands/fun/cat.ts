@@ -25,5 +25,6 @@ export const help = {
   aliases: [],
   category: 'Fun',
   desc: 'Shows a picture of a cat.',
+  dm: true,
   usage: 'cat'
 };

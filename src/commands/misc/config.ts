@@ -1,6 +1,6 @@
 import ReknownClient from '../../structures/client';
 import { prefix } from '../../config.json';
-import { DMChannel, Guild, Message, MessageEmbed } from 'discord.js';
+import { DMChannel, Guild, Message, MessageEmbed, TextChannel } from 'discord.js';
 
 const configs: { [ key: string ]: string } = {
   levelmodifier: 'The level modifier for levelling up.',
@@ -42,9 +42,7 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
   }
 };
 
-export async function run (client: ReknownClient, message: Message, args: string[]) {
-  if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
-
+export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!args[1]) {
     if (!message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 

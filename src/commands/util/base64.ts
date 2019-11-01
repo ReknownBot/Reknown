@@ -31,5 +31,6 @@ export const help = {
   aliases: [],
   category: 'Utility',
   desc: 'Encodes or decodes into Base64.',
+  dm: true,
   usage: 'base64 <"decode"/"encode"> <Input>'
 };

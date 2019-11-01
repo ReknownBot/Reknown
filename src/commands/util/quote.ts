@@ -39,5 +39,6 @@ export const help = {
   aliases: [ 'quotemessage' ],
   category: 'Utility',
   desc: 'Quotes a message. You must have access to the channel.',
+  dm: true,
   usage: 'quote <Message URL>'
 };

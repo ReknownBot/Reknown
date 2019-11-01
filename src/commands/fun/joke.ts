@@ -21,5 +21,6 @@ export const help = {
   aliases: [],
   category: 'Fun',
   desc: 'Tells you a joke.',
+  dm: true,
   usage: 'joke'
 };

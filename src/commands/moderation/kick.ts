@@ -1,8 +1,7 @@
 import ReknownClient from '../../structures/client';
-import { DMChannel, GuildMember, Message } from 'discord.js';
+import { DMChannel, GuildMember, Message, TextChannel } from 'discord.js';
 
-export async function run (client: ReknownClient, message: Message, args: string[]) {
-  if (message.channel instanceof DMChannel) return message.reply('This command is only available in servers.');
+export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!message.channel.permissionsFor(client.user!)!.has('KICK_MEMBERS')) return client.functions.noClientPerms(message, [ 'Kick Members' ], message.channel);
   if (!message.member!.hasPermission('KICK_MEMBERS')) return client.functions.noPerms(message, [ 'Kick Members' ]);
 
