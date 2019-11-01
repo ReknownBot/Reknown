@@ -16,15 +16,21 @@ function sendLog (client: ReknownClient, member: GuildMember) {
 }
 
 async function goodbyeMsg (client: ReknownClient, member: GuildMember) {
-  const toggledRow: ToggleRow = (await client.query('SELECT bool FROM togglewelcome WHERE guildid = $1', [ member.guild.id ])).rows[0];
+  const toggledRow: ToggleRow | null = await client.functions.getRow(client, 'togglewelcome', {
+    guildid: member.guild.id
+  });
   if (!toggledRow || !toggledRow.bool) return;
 
-  const channelRow: WelcomeChannelRow = (await client.query('SELECT channel FROM welcomechannel WHERE guildid = $1', [ member.guild.id ])).rows[0];
+  const channelRow: WelcomeChannelRow | null = await client.functions.getRow(client, 'welcomechannel', {
+    guildid: member.guild.id
+  });
   const channel = (channelRow ? member.guild.channels.find(c => c.id === channelRow.channel && c.type === 'text') : member.guild.channels.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
 
-  const msgRow = (await client.query('SELECT msg FROM goodbyemsg WHERE guildid = $1', [ member.guild.id ])).rows[0];
+  const msgRow = await client.functions.getRow(client, 'goodbyemsg', {
+    guildid: member.guild.id
+  });
   const msg: string = msgRow ? msgRow.msg : '<User> has left **<Server>**. There are <MemberCount> members now.';
 
   const embed = new MessageEmbed()

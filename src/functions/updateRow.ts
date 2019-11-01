@@ -4,7 +4,7 @@ export async function run (client: ReknownClient, table: string, changes: { [ co
   const columns = Object.keys(changes);
   const values = Object.values(changes);
   if (table === 'prefix') client.prefixes[changes.guildid] = changes.customprefix;
-  const row = (await client.query(`SELECT * FROM ${table} WHERE ${Object.keys(filters).map((c, i) => `${c} = $${i + 1}`).join(' AND ')}`, Object.values(filters))).rows[0];
+  const row = await client.functions.getRow(client, table, filters);
   if (row) client.query(`UPDATE ${table} SET ${columns.map((c, i) => `${c} = $${i + 1}`)} WHERE ${Object.keys(filters).map((c, i) => `${c} = $${i + columns.length + 1}`).join(' AND ')}`, [ ...values, ...Object.values(filters) ]);
   else client.query(`INSERT INTO ${table} (${columns}) VALUES (${columns.map((c, i) => `$${i + 1}`)})`, values);
 }
