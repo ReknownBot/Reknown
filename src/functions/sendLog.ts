@@ -1,21 +1,22 @@
 import ReknownClient from '../structures/client';
 import { Guild, MessageEmbed, TextChannel } from 'discord.js';
 import { LogChannelRow, ToggleRow, WebhookRow } from 'ReknownBot';
+import { tables } from '../Constants';
 
 export async function run (client: ReknownClient, embed: MessageEmbed, guild: Guild) {
-  const toggledRow: ToggleRow | null = await client.functions.getRow(client, 'togglelog', {
+  const toggledRow: ToggleRow | null = await client.functions.getRow(client, tables.LOGTOGGLE, {
     guildid: guild.id
   });
   if (!toggledRow || !toggledRow.bool) return;
 
-  const channelRow: LogChannelRow | null = await client.functions.getRow(client, 'logchannel', {
+  const channelRow: LogChannelRow | null = await client.functions.getRow(client, tables.LOGCHANNEL, {
     guildid: guild.id
   });
   const channel = (channelRow ? client.channels.get(channelRow.channelid) : guild.channels.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has('MANAGE_WEBHOOKS')) return;
   const webhooks = await channel.fetchWebhooks();
-  let webhookRow: WebhookRow | null = await client.functions.getRow(client, 'logwebhook', {
+  let webhookRow: WebhookRow | null = await client.functions.getRow(client, tables.LOGWEBHOOK, {
     channelid: channel.id
   });
   let webhook;
@@ -25,8 +26,8 @@ export async function run (client: ReknownClient, embed: MessageEmbed, guild: Gu
       reason: 'Reknown Logs'
     });
     webhookRow = !webhookRow ?
-      (await client.query('INSERT INTO logwebhook (channelid, guildid, webhookid) VALUES ($1, $2, $3) RETURNING *', [ channel.id, guild.id, webhook.id ])).rows[0] :
-      (await client.query('UPDATE logwebhook SET webhookid = $1 WHERE channelid = $2 RETURNING *', [ webhook.id, channel.id ])).rows[0];
+      (await client.query(`INSERT INTO ${tables.LOGWEBHOOK} (channelid, guildid, webhookid) VALUES ($1, $2, $3) RETURNING *`, [ channel.id, guild.id, webhook.id ])).rows[0] :
+      (await client.query(`UPDATE ${tables.LOGWEBHOOK} SET webhookid = $1 WHERE channelid = $2 RETURNING *`, [ webhook.id, channel.id ])).rows[0];
   } else webhook = webhooks.get(webhookRow.webhookid)!;
 
   webhook.send(embed);
