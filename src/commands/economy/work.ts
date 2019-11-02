@@ -12,16 +12,18 @@ export async function run (client: ReknownClient, message: Message, args: string
   const cooldown = await client.functions.getRow(client, tables.WORKCOOLDOWN, {
     userid: message.author.id
   });
-  if (cooldown && cooldown.endsat >= Date.now()) return message.reply(`This command is still on cooldown! Please wait ${client.functions.getTime(cooldown.endsAt - Date.now())}.`);
+  if (cooldown && cooldown.endsat >= Date.now()) return message.reply(`This command is still on cooldown! Please wait ${client.functions.getTime(cooldown.endsat - Date.now())}.`);
   client.functions.updateRow(client, tables.WORKCOOLDOWN, {
-    endsat: Date.now() + ms('6h')
+    endsat: (Date.now() + ms('6h')).toString(),
+    userid: message.author.id
   }, {
     userid: message.author.id
   });
 
   const amt = Math.floor(Math.random() * 101) + 100;
   client.functions.updateRow(client, tables.ECONOMY, {
-    balance: registered.balance + amt
+    balance: registered.balance + amt,
+    userid: message.author.id
   }, {
     userid: message.author.id
   });
