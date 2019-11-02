@@ -1,9 +1,9 @@
+import { ReknownClient } from 'ReknownBot';
 import ms from 'ms';
-import { ReknownClient } from "ReknownBot";
-import { Message, MessageEmbed } from "discord.js";
 import { tables } from '../../Constants';
+import { Message, MessageEmbed } from 'discord.js';
 
-export async function run(client: ReknownClient, message: Message, args: string[]) {
+export async function run (client: ReknownClient, message: Message, args: string[]) {
   let registered = await client.functions.getRow(client, tables.ECONOMY, {
     userid: message.author.id
   });
@@ -42,4 +42,4 @@ export const help = {
   desc: 'Works to get money.',
   dm: true,
   usage: 'work'
-}
+};
