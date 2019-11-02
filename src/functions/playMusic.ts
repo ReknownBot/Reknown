@@ -18,7 +18,7 @@ export async function run (client: ReknownClient, guild: Guild, music: MusicObje
     else music.queue.shift();
 
     // eslint-disable-next-line import/no-commonjs
-    if (music.queue.length > 0) return setTimeout(module.exports, 500, client, guild, music, music.queue[0], true);
+    if (music.queue.length > 0) return setTimeout(module.exports.run, 500, client, guild, music, music.queue[0], true);
     client.functions.endSession(music);
   });
 }
