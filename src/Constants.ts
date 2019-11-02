@@ -33,4 +33,4 @@ export const tables = {
   WELCOMEMSG: 'welcomemsg',
   WELCOMETOGGLE: 'togglewelcome',
   WORKCOOLDOWN: 'work'
-}
+};

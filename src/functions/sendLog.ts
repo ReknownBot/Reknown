@@ -1,7 +1,7 @@
 import ReknownClient from '../structures/client';
+import { tables } from '../Constants';
 import { Guild, MessageEmbed, TextChannel } from 'discord.js';
 import { LogChannelRow, ToggleRow, WebhookRow } from 'ReknownBot';
-import { tables } from '../Constants';
 
 export async function run (client: ReknownClient, embed: MessageEmbed, guild: Guild) {
   const toggledRow: ToggleRow | null = await client.functions.getRow(client, tables.LOGTOGGLE, {
