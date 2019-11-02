@@ -1,5 +1,5 @@
-import { ReknownClient } from "ReknownBot";
-import { Snowflake } from "discord.js";
+import { ReknownClient } from 'ReknownBot';
+import { Snowflake } from 'discord.js';
 import { tables } from '../Constants';
 
 export async function run (client: ReknownClient, userid: Snowflake) {
