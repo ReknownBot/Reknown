@@ -1,5 +1,6 @@
 import { Message } from 'discord.js';
 import { ReknownClient } from 'ReknownBot';
+import { tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const user = args[1] ? await client.functions.parseMention(args[1], {
@@ -8,7 +9,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   }) : message.author;
   if (!user) return client.functions.badArg(message, 1, 'That user was not found.');
 
-  const row = await client.functions.getRow(client, 'economy', {
+  const row = await client.functions.getRow(client, tables.ECONOMY, {
     userid: user.id
   });
   if (!row || row.balance === 0) return message.reply('That user does not have a registered account or has no money.');

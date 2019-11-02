@@ -1,11 +1,12 @@
 import { LevelRow } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
-  const res = await client.query('SELECT * FROM scores WHERE guildid = $1 ORDER BY points DESC', [ message.guild!.id ]);
+  const res = await client.query(`SELECT * FROM ${tables.LEVELS} WHERE guildid = $1 ORDER BY points DESC`, [ message.guild!.id ]);
   const rows: LevelRow[] = res.rows;
   if (rows.length === 0) return message.reply('There was no levelling data found for this server.');
 
