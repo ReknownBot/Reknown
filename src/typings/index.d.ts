@@ -9,6 +9,7 @@ declare module 'ReknownBot' {
     public formatNum(num: number): string;
     public getPrefix(client: ReknownClient, id: Snowflake): Promise<string>;
     public getRow(client: ReknownClient, table: string, filters: { [ rowName: string ]: any }): Promise<any>;
+    public getTime(timeLeft: number): string;
     public noArg(message: Message, argNum: number, desc: string): void;
     public noClientPerms(message: Message, perms: string[], channel?: GuildChannel): void;
     public noPerms(message: Message, perms: string[], channel?: GuildChannel): void;
@@ -19,6 +20,7 @@ declare module 'ReknownBot' {
     public parseMention(id: Snowflake, options: ParseMentionOptions & { type: 'channel'; cType?: 'voice' }): VoiceChannel | null;
     public parseMention(id: Snowflake, options: ParseMentionOptions & { type: 'channel'; cType?: 'category' }): CategoryChannel | null;
     public playMusic(client: ReknownClient, guild: Guild, music: MusicObject, track: Track, ended?: boolean): void;
+    public register(client: ReknownClient, userid: Snowflake): Promise<EconomyRow>;
     public sendLog(client: ReknownClient, embed: MessageEmbed, guild: Guild): Promise<void>;
     public sendSong(music: MusicObject, message: Message, song: Track, user: ClientUser): void;
     public updateRow(client: ReknownClient, table: string, changes: { [ column: string ]: any }, filters: { [ column: string ]: any }): void;
@@ -39,6 +41,11 @@ declare module 'ReknownBot' {
     ownerID: Snowflake;
     prefix: string;
     suggestions: Snowflake;
+  }
+
+  interface EconomyRow {
+    balance: number;
+    userid: Snowflake;
   }
 
   interface HelpObj {

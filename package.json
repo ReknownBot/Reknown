@@ -47,6 +47,7 @@
     "@types/atob": "^2.1.2",
     "@types/btoa": "^1.2.3",
     "@types/dateformat": "^3.0.1",
+    "@types/ms": "^0.7.31",
     "@types/node": "^12.12.5",
     "@types/node-fetch": "^2.5.3",
     "@types/pg": "^7.11.2",
