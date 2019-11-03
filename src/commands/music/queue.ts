@@ -29,7 +29,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
 }
 
 export const help = {
-  aliases: [ 'songlist' ],
+  aliases: [ 'q', 'songlist' ],
   category: 'Music',
   desc: 'Shows the queue.',
   usage: 'queue ["clear"]'
