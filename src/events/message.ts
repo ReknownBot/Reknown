@@ -12,7 +12,7 @@ export async function run (client: ReknownClient, message: Message) {
   const regexp = new RegExp(`^<@!?${message.client.user!.id}> `);
   if (!message.content.startsWith(prefix) && !message.content.match(regexp) || message.content === prefix) return;
 
-  if (cooldowns.has(message.guild!.id)) return message.reply(`This server is still on command cooldown! Please wait a second and try again.`);
+  if (cooldowns.has(message.guild!.id)) return message.reply('This server is still on command cooldown! Please wait a second and try again.');
 
   let args: string[];
   if (message.content.match(regexp)) args = message.content.slice(message.content.match(regexp)![0].length).split(/ +/g);
