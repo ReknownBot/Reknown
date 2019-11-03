@@ -12,6 +12,10 @@ interface UUIDJson {
 const hypixelEndpoint = 'https://api.hypixel.net';
 const minecraftEndpoint = 'https://api.mojang.com';
 
+const REVERSE_PQ_PREFIX = -3.5;
+const REVERSE_CONST = 12.25;
+const GROWTH_DIVIDES_2 = 0.0008;
+
 let ratelimit = 0;
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
@@ -37,8 +41,9 @@ export async function run (client: ReknownClient, message: Message, args: string
       setTimeout(() => ratelimit -= 1, 60000);
       if (!hypixelJson.success) return client.functions.badArg(message, 2, 'That player has not joined the server yet, or the request has failed.');
       const { player } = hypixelJson;
+      const level = player.networkExp < 0 ? 1 : Math.floor(1 + REVERSE_PQ_PREFIX + Math.sqrt(REVERSE_CONST + GROWTH_DIVIDES_2 * player.networkExp));
       const embed = new MessageEmbed()
-        .addField('Network XP', client.functions.formatNum(player.networkExp || 0), true)
+        .addField('Network XP', `${client.functions.formatNum(player.networkExp || 0)} (Level: ${client.functions.formatNum(level)})`, true)
         .addField('Karma', client.functions.formatNum(player.karma || 0), true)
         .addField('Achievement Points', client.functions.formatNum(player.achievementPoints || 0), true)
         .addField('Total Votes', client.functions.formatNum(player.voting ? player.voting.total : 0), true)
