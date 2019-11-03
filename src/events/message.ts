@@ -21,7 +21,7 @@ export async function run (client: ReknownClient, message: Message) {
   if (!Object.keys(client.aliases).includes(cmd)) return;
 
   cooldowns.add(message.guild!.id);
-  setTimeout(cooldowns.delete, 1000, message.guild!.id);
+  setTimeout(() => cooldowns.delete(message.guild!.id), 1000);
 
   cmd = client.aliases[cmd];
   const cmdInfo = client.commands.get(cmd)!;
