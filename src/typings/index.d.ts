@@ -32,6 +32,7 @@ declare module 'ReknownBot' {
       | 'Fun'
       | 'Levelling'
       | 'Miscellaneous'
+      | 'Music'
       | 'Moderation'
       | 'Utility';
 
