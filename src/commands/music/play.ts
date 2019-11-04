@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { Message, TextChannel } from 'discord.js';
 
@@ -30,7 +31,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   client.functions.playMusic(client, message.guild!, music, song);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'p', 'playmusic' ],
   category: 'Music',
   desc: 'Plays music.',

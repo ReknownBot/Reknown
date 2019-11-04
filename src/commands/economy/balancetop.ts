@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
@@ -26,7 +27,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   message.channel.send(embed);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'baltop' ],
   category: 'Economy',
   desc: 'Shows the top 10 users with the most balance.',

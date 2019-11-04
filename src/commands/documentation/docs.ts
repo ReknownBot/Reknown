@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
 import { stringify } from 'querystring';
@@ -31,7 +32,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   message.channel.send({ embed: embed });
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [],
   category: 'Documentation',
   desc: 'Displays documentation for Discord.JS.',

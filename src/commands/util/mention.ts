@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { Message, TextChannel } from 'discord.js';
 
@@ -20,7 +21,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   if (!mentionable) await role.setMentionable(false);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [],
   category: 'Utility',
   desc: 'Mentions a provided role in the current channel.',

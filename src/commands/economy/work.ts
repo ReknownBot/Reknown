@@ -1,6 +1,6 @@
-import { ReknownClient } from 'ReknownBot';
 import ms from 'ms';
 import { tables } from '../../Constants';
+import { HelpObj, ReknownClient } from 'ReknownBot';
 import { Message, MessageEmbed } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
@@ -38,7 +38,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   message.channel.send(embed);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [],
   category: 'Economy',
   desc: 'Works to get money.',

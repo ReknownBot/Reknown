@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
 import { Message, TextChannel } from 'discord.js';
@@ -21,7 +22,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   message.channel.send(`Successfully updated the prefix to \`\`${client.escInline(prefix)}\`\`.`);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [],
   category: 'Miscellaneous',
   desc: 'Displays the prefix of the server.',
