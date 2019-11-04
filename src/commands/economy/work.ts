@@ -1,9 +1,11 @@
 import ms from 'ms';
 import { tables } from '../../Constants';
 import { HelpObj, ReknownClient } from 'ReknownBot';
-import { Message, MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
+  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
+
   let registered = await client.functions.getRow(client, tables.ECONOMY, {
     userid: message.author.id
   });
