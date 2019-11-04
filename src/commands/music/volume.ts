@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { Message, TextChannel } from 'discord.js';
 
@@ -18,7 +19,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   message.channel.send(`Successfully set the volume to **${volume}**.`);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'setvolume' ],
   category: 'Music',
   desc: 'Displays / Sets the volume.',

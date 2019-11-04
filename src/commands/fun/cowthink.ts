@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import { Message } from 'discord.js';
 import ReknownClient from '../../structures/client';
 import { think } from 'cowsay';
@@ -9,7 +10,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   message.channel.send(`\`\`\`${think({ text: msg })}\`\`\``);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [],
   category: 'Fun',
   desc: 'Makes a cow think of something.',

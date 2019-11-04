@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
 import { GuildMember, Message, MessageEmbed, TextChannel } from 'discord.js';
@@ -30,7 +31,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   message.channel.send(embed);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'rank' ],
   category: 'Levelling',
   desc: 'Shows levelling information of a user.',
