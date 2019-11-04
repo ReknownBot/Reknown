@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import { Message } from 'discord.js';
 import ReknownClient from '../../structures/client';
 
@@ -15,7 +16,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   message.channel.send(`The result is **${newVal}** degrees ${convertTo === 'f' ? 'fahrenheit' : 'celsius'}.`);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'temp' ],
   category: 'Utility',
   desc: 'Converts temperature from fahrenheit to celsius and vice-versa.',

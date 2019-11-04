@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { GuildMember, Message, TextChannel, User } from 'discord.js';
 
@@ -21,7 +22,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   message.channel.send(`Successfully banned user ${client.escMD(user.tag)} (ID: ${user.id})${reason ? ` for reason \`\`${client.escInline(reason)}\`\`` : ''}.`);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'banish' ],
   category: 'Moderation',
   desc: 'Bans a user.',

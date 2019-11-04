@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import atob from 'atob';
 import btoa from 'btoa';
@@ -27,7 +28,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   message.channel.send(embed);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [],
   category: 'Utility',
   desc: 'Encodes or decodes into Base64.',

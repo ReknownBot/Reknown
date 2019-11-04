@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { prefix } from '../../config.json';
 import { Guild, Message, MessageEmbed, TextChannel } from 'discord.js';
@@ -82,7 +83,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   message.channel.send(`Successfully updated \`${table}\` to \`\`${client.escInline(value.toString())}\`\`.`);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'configuration' ],
   category: 'Miscellaneous',
   desc: 'Shows or changes configuration values for the server.',
