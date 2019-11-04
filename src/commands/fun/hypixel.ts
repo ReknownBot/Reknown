@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import { Player } from 'Hypixel-API';
 import ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
@@ -59,7 +60,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   }
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [],
   category: 'Fun',
   desc: 'Gets a variety of stats from the Minecraft server [Hypixel](https://hypixel.net/).',

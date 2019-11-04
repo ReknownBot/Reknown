@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
@@ -56,7 +57,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   message.channel.send(embed);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'commands', 'command' ],
   category: 'Miscellaneous',
   desc: 'Displays the help menu or shows information about a command or category.',

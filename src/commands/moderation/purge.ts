@@ -1,4 +1,4 @@
-import { ReknownClient } from 'ReknownBot';
+import { HelpObj, ReknownClient } from 'ReknownBot';
 import { Message, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
@@ -13,7 +13,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   message.channel.bulkDelete(amt === 100 ? amt : amt + 1, true);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'clear' ],
   category: 'Moderation',
   desc: 'Clears x amount of messages.',

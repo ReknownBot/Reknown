@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
-import { ReknownClient } from 'ReknownBot';
 import { tables } from '../../Constants';
+import { HelpObj, ReknownClient } from 'ReknownBot';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const user = args[1] ? await client.functions.parseMention(args[1], {
@@ -17,7 +17,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   message.channel.send(`${user.tag} has **$${row.balance}**.`);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'bal', 'money' ],
   category: 'Economy',
   desc: 'Displays a user\'s balance.',

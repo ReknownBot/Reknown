@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
@@ -35,7 +36,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   message.channel.send(embed);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'quotemessage' ],
   category: 'Utility',
   desc: 'Quotes a message. You must have access to the channel.',

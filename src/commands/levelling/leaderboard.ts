@@ -1,6 +1,6 @@
-import { LevelRow } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
+import { HelpObj, LevelRow } from 'ReknownBot';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
@@ -31,7 +31,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   message.channel.send(embed);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'toplevel' ],
   category: 'Levelling',
   desc: 'Shows the levelling leaderboard for the current server.',

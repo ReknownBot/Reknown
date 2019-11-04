@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { Message, TextChannel } from 'discord.js';
 
@@ -11,7 +12,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   message.channel.send('Successfully stopped the music and left the voice channel.');
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [ 'dis', 'disconnect' ],
   category: 'Music',
   desc: 'Stops the music.',

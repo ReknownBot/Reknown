@@ -1,3 +1,4 @@
+import { HelpObj } from 'ReknownBot';
 import { Message } from 'discord.js';
 import ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
@@ -17,7 +18,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   message.channel.send(json.joke);
 }
 
-export const help = {
+export const help: HelpObj = {
   aliases: [],
   category: 'Fun',
   desc: 'Tells you a joke.',
