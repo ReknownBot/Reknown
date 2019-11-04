@@ -1,7 +1,7 @@
 import ReknownClient from '../structures/client';
 import { MessageEmbed, Role } from 'discord.js';
 
-function sendLog (client: ReknownClient, oldRole: Role, newRole: Role) {
+function nameUpdate (client: ReknownClient, oldRole: Role, newRole: Role) {
   if (oldRole.name === newRole.name) return;
 
   const embed = new MessageEmbed()
@@ -18,5 +18,5 @@ function sendLog (client: ReknownClient, oldRole: Role, newRole: Role) {
 export async function run (client: ReknownClient, oldRole: Role, newRole: Role) {
   if (!newRole.guild.available) return;
 
-  sendLog(client, oldRole, newRole);
+  nameUpdate(client, oldRole, newRole);
 }
