@@ -18,8 +18,8 @@ function nameUpdate (client: ReknownClient, oldRole: Role, newRole: Role) {
 function permissionUpdate (client: ReknownClient, oldRole: Role, newRole: Role) {
   if (oldRole.permissions.bitfield === newRole.permissions.bitfield) return;
 
-  const addedPerms = newRole.permissions.toArray().filter(perm => oldRole.permissions.has(perm));
-  const removedPerms = oldRole.permissions.toArray().filter(perm => newRole.permissions.has(perm));
+  const addedPerms = newRole.permissions.toArray().filter(perm => !oldRole.permissions.has(perm));
+  const removedPerms = oldRole.permissions.toArray().filter(perm => !newRole.permissions.has(perm));
 
   const embed = new MessageEmbed()
     .addField('Role', newRole.toString())
