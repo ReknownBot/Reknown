@@ -29,7 +29,7 @@ function permissionUpdate (client: ReknownClient, oldRole: Role, newRole: Role) 
     .setTimestamp()
     .setTitle('Role Permissions Changed');
 
-  client.functions.sendLog(client, embed, newRole.guild)
+  client.functions.sendLog(client, embed, newRole.guild);
 }
 
 export async function run (client: ReknownClient, oldRole: Role, newRole: Role) {
