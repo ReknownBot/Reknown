@@ -8,7 +8,7 @@ declare module 'ReknownBot' {
     public endSession(music: MusicObject): void;
     public formatNum(num: number): string;
     public getPrefix(client: ReknownClient, id: Snowflake): Promise<string>;
-    public getRow(client: ReknownClient, table: string, filters: { [ rowName: string ]: any }): Promise<any>;
+    public getRow<T>(client: ReknownClient, table: string, filters: { [ rowName: string ]: any }): Promise<T | null>;
     public getTime(timeLeft: number): string;
     public noArg(message: Message, argNum: number, desc: string): void;
     public noClientPerms(message: Message, perms: string[], channel?: GuildChannel): void;
@@ -36,12 +36,24 @@ declare module 'ReknownBot' {
       | 'Moderation'
       | 'Utility';
 
+  interface BiographyRow {
+    email: string;
+    summary: string;
+    twitter: string;
+    userid: string;
+  }
+
   interface ConfigObject {
     contributors: Snowflake[];
     embedColor: string;
     ownerID: Snowflake;
     prefix: string;
     suggestions: Snowflake;
+  }
+
+  interface CooldownRow {
+    endsat: number;
+    userid: string;
   }
 
   interface EconomyRow {
@@ -70,6 +82,11 @@ declare module 'ReknownBot' {
     guildid: Snowflake;
   }
 
+  interface MsgRow {
+    guildid: string;
+    msg: string;
+  }
+
   interface MusicObject {
     equalizer: number;
     looping: boolean;
@@ -83,6 +100,11 @@ declare module 'ReknownBot' {
     cType?: 'text' | 'voice' | 'category';
     guild?: Guild;
     type: 'member' | 'user' | 'role' | 'channel';
+  }
+
+  interface PrefixRow {
+    customprefix: string;
+    guildid: string;
   }
 
   interface ReknownCommand {

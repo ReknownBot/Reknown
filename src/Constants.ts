@@ -1,4 +1,5 @@
 export const tables = {
+  BIOGRAPHY: 'biography',
   BLACKLIST: 'blacklist',
   BLACKLISTMSG: 'blacklistmsg',
   CMDNOTFOUND: 'cmdnotfound',
