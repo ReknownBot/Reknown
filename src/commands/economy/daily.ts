@@ -1,21 +1,21 @@
-import { HelpObj } from 'ReknownBot';
 import { Message } from 'discord.js';
 import ReknownClient from '../../structures/client';
 import ms from 'ms';
 import { tables } from '../../Constants';
+import { CooldownRow, EconomyRow, HelpObj } from 'ReknownBot';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  let registered = await client.functions.getRow(client, tables.ECONOMY, {
+  let registered = await client.functions.getRow<EconomyRow>(client, tables.ECONOMY, {
     userid: message.author.id
   });
   if (!registered) registered = await client.functions.register(client, message.author.id);
 
-  const cooldown = await client.functions.getRow(client, tables.DAILYCOOLDOWN, {
+  const cooldown = await client.functions.getRow<CooldownRow>(client, tables.DAILYCOOLDOWN, {
     userid: message.author.id
   });
   if (cooldown && cooldown.endsat >= Date.now()) return message.reply(`This command is still on cooldown! Please wait ${client.functions.getTime(cooldown.endsat - Date.now())}.`);
   client.functions.updateRow(client, tables.DAILYCOOLDOWN, {
-    endsat: (Date.now() + ms('16h')).toString(),
+    endsat: Date.now() + ms('16h'),
     userid: message.author.id
   }, {
     userid: message.author.id
