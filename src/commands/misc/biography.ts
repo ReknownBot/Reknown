@@ -21,7 +21,8 @@ export async function run (client: ReknownClient, message: Message & { channel: 
     const value = args.slice(3).join(' ');
 
     client.functions.updateRow(client, tables.BIOGRAPHY, {
-      [field]: value
+      [field]: value,
+      userid: message.author.id
     }, {
       userid: message.author.id
     });
@@ -45,7 +46,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
       .setTimestamp()
       .setTitle(`${member.user.tag}'s Biography`);
 
-    if (row.email !== 'None') embed.addField('Email', row.email, true);
+    if (row.email) embed.addField('Email', row.email, true);
     if (row.summary) embed.setDescription(row.summary);
     if (row.twitter) embed.addField('Twitter', row.twitter);
 
