@@ -4,19 +4,19 @@ import { Guild, MessageEmbed, TextChannel } from 'discord.js';
 import { LogChannelRow, ToggleRow, WebhookRow } from 'ReknownBot';
 
 export async function run (client: ReknownClient, embed: MessageEmbed, guild: Guild) {
-  const toggledRow: ToggleRow | null = await client.functions.getRow(client, tables.LOGTOGGLE, {
+  const toggledRow = await client.functions.getRow<ToggleRow>(client, tables.LOGTOGGLE, {
     guildid: guild.id
   });
   if (!toggledRow || !toggledRow.bool) return;
 
-  const channelRow: LogChannelRow | null = await client.functions.getRow(client, tables.LOGCHANNEL, {
+  const channelRow = await client.functions.getRow<LogChannelRow>(client, tables.LOGCHANNEL, {
     guildid: guild.id
   });
   const channel = (channelRow ? client.channels.get(channelRow.channelid) : guild.channels.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has('MANAGE_WEBHOOKS')) return;
   const webhooks = await channel.fetchWebhooks();
-  let webhookRow: WebhookRow | null = await client.functions.getRow(client, tables.LOGWEBHOOK, {
+  let webhookRow = await client.functions.getRow<WebhookRow>(client, tables.LOGWEBHOOK, {
     channelid: channel.id
   });
   let webhook;

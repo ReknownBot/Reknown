@@ -1,8 +1,9 @@
+CREATE TABLE IF NOT EXISTS biography (email TEXT, summary TEXT, twitter TEXT, userid TEXT);
 CREATE TABLE IF NOT EXISTS blacklist (executor TEXT, guildid TEXT, reason TEXT, userid TEXT);
 CREATE TABLE IF NOT EXISTS blacklistmsg (bool BOOLEAN, guildid TEXT);
 CREATE TABLE IF NOT EXISTS cmdnotfound (bool BOOLEAN, guildid TEXT);
 CREATE TABLE IF NOT EXISTS cooldownmsg (bool BOOLEAN, guildid TEXT);
-CREATE TABLE IF NOT EXISTS daily (endsat TEXT, userid TEXT);
+CREATE TABLE IF NOT EXISTS daily (endsat BIGINT, userid TEXT);
 CREATE TABLE IF NOT EXISTS deleteinvite (bool BOOLEAN, guildid TEXT);
 CREATE TABLE IF NOT EXISTS economy (balance INTEGER, userid TEXT);
 CREATE TABLE IF NOT EXISTS gblacklist (memberid TEXT, reason TEXT);
@@ -31,4 +32,4 @@ CREATE TABLE IF NOT EXISTS usertag (userid TEXT, tagcontent TEXT, tagname TEXT);
 CREATE TABLE IF NOT EXISTS warnings (guildid TEXT, userid TEXT, warnedby TEXT, warnreason TEXT);
 CREATE TABLE IF NOT EXISTS welcomechannel (guildid TEXT, channelid TEXT);
 CREATE TABLE IF NOT EXISTS welcomemsg (guildid TEXT, msg TEXT);
-CREATE TABLE IF NOT EXISTS work (endsat TEXT, userid TEXT);
+CREATE TABLE IF NOT EXISTS work (endsat BIGINT, userid TEXT);
