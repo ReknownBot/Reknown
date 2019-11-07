@@ -1,17 +1,17 @@
 import ms from 'ms';
 import { tables } from '../../Constants';
-import { HelpObj, ReknownClient } from 'ReknownBot';
+import { CooldownRow, EconomyRow, HelpObj, ReknownClient } from 'ReknownBot';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
 
-  let registered = await client.functions.getRow(client, tables.ECONOMY, {
+  let registered = await client.functions.getRow<EconomyRow>(client, tables.ECONOMY, {
     userid: message.author.id
   });
   if (!registered) registered = await client.functions.register(client, message.author.id);
 
-  const cooldown = await client.functions.getRow(client, tables.WORKCOOLDOWN, {
+  const cooldown = await client.functions.getRow<CooldownRow>(client, tables.WORKCOOLDOWN, {
     userid: message.author.id
   });
   if (cooldown && cooldown.endsat >= Date.now()) return message.reply(`This command is still on cooldown! Please wait ${client.functions.getTime(cooldown.endsat - Date.now())}.`);

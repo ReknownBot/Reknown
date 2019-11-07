@@ -9,7 +9,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   }) : message.author;
   if (!user) return client.functions.badArg(message, 1, 'That user was not found.');
 
-  const row: EconomyRow = await client.functions.getRow(client, tables.ECONOMY, {
+  const row = await client.functions.getRow<EconomyRow>(client, tables.ECONOMY, {
     userid: user.id
   });
   if (!row || row.balance === 0) return message.reply('That user does not have a registered account or has no money.');
