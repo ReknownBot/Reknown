@@ -17,9 +17,9 @@ export async function run (client: ReknownClient, message: Message & { channel: 
     guildid: message.guild!.id
   });
   let bool;
-  if (!args[1]) bool = !row;
-  else if (args[1].toLowerCase() === 'enable') bool = false;
-  else if (args[1].toLowerCase() === 'disable') bool = true;
+  if (!args[2]) bool = !row;
+  else if (args[2].toLowerCase() === 'enable') bool = false;
+  else if (args[2].toLowerCase() === 'disable') bool = true;
   else return client.functions.badArg(message, 2, 'This parameter must be "enable" or "disable".');
 
   if (Boolean(row) === bool) return client.functions.badArg(message, 2, 'The value is already set to that!');
