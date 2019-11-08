@@ -32,5 +32,6 @@ export const help: HelpObj = {
   category: 'Economy',
   desc: 'Shows the top 10 users with the most balance.',
   dm: true,
+  togglable: true,
   usage: 'balancetop'
 };

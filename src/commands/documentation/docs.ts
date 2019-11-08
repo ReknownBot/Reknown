@@ -37,5 +37,6 @@ export const help: HelpObj = {
   category: 'Documentation',
   desc: 'Displays documentation for Discord.JS.',
   dm: true,
+  togglable: true,
   usage: 'docs <Query> [Branch]'
 };

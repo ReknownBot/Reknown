@@ -23,5 +23,6 @@ export const help: HelpObj = {
   aliases: [ 'pausemusic' ],
   category: 'Music',
   desc: 'Pauses the music.',
+  togglable: true,
   usage: 'pause [Toggle=auto]'
 };

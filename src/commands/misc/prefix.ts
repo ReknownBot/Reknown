@@ -26,5 +26,6 @@ export const help: HelpObj = {
   aliases: [],
   category: 'Miscellaneous',
   desc: 'Displays the prefix of the server.',
+  togglable: true,
   usage: 'prefix [New Prefix]'
 };

@@ -58,5 +58,6 @@ export const help: HelpObj = {
   aliases: [ 'bio' ],
   category: 'Miscellaneous',
   desc: 'Checks a member\'s biography. Please note that any information set in this command is public to everyone that shares a server with you.',
+  togglable: true,
   usage: 'biography [Member]\nbiography set <Field> <Value>'
 };

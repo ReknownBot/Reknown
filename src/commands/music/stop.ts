@@ -16,5 +16,6 @@ export const help: HelpObj = {
   aliases: [ 'dis', 'disconnect' ],
   category: 'Music',
   desc: 'Stops the music.',
+  togglable: true,
   usage: 'stop'
 };

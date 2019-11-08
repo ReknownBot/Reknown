@@ -56,6 +56,11 @@ declare module 'ReknownBot' {
     userid: string;
   }
 
+  interface DisabledCommandsRow {
+    command: string;
+    guildid: string;
+  }
+
   interface EconomyRow {
     balance: number;
     userid: Snowflake;
@@ -67,6 +72,7 @@ declare module 'ReknownBot' {
     desc: string;
     dm?: true;
     private?: boolean;
+    togglable: boolean;
     usage: string;
   }
 

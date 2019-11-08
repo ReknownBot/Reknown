@@ -21,5 +21,6 @@ export const help: HelpObj = {
   category: 'Utility',
   desc: 'Converts temperature from fahrenheit to celsius and vice-versa.',
   dm: true,
+  togglable: true,
   usage: 'temperature <"f"/"c"> <Input>'
 };
