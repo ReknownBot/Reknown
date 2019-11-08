@@ -66,5 +66,6 @@ export const help: HelpObj = {
   category: 'Utility',
   desc: 'Either decodes or encodes into binary.',
   dm: true,
+  togglable: true,
   usage: 'binary <"decode"/"encode"> <Input>'
 };

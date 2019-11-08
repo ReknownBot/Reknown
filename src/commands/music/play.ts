@@ -35,5 +35,6 @@ export const help: HelpObj = {
   aliases: [ 'p', 'playmusic' ],
   category: 'Music',
   desc: 'Plays music.',
+  togglable: true,
   usage: 'play <Query>'
 };

@@ -35,5 +35,6 @@ export const help: HelpObj = {
   aliases: [ 'rank' ],
   category: 'Levelling',
   desc: 'Shows levelling information of a user.',
+  togglable: true,
   usage: 'level [Member]'
 };

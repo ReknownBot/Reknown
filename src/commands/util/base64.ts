@@ -33,5 +33,6 @@ export const help: HelpObj = {
   category: 'Utility',
   desc: 'Encodes or decodes into Base64.',
   dm: true,
+  togglable: true,
   usage: 'base64 <"decode"/"encode"> <Input>'
 };

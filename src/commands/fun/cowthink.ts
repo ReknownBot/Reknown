@@ -15,5 +15,6 @@ export const help: HelpObj = {
   category: 'Fun',
   desc: 'Makes a cow think of something.',
   dm: true,
+  togglable: true,
   usage: 'cowthink <Message>'
 };

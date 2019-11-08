@@ -25,5 +25,6 @@ export const help: HelpObj = {
   aliases: [],
   category: 'Utility',
   desc: 'Mentions a provided role in the current channel.',
+  togglable: true,
   usage: 'mention <Role>'
 };

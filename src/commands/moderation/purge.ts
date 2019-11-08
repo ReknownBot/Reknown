@@ -17,5 +17,6 @@ export const help: HelpObj = {
   aliases: [ 'clear' ],
   category: 'Moderation',
   desc: 'Clears x amount of messages.',
+  togglable: true,
   usage: 'purge <Amount>'
 };

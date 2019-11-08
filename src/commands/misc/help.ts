@@ -62,5 +62,6 @@ export const help: HelpObj = {
   category: 'Miscellaneous',
   desc: 'Displays the help menu or shows information about a command or category.',
   dm: true,
+  togglable: false,
   usage: 'help [Command or Category]'
 };

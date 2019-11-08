@@ -22,5 +22,6 @@ export const help: HelpObj = {
   aliases: [],
   category: 'Music',
   desc: 'Toggles looping for music.',
+  togglable: true,
   usage: 'loop [Toggle=on]'
 };

@@ -16,5 +16,6 @@ export const help: HelpObj = {
   aliases: [ 'skipsong' ],
   category: 'Music',
   desc: 'Skips a song.',
+  togglable: true,
   usage: 'skip'
 };

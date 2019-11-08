@@ -26,5 +26,6 @@ export const help: HelpObj = {
   aliases: [ 'banish' ],
   category: 'Moderation',
   desc: 'Bans a user.',
+  togglable: true,
   usage: 'ban <User> [Reason]'
 };
