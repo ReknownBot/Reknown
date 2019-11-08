@@ -88,5 +88,6 @@ export const help: HelpObj = {
   aliases: [ 'configuration' ],
   category: 'Miscellaneous',
   desc: 'Shows or changes configuration values for the server.',
+  togglable: true,
   usage: 'config [Configuration] [Value]'
 };

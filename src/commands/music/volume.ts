@@ -23,5 +23,6 @@ export const help: HelpObj = {
   aliases: [ 'setvolume' ],
   category: 'Music',
   desc: 'Displays / Sets the volume.',
+  togglable: true,
   usage: 'volume [New Volume]'
 };

@@ -35,5 +35,6 @@ export const help: HelpObj = {
   aliases: [ 'soundcloudplay' ],
   category: 'Music',
   desc: 'Searches songs from SoundCloud and plays music.',
+  togglable: true,
   usage: 'scplay <Query>'
 };

@@ -27,5 +27,6 @@ export const help: HelpObj = {
   category: 'Fun',
   desc: 'Shows a picture of a cat.',
   dm: true,
+  togglable: true,
   usage: 'cat'
 };

@@ -35,5 +35,6 @@ export const help: HelpObj = {
   aliases: [ 'toplevel' ],
   category: 'Levelling',
   desc: 'Shows the levelling leaderboard for the current server.',
+  togglable: true,
   usage: 'leaderboard'
 };

@@ -33,5 +33,6 @@ export const help: HelpObj = {
   aliases: [ 'q', 'songlist' ],
   category: 'Music',
   desc: 'Shows the queue.',
+  togglable: true,
   usage: 'queue ["clear"]'
 };

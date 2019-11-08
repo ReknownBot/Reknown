@@ -14,5 +14,6 @@ export const help: HelpObj = {
   aliases: [ 'randomuser' ],
   category: 'Fun',
   desc: 'Gets a random member in a server.',
+  togglable: true,
   usage: 'someone'
 };

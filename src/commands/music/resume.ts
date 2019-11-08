@@ -17,5 +17,6 @@ export const help: HelpObj = {
   aliases: [ 'resumemusic' ],
   category: 'Music',
   desc: 'Resumes the music.',
+  togglable: true,
   usage: 'resume'
 };
