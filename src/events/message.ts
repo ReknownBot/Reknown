@@ -1,4 +1,6 @@
 import ReknownClient from '../structures/client';
+import { DisabledCommandsRow } from 'ReknownBot';
+import { tables } from '../Constants';
 import { DMChannel, Message } from 'discord.js';
 
 const cooldowns = new Set();
@@ -24,6 +26,14 @@ export async function run (client: ReknownClient, message: Message) {
   setTimeout(() => cooldowns.delete(message.guild!.id), 1000);
 
   cmd = client.aliases[cmd];
+  if (message.guild) {
+    const disabled = await client.functions.getRow<DisabledCommandsRow>(client, tables.DISABLEDCOMMANDS, {
+      command: cmd,
+      guildid: message.guild.id
+    });
+    if (disabled) return;
+  }
+
   const cmdInfo = client.commands.get(cmd)!;
   if (message.channel instanceof DMChannel && !cmdInfo.help.dm) return message.reply('This command is only available in servers.');
   cmdInfo.run(client, message, args);
