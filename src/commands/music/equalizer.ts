@@ -35,5 +35,6 @@ export const help: HelpObj = {
   aliases: [ 'eq' ],
   category: 'Music',
   desc: 'Displays or changes the equalizer.',
+  togglable: true,
   usage: 'equalizer [New Equalizer]'
 };

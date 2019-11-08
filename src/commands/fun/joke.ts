@@ -23,5 +23,6 @@ export const help: HelpObj = {
   category: 'Fun',
   desc: 'Tells you a joke.',
   dm: true,
+  togglable: true,
   usage: 'joke'
 };

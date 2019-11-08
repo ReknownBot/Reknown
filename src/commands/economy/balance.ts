@@ -22,5 +22,6 @@ export const help: HelpObj = {
   category: 'Economy',
   desc: 'Displays a user\'s balance.',
   dm: true,
+  togglable: true,
   usage: 'balance [User]'
 };

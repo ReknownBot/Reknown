@@ -12,5 +12,6 @@ export const help: HelpObj = {
   category: 'Miscellaneous',
   desc: 'Displays the ping of the bot.',
   dm: true,
+  togglable: false,
   usage: 'ping'
 };

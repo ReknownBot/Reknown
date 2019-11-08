@@ -11,5 +11,6 @@ export const help: HelpObj = {
   category: 'Miscellaneous',
   desc: 'Provides you with the bot invite.',
   dm: true,
+  togglable: false,
   usage: 'invite'
 };

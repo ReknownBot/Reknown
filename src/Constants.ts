@@ -6,6 +6,7 @@ export const tables = {
   COOLDOWNMSG: 'cooldownmsg',
   DAILYCOOLDOWN: 'daily',
   DELETEINVITE: 'deleteinvite',
+  DISABLEDCOMMANDS: 'disabledcommands',
   ECONOMY: 'economy',
   GLOBALBLACKLIST: 'gblacklist',
   GUILDTAG: 'guildtag',

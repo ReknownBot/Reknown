@@ -20,5 +20,6 @@ export const help: HelpObj = {
   aliases: [],
   category: 'Moderation',
   desc: 'Kicks a user.',
+  togglable: true,
   usage: 'kick <User> [Reason]'
 };

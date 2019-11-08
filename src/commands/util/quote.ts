@@ -41,5 +41,6 @@ export const help: HelpObj = {
   category: 'Utility',
   desc: 'Quotes a message. You must have access to the channel.',
   dm: true,
+  togglable: true,
   usage: 'quote <Message URL>'
 };

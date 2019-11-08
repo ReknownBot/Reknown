@@ -37,5 +37,6 @@ export const help: HelpObj = {
   category: 'Economy',
   desc: 'Gets your daily money.',
   dm: true,
+  togglable: true,
   usage: 'daily'
 };
