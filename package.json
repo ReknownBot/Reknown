@@ -55,7 +55,7 @@
     "@typescript-eslint/parser": "^2.6.1",
     "eslint": "^6.6.0",
     "eslint-plugin-import": "^2.18.2",
-    "typescript": "^3.6.4"
+    "typescript": "^3.7.2"
   },
   "optionalDependencies": {
     "erlpack": "^0.1.3"
