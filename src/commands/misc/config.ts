@@ -9,6 +9,7 @@ const configs: { [ key: string ]: string } = {
   prefix: 'The prefix for bot commands.',
   starchannel: 'The channel to send starboard messages to.',
   togglelog: 'Toggle for the action log.',
+  togglestar: 'Toggle for starboard messages.',
   togglewelcome: 'Toggle for welcoming messages.'
 };
 
@@ -18,11 +19,12 @@ const defaultValues: { [ key: string ]: [ string, number | string | false ] } = 
   prefix: [ 'customprefix', prefix ],
   starchannel: [ 'channelid', '#starboard' ],
   togglelog: [ 'bool', false ],
+  togglestar: [ 'bool', false ],
   togglewelcome: [ 'bool', false ]
 };
 
 const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Guild) => any } = {
-  levelmodifier: (value: number): number | string[] => {
+  levelmodifier: (value: number) => {
     if (isNaN(value) || value.toString().includes('.') || value < 1 || value > 5) return [ 'The value was not a number, was a decimal, or was out of range [1-5].' ];
     return value;
   },
@@ -31,7 +33,7 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
     if (!channel) return [ 'That channel does not exist or is not a text channel.' ];
     return channel.id;
   },
-  prefix: (value: string): string | string[] => {
+  prefix: (value: string) => {
     if (value.length > 15) return [ 'The value was too long to be a prefix [15 characters].' ];
     return value;
   },
@@ -40,11 +42,15 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
     if (!channel) return [ 'That channel does not exist or is not a text channel.' ];
     return channel.id;
   },
-  togglelog: (value: string): boolean | string[] => {
+  togglelog: (value: string) => {
     if (![ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
     return value === 'true';
   },
-  togglewelcome: (value: string): boolean | string[] => {
+  togglestar: (value: string) => {
+    if (![ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
+    return value === 'true';
+  },
+  togglewelcome: (value: string) => {
     if (![ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
     return value === 'true';
   }
