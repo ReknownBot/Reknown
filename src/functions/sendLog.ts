@@ -1,7 +1,7 @@
 import ReknownClient from '../structures/client';
 import { tables } from '../Constants';
+import { ChannelRow, ToggleRow, WebhookRow } from 'ReknownBot';
 import { Guild, MessageEmbed, TextChannel } from 'discord.js';
-import { LogChannelRow, ToggleRow, WebhookRow } from 'ReknownBot';
 
 export async function run (client: ReknownClient, embed: MessageEmbed, guild: Guild) {
   const toggledRow = await client.functions.getRow<ToggleRow>(client, tables.LOGTOGGLE, {
@@ -9,7 +9,7 @@ export async function run (client: ReknownClient, embed: MessageEmbed, guild: Gu
   });
   if (!toggledRow || !toggledRow.bool) return;
 
-  const channelRow = await client.functions.getRow<LogChannelRow>(client, tables.LOGCHANNEL, {
+  const channelRow = await client.functions.getRow<ChannelRow>(client, tables.LOGCHANNEL, {
     guildid: guild.id
   });
   const channel = (channelRow ? client.channels.get(channelRow.channelid) : guild.channels.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
