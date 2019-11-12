@@ -1,5 +1,5 @@
-import ReknownClient from '../structures/client';
 import { DisabledCommandsRow } from 'ReknownBot';
+import ReknownClient from '../structures/client';
 import { tables } from '../Constants';
 import { DMChannel, Message } from 'discord.js';
 
