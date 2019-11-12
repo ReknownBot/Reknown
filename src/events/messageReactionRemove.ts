@@ -53,6 +53,7 @@ export async function run (client: ReknownClient, reaction: MessageReaction, use
     }
   }
 
+  if (count === 0) return;
   const msg = await channel.send(embed);
   client.functions.updateRow(client, tables.STARBOARD, {
     editid: msg.id,
