@@ -7,6 +7,7 @@ const configs: { [ key: string ]: string } = {
   levelmodifier: 'The level modifier for levelling up.',
   logchannel: 'The channel to send logs to.',
   prefix: 'The prefix for bot commands.',
+  starchannel: 'The channel to send starboard messages to.',
   togglelog: 'Toggle for the action log.',
   togglewelcome: 'Toggle for welcoming messages.'
 };
@@ -15,6 +16,7 @@ const defaultValues: { [ key: string ]: [ string, number | string | false ] } = 
   levelmodifier: [ 'modifier', 1 ],
   logchannel: [ 'channelid', '#action-log' ],
   prefix: [ 'customprefix', prefix ],
+  starchannel: [ 'channelid', '#starboard' ],
   togglelog: [ 'bool', false ],
   togglewelcome: [ 'bool', false ]
 };
@@ -32,6 +34,11 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
   prefix: (value: string): string | string[] => {
     if (value.length > 15) return [ 'The value was too long to be a prefix [15 characters].' ];
     return value;
+  },
+  starchannel: (value: string, client, guild) => {
+    const channel = client.functions.parseMention(value, { cType: 'text', guild: guild, type: 'channel' });
+    if (!channel) return [ 'That channel does not exist or is not a text channel.' ];
+    return channel.id;
   },
   togglelog: (value: string): boolean | string[] => {
     if (![ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
