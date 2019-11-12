@@ -1,8 +1,8 @@
 import ReknownClient from '../structures/client';
 import dateformat from 'dateformat';
 import { tables } from '../Constants';
+import { ChannelRow, MsgRow, ToggleRow } from 'ReknownBot';
 import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
-import { MsgRow, ToggleRow, WelcomeChannelRow } from 'ReknownBot';
 
 function sendLog (client: ReknownClient, member: GuildMember) {
   const embed = new MessageEmbed()
@@ -22,10 +22,10 @@ async function goodbyeMsg (client: ReknownClient, member: GuildMember) {
   });
   if (!toggledRow || !toggledRow.bool) return;
 
-  const channelRow = await client.functions.getRow<WelcomeChannelRow>(client, tables.WELCOMECHANNEL, {
+  const channelRow = await client.functions.getRow<ChannelRow>(client, tables.WELCOMECHANNEL, {
     guildid: member.guild.id
   });
-  const channel = (channelRow ? member.guild.channels.find(c => c.id === channelRow.channel && c.type === 'text') : member.guild.channels.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
+  const channel = (channelRow ? member.guild.channels.find(c => c.id === channelRow.channelid && c.type === 'text') : member.guild.channels.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
 
