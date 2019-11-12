@@ -6,10 +6,10 @@ function avatarUpdate (client: ReknownClient, oldUser: User, newUser: User, guil
 
   const embed = new MessageEmbed()
     .setColor(client.config.embedColor)
-    .setDescription(`[Old Avatar](${oldUser.displayAvatarURL({ size: 2048 })}) => [New Avatar](${newUser.displayAvatarURL({ size: 2048 })})`)
+    .setDescription(`[Old Avatar](${oldUser.displayAvatarURL()}) => [New Avatar](${newUser.displayAvatarURL()})`)
     .setFooter(`ID: ${newUser.id} | Tip: The larger one is the new one!`)
-    .setImage(newUser.displayAvatarURL({ size: 2048 }))
-    .setThumbnail(oldUser.displayAvatarURL({ size: 2048 }))
+    .setImage(newUser.displayAvatarURL())
+    .setThumbnail(oldUser.displayAvatarURL())
     .setTimestamp()
     .setTitle('Avatar Updated');
 
