@@ -122,7 +122,7 @@ module.exports = exports = {
         // We require all vars to be initialized (see init-declarations)
         // If we NEED a var to be initialized to undefined, it needs to be explicit
         "no-undef-init": OFF,
-        "no-undef": ERROR,
+        "no-undef": OFF,
         "no-undefined": OFF,
         "no-unused-vars": [ ERROR, { args: "none" }],
         // Disallow hoisting - let & const don't allow hoisting anyhow

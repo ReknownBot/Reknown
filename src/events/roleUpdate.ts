@@ -1,5 +1,5 @@
 import ReknownClient from '../structures/client';
-import { MessageEmbed, Role, PermissionString } from 'discord.js';
+import { MessageEmbed, PermissionString, Role } from 'discord.js';
 
 function nameUpdate (client: ReknownClient, oldRole: Role, newRole: Role) {
   if (oldRole.name === newRole.name) return;
@@ -18,8 +18,8 @@ function nameUpdate (client: ReknownClient, oldRole: Role, newRole: Role) {
 function permissionUpdate (client: ReknownClient, oldRole: Role, newRole: Role) {
   if (oldRole.permissions.bitfield === newRole.permissions.bitfield) return;
 
-  const addedPerms = (Object.keys(newRole.permissions.serialize(false)) as PermissionString[]).filter(perm => !oldRole.permissions.has(perm, false));
-  const removedPerms = (Object.keys(oldRole.permissions.serialize(false)) as PermissionString[]).filter(perm => !newRole.permissions.has(perm, false));
+  const addedPerms = Object.keys(newRole.permissions.serialize(false)).filter(perm => !oldRole.permissions.has(perm as PermissionString, false));
+  const removedPerms = Object.keys(oldRole.permissions.serialize(false)).filter(perm => !newRole.permissions.has(perm as PermissionString, false));
 
   const embed = new MessageEmbed()
     .addField('Role', newRole.toString())
