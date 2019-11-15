@@ -1,6 +1,6 @@
 import { tables } from '../Constants';
 import { ChannelRow, ReknownClient, StarMessageRow, ToggleRow } from 'ReknownBot';
-import { Message, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
 
 async function delStar (client: ReknownClient, message: Message) {
   const toggled = await client.functions.getRow<ToggleRow>(client, tables.STARTOGGLE, {
@@ -25,8 +25,25 @@ async function delStar (client: ReknownClient, message: Message) {
   if (msg && !msg.deleted) msg.delete();
 }
 
+function sendLog (client: ReknownClient, message: Message) {
+  if (!message.content && !message.attachments.find(attch => Boolean(attch.height))) return;
+
+  const embed = new MessageEmbed()
+    .addField('Author', `${message.author} [${client.escMD(message.author.tag)}] (ID: ${message.author.id})`)
+    .setColor(client.config.embedColor)
+    .setDescription(message.content)
+    .setFooter(`ID: ${message.id}`)
+    .setTimestamp()
+    .setTitle('Message Deleted');
+  const img = message.attachments.find(attachment => Boolean(attachment.height));
+  if (img) embed.setImage(img.proxyURL);
+
+  client.functions.sendLog(client, embed, message.guild!);
+}
+
 export function run (client: ReknownClient, message: Message) {
   if (!message.guild || !message.guild.available) return;
 
   delStar(client, message);
+  sendLog(client, message);
 }
