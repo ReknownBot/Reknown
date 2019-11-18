@@ -51,7 +51,7 @@
     "@types/node": "^12.12.7",
     "@types/node-fetch": "^2.5.3",
     "@types/pg": "^7.11.2",
-    "@typescript-eslint/eslint-plugin": "^2.6.1",
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
     "@typescript-eslint/parser": "^2.6.1",
     "eslint": "^6.6.0",
     "eslint-plugin-import": "^2.18.2",
