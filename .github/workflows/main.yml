@@ -1,4 +1,4 @@
-name: lint
+name: main
 
 on: [push]
 
@@ -16,3 +16,5 @@ jobs:
     - run: npm install
     - name: Lint
       run: npm run lint
+    - name: Compile
+      run: npm run compile
