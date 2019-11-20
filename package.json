@@ -7,7 +7,7 @@
     "compile": "tsc",
     "lint": "eslint ./src --ext .ts",
     "lint:fix": "eslint ./src --ext .ts --fix",
-    "start": "node --experimental-modules ."
+    "start": "node . --experimental-modules"
   },
   "repository": {
     "type": "git",
