@@ -16,5 +16,5 @@ jobs:
     - run: npm install
     - name: Lint
       run: npm run lint
-    - name: Compile
-      run: npm run compile
+    - name: Build
+      run: npm run build
