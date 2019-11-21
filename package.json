@@ -2,7 +2,7 @@
   "name": "reknown",
   "version": "3.0.0",
   "description": "A Discord bot with created with Discord.JS (master branch).",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "lint": "eslint ./src --ext .ts",
