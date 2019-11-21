@@ -10,9 +10,9 @@ const client = new ReknownClient({
   disableEveryone: true,
   partials: [ 'GUILD_MEMBER', 'MESSAGE', 'USER' ]
 });
-const categories = readdirSync('./build/commands');
-categories.forEach(name => readdirSync(`./build/commands/${name}`).forEach(f => client.commands.set(f.slice(0, -3), require(`./commands/${name}/${f}`))));
-client.events = new Discord.Collection(readdirSync('./build/events').map(f => [ f.slice(0, -3), require(`./events/${f}`) ]));
+const categories = readdirSync('./dist/commands');
+categories.forEach(name => readdirSync(`./dist/commands/${name}`).forEach(f => client.commands.set(f.slice(0, -3), require(`./commands/${name}/${f}`))));
+client.events = new Discord.Collection(readdirSync('./dist/events').map(f => [ f.slice(0, -3), require(`./events/${f}`) ]));
 client.commands.forEach((obj, name) => {
   obj.help.aliases.forEach(alias => {
     client.aliases[alias] = name;
