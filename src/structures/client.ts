@@ -11,7 +11,7 @@ const fnList = readdirSync('./dist/functions');
 const functions: ReknownFunctions | { [ fn: string ]: { run: Function }} = {};
 fnList.forEach(fn => {
   // eslint-disable-next-line global-require
-  functions[fn] = require(`../functions/${fn}`).run;
+  functions[fn.slice(0, -3)] = require(`../functions/${fn}`).run;
 });
 
 export default class ReknownClient extends Client {
