@@ -4,7 +4,7 @@
   "description": "A Discord bot with created with Discord.JS (master branch).",
   "main": "build/index.js",
   "scripts": {
-    "compile": "tsc",
+    "build": "tsc",
     "lint": "eslint ./src --ext .ts",
     "lint:fix": "eslint ./src --ext .ts --fix",
     "start": "node . --experimental-modules"
