@@ -7,11 +7,11 @@ import { CommandCategory, ConfigObject, MusicObject, ReknownCommand, ReknownEven
 
 const pool = new Pool();
 
-const fnList = readdirSync('./build/functions').map(f => f.slice(0, -3));
+const fnList = readdirSync('./build/functions');
 const functions: ReknownFunctions | { [ fn: string ]: { run: Function }} = {};
 fnList.forEach(fn => {
   // eslint-disable-next-line global-require
-  functions[fn] = require(`../functions/${fn}.js`).run;
+  functions[fn] = require(`../functions/${fn}`).run;
 });
 
 export default class ReknownClient extends Client {
