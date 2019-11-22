@@ -7,7 +7,7 @@ import { CommandCategory, ConfigObject, MusicObject, ReknownCommand, ReknownEven
 
 const pool = new Pool();
 
-const fnList = readdirSync('./dist/functions');
+const fnList = readdirSync('./dist/functions').filter(f => f.endsWith('.js'));
 const functions: ReknownFunctions | { [ fn: string ]: { run: Function }} = {};
 fnList.forEach(fn => {
   // eslint-disable-next-line global-require
