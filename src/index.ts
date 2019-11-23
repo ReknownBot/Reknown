@@ -10,8 +10,8 @@ const client = new ReknownClient({
   partials: [ 'GUILD_MEMBER', 'MESSAGE', 'USER' ]
 });
 const categories = readdirSync('./dist/commands');
-categories.forEach(name => readdirSync(`./dist/commands/${name}`).filter(f => f.endsWith('.js')).forEach(f => client.commands.set(f.slice(0, -3), require(`./commands/${name}/${f}`))));
-const eventList = readdirSync('./dist/events').filter(f => f.endsWith('.js'));
+categories.forEach(name => readdirSync(`./dist/commands/${name}`).forEach(f => client.commands.set(f.slice(0, -3), require(`./commands/${name}/${f}`))));
+const eventList = readdirSync('./dist/events');
 eventList.forEach(f => client.events.set(f.slice(0, -3), require(`./events/${f}`)));
 client.commands.forEach((obj, name) => {
   obj.help.aliases.forEach(alias => {
