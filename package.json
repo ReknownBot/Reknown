@@ -52,7 +52,7 @@
     "@types/node-fetch": "^2.5.3",
     "@types/pg": "^7.11.2",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
-    "@typescript-eslint/parser": "^2.8.0",
+    "@typescript-eslint/parser": "^2.9.0",
     "eslint": "^6.6.0",
     "eslint-plugin-import": "^2.18.2",
     "typescript": "^3.7.2"
