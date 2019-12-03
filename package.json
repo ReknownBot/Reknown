@@ -49,7 +49,7 @@
     "@types/dateformat": "^3.0.1",
     "@types/ms": "^0.7.31",
     "@types/node": "^12.12.14",
-    "@types/node-fetch": "^2.5.3",
+    "@types/node-fetch": "^2.5.4",
     "@types/pg": "^7.11.2",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
