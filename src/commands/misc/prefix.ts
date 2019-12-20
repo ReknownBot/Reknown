@@ -9,7 +9,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
     return message.channel.send(`The prefix for **${client.escMD(message.guild!.name)}** is: \`\`${client.escInline(prefix)}\`\``);
   }
 
-  if (!message.member!.hasPermission('ADMINISTRATOR')) return client.functions.noPerms(message, [ 'Administrator' ]);
+  if (!message.member!.hasPermission('ADMINISTRATOR')) return client.functions.noPerms(message, [ 'ADMINISTRATOR' ]);
   const prefix = args.slice(1).join(' ');
   if (prefix.length > 15) return client.functions.badArg(message, 1, 'The prefix length must be lower than 16.');
   client.functions.updateRow(client, tables.PREFIX, {

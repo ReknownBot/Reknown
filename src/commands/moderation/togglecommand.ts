@@ -4,7 +4,7 @@ import { DisabledCommandsRow, HelpObj } from 'ReknownBot';
 import { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
-  if (!message.member!.hasPermission('ADMINISTRATOR')) return client.functions.noPerms(message, [ 'Administrator' ]);
+  if (!message.member!.hasPermission('ADMINISTRATOR')) return client.functions.noPerms(message, [ 'ADMINISTRATOR' ]);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'A command to toggle.');
   const command = client.aliases[args[1].toLowerCase()];
