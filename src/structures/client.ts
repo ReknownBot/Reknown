@@ -1,18 +1,11 @@
 import * as config from '../config.json';
+import { Functions } from './functions';
 import Node from 'lavalink';
 import { Pool } from 'pg';
-import { readdirSync } from 'fs';
 import { Client, Collection, Util } from 'discord.js';
-import { CommandCategory, ConfigObject, MusicObject, ReknownCommand, ReknownEvent, ReknownFunctions } from 'ReknownBot';
+import { CommandCategory, ConfigObject, MusicObject, ReknownCommand, ReknownEvent } from 'ReknownBot';
 
 const pool = new Pool();
-
-const fnList = readdirSync('./dist/functions');
-const functions: ReknownFunctions | { [ fn: string ]: { run: Function }} = {};
-fnList.forEach(fn => {
-  // eslint-disable-next-line global-require
-  functions[fn.slice(0, -3)] = require(`../functions/${fn}`).run;
-});
 
 export default class ReknownClient extends Client {
   public aliases: { [ command: string ]: string } = {};
@@ -29,7 +22,7 @@ export default class ReknownClient extends Client {
 
   public events = new Collection<string, ReknownEvent>();
 
-  public functions: ReknownFunctions = functions as ReknownFunctions;
+  public functions = new Functions();
 
   public lavalink: Node | null = null;
 

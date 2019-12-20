@@ -14,8 +14,8 @@ export async function run (client: ReknownClient, message: Message, args: string
   const channel = guild.channels.get(res[1]);
   if (!channel) return client.functions.badArg(message, 1, 'The provided channel does not exist.');
   if (!(channel instanceof TextChannel)) return client.functions.badArg(message, 1, 'The provided channel must be a text channel.');
-  if (!channel.permissionsFor(client.user!)!.has([ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ])) return client.functions.noClientPerms(message, [ 'Read Message History', 'View Channel' ], channel);
-  if (!channel.permissionsFor(message.author!)!.has([ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ])) return client.functions.noPerms(message, [ 'Read Message History', 'View Channel' ], channel);
+  if (!channel.permissionsFor(client.user!)!.has([ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ])) return client.functions.noClientPerms(message, [ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ], channel);
+  if (!channel.permissionsFor(message.author!)!.has([ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ])) return client.functions.noPerms(message, [ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ], channel);
 
   const msg = await channel.messages.fetch(res[2]).catch(() => false);
   if (!(msg instanceof Message)) return client.functions.badArg(message, 1, 'I did not find the message provided.');
