@@ -3,7 +3,7 @@ import ReknownClient from '../../structures/client';
 import { GuildMember, Message, PermissionString, TextChannel, User } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
-  if (!message.member!.hasPermission('BAN_MEMBERS')) return client.functions.noPerms(message, [ 'Ban Members' ]);
+  if (!message.member!.hasPermission('BAN_MEMBERS')) return client.functions.noPerms(message, [ 'BAN_MEMBERS' ]);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'a user to ban.');
   const member = await client.functions.parseMention(args[1], { guild: message.guild!, type: 'member' }).catch(() => false);
