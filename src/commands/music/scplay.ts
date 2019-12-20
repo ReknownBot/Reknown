@@ -14,7 +14,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   if (!message.member!.voice.channel) return message.reply('You must be in a voice channel to do this.');
   if (music.player && music.player.playing && message.guild!.voice!.channelID !== message.member!.voice.channelID) return message.reply('You must be in the same voice channel as me to run that command.');
   const vc = message.member!.voice.channel;
-  if (!vc.permissionsFor(client.user!)!.has([ 'CONNECT', 'SPEAK' ])) return client.functions.noClientPerms(message, [ 'Connect', 'Speak' ], vc);
+  if (!vc.permissionsFor(client.user!)!.has([ 'CONNECT', 'SPEAK' ])) return client.functions.noClientPerms(message, [ 'CONNECT', 'SPEAK' ], vc);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'a query to search for.');
   const res = await client.lavalink!.load(`scsearch:${args.slice(1).join(' ')}`);
