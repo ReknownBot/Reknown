@@ -1,7 +1,7 @@
 import { HelpObj } from 'ReknownBot';
-import { Message } from 'discord.js';
 import ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
+import { Message, PermissionString } from 'discord.js';
 
 interface JokeResult {
   id: string;
@@ -26,3 +26,5 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'joke'
 };
+
+export const permissions: PermissionString[] = [];

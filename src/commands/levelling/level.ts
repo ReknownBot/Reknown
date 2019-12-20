@@ -1,11 +1,9 @@
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import { GuildMember, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { GuildMember, Message, MessageEmbed, PermissionString, TextChannel } from 'discord.js';
 import { HelpObj, LevelRow } from 'ReknownBot';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
-  if (!message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
-
   const member = args[1] ? await client.functions.parseMention(args[1], { guild: message.guild!, type: 'member' }).catch(() => false) : message.member;
   if (!(member instanceof GuildMember)) return client.functions.badArg(message, 1, 'I did not find a member by that query.');
 
@@ -38,3 +36,7 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'level [Member]'
 };
+
+export const permissions: PermissionString[] = [
+  'EMBED_LINKS'
+];

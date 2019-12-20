@@ -1,6 +1,6 @@
 import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   const music = client.music[message.guild!.id];
@@ -36,3 +36,5 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'queue ["clear"]'
 };
+
+export const permissions: PermissionString[] = [];

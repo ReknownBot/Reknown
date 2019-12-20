@@ -1,6 +1,6 @@
 import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
-import { Message, TextChannel } from 'discord.js';
+import { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   let members = message.guild!.members;
@@ -17,3 +17,5 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'someone'
 };
+
+export const permissions: PermissionString[] = [];
