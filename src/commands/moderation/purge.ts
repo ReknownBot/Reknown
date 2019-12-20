@@ -1,9 +1,8 @@
 import { HelpObj, ReknownClient } from 'ReknownBot';
-import { Message, TextChannel } from 'discord.js';
+import { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!message.channel.permissionsFor(message.member!)!.has('MANAGE_MESSAGES')) return client.functions.noPerms(message, [ 'Manage Messages' ], message.channel);
-  if (!message.channel.permissionsFor(client.user!)!.has('MANAGE_MESSAGES')) return client.functions.noPerms(message, [ 'Manage Messages' ], message.channel);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'an amount to purge.');
   const amt = parseInt(args[1]);
@@ -20,3 +19,8 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'purge <Amount>'
 };
+
+export const permissions: PermissionString[] = [
+  'MANAGE_MESSAGES',
+  'READ_MESSAGE_HISTORY'
+];

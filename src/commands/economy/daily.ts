@@ -1,8 +1,8 @@
-import { Message } from 'discord.js';
 import ReknownClient from '../../structures/client';
 import ms from 'ms';
 import { tables } from '../../Constants';
 import { CooldownRow, EconomyRow, HelpObj } from 'ReknownBot';
+import { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   let registered = await client.functions.getRow<EconomyRow>(client, tables.ECONOMY, {
@@ -40,3 +40,5 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'daily'
 };
+
+export const permissions: PermissionString[] = [];

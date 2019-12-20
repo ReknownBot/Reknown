@@ -1,7 +1,7 @@
 import { HelpObj } from 'ReknownBot';
-import { Message } from 'discord.js';
 import ReknownClient from '../../structures/client';
 import { say } from 'cowsay';
+import { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'a message for a cow to say.');
@@ -18,3 +18,5 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'cowsay <Message>'
 };
+
+export const permissions: PermissionString[] = [];

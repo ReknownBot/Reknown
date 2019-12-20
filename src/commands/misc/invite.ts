@@ -1,6 +1,6 @@
 import { HelpObj } from 'ReknownBot';
-import { Message } from 'discord.js';
 import ReknownClient from '../../structures/client';
+import { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   message.channel.send('**Add Reknown to your Server**: <https://reknown.xyz/invite>');
@@ -14,3 +14,5 @@ export const help: HelpObj = {
   togglable: false,
   usage: 'invite'
 };
+
+export const permissions: PermissionString[] = [];

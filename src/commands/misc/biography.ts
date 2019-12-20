@@ -1,7 +1,7 @@
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
 import { BiographyRow, HelpObj } from 'ReknownBot';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, PermissionString, TextChannel } from 'discord.js';
 
 const allowedFields = [
   'email',
@@ -10,8 +10,6 @@ const allowedFields = [
 ];
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
-  if (!message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
-
   if (args[1] && args[1].toLowerCase() === 'set') {
     if (!args[2]) return client.functions.noArg(message, 2, `a field to fill. It can be: ${allowedFields.join(', ')}.`);
     const field = args[2].toLowerCase();
@@ -61,3 +59,7 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'biography [Member]\nbiography set <Field> <Value>'
 };
+
+export const permissions: PermissionString[] = [
+  'EMBED_LINKS'
+];

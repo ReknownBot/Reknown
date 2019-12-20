@@ -1,9 +1,8 @@
 import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
-import { Message, TextChannel } from 'discord.js';
+import { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
-  if (!message.guild!.me!.hasPermission('MANAGE_ROLES')) return client.functions.noClientPerms(message, [ 'Manage Roles' ]);
   if (!args[1]) return client.functions.noArg(message, 1, 'a role to mention.');
   const role = message.guild!.roles.find(r => r.name === args.slice(1).join(' ')) || message.guild!.roles.get(args[1]);
   if (!role) return client.functions.badArg(message, 1, 'I did not find the role. Please provide the name (case sensitive) or the ID of the role.');
@@ -28,3 +27,7 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'mention <Role>'
 };
+
+export const permissions: PermissionString[] = [
+  'MANAGE_ROLES'
+];

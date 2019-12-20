@@ -1,9 +1,8 @@
 import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
-import { GuildMember, Message, TextChannel } from 'discord.js';
+import { GuildMember, Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
-  if (!message.channel.permissionsFor(client.user!)!.has('KICK_MEMBERS')) return client.functions.noClientPerms(message, [ 'Kick Members' ], message.channel);
   if (!message.member!.hasPermission('KICK_MEMBERS')) return client.functions.noPerms(message, [ 'Kick Members' ]);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'a user to kick.');
@@ -23,3 +22,7 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'kick <User> [Reason]'
 };
+
+export const permissions: PermissionString[] = [
+  'KICK_MEMBERS'
+];
