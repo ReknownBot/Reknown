@@ -58,7 +58,7 @@ export async function run (client: ReknownClient, message: Message, args: string
 }
 
 export const help: HelpObj = {
-  aliases: [ 'commands', 'command' ],
+  aliases: [ 'command', 'commands' ],
   category: 'Miscellaneous',
   desc: 'Displays the help menu or shows information about a command or category.',
   dm: true,
