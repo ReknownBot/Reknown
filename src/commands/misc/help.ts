@@ -1,10 +1,8 @@
 import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
-
   const prefix = message.guild ? await client.functions.getPrefix(client, message.guild.id) : client.config.prefix;
   if (!args[1]) {
     let commands = client.commands.keyArray();
@@ -65,3 +63,7 @@ export const help: HelpObj = {
   togglable: false,
   usage: 'help [Command or Category]'
 };
+
+export const permissions: PermissionString[] = [
+  'EMBED_LINKS'
+];

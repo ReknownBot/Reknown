@@ -1,7 +1,7 @@
 import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { prefix } from '../../config.json';
-import { Guild, Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Guild, Message, MessageEmbed, PermissionString, TextChannel } from 'discord.js';
 
 const configs: { [ key: string ]: string } = {
   levelmodifier: 'The level modifier for levelling up.',
@@ -58,8 +58,6 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!args[1]) {
-    if (!message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
-
     const embed = new MessageEmbed()
       .setColor(client.config.embedColor)
       .setDescription(Object.keys(configs).map(name => `\`${name}\` - ${configs[name]}`).join('\n'))
@@ -104,3 +102,7 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'config [Configuration] [Value]'
 };
+
+export const permissions: PermissionString[] = [
+  'EMBED_LINKS'
+];

@@ -1,6 +1,6 @@
-import { Message } from 'discord.js';
 import { tables } from '../../Constants';
 import { EconomyRow, HelpObj, ReknownClient } from 'ReknownBot';
+import { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const user = args[1] ? await client.functions.parseMention(args[1], {
@@ -25,3 +25,5 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'balance [User]'
 };
+
+export const permissions: PermissionString[] = [];

@@ -1,7 +1,7 @@
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
 import { DisabledCommandsRow, HelpObj } from 'ReknownBot';
-import { Message, TextChannel } from 'discord.js';
+import { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!message.member!.hasPermission('ADMINISTRATOR')) return client.functions.noPerms(message, [ 'Administrator' ]);
@@ -37,3 +37,5 @@ export const help: HelpObj = {
   togglable: false,
   usage: 'togglecommand <Command> ["enable"/"disable"]'
 };
+
+export const permissions: PermissionString[] = [];
