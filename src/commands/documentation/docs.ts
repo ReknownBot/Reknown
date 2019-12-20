@@ -2,7 +2,7 @@ import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
 import { stringify } from 'querystring';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, PermissionString } from 'discord.js';
 
 const sources = [
   'stable',
@@ -15,8 +15,6 @@ const sources = [
 ];
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
-
   const q = args[1];
   let branch = args[2] || 'stable';
   if (!q) return client.functions.noArg(message, 1, 'a query to search for.');
@@ -40,3 +38,7 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'docs <Query> [Branch]'
 };
+
+export const permissions: PermissionString[] = [
+  'EMBED_LINKS'
+];

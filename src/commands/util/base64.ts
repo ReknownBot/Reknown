@@ -2,11 +2,9 @@ import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import atob from 'atob';
 import btoa from 'btoa';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
-
   const method = args[1] ? args[1].toLowerCase() : null;
   if (!method) return client.functions.noArg(message, 1, 'an action to do, either decode / encode.');
   if (method !== 'decode' && method !== 'encode') return client.functions.badArg(message, 1, 'The action provided was not a valid choice. It must be either decode or encode.');
@@ -36,3 +34,7 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'base64 <"decode"/"encode"> <Input>'
 };
+
+export const permissions: PermissionString[] = [
+  'EMBED_LINKS'
+];

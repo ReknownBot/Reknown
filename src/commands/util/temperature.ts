@@ -1,6 +1,6 @@
 import { HelpObj } from 'ReknownBot';
-import { Message } from 'discord.js';
 import ReknownClient from '../../structures/client';
+import { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'either "f" or "c" to convert to.');
@@ -24,3 +24,5 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'temperature <"f"/"c"> <Input>'
 };
+
+export const permissions: PermissionString[] = [];

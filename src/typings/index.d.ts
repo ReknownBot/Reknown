@@ -1,5 +1,5 @@
 declare module 'ReknownBot' {
-  import { CategoryChannel, ClientUser, Guild, GuildChannel, GuildMember, Message, MessageEmbed, Role, Snowflake, TextChannel, User, VoiceChannel } from 'discord.js';
+  import { CategoryChannel, ClientUser, Guild, GuildChannel, GuildMember, Message, MessageEmbed, PermissionString, Role, Snowflake, TextChannel, User, VoiceChannel } from 'discord.js';
   import { Player, Track } from 'lavalink';
   type ReknownClient = import('../structures/client').default;
 
@@ -115,6 +115,7 @@ declare module 'ReknownBot' {
 
   interface ReknownCommand {
     help: HelpObj;
+    permissions: PermissionString[];
     run: (client: ReknownClient, message: Message, args: string[]) => void;
   }
 

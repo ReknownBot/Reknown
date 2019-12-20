@@ -1,9 +1,8 @@
 import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
-import { GuildMember, Message, TextChannel, User } from 'discord.js';
+import { GuildMember, Message, PermissionString, TextChannel, User } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
-  if (!message.channel.permissionsFor(client.user!)!.has('BAN_MEMBERS')) return client.functions.noClientPerms(message, [ 'Ban Members' ], message.channel);
   if (!message.member!.hasPermission('BAN_MEMBERS')) return client.functions.noPerms(message, [ 'Ban Members' ]);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'a user to ban.');
@@ -29,3 +28,7 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'ban <User> [Reason]'
 };
+
+export const permissions: PermissionString[] = [
+  'BAN_MEMBERS'
+];

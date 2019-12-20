@@ -35,6 +35,8 @@ export async function run (client: ReknownClient, message: Message) {
   }
 
   const cmdInfo = client.commands.get(cmd)!;
-  if (message.channel instanceof DMChannel && !cmdInfo.help.dm) return message.reply('This command is only available in servers.');
+  if (message.channel instanceof DMChannel) {
+    if (!cmdInfo.help.dm) return message.reply('This command is only available in servers.');
+  } else if (!message.channel.permissionsFor(client.user!)!.has(cmdInfo.permissions)) return client.functions.noClientPerms(message, cmdInfo.permissions, message.channel);
   cmdInfo.run(client, message, args);
 }

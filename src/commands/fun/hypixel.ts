@@ -3,7 +3,7 @@ import { Player } from 'Hypixel-API';
 import ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
 import { stringify } from 'querystring';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, PermissionString } from 'discord.js';
 
 interface UUIDJson {
   id: string;
@@ -20,8 +20,6 @@ const GROWTH_DIVIDES_2 = 0.0008;
 let ratelimit = 0;
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
-
   if (ratelimit >= 115) return message.reply('I am getting close to the ratelimit for the Hypixel API. Please try again in a moment.');
   if (!args[1]) return client.functions.noArg(message, 1, 'a type of statistic to look up, it can be: player.');
   if (!args[2]) return client.functions.noArg(message, 2, 'a value to search by.');
@@ -68,3 +66,7 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'hypixel <"player"> <In-Game Name>'
 };
+
+export const permissions: PermissionString[] = [
+  'EMBED_LINKS'
+];

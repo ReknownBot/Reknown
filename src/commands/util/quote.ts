@@ -1,12 +1,10 @@
 import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, PermissionString, TextChannel } from 'discord.js';
 
 const regex = /(?:discordapp.com\/channels)\/(?:(\d{17,19})\/(\d{17,19})\/(\d{17,19}))/;
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
-
   if (!args[1]) return client.functions.noArg(message, 1, 'a message URL to quote.');
   if (!regex.test(args[1])) return client.functions.badArg(message, 1, 'The provided argument was not a message URL.');
   const res = args[1].match(regex)!.slice(1);
@@ -44,3 +42,7 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'quote <Message URL>'
 };
+
+export const permissions: PermissionString[] = [
+  'EMBED_LINKS'
+];

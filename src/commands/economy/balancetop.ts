@@ -1,11 +1,9 @@
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
 import { EconomyRow, HelpObj } from 'ReknownBot';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, MessageEmbed, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  if (message.channel instanceof TextChannel && !message.channel.permissionsFor(client.user!)!.has('EMBED_LINKS')) return client.functions.noClientPerms(message, [ 'Embed Links' ], message.channel);
-
   const { rows }: { rows: EconomyRow[] } = await client.query(`SELECT * FROM ${tables.ECONOMY} ORDER BY balance DESC LIMIT 10`);
   const desc = await Promise.all(rows.map(async (r, i) => {
     const user = await client.users.fetch(r.userid).catch(() => null);
@@ -35,3 +33,7 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'balancetop'
 };
+
+export const permissions: PermissionString[] = [
+  'EMBED_LINKS'
+];
