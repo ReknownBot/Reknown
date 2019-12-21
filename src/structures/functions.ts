@@ -119,7 +119,7 @@ export class Functions {
       else music.queue.shift();
 
       // eslint-disable-next-line import/no-commonjs
-      if (music.queue.length > 0) return setTimeout(module.exports.run, 500, client, guild, music, music.queue[0], true);
+      if (music.queue.length > 0) return setTimeout(this.playMusic, 500, client, guild, music, music.queue[0], true);
       client.functions.endSession(music);
     });
   }
