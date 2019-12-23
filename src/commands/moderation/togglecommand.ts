@@ -4,8 +4,6 @@ import { DisabledCommandsRow, HelpObj } from 'ReknownBot';
 import { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
-  if (!message.member!.hasPermission('ADMINISTRATOR')) return client.functions.noPerms(message, [ 'ADMINISTRATOR' ]);
-
   if (!args[1]) return client.functions.noArg(message, 1, 'A command to toggle.');
   const command = client.commands.aliases[args[1].toLowerCase()];
   if (!command) return client.functions.badArg(message, 1, 'I did not find that command.');
@@ -37,5 +35,9 @@ export const help: HelpObj = {
   togglable: false,
   usage: 'togglecommand <Command> ["enable"/"disable"]'
 };
+
+export const memberPerms: PermissionString[] = [
+  'ADMINISTRATOR'
+];
 
 export const permissions: PermissionString[] = [];

@@ -91,6 +91,7 @@ declare module 'ReknownBot' {
 
   interface ReknownCommand {
     help: HelpObj;
+    memberPerms: PermissionString[];
     permissions: PermissionString[];
     run: (client: ReknownClient, message: Message, args: string[]) => void;
   }

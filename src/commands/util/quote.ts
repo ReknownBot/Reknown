@@ -43,6 +43,8 @@ export const help: HelpObj = {
   usage: 'quote <Message URL>'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [
   'EMBED_LINKS'
 ];

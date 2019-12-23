@@ -21,4 +21,6 @@ export const help: HelpObj = {
   usage: 'resume'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];

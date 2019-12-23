@@ -67,6 +67,8 @@ export const help: HelpObj = {
   usage: 'hypixel <"player"> <In-Game Name>'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [
   'EMBED_LINKS'
 ];

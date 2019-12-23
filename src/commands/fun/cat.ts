@@ -29,6 +29,8 @@ export const help: HelpObj = {
   usage: 'cat'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [
   'EMBED_LINKS'
 ];

@@ -37,4 +37,6 @@ export const help: HelpObj = {
   usage: 'queue ["clear"]'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];

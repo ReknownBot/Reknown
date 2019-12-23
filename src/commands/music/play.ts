@@ -39,4 +39,6 @@ export const help: HelpObj = {
   usage: 'play <Query>'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];
