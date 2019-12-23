@@ -7,7 +7,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   if (!message.member!.hasPermission('ADMINISTRATOR')) return client.functions.noPerms(message, [ 'ADMINISTRATOR' ]);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'A command to toggle.');
-  const command = client.aliases[args[1].toLowerCase()];
+  const command = client.commands.aliases[args[1].toLowerCase()];
   if (!command) return client.functions.badArg(message, 1, 'I did not find that command.');
   const cmdInfo = client.commands.get(command)!;
   if (!cmdInfo.help.togglable) return client.functions.badArg(message, 1, 'You cannot toggle this command.');
