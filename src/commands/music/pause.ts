@@ -27,4 +27,6 @@ export const help: HelpObj = {
   usage: 'pause [Toggle=auto]'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];

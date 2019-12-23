@@ -35,6 +35,8 @@ export const help: HelpObj = {
   usage: 'base64 <"decode"/"encode"> <Input>'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [
   'EMBED_LINKS'
 ];

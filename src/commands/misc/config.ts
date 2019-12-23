@@ -68,7 +68,6 @@ export async function run (client: ReknownClient, message: Message & { channel: 
     return message.channel.send(embed);
   }
 
-  if (!message.member!.hasPermission('ADMINISTRATOR')) return client.functions.noPerms(message, [ 'ADMINISTRATOR' ]);
   const table = args[1].toLowerCase();
   if (!Object.keys(configs).includes(table)) return client.functions.badArg(message, 1, 'That configuration value does not exist.');
   const row = await client.functions.getRow<any>(client, table, {
@@ -102,6 +101,10 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'config [Configuration] [Value]'
 };
+
+export const memberPerms: PermissionString[] = [
+  'ADMINISTRATOR'
+];
 
 export const permissions: PermissionString[] = [
   'EMBED_LINKS'

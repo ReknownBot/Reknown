@@ -64,6 +64,8 @@ export const help: HelpObj = {
   usage: 'help [Command or Category]'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [
   'EMBED_LINKS'
 ];

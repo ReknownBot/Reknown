@@ -60,6 +60,8 @@ export const help: HelpObj = {
   usage: 'biography [Member]\nbiography set <Field> <Value>'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [
   'EMBED_LINKS'
 ];

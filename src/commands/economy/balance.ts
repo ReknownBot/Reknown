@@ -26,4 +26,6 @@ export const help: HelpObj = {
   usage: 'balance [User]'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];
