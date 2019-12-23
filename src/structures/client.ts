@@ -1,18 +1,15 @@
 import * as config from '../config.json';
+import CommandHandler from './commandhandler';
 import { Functions } from './functions';
 import Node from 'lavalink';
 import { Pool } from 'pg';
 import { Client, Collection, Util } from 'discord.js';
-import { CommandCategory, ConfigObject, MusicObject, ReknownCommand, ReknownEvent } from 'ReknownBot';
+import { ConfigObject, MusicObject, ReknownEvent } from 'ReknownBot';
 
 const pool = new Pool();
 
 export default class ReknownClient extends Client {
-  public aliases: { [ command: string ]: string } = {};
-
-  public categories: CommandCategory[] = [];
-
-  public commands = new Collection<string, ReknownCommand>();
+  public commands = new CommandHandler();
 
   public config: ConfigObject = config;
 

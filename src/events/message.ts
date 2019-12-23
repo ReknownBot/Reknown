@@ -20,12 +20,12 @@ export async function run (client: ReknownClient, message: Message) {
   if (message.content.match(regexp)) args = message.content.slice(message.content.match(regexp)![0].length).split(/ +/g);
   else args = message.content.slice(prefix.length).split(/ +/g);
   let cmd = args[0].toLowerCase();
-  if (!Object.keys(client.aliases).includes(cmd)) return;
+  if (!Object.keys(client.commands.aliases).includes(cmd)) return;
 
   cooldowns.add(message.guild!.id);
   setTimeout(() => cooldowns.delete(message.guild!.id), 1000);
 
-  cmd = client.aliases[cmd];
+  cmd = client.commands.aliases[cmd];
   if (message.guild) {
     const disabled = await client.functions.getRow<DisabledCommandsRow>(client, tables.DISABLEDCOMMANDS, {
       command: cmd,
