@@ -19,4 +19,6 @@ export const help: HelpObj = {
   usage: 'cowsay <Message>'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];

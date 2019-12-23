@@ -18,4 +18,6 @@ export const help: HelpObj = {
   usage: 'someone'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];

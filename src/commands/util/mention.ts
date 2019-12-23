@@ -28,6 +28,8 @@ export const help: HelpObj = {
   usage: 'mention <Role>'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [
   'MANAGE_ROLES'
 ];

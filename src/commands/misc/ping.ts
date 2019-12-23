@@ -16,4 +16,6 @@ export const help: HelpObj = {
   usage: 'ping'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];

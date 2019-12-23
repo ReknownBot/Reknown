@@ -30,4 +30,6 @@ export const help: HelpObj = {
   usage: 'prefix [New Prefix]'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];

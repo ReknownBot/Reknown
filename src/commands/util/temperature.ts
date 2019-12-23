@@ -25,4 +25,6 @@ export const help: HelpObj = {
   usage: 'temperature <"f"/"c"> <Input>'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];

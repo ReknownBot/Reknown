@@ -68,6 +68,8 @@ export const help: HelpObj = {
   usage: 'binary <"decode"/"encode"> <Input>'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [
   'EMBED_LINKS'
 ];

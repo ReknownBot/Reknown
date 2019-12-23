@@ -41,4 +41,6 @@ export const help: HelpObj = {
   usage: 'daily'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];
