@@ -39,4 +39,6 @@ export const help: HelpObj = {
   usage: 'equalizer [New Equalizer]'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];

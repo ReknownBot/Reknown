@@ -34,6 +34,8 @@ export const help: HelpObj = {
   usage: 'balancetop'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [
   'EMBED_LINKS'
 ];

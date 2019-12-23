@@ -20,4 +20,6 @@ export const help: HelpObj = {
   usage: 'stop'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];

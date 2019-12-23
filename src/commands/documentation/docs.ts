@@ -39,6 +39,8 @@ export const help: HelpObj = {
   usage: 'docs <Query> [Branch]'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [
   'EMBED_LINKS'
 ];

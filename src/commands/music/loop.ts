@@ -26,4 +26,6 @@ export const help: HelpObj = {
   usage: 'loop [Toggle=on]'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];

@@ -27,4 +27,6 @@ export const help: HelpObj = {
   usage: 'joke'
 };
 
+export const memberPerms: PermissionString[] = [];
+
 export const permissions: PermissionString[] = [];
