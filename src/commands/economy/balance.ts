@@ -1,5 +1,5 @@
 import { tables } from '../../Constants';
-import { EconomyRow, HelpObj, ReknownClient } from 'ReknownBot';
+import { HelpObj, ReknownClient, RowEconomy } from 'ReknownBot';
 import { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
@@ -9,7 +9,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   }) : message.author;
   if (!user) return client.functions.badArg(message, 1, 'That user was not found.');
 
-  const row = await client.functions.getRow<EconomyRow>(client, tables.ECONOMY, {
+  const row = await client.functions.getRow<RowEconomy>(client, tables.ECONOMY, {
     userid: user.id
   });
   if (!row || row.balance === 0) return message.reply('That user does not have a registered account or has no money.');

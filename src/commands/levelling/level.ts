@@ -1,13 +1,13 @@
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
 import { GuildMember, Message, MessageEmbed, PermissionString, TextChannel } from 'discord.js';
-import { HelpObj, LevelRow } from 'ReknownBot';
+import { HelpObj, RowLevel } from 'ReknownBot';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   const member = args[1] ? await client.functions.parseMention(args[1], { guild: message.guild!, type: 'member' }).catch(() => false) : message.member;
   if (!(member instanceof GuildMember)) return client.functions.badArg(message, 1, 'I did not find a member by that query.');
 
-  const row = await client.functions.getRow<LevelRow>(client, tables.LEVELS, {
+  const row = await client.functions.getRow<RowLevel>(client, tables.LEVELS, {
     userid: member.id,
     guildid: message.guild!.id
   });

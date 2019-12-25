@@ -1,6 +1,6 @@
 import { tables } from '../Constants';
-import { ChannelRow, ReknownClient, StarMessageRow, ToggleRow } from 'ReknownBot';
 import { MessageEmbed, MessageReaction, PartialUser, TextChannel, User } from 'discord.js';
+import { ReknownClient, RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
 
 export async function run (client: ReknownClient, reaction: MessageReaction, user: User | PartialUser) {
   if (reaction.message.partial) await reaction.message.fetch();
@@ -11,7 +11,7 @@ export async function run (client: ReknownClient, reaction: MessageReaction, use
   if (message.webhookID) return;
   if (!message.content && !message.attachments.find(attch => Boolean(attch.height))) return;
 
-  const toggled = await client.functions.getRow<ToggleRow>(client, tables.STARTOGGLE, {
+  const toggled = await client.functions.getRow<RowToggle>(client, tables.STARTOGGLE, {
     guildid: message.guild.id
   });
   if (!toggled || !toggled.bool) return;
@@ -20,7 +20,7 @@ export async function run (client: ReknownClient, reaction: MessageReaction, use
   if (reaction.users.has(message.author.id)) count -= 1;
   if (count === 0) return client.query(`DELETE FROM ${tables.STARBOARD} WHERE msgid = $1`, [ message.id ]);
 
-  const channelRow = await client.functions.getRow<ChannelRow>(client, tables.STARCHANNEL, {
+  const channelRow = await client.functions.getRow<RowChannel>(client, tables.STARCHANNEL, {
     guildid: message.guild.id
   });
   const channel = (channelRow ? message.guild.channels.get(channelRow.channelid) : message.guild.channels.find(c => c.name === 'starboard' && c.type === 'text')) as TextChannel | undefined;
@@ -30,7 +30,7 @@ export async function run (client: ReknownClient, reaction: MessageReaction, use
   const emoji = reaction.emoji.name;
   if (emoji !== '\u2B50') return;
 
-  const msgRow = await client.functions.getRow<StarMessageRow>(client, tables.STARBOARD, {
+  const msgRow = await client.functions.getRow<RowStarboard>(client, tables.STARBOARD, {
     msgid: message.id
   });
 
