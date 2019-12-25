@@ -1,7 +1,7 @@
 import { Track } from 'lavalink';
 import { embedColor } from '../config.json';
 import { CategoryChannel, ClientUser, Guild, GuildChannel, GuildMember, Message, MessageEmbed, Role, Snowflake, TextChannel, User, Util, VoiceChannel } from 'discord.js';
-import { ChannelRow, EconomyRow, MusicObject, ParseMentionOptions, PrefixRow, ReknownClient, ToggleRow, WebhookRow } from 'ReknownBot';
+import { MusicObject, ParseMentionOptions, ReknownClient, RowChannel, RowEconomy, RowPrefix, RowToggle, RowWebhook } from 'ReknownBot';
 import { parsedPerms, tables } from '../Constants';
 
 export class Functions {
@@ -30,7 +30,7 @@ export class Functions {
 
   public async getPrefix (client: ReknownClient, id: Snowflake): Promise<string> {
     if (client.prefixes[id]) return client.prefixes[id];
-    const row = await client.functions.getRow<PrefixRow>(client, tables.PREFIX, {
+    const row = await client.functions.getRow<RowPrefix>(client, tables.PREFIX, {
       guildid: id
     });
     return client.prefixes[id] = row ? row.customprefix : client.config.prefix;
@@ -123,24 +123,24 @@ export class Functions {
     });
   }
 
-  public async register (client: ReknownClient, userid: Snowflake): Promise<EconomyRow> {
+  public async register (client: ReknownClient, userid: Snowflake): Promise<RowEconomy> {
     return (await client.query(`INSERT INTO ${tables.ECONOMY} (balance, userid) VALUES ($1, $2) RETURNING *`, [ 0, userid ])).rows[0];
   }
 
   public async sendLog (client: ReknownClient, embed: MessageEmbed, guild: Guild) {
-    const toggledRow = await client.functions.getRow<ToggleRow>(client, tables.LOGTOGGLE, {
+    const toggledRow = await client.functions.getRow<RowToggle>(client, tables.LOGTOGGLE, {
       guildid: guild.id
     });
     if (!toggledRow || !toggledRow.bool) return;
 
-    const channelRow = await client.functions.getRow<ChannelRow>(client, tables.LOGCHANNEL, {
+    const channelRow = await client.functions.getRow<RowChannel>(client, tables.LOGCHANNEL, {
       guildid: guild.id
     });
     const channel = (channelRow ? client.channels.get(channelRow.channelid) : guild.channels.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
     if (!channel) return;
     if (!channel.permissionsFor(client.user!)!.has('MANAGE_WEBHOOKS')) return;
     const webhooks = await channel.fetchWebhooks();
-    let webhookRow = await client.functions.getRow<WebhookRow>(client, tables.LOGWEBHOOK, {
+    let webhookRow = await client.functions.getRow<RowWebhook>(client, tables.LOGWEBHOOK, {
       channelid: channel.id
     });
     let webhook;
@@ -181,7 +181,7 @@ export class Functions {
     const columns = Object.keys(changes);
     const values = Object.values(changes);
     // eslint-disable-next-line no-extra-parens
-    if (table === 'prefix') client.prefixes[(changes as unknown as PrefixRow).guildid] = (changes as unknown as PrefixRow).customprefix;
+    if (table === 'prefix') client.prefixes[(changes as unknown as RowPrefix).guildid] = (changes as unknown as RowPrefix).customprefix;
     const row = await client.functions.getRow<any>(client, table, filters);
     if (row) client.query(`UPDATE ${table} SET ${columns.map((c, i) => `${c} = $${i + 1}`)} WHERE ${Object.keys(filters).map((c, i) => `${c} = $${i + columns.length + 1}`).join(' AND ')}`, [ ...values, ...Object.values(filters) ]);
     else client.query(`INSERT INTO ${table} (${columns}) VALUES (${columns.map((c, i) => `$${i + 1}`)})`, values);

@@ -1,5 +1,5 @@
-import { DisabledCommandsRow } from 'ReknownBot';
 import ReknownClient from '../structures/client';
+import { RowDisabledCommands } from 'ReknownBot';
 import { tables } from '../Constants';
 import { DMChannel, Message } from 'discord.js';
 
@@ -27,7 +27,7 @@ export async function run (client: ReknownClient, message: Message) {
 
   cmd = client.commands.aliases[cmd];
   if (message.guild) {
-    const disabled = await client.functions.getRow<DisabledCommandsRow>(client, tables.DISABLEDCOMMANDS, {
+    const disabled = await client.functions.getRow<RowDisabledCommands>(client, tables.DISABLEDCOMMANDS, {
       command: cmd,
       guildid: message.guild.id
     });
