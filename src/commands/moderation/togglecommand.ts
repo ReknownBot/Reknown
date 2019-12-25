@@ -1,6 +1,6 @@
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import { DisabledCommandsRow, HelpObj } from 'ReknownBot';
+import { HelpObj, RowDisabledCommands } from 'ReknownBot';
 import { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
@@ -10,7 +10,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   const cmdInfo = client.commands.get(command)!;
   if (!cmdInfo.help.togglable) return client.functions.badArg(message, 1, 'You cannot toggle this command.');
 
-  const row = await client.functions.getRow<DisabledCommandsRow>(client, tables.DISABLEDCOMMANDS, {
+  const row = await client.functions.getRow<RowDisabledCommands>(client, tables.DISABLEDCOMMANDS, {
     command: command,
     guildid: message.guild!.id
   });
