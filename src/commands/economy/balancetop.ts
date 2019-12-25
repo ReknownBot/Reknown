@@ -1,10 +1,10 @@
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import { EconomyRow, HelpObj } from 'ReknownBot';
+import { HelpObj, RowEconomy } from 'ReknownBot';
 import { Message, MessageEmbed, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  const { rows }: { rows: EconomyRow[] } = await client.query(`SELECT * FROM ${tables.ECONOMY} ORDER BY balance DESC LIMIT 10`);
+  const { rows }: { rows: RowEconomy[] } = await client.query(`SELECT * FROM ${tables.ECONOMY} ORDER BY balance DESC LIMIT 10`);
   const desc = await Promise.all(rows.map(async (r, i) => {
     const user = await client.users.fetch(r.userid).catch(() => null);
     if (!user) return client.query(`DELETE FROM ${tables.ECONOMY} WHERE userid = $1`, [ r.userid ]);

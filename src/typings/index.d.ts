@@ -12,39 +12,12 @@ declare module 'ReknownBot' {
       | 'Moderation'
       | 'Utility';
 
-  interface BiographyRow {
-    email: string;
-    summary: string;
-    twitter: string;
-    userid: string;
-  }
-
-  interface ChannelRow {
-    channelid: Snowflake;
-    guildid: Snowflake;
-  }
-
   interface ConfigObject {
     contributors: Snowflake[];
     embedColor: string;
     ownerID: Snowflake;
     prefix: string;
     suggestions: Snowflake;
-  }
-
-  interface CooldownRow {
-    endsat: number;
-    userid: string;
-  }
-
-  interface DisabledCommandsRow {
-    command: string;
-    guildid: string;
-  }
-
-  interface EconomyRow {
-    balance: number;
-    userid: Snowflake;
   }
 
   interface HelpObj {
@@ -55,18 +28,6 @@ declare module 'ReknownBot' {
     private?: boolean;
     togglable: boolean;
     usage: string;
-  }
-
-  interface LevelRow {
-    guildid: Snowflake;
-    level: number;
-    points: number;
-    userid: Snowflake;
-  }
-
-  interface MsgRow {
-    guildid: string;
-    msg: string;
   }
 
   interface MusicObject {
@@ -84,11 +45,6 @@ declare module 'ReknownBot' {
     type: 'member' | 'user' | 'role' | 'channel';
   }
 
-  interface PrefixRow {
-    customprefix: string;
-    guildid: string;
-  }
-
   interface ReknownCommand {
     help: HelpObj;
     memberPerms: PermissionString[];
@@ -100,17 +56,61 @@ declare module 'ReknownBot' {
     run: (...args: any) => void;
   }
 
-  interface StarMessageRow {
+  interface RowBiography {
+    email: string;
+    summary: string;
+    twitter: string;
+    userid: string;
+  }
+
+  interface RowChannel {
+    channelid: Snowflake;
+    guildid: Snowflake;
+  }
+
+  interface RowCooldown {
+    endsat: number;
+    userid: string;
+  }
+
+  interface RowDisabledCommands {
+    command: string;
+    guildid: string;
+  }
+
+  interface RowEconomy {
+    balance: number;
+    userid: Snowflake;
+  }
+
+  interface RowLevel {
+    guildid: Snowflake;
+    level: number;
+    points: number;
+    userid: Snowflake;
+  }
+
+  interface RowMsg {
+    guildid: string;
+    msg: string;
+  }
+
+  interface RowPrefix {
+    customprefix: string;
+    guildid: string;
+  }
+
+  interface RowStarboard {
     editid: Snowflake;
     msgid: Snowflake;
   }
 
-  interface ToggleRow {
+  interface RowToggle {
     bool: boolean;
     guildid: Snowflake;
   }
 
-  interface WebhookRow {
+  interface RowWebhook {
     channelid: Snowflake;
     guildid: Snowflake;
     webhookid: Snowflake;

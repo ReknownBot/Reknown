@@ -1,6 +1,6 @@
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import { BiographyRow, HelpObj } from 'ReknownBot';
+import { HelpObj, RowBiography } from 'ReknownBot';
 import { Message, MessageEmbed, PermissionString, TextChannel } from 'discord.js';
 
 const allowedFields = [
@@ -32,7 +32,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
     }) : message.member;
     if (!member) return client.functions.badArg(message, 1, 'That member was not found.');
 
-    const row = await client.functions.getRow<BiographyRow>(client, tables.BIOGRAPHY, {
+    const row = await client.functions.getRow<RowBiography>(client, tables.BIOGRAPHY, {
       userid: member.id
     });
     if (!row) return client.functions.badArg(message, 1, 'The member provided did not provide any information about themselves.');
