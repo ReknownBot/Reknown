@@ -177,10 +177,11 @@ export class Functions {
     message.channel.send(embed);
   }
 
-  public async updateRow (client: ReknownClient, table: string, changes: { [ column: string ]: any }, filters: { [ column: string ]: any }): Promise<void> {
+  public async updateRow<T> (client: ReknownClient, table: string, changes: T, filters: Partial<T>): Promise<void> {
     const columns = Object.keys(changes);
     const values = Object.values(changes);
-    if (table === 'prefix') client.prefixes[changes.guildid] = changes.customprefix;
+    // eslint-disable-next-line no-extra-parens
+    if (table === 'prefix') client.prefixes[(changes as unknown as PrefixRow).guildid] = (changes as unknown as PrefixRow).customprefix;
     const row = await client.functions.getRow<any>(client, table, filters);
     if (row) client.query(`UPDATE ${table} SET ${columns.map((c, i) => `${c} = $${i + 1}`)} WHERE ${Object.keys(filters).map((c, i) => `${c} = $${i + columns.length + 1}`).join(' AND ')}`, [ ...values, ...Object.values(filters) ]);
     else client.query(`INSERT INTO ${table} (${columns}) VALUES (${columns.map((c, i) => `$${i + 1}`)})`, values);
