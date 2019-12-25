@@ -41,7 +41,7 @@ function sendLog (client: ReknownClient, message: Message) {
   client.functions.sendLog(client, embed, message.guild!);
 }
 
-export function run (client: ReknownClient, message: Message) {
+export async function run (client: ReknownClient, message: Message) {
   if (!message.guild || !message.guild.available) return;
 
   delStar(client, message);
