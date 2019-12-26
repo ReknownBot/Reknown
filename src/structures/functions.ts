@@ -115,7 +115,7 @@ export class Functions {
     music.player!.once('event', async d => {
       if (d.reason === 'REPLACED') return;
       if (!guild.voice || !guild.voice.channel) return client.functions.endSession(music);
-      if (music.looping) music.queue.push(music.queue.shift()!);
+      if (music.looping && music.queue.length > 0) music.queue.push(music.queue.shift()!);
       else music.queue.shift();
 
       if (music.queue.length > 0) return setTimeout(this.playMusic.bind(this), 500, client, guild, music, music.queue[0], true);
