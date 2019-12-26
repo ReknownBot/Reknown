@@ -1,6 +1,7 @@
+import ReknownClient from '../structures/client';
 import { tables } from '../Constants';
 import { MessageEmbed, MessageReaction, PartialUser, TextChannel, User } from 'discord.js';
-import { ReknownClient, RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
+import { RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
 
 export async function run (client: ReknownClient, reaction: MessageReaction, user: User | PartialUser) {
   if (reaction.message.partial) await reaction.message.fetch();

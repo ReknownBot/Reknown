@@ -1,4 +1,4 @@
-import { ReknownClient } from 'ReknownBot';
+import ReknownClient from '../structures/client';
 import { GuildChannel, MessageEmbed } from 'discord.js';
 
 async function sendLog (client: ReknownClient, channel: GuildChannel) {

@@ -1,4 +1,5 @@
-import { HelpObj, ReknownClient } from 'ReknownBot';
+import { HelpObj } from 'ReknownBot';
+import ReknownClient from '../../structures/client';
 import { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
