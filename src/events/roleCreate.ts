@@ -1,4 +1,4 @@
-import { ReknownClient } from 'ReknownBot';
+import ReknownClient from '../structures/client';
 import { MessageEmbed, Role } from 'discord.js';
 
 function sendLog (client: ReknownClient, role: Role) {

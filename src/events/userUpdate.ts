@@ -1,4 +1,4 @@
-import { ReknownClient } from 'ReknownBot';
+import ReknownClient from '../structures/client';
 import { Guild, MessageEmbed, User } from 'discord.js';
 
 function avatarUpdate (client: ReknownClient, oldUser: User, newUser: User, guild: Guild) {

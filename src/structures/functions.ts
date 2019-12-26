@@ -1,7 +1,8 @@
+import ReknownClient from './client';
 import { Track } from 'lavalink';
 import { embedColor } from '../config.json';
 import { CategoryChannel, ClientUser, Guild, GuildChannel, GuildMember, Message, MessageEmbed, Role, Snowflake, TextChannel, User, Util, VoiceChannel } from 'discord.js';
-import { MusicObject, ParseMentionOptions, ReknownClient, RowChannel, RowEconomy, RowPrefix, RowToggle, RowWebhook } from 'ReknownBot';
+import { MusicObject, ParseMentionOptions, RowChannel, RowEconomy, RowPrefix, RowToggle, RowWebhook } from 'ReknownBot';
 import { parsedPerms, tables } from '../Constants';
 
 export class Functions {
