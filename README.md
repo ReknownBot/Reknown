@@ -11,7 +11,7 @@ Dr. Ari Gami#0001:
 Helped with hosting and fuzzy strings. Also a huge help in website development and Lavalink setup.
 
 Xenoq#4499:
-Partial development.
+Partial development and GFX creation.
 
 JacobTech#1234:
 Provided a host.
