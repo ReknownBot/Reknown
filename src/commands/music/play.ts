@@ -28,7 +28,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   if (!music.player.playing) await music.player.join(vc.id);
 
   client.functions.sendSong(music, message, song, client.user!);
-  client.functions.playMusic(client, message.guild!, music, song);
+  client.functions.playMusic.bind(client.functions)(client, message.guild!, music, song);
 }
 
 export const help: HelpObj = {
