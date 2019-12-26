@@ -1,6 +1,7 @@
+import { HelpObj } from 'ReknownBot';
 import { Message } from 'discord.js';
+import ReknownClient from '../../structures/client';
 import { evaluate } from 'mathjs';
-import { HelpObj, ReknownClient } from 'ReknownBot';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'an expression to evaluate.');

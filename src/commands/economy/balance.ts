@@ -1,5 +1,6 @@
+import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import { HelpObj, ReknownClient, RowEconomy } from 'ReknownBot';
+import { HelpObj, RowEconomy } from 'ReknownBot';
 import { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
