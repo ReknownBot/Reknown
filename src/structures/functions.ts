@@ -118,7 +118,7 @@ export class Functions {
       if (music.looping) music.queue.push(music.queue.shift()!);
       else music.queue.shift();
 
-      if (music.queue.length > 0) return setTimeout(this.playMusic, 500, client, guild, music, music.queue[0], true);
+      if (music.queue.length > 0) return setTimeout(this.playMusic.bind(this), 500, client, guild, music, music.queue[0], true);
       client.functions.endSession(music);
     });
   }
