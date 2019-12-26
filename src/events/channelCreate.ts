@@ -10,6 +10,8 @@ async function sendLog (client: ReknownClient, channel: GuildChannel) {
     .setTimestamp()
     .setTitle('Channel Created');
 
+  if (channel.parent) embed.addField('Category', client.escMD(channel.parent.name));
+
   client.functions.sendLog(client, embed, channel.guild);
 }
 
