@@ -3,7 +3,7 @@ import { GuildChannel, MessageEmbed } from 'discord.js';
 
 async function sendLog (client: ReknownClient, channel: GuildChannel) {
   const embed = new MessageEmbed()
-    .addField('Channel', channel.toString())
+    .addField('Channel', client.escMD(channel.name))
     .addField('Channel Type', channel.type)
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${channel.id}`)
