@@ -120,7 +120,7 @@ export class Functions {
       else music.queue.shift();
 
       if (music.queue.length > 0) return setTimeout(this.playMusic.bind(this), 500, client, guild, music, music.queue[0], true);
-      client.functions.endSession(music);
+      setTimeout(client.functions.endSession, 800, music);
     });
   }
 
