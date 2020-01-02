@@ -1,7 +1,7 @@
 import { HelpObj } from 'ReknownBot';
-import { Message } from 'discord.js';
 import ReknownClient from '../../structures/client';
 import { evaluate } from 'mathjs';
+import { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'an expression to evaluate.');
@@ -26,3 +26,7 @@ export const help: HelpObj = {
   togglable: true,
   usage: 'calculate <Expression>'
 };
+
+export const memberPerms: PermissionString[] = [];
+
+export const permissions: PermissionString[] = [];
