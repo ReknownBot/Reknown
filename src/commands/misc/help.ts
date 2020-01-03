@@ -26,9 +26,9 @@ export async function run (client: ReknownClient, message: Message, args: string
   }
 
   const query = args.slice(1).join(' ').toLowerCase();
-  if (!client.commands.has(query) && !client.commands.categories.some(c => c.toLowerCase() === query)) return client.functions.badArg(message, 1, 'The query provided was neither a category or a command.');
+  if (!client.commands.aliases[query] && !client.commands.categories.some(c => c.toLowerCase() === query)) return client.functions.badArg(message, 1, 'The query provided was neither a category or a command.');
 
-  const cmd = client.commands.get(query);
+  const cmd = client.commands.get(client.commands.aliases[query]);
   if (cmd) {
     const embed = new MessageEmbed()
       .addField('Usage', prefix + cmd.help.usage, true)
