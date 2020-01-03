@@ -22,7 +22,7 @@ export async function run (client: ReknownClient, message: Message) {
 
   let cmd = str.split(/ +/)[0];
   if (!Object.keys(client.commands.aliases).includes(cmd)) return;
-  const args = [ cmd, ...client.functions.parseArgs(str.slice(cmd.length + 1)) ];
+  const args = [ cmd, ...client.functions.parseArgs(str.slice(cmd.length)) ];
 
   cooldowns.add(message.guild!.id);
   setTimeout(() => cooldowns.delete(message.guild!.id), 1000);
