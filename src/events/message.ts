@@ -16,11 +16,13 @@ export async function run (client: ReknownClient, message: Message) {
 
   if (cooldowns.has(message.guild!.id)) return message.reply('This server is still on command cooldown! Please wait a second and try again.');
 
-  let args: string[];
-  if (message.content.match(regexp)) args = message.content.slice(message.content.match(regexp)![0].length).split(/ +/g);
-  else args = message.content.slice(prefix.length).split(/ +/g);
-  let cmd = args[0].toLowerCase();
+  let str: string;
+  if (message.content.match(regexp)) str = message.content.slice(message.content.match(regexp)![0].length);
+  else str = message.content.slice(prefix.length);
+
+  let cmd = str.split(/ +/)[0];
   if (!Object.keys(client.commands.aliases).includes(cmd)) return;
+  const args = [ cmd, ...client.functions.parseArgs(str.slice(cmd.length + 1)) ];
 
   cooldowns.add(message.guild!.id);
   setTimeout(() => cooldowns.delete(message.guild!.id), 1000);
