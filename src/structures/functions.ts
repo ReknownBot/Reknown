@@ -80,13 +80,12 @@ export class Functions {
     let space = '<SPCE>';
     while (content.indexOf(space) > -1) space += '*';
 
-    content = content.replace(/"([^"]*)"/g, (fm, capture: string) => {
-      if (capture === '') return '""';
-      return capture.replace(/ /g, space)
+    content = content.replace(/ ("[^"]{1,}"\B)/g, (fm, capture: string) => {
+      return capture.slice(1, -1).replace(/ /g, space)
         .replace(new RegExp('<Quote>', 'g'), '"');
     });
 
-    const arr = content.split(/ +/);
+    const arr = content.split(/ +/).filter(str => str);
     return arr.map(str => str.replace(new RegExp(space, 'g'), ' '));
   }
 
