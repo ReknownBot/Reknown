@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const client = new ReknownClient({
   disableEveryone: true,
-  partials: [ 'GUILD_MEMBER', 'MESSAGE', 'USER' ]
+  partials: [ 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER' ]
 });
 
 const eventList = readdirSync('./dist/events');

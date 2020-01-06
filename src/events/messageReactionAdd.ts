@@ -3,11 +3,12 @@ import { tables } from '../Constants';
 import { MessageEmbed, MessageReaction, PartialUser, TextChannel, User } from 'discord.js';
 import { RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
 
-export async function run (client: ReknownClient, reaction: MessageReaction, user: User | PartialUser) {
-  if (reaction.message.partial) await reaction.message.fetch();
+export async function run (client: ReknownClient, reaction: MessageReaction & { count: number }, user: User | PartialUser) {
+  if (reaction.partial) await reaction.fetch();
   if (user.partial) user = await user.fetch();
   if (user.bot) return;
   const { message } = reaction;
+  if (message.partial) await message.fetch();
   if (!message.guild || !message.guild.available) return;
   if (message.webhookID) return;
   if (!message.content && !message.attachments.find(attch => Boolean(attch.height))) return;
