@@ -10,7 +10,7 @@ async function sendLog (client: ReknownClient, oldEmoji: GuildEmoji, newEmoji: G
     .addField('Animated', newEmoji.animated ? 'Yes' : 'No')
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${newEmoji.id}`)
-    .setThumbnail(newEmoji.url!)
+    .setThumbnail(newEmoji.url)
     .setTimestamp()
     .setTitle('Emoji Name Updated');
 

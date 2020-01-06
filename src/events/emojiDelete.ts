@@ -7,7 +7,7 @@ async function sendLog (client: ReknownClient, emoji: GuildEmoji) {
     .addField('Animated', emoji.animated ? 'Yes' : 'No')
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${emoji.id}`)
-    .setThumbnail(emoji.url!)
+    .setThumbnail(emoji.url)
     .setTimestamp()
     .setTitle('Emoji Deleted');
 
