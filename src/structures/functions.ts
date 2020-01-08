@@ -76,17 +76,17 @@ export class Functions {
     message.channel.send(`You do not have the required permissions.\nThe permissions are:\n\n${formatted}`);
   }
 
-  public parseArgs (content: string): string[] {
-    let space = '<SPCE>';
-    while (content.indexOf(space) > -1) space += '*';
-
-    content = content.replace(/ ("[^"]{1,}"\B)/g, (fm, capture: string) => {
-      return capture.slice(1, -1).replace(/ /g, space)
-        .replace(new RegExp('<Quote>', 'g'), '"');
-    });
-
-    const arr = content.split(/ +/).filter(str => str);
-    return arr.map(str => str.replace(new RegExp(space, 'g'), ' '));
+  public parseArgs (str: string): string[] {
+    const cmd = str.split(/\s+/)[0];
+    str = str.slice(cmd.length);
+    const matches = [];
+    let match;
+    // eslint-disable-next-line no-useless-escape
+    const regex = new RegExp('"([\\s\\S]+?(?<!\\\\))"(?!\S)|([^\\s]+)', 'g');
+    while ((match = regex.exec(str)) !== null) {
+      matches.push(match[1] || match[0]);
+    }
+    return [ cmd, ...matches ];
   }
 
   public parseMention(id: Snowflake, options: ParseMentionOptions & { cType?: 'text'; guild: Guild; type: 'channel' }): TextChannel | null;
