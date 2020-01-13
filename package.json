@@ -35,7 +35,7 @@
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^8.2.0",
     "fs": "0.0.1-security",
-    "lavalink": "^2.8.2",
+    "lavalink": "^2.9.0",
     "mathjs": "^6.5.0",
     "moment": "^2.24.0",
     "ms": "^2.1.2",
