@@ -3,6 +3,9 @@
     "alwaysStrict": true,
     "declaration": false,
     "esModuleInterop": true,
+    "lib": [
+      "es2020.string"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./dist",
