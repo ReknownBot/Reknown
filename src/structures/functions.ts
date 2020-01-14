@@ -79,13 +79,13 @@ export class Functions {
   public parseArgs (str: string): string[] {
     const cmd = str.split(/\s+/)[0];
     str = str.slice(cmd.length);
-    const matches = [];
-    let match;
-    // eslint-disable-next-line no-useless-escape
-    const regex = new RegExp('"([\\s\\S]+?(?<!\\\\))"(?!\S)|([^\\s]+)', 'g');
-    while ((match = regex.exec(str)) !== null) {
-      matches.push(match[1] || match[0]);
-    }
+    const regex = /"(.+?(?<!\\))"(?!\S)|(\S+)/gs;
+    const matches = [ ...str.matchAll(regex) ].map(s => {
+      const match = s[1] || s[0];
+      if (match.includes(' ')) return match.replace(/\\"/gs, '"').replace(/\\ /gs, ' ');
+      return match;
+    });
+
     return [ cmd, ...matches ];
   }
 
