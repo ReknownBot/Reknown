@@ -1,7 +1,7 @@
-import { EqualizerBand } from 'lavalink';
-import { HelpObj } from 'ReknownBot';
-import ReknownClient from '../../structures/client';
-import { Message, PermissionString, TextChannel } from 'discord.js';
+import type { EqualizerBand } from 'lavalink';
+import type { HelpObj } from 'ReknownBot';
+import type ReknownClient from '../../structures/client';
+import type { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   const music = client.music[message.guild!.id];

@@ -1,7 +1,7 @@
-import ReknownClient from '../../structures/client';
+import type ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import { HelpObj, RowDisabledCommands } from 'ReknownBot';
-import { Message, PermissionString, TextChannel } from 'discord.js';
+import type { HelpObj, RowDisabledCommands } from 'ReknownBot';
+import type { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'A command to toggle.');

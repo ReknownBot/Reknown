@@ -1,8 +1,9 @@
-import ReknownClient from '../structures/client';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../structures/client';
 import dateformat from 'dateformat';
 import { tables } from '../Constants';
-import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
-import { RowChannel, RowMsg, RowToggle } from 'ReknownBot';
+import type { GuildMember, TextChannel } from 'discord.js';
+import type { RowChannel, RowMsg, RowToggle } from 'ReknownBot';
 
 function sendLog (client: ReknownClient, member: GuildMember) {
   const embed = new MessageEmbed()
