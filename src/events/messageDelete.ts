@@ -1,7 +1,8 @@
-import ReknownClient from '../structures/client';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../structures/client';
 import { tables } from '../Constants';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
-import { RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
+import type { Message, TextChannel } from 'discord.js';
+import type { RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
 
 async function delStar (client: ReknownClient, message: Message) {
   const toggled = await client.functions.getRow<RowToggle>(client, tables.STARTOGGLE, {

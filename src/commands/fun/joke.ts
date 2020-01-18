@@ -1,7 +1,7 @@
-import { HelpObj } from 'ReknownBot';
-import ReknownClient from '../../structures/client';
+import type { HelpObj } from 'ReknownBot';
+import type ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
-import { Message, PermissionString } from 'discord.js';
+import type { Message, PermissionString } from 'discord.js';
 
 interface JokeResult {
   id: string;

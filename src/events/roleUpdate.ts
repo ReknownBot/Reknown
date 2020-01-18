@@ -1,5 +1,6 @@
-import ReknownClient from '../structures/client';
-import { MessageEmbed, Role } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../structures/client';
+import type { Role } from 'discord.js';
 
 function nameUpdate (client: ReknownClient, oldRole: Role, newRole: Role) {
   if (oldRole.name === newRole.name) return;

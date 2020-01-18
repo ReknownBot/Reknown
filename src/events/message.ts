@@ -1,7 +1,8 @@
-import ReknownClient from '../structures/client';
-import { RowDisabledCommands } from 'ReknownBot';
+import { DMChannel } from 'discord.js';
+import type { Message } from 'discord.js';
+import type ReknownClient from '../structures/client';
+import type { RowDisabledCommands } from 'ReknownBot';
 import { tables } from '../Constants';
-import { DMChannel, Message } from 'discord.js';
 
 const cooldowns = new Set();
 

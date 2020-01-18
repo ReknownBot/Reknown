@@ -1,9 +1,10 @@
-import { HelpObj } from 'ReknownBot';
-import { Player } from 'Hypixel-API';
-import ReknownClient from '../../structures/client';
+import type { HelpObj } from 'ReknownBot';
+import { MessageEmbed } from 'discord.js';
+import type { Player } from 'Hypixel-API';
+import type ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
 import { stringify } from 'querystring';
-import { Message, MessageEmbed, PermissionString } from 'discord.js';
+import type { Message, PermissionString } from 'discord.js';
 
 interface UUIDJson {
   id: string;

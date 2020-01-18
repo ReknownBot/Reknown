@@ -1,8 +1,8 @@
-import ReknownClient from '../../structures/client';
+import type ReknownClient from '../../structures/client';
 import ms from 'ms';
 import { tables } from '../../Constants';
-import { HelpObj, RowCooldown, RowEconomy } from 'ReknownBot';
-import { Message, PermissionString } from 'discord.js';
+import type { HelpObj, RowCooldown, RowEconomy } from 'ReknownBot';
+import type { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   let registered = await client.functions.getRow<RowEconomy>(client, tables.ECONOMY, {

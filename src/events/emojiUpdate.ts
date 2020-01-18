@@ -1,5 +1,6 @@
-import ReknownClient from '../structures/client';
-import { GuildEmoji, MessageEmbed } from 'discord.js';
+import type { GuildEmoji } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../structures/client';
 
 async function sendLog (client: ReknownClient, oldEmoji: GuildEmoji, newEmoji: GuildEmoji) {
   if (oldEmoji.name === newEmoji.name) return;
