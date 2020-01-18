@@ -1,7 +1,8 @@
-import ReknownClient from '../structures/client';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../structures/client';
 import { tables } from '../Constants';
-import { MessageEmbed, MessageReaction, PartialUser, TextChannel, User } from 'discord.js';
-import { RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
+import type { MessageReaction, PartialUser, TextChannel, User } from 'discord.js';
+import type { RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
 
 export async function run (client: ReknownClient, reaction: MessageReaction & { count: number }, user: User | PartialUser) {
   if (reaction.partial) await reaction.fetch();

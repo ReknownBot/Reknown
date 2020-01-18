@@ -1,7 +1,7 @@
-import ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/client';
 import { tables } from '../Constants';
-import { Message, PartialMessage, TextChannel } from 'discord.js';
-import { RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
+import type { Message, PartialMessage, TextChannel } from 'discord.js';
+import type { RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
 
 export async function run (client: ReknownClient, message: Message | PartialMessage) {
   if (message.partial) message = await message.fetch();

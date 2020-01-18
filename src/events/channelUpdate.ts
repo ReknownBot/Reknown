@@ -1,4 +1,4 @@
-import ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/client';
 import { DMChannel, GuildChannel, MessageEmbed } from 'discord.js';
 
 async function sendLog (client: ReknownClient, oldChannel: GuildChannel, newChannel: GuildChannel) {

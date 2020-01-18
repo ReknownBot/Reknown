@@ -1,10 +1,10 @@
 import * as config from '../config.json';
 import CommandHandler from './commandhandler';
 import { Functions } from './functions';
-import Node from 'lavalink';
+import type Node from 'lavalink';
 import { Pool } from 'pg';
 import { Client, Collection, Util } from 'discord.js';
-import { ConfigObject, MusicObject, ReknownEvent } from 'ReknownBot';
+import type { ConfigObject, MusicObject, ReknownEvent } from 'ReknownBot';
 
 const pool = new Pool();
 

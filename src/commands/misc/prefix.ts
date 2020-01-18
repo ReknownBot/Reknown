@@ -1,7 +1,7 @@
 import { HelpObj } from 'ReknownBot';
 import ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import { Message, PermissionString, TextChannel } from 'discord.js';
+import type { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!args[1]) {

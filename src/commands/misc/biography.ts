@@ -1,7 +1,8 @@
-import ReknownClient from '../../structures/client';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import { HelpObj, RowBiography } from 'ReknownBot';
-import { Message, MessageEmbed, PermissionString, TextChannel } from 'discord.js';
+import type { HelpObj, RowBiography } from 'ReknownBot';
+import type { Message, PermissionString, TextChannel } from 'discord.js';
 
 const allowedFields = [
   'email',

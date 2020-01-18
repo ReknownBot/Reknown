@@ -1,5 +1,5 @@
 import { Node } from 'lavalink';
-import ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/client';
 
 export async function run (client: ReknownClient) {
   console.log(`Successfully logged in as ${client.user!.tag} (${client.user!.id}).`);

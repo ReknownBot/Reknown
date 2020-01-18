@@ -1,6 +1,6 @@
 import { Collection } from 'discord.js';
 import { readdirSync } from 'fs';
-import { CommandCategory, ReknownCommand } from 'ReknownBot';
+import type { CommandCategory, ReknownCommand } from 'ReknownBot';
 
 export default class CommandHandler extends Collection<string, ReknownCommand> {
   public constructor () {

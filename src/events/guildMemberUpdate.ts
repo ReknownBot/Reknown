@@ -1,5 +1,6 @@
-import ReknownClient from '../structures/client';
-import { Guild, GuildMember, MessageEmbed, User } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../structures/client';
+import type { Guild, GuildMember, User } from 'discord.js';
 
 function nickUpdate (client: ReknownClient, oldMember: GuildMember, newMember: GuildMember) {
   if (oldMember.displayName === newMember.displayName) return;

@@ -1,8 +1,9 @@
-import { HelpObj } from 'ReknownBot';
-import ReknownClient from '../../structures/client';
+import type { HelpObj } from 'ReknownBot';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../../structures/client';
 import atob from 'atob';
 import btoa from 'btoa';
-import { Message, MessageEmbed, PermissionString } from 'discord.js';
+import type { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const method = args[1] ? args[1].toLowerCase() : null;
