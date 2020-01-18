@@ -1,6 +1,6 @@
-import { HelpObj } from 'ReknownBot';
-import ReknownClient from '../../structures/client';
-import { Message, PermissionString, TextChannel } from 'discord.js';
+import type { HelpObj } from 'ReknownBot';
+import type ReknownClient from '../../structures/client';
+import type { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'a role to mention.');

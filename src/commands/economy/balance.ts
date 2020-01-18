@@ -1,7 +1,7 @@
-import ReknownClient from '../../structures/client';
+import type ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import { HelpObj, RowEconomy } from 'ReknownBot';
-import { Message, PermissionString } from 'discord.js';
+import type { HelpObj, RowEconomy } from 'ReknownBot';
+import type { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const user = args[1] ? await client.functions.parseMention(args[1], {

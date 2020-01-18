@@ -1,7 +1,8 @@
-import ReknownClient from '../../structures/client';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import { HelpObj, RowLevel } from 'ReknownBot';
-import { Message, MessageEmbed, PermissionString, TextChannel } from 'discord.js';
+import type { HelpObj, RowLevel } from 'ReknownBot';
+import type { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   const res = await client.query(`SELECT * FROM ${tables.LEVELS} WHERE guildid = $1 ORDER BY points DESC`, [ message.guild!.id ]);

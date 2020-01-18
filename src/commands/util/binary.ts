@@ -1,6 +1,7 @@
-import { HelpObj } from 'ReknownBot';
-import ReknownClient from '../../structures/client';
-import { Message, MessageEmbed, PermissionString } from 'discord.js';
+import type { HelpObj } from 'ReknownBot';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../../structures/client';
+import type { Message, PermissionString } from 'discord.js';
 
 function text2Binary (str: string): string {
   str = unescape(encodeURIComponent(str));

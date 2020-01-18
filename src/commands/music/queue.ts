@@ -1,6 +1,7 @@
-import { HelpObj } from 'ReknownBot';
-import ReknownClient from '../../structures/client';
-import { Message, MessageEmbed, PermissionString, TextChannel } from 'discord.js';
+import type { HelpObj } from 'ReknownBot';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../../structures/client';
+import type { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   const music = client.music[message.guild!.id];

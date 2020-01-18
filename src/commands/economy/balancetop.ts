@@ -1,7 +1,8 @@
-import ReknownClient from '../../structures/client';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import { HelpObj, RowEconomy } from 'ReknownBot';
-import { Message, MessageEmbed, PermissionString } from 'discord.js';
+import type { HelpObj, RowEconomy } from 'ReknownBot';
+import type { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const { rows }: { rows: RowEconomy[] } = await client.query(`SELECT * FROM ${tables.ECONOMY} ORDER BY balance DESC LIMIT 10`);

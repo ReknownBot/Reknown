@@ -1,6 +1,7 @@
-import { HelpObj } from 'ReknownBot';
-import ReknownClient from '../../structures/client';
-import { Message, MessageEmbed, PermissionString } from 'discord.js';
+import type { HelpObj } from 'ReknownBot';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../../structures/client';
+import type { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const prefix = message.guild ? await client.functions.getPrefix(client, message.guild.id) : client.config.prefix;

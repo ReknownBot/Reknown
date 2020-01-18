@@ -1,4 +1,4 @@
-import ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/client';
 
 export async function run (client: ReknownClient, pk: any) {
   if (pk.t === 'VOICE_STATE_UPDATE') client.lavalink!.voiceStateUpdate(pk.d);

@@ -1,5 +1,6 @@
-import ReknownClient from '../structures/client';
-import { Guild, MessageEmbed, User } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../structures/client';
+import type { Guild, User } from 'discord.js';
 
 async function sendLog (client: ReknownClient, guild: Guild, user: User) {
   const embed = new MessageEmbed()
