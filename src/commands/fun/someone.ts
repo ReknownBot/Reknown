@@ -4,9 +4,9 @@ import type { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   let members = message.guild!.members;
-  if (members.size !== message.guild!.memberCount) members = await message.guild!.members.fetch();
+  if (members.cache.size !== message.guild!.memberCount) members = await message.guild!.members.fetch();
 
-  const member = members.filter(m => !m.user.bot).random();
+  const member = members.cache.filter(m => !m.user.bot).random();
   message.channel.send(`Successfully randomly fetched **${client.escMD(member.user.tag)}**!`);
 }
 
