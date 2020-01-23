@@ -19,8 +19,8 @@ function nickUpdate (client: ReknownClient, oldMember: GuildMember, newMember: G
 }
 
 function roleUpdate (client: ReknownClient, oldMember: GuildMember, newMember: GuildMember) {
-  const addedRoles = newMember.roles.filter(r => !oldMember.roles.has(r.id));
-  const removedRoles = oldMember.roles.filter(r => !newMember.roles.has(r.id));
+  const addedRoles = newMember.roles.cache.filter(r => !oldMember.roles.cache.has(r.id));
+  const removedRoles = oldMember.roles.cache.filter(r => !newMember.roles.cache.has(r.id));
   if (addedRoles.size === 0 && removedRoles.size === 0) return;
 
   const embed = new MessageEmbed()

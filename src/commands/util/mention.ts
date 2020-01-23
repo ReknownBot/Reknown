@@ -4,7 +4,7 @@ import type { Message, PermissionString, TextChannel } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'a role to mention.');
-  const role = message.guild!.roles.find(r => r.name === args.slice(1).join(' ')) || message.guild!.roles.get(args[1]);
+  const role = message.guild!.roles.cache.find(r => r.name === args.slice(1).join(' ')) || message.guild!.roles.cache.get(args[1]);
   if (!role) return client.functions.badArg(message, 1, 'I did not find the role. Please provide the name (case sensitive) or the ID of the role.');
   if (role.position >= message.guild!.me!.roles.highest.position) return client.functions.badArg(message, 1, 'That role\'s position is higher or equal to my highest role\'s position.');
 

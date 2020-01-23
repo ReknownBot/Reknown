@@ -18,5 +18,5 @@ function avatarUpdate (client: ReknownClient, oldUser: User, newUser: User, guil
 }
 
 export async function run (client: ReknownClient, oldUser: User, newUser: User) {
-  client.guilds.filter(g => g.members.has(newUser.id)).forEach(g => avatarUpdate(client, oldUser, newUser, g));
+  client.guilds.cache.filter(g => g.members.cache.has(newUser.id)).forEach(g => avatarUpdate(client, oldUser, newUser, g));
 }
