@@ -28,8 +28,8 @@ export async function run (client: ReknownClient, message: Message, args: string
   switch (args[1].toLowerCase()) {
     case 'player': {
       const uuidRes = await fetch(`${minecraftEndpoint}/users/profiles/minecraft/${args[2]}`);
-      const uuidJson: UUIDJson | false = await uuidRes.json().catch(() => false);
-      if (uuidJson === false) return client.functions.badArg(message, 1, 'That Minecraft player does not exist.');
+      const uuidJson: UUIDJson | null = await uuidRes.json().catch(() => null);
+      if (!uuidJson) return client.functions.badArg(message, 1, 'That Minecraft player does not exist.');
       const uuid = uuidJson.id;
 
       const queries = stringify({

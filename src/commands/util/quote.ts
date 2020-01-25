@@ -18,8 +18,8 @@ export async function run (client: ReknownClient, message: Message, args: string
   if (!channel.permissionsFor(client.user!)!.has([ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ])) return client.functions.noClientPerms(message, [ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ], channel);
   if (!channel.permissionsFor(message.author!)!.has([ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ])) return client.functions.noPerms(message, [ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ], channel);
 
-  const msg = await channel.messages.fetch(res[2]).catch(() => false);
-  if (!(msg instanceof Message)) return client.functions.badArg(message, 1, 'I did not find the message provided.');
+  const msg = await channel.messages.fetch(res[2]).catch(() => null);
+  if (!msg) return client.functions.badArg(message, 1, 'I did not find the message provided.');
 
   let img = msg.attachments.first();
   if (img && !img.height) img = undefined;
