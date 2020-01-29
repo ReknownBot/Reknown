@@ -1,5 +1,6 @@
+import type { GuildChannel } from 'discord.js';
 import type ReknownClient from '../structures/client';
-import { DMChannel, GuildChannel, MessageEmbed } from 'discord.js';
+import { DMChannel, MessageEmbed } from 'discord.js';
 
 async function sendLog (client: ReknownClient, oldChannel: GuildChannel, newChannel: GuildChannel) {
   if (oldChannel.name === newChannel.name) return;
