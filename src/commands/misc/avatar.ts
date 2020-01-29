@@ -1,6 +1,7 @@
 import type { HelpObj } from 'ReknownBot';
-import ReknownClient from '../../structures/client';
-import { Message, MessageEmbed, PermissionString } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
+import type ReknownClient from '../../structures/client';
+import type { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const user = args[1] ? message.author : await client.functions.parseMention(args[1], {
