@@ -1,3 +1,10 @@
+export const errors = {
+  MEMBER_INSUFFICIENT_POSITION: 'Your role position is not high enough to do this.',
+  UNKNOWN_COMMNAD: 'That command does not exist.',
+  UNKNOWN_MEMBER: 'I did not find a member by that query.',
+  UNKNOWN_USER: 'I did not find a user by that query.'
+};
+
 export const parsedPerms = {
   ADD_REACTIONS: 'Add Reactions',
   ADMINISTRATOR: 'Administrator',
