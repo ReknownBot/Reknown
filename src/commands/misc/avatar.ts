@@ -1,6 +1,7 @@
 import type { HelpObj } from 'ReknownBot';
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../../structures/client';
+import { errors } from '../../Constants';
 import type { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
@@ -8,7 +9,7 @@ export async function run (client: ReknownClient, message: Message, args: string
     client: client,
     type: 'user'
   }).catch(() => null);
-  if (!user) return client.functions.badArg(message, 1, 'The user provided was not found.');
+  if (!user) return client.functions.badArg(message, 1, errors.UNKNOWN_USER);
 
   const embed = new MessageEmbed()
     .setColor(client.config.embedColor)
