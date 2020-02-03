@@ -1,8 +1,8 @@
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import { tables } from '../../Constants';
 import type { HelpObj, RowBiography } from 'ReknownBot';
 import type { Message, PermissionString, TextChannel } from 'discord.js';
+import { errors, tables } from '../../Constants';
 
 const allowedFields = [
   'email',
@@ -31,7 +31,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
       guild: message.guild!,
       type: 'member'
     }) : message.member;
-    if (!member) return client.functions.badArg(message, 1, 'That member was not found.');
+    if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
 
     const row = await client.functions.getRow<RowBiography>(client, tables.BIOGRAPHY, {
       userid: member.id
