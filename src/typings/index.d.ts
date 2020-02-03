@@ -110,6 +110,15 @@ declare module 'ReknownBot' {
     guildid: Snowflake;
   }
 
+  interface RowWarnings {
+    guildid: Snowflake;
+    userid: Snowflake;
+    warnedat: number;
+    warnedby: Snowflake;
+    warnid: number;
+    warnreason: string;
+  }
+
   interface RowWebhook {
     channelid: Snowflake;
     guildid: Snowflake;
