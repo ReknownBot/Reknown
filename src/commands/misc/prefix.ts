@@ -1,5 +1,5 @@
-import { HelpObj } from 'ReknownBot';
-import ReknownClient from '../../structures/client';
+import type { HelpObj } from 'ReknownBot';
+import type ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
 import type { Message, PermissionString, TextChannel } from 'discord.js';
 

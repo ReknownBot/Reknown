@@ -1,7 +1,8 @@
 import type { HelpObj } from 'ReknownBot';
+import type { Message } from 'discord.js';
 import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { MessageEmbed, TextChannel } from 'discord.js';
 
 const regex = /(?:discordapp.com\/channels)\/(?:(\d{17,19})\/(\d{17,19})\/(\d{17,19}))/;
 

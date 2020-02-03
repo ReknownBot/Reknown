@@ -90,12 +90,12 @@ export class Functions {
     return [ cmd, ...matches ];
   }
 
-  public parseMention(id: Snowflake, options: ParseMentionOptions & { cType?: 'text'; guild: Guild; type: 'channel' }): TextChannel | null;
-  public parseMention(id: Snowflake, options: ParseMentionOptions & { cType?: 'voice'; guild: Guild; type: 'channel' }): VoiceChannel | null;
-  public parseMention(id: Snowflake, options: ParseMentionOptions & { cType?: 'category'; guild: Guild; type: 'channel' }): CategoryChannel | null;
-  public parseMention(id: Snowflake, options: ParseMentionOptions & { guild: Guild; type: 'member' }): Promise<GuildMember | null>;
-  public parseMention(id: Snowflake, options: ParseMentionOptions & { guild: Guild; type: 'role' }): Role | null;
-  public parseMention(id: Snowflake, options: ParseMentionOptions & { client: ReknownClient; type: 'user' }): Promise<User | null>;
+  public parseMention (id: Snowflake, options: ParseMentionOptions & { cType?: 'text'; guild: Guild; type: 'channel' }): TextChannel | null;
+  public parseMention (id: Snowflake, options: ParseMentionOptions & { cType?: 'voice'; guild: Guild; type: 'channel' }): VoiceChannel | null;
+  public parseMention (id: Snowflake, options: ParseMentionOptions & { cType?: 'category'; guild: Guild; type: 'channel' }): CategoryChannel | null;
+  public parseMention (id: Snowflake, options: ParseMentionOptions & { guild: Guild; type: 'member' }): Promise<GuildMember | null>;
+  public parseMention (id: Snowflake, options: ParseMentionOptions & { guild: Guild; type: 'role' }): Role | null;
+  public parseMention (id: Snowflake, options: ParseMentionOptions & { client: ReknownClient; type: 'user' }): Promise<User | null>;
   public parseMention (id: Snowflake, options: ParseMentionOptions): any {
     if (!parseInt(id) && !this.regexArr.some(regex => regex.test(id))) {
       if ([ 'member', 'user' ].includes(options.type)) return Promise.reject(null);
