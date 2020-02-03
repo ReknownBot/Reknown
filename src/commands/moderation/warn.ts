@@ -19,7 +19,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   if (reason?.length ?? 0 > 100) return client.functions.badArg(message, 2, 'The reason cannot be above 100 characters.');
 
   const row: RowWarnings = (await client.query(`INSERT INTO ${tables.WARNINGS} (guildid, userid, warnedat, warnedby, warnreason) VALUES ($1, $2, $3, $4, $5) RETURNING warnid`, [ message.guild!.id, member.id, Date.now(), message.author.id, reason ])).rows[0];
-  message.channel.send(`Successfully warned \`\`${client.escInline(message.author.tag)}\`\` for \`\`${client.escInline(reason || 'None')}\`\` with warning ID \`${row.warnid}\`.`);
+  message.channel.send(`Successfully warned \`\`${client.escInline(member.user.tag)}\`\` for \`\`${client.escInline(reason || 'None')}\`\` with warning ID \`${row.warnid}\`.`);
 }
 
 export const help: HelpObj = {

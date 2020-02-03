@@ -23,7 +23,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   const str = (await Promise.all(rows.map(async r => {
     const user = await client.users.fetch(r.userid);
     const by = await client.users.fetch(r.warnedby);
-    return `**${dateformat(r.warnedat, 'UTC:mmm d, yyyy, h:MM:ss TT Z')}** \`\`${client.escInline(user.tag)}\`\` by \`\`${client.escInline(by.tag)}\`\` for \`\`${client.escInline(r.warnreason)}\`\``;
+    return `**${dateformat(new Date(r.warnedat), 'UTC:mmm d, yyyy, h:MM:ss TT Z')}** \`\`${client.escInline(user.tag)}\`\` by \`\`${client.escInline(by.tag)}\`\` for \`\`${client.escInline(r.warnreason)}\`\``;
   }))).join('\n');
   const pages = Util.splitMessage(str, { maxLength: 2048 });
   if (pages.length > page) return client.functions.badArg(message, 2, `The page provided is out of range. (${pages.length})`);
