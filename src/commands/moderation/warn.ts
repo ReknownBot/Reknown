@@ -16,7 +16,8 @@ export async function run (client: ReknownClient, message: Message, args: string
   if (member.roles.highest.position >= message.member!.roles.highest.position && message.author.id !== message.guild!.ownerID) return client.functions.badArg(message, 1, 'Your role position is not high enough to warn that member.');
 
   const reason = args[2] ? args.slice(2).join(' ') : null;
-  if (reason?.length ?? 0 > 100) return client.functions.badArg(message, 2, 'The reason cannot be above 100 characters.');
+  // eslint-disable-next-line no-extra-parens
+  if ((reason?.length ?? 0) > 100) return client.functions.badArg(message, 2, 'The reason cannot be above 100 characters.');
 
   const row: RowWarnings = (await client.query(`INSERT INTO ${tables.WARNINGS} (guildid, userid, warnedat, warnedby, warnreason) VALUES ($1, $2, $3, $4, $5) RETURNING warnid`, [ message.guild!.id, member.id, Date.now(), message.author.id, reason ])).rows[0];
   message.channel.send(`Successfully warned \`\`${client.escInline(member.user.tag)}\`\` for \`\`${client.escInline(reason || 'None')}\`\` with warning ID \`${row.warnid}\`.`);
