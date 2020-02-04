@@ -69,7 +69,7 @@ declare module 'ReknownBot' {
   }
 
   interface RowCooldown {
-    endsat: number;
+    endsat: string;
     userid: string;
   }
 
@@ -113,7 +113,7 @@ declare module 'ReknownBot' {
   interface RowWarnings {
     guildid: Snowflake;
     userid: Snowflake;
-    warnedat: number;
+    warnedat: string;
     warnedby: Snowflake;
     warnid: number;
     warnreason: string;
