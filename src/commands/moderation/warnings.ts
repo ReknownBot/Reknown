@@ -21,12 +21,11 @@ export async function run (client: ReknownClient, message: Message, args: string
   if (rows.length === 0) return message.channel.send(`\`\`${client.escInline(member.user.tag)} (ID: ${member.id})\`\` has \`0\` warnings! Keep up the good work.`);
 
   const str = (await Promise.all(rows.map(async r => {
-    const user = await client.users.fetch(r.userid);
     const by = await client.users.fetch(r.warnedby);
-    return `**${dateformat(new Date(+r.warnedat), 'UTC:mmm d, yyyy, h:MM:ss TT Z')}** \`\`${client.escInline(user.tag)}\`\` by \`\`${client.escInline(by.tag)}\`\` for \`\`${client.escInline(r.warnreason)}\`\``;
+    return `**${dateformat(new Date(Number(r.warnedat)), 'UTC:mmm d, yyyy, h:MM:ss TT Z')} \`Warn ID: ${r.warnid}\`** By \`\`${client.escInline(by.tag)}\`\` for \`\`${client.escInline(r.warnreason)}\`\``;
   }))).join('\n');
   const pages = Util.splitMessage(str, { maxLength: 2048 });
-  if (pages.length > page) return client.functions.badArg(message, 2, `The page provided is out of range. (${pages.length})`);
+  if (pages.length < page) return client.functions.badArg(message, 2, 'The page provided is out of range.');
 
   const embed = new MessageEmbed()
     .setColor(client.config.embedColor)
