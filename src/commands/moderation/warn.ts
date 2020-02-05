@@ -18,6 +18,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   const reason = args[2] ? args.slice(2).join(' ') : null;
   // eslint-disable-next-line no-extra-parens
   if ((reason?.length ?? 0) > 100) return client.functions.badArg(message, 2, 'The reason cannot be above 100 characters.');
+  if (reason?.includes('\n')) return client.functions.badArg(message, 2, errors.NO_LINE_BREAKS);
 
   client.query(`INSERT INTO ${tables.WARNINGS} (guildid, userid, warnedat, warnedby, warnreason) VALUES ($1, $2, $3, $4, $5)`, [ message.guild!.id, member.id, Date.now(), message.author.id, reason ]);
   message.channel.send(`Successfully warned \`\`${client.escInline(member.user.tag)}\`\` for \`\`${client.escInline(reason || 'None')}\`\`.`);
