@@ -1,7 +1,7 @@
 import type ReknownClient from '../../structures/client';
-import { tables } from '../../Constants';
 import type { HelpObj, RowWarnings } from 'ReknownBot';
 import type { Message, PermissionString } from 'discord.js';
+import { errors, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'a member to warn.');
@@ -9,11 +9,11 @@ export async function run (client: ReknownClient, message: Message, args: string
     guild: message.guild!,
     type: 'member'
   }).catch(() => null);
-  if (!member) return client.functions.badArg(message, 1, 'The member provided does not exist.');
+  if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
   if (member.user.bot) return client.functions.badArg(message, 1, 'You cannot warn a bot.');
   if (member.id === message.author.id) return client.functions.badArg(message, 1, 'You cannot warn yourself.');
   if (member.id === message.guild!.ownerID) return client.functions.badArg(message, 1, 'The member provided is the owner.');
-  if (member.roles.highest.position >= message.member!.roles.highest.position && message.author.id !== message.guild!.ownerID) return client.functions.badArg(message, 1, 'Your role position is not high enough to warn that member.');
+  if (member.roles.highest.position >= message.member!.roles.highest.position && message.author.id !== message.guild!.ownerID) return client.functions.badArg(message, 1, errors.MEMBER_INSUFFICIENT_POSITION);
 
   const reason = args[2] ? args.slice(2).join(' ') : null;
   // eslint-disable-next-line no-extra-parens
