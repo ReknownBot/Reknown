@@ -1,5 +1,5 @@
+import type { HelpObj } from 'ReknownBot';
 import type ReknownClient from '../../structures/client';
-import type { HelpObj, RowWarnings } from 'ReknownBot';
 import type { Message, PermissionString } from 'discord.js';
 import { errors, tables } from '../../Constants';
 
@@ -19,8 +19,8 @@ export async function run (client: ReknownClient, message: Message, args: string
   // eslint-disable-next-line no-extra-parens
   if ((reason?.length ?? 0) > 100) return client.functions.badArg(message, 2, 'The reason cannot be above 100 characters.');
 
-  const row: RowWarnings = (await client.query(`INSERT INTO ${tables.WARNINGS} (guildid, userid, warnedat, warnedby, warnreason) VALUES ($1, $2, $3, $4, $5) RETURNING warnid`, [ message.guild!.id, member.id, Date.now(), message.author.id, reason ])).rows[0];
-  message.channel.send(`Successfully warned \`\`${client.escInline(member.user.tag)}\`\` for \`\`${client.escInline(reason || 'None')}\`\` with warning ID \`${row.warnid}\`.`);
+  client.query(`INSERT INTO ${tables.WARNINGS} (guildid, userid, warnedat, warnedby, warnreason) VALUES ($1, $2, $3, $4, $5) RETURNING warnid`, [ message.guild!.id, member.id, Date.now(), message.author.id, reason ]);
+  message.channel.send(`Successfully warned \`\`${client.escInline(member.user.tag)}\`\` for \`\`${client.escInline(reason || 'None')}\`\`.`);
 }
 
 export const help: HelpObj = {
