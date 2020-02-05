@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS toggletickets (bool BOOLEAN, guildid TEXT);
 CREATE TABLE IF NOT EXISTS togglewelcome (bool BOOLEAN, guildid TEXT);
 CREATE TABLE IF NOT EXISTS updatechannel (channelid TEXT, guildid TEXT);
 CREATE TABLE IF NOT EXISTS usertag (userid TEXT, tagcontent TEXT, tagname TEXT);
-CREATE TABLE IF NOT EXISTS warnings (guildid TEXT, userid TEXT, warnedat BIGINT, warnedby TEXT, warnid SERIAL PRIMARY KEY, warnreason TEXT);
+CREATE TABLE IF NOT EXISTS warnings (guildid TEXT, userid TEXT, warnedat BIGINT, warnedby TEXT, warnreason TEXT);
 CREATE TABLE IF NOT EXISTS welcomechannel (guildid TEXT, channelid TEXT);
 CREATE TABLE IF NOT EXISTS welcomemsg (guildid TEXT, msg TEXT);
 CREATE TABLE IF NOT EXISTS work (endsat BIGINT, userid TEXT);
