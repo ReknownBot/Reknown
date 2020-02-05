@@ -17,12 +17,12 @@ export async function run (client: ReknownClient, message: Message, args: string
   if (isNaN(page)) return client.functions.badArg(message, 2, 'The page provided was not a number.');
   if (page < 1) return client.functions.badArg(message, 2, 'The page provided is lower than one.');
 
-  const { rows }: { rows: RowWarnings[] } = await client.query(`SELECT * FROM ${tables.WARNINGS} WHERE guildid = $1 AND userid = $2 ORDER BY warnedat DESC`, [ message.guild!.id, member.id ]);
+  const { rows }: { rows: RowWarnings[] } = await client.query(`SELECT * FROM ${tables.WARNINGS} WHERE guildid = $1 AND userid = $2 ORDER BY warnedat ASC`, [ message.guild!.id, member.id ]);
   if (rows.length === 0) return message.channel.send(`\`\`${client.escInline(member.user.tag)} (ID: ${member.id})\`\` has \`0\` warnings! Keep up the good work.`);
 
   const str = (await Promise.all(rows.map(async r => {
     const by = await client.users.fetch(r.warnedby);
-    return `**${dateformat(new Date(Number(r.warnedat)), 'UTC:mmm d, yyyy, h:MM:ss TT Z')} \`Warn ID: ${r.warnid}\`** By \`\`${client.escInline(by.tag)}\`\` for \`\`${client.escInline(r.warnreason)}\`\``;
+    return `${rows.indexOf(r) + 1}. **${dateformat(Number(r.warnedat), 'UTC:mmm d, yyyy, h:MM:ss TT Z')}** By \`\`${client.escInline(by.tag)}\`\` for \`\`${client.escInline(r.warnreason)}\`\``;
   }))).join('\n');
   const pages = Util.splitMessage(str, { maxLength: 2048 });
   if (pages.length < page) return client.functions.badArg(message, 2, 'The page provided is out of range.');

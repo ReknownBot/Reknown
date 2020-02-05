@@ -115,7 +115,6 @@ declare module 'ReknownBot' {
     userid: Snowflake;
     warnedat: string;
     warnedby: Snowflake;
-    warnid: number;
     warnreason: string;
   }
 
