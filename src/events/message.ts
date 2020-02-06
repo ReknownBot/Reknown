@@ -25,7 +25,7 @@ export async function run (client: ReknownClient, message: Message) {
   if (message.guild) {
     if (cooldowns.has(message.guild.id)) return message.reply('This server is still on command cooldown! Please try again.');
     cooldowns.add(message.guild.id);
-    setTimeout(() => cooldowns.delete(message.guild!.id), 1000);
+    setTimeout(() => cooldowns.delete(message.guild!.id), 150);
   }
 
   cmd = client.commands.aliases[cmd];
