@@ -14,8 +14,6 @@ export async function run (client: ReknownClient, message: Message) {
   const regexp = new RegExp(`^<@!?${message.client.user!.id}> `);
   if (!message.content.startsWith(prefix) && !message.content.match(regexp) || message.content === prefix) return;
 
-  if (cooldowns.has(message.guild!.id)) return message.reply('This server is still on command cooldown! Please wait a second and try again.');
-
   let str: string;
   if (message.content.match(regexp)) str = message.content.slice(message.content.match(regexp)![0].length);
   else str = message.content.slice(prefix.length);
@@ -24,8 +22,11 @@ export async function run (client: ReknownClient, message: Message) {
   let cmd = args[0];
   if (!Object.keys(client.commands.aliases).includes(cmd)) return;
 
-  cooldowns.add(message.guild!.id);
-  setTimeout(() => cooldowns.delete(message.guild!.id), 1000);
+  if (message.guild) {
+    if (cooldowns.has(message.guild.id)) return message.reply('This server is still on command cooldown! Please try again.');
+    cooldowns.add(message.guild.id);
+    setTimeout(() => cooldowns.delete(message.guild!.id), 1000);
+  }
 
   cmd = client.commands.aliases[cmd];
   if (message.guild) {
