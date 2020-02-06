@@ -1,10 +1,10 @@
-import type { HelpObj } from 'ReknownBot';
+import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import type { Message, PermissionString, TextChannel } from 'discord.js';
+import type { GuildMessage, HelpObj } from 'ReknownBot';
 
-export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
-  let members = message.guild!.members;
-  if (members.size !== message.guild!.memberCount) members = await message.guild!.members.fetch();
+export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
+  let members = message.guild.members;
+  if (members.size !== message.guild.memberCount) members = await message.guild.members.fetch();
 
   const member = members.filter(m => !m.user.bot).random();
   message.channel.send(`Successfully randomly fetched **${client.escMD(member.user.tag)}**!`);

@@ -1,10 +1,10 @@
-import type { HelpObj } from 'ReknownBot';
+import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import type { Message, PermissionString, TextChannel } from 'discord.js';
+import type { GuildMessage, HelpObj } from 'ReknownBot';
 
-export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
-  let music = client.music[message.guild!.id];
-  if (!music) music = client.music[message.guild!.id] = {
+export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
+  let music = client.music[message.guild.id];
+  if (!music) music = client.music[message.guild.id] = {
     equalizer: 0,
     looping: false,
     player: undefined,

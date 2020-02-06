@@ -1,8 +1,8 @@
-import type { HelpObj } from 'ReknownBot';
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import { prefix } from '../../config.json';
-import type { Guild, Message, PermissionString, TextChannel } from 'discord.js';
+import type { Guild, PermissionString } from 'discord.js';
+import type { GuildMessage, HelpObj } from 'ReknownBot';
 
 const configs: { [ key: string ]: string } = {
   levelmodifier: 'The level modifier for levelling up.',
@@ -57,7 +57,7 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
   }
 };
 
-export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
+export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
   if (!args[1]) {
     const embed = new MessageEmbed()
       .setColor(client.config.embedColor)
@@ -72,7 +72,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   const table = args[1].toLowerCase();
   if (!Object.keys(configs).includes(table)) return client.functions.badArg(message, 1, 'That configuration value does not exist.');
   const row = await client.functions.getRow<any>(client, table, {
-    guildid: message.guild!.id
+    guildid: message.guild.id
   });
 
   if (!args[2]) {
@@ -82,14 +82,14 @@ export async function run (client: ReknownClient, message: Message & { channel: 
   }
 
   let value = args.slice(2).join(' ');
-  const filter = filters[table](value, client, message.guild!);
+  const filter = filters[table](value, client, message.guild);
   if (filter instanceof Array) return client.functions.badArg(message, 2, filter[0]);
   value = filter;
 
-  const newRow: { [ key: string ]: any } = { guildid: message.guild!.id };
+  const newRow: { [ key: string ]: any } = { guildid: message.guild.id };
   newRow[defaultValues[table][0]] = value;
   client.functions.updateRow(client, table, newRow, {
-    guildid: message.guild!.id
+    guildid: message.guild.id
   });
 
   message.channel.send(`Successfully updated \`${table}\` to \`\`${client.escInline(value.toString())}\`\`.`);
