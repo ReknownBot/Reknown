@@ -1,15 +1,15 @@
+import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import dateformat from 'dateformat';
 import { tables } from '../../Constants';
-import type { HelpObj, RowWarnings } from 'ReknownBot';
-import type { Message, PermissionString } from 'discord.js';
+import type { GuildMessage, HelpObj, RowWarnings } from 'ReknownBot';
 import { MessageEmbed, Util } from 'discord.js';
 
-export async function run (client: ReknownClient, message: Message, args: string[]) {
+export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
   const member = args[1] ? await client.functions.parseMention(args[1], {
-    guild: message.guild!,
+    guild: message.guild,
     type: 'member'
-  }).catch(() => null) : message.member!;
+  }).catch(() => null) : message.member;
   if (!member) return client.functions.badArg(message, 1, 'The member provided does not exist.');
   if (member.user.bot) return client.functions.badArg(message, 1, 'Bots do not get any warnings.');
 
@@ -17,7 +17,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   if (isNaN(page)) return client.functions.badArg(message, 2, 'The page provided was not a number.');
   if (page < 1) return client.functions.badArg(message, 2, 'The page provided is lower than one.');
 
-  const { rows }: { rows: RowWarnings[] } = await client.query(`SELECT * FROM ${tables.WARNINGS} WHERE guildid = $1 AND userid = $2 ORDER BY warnedat ASC`, [ message.guild!.id, member.id ]);
+  const { rows } = await client.query<RowWarnings>(`SELECT * FROM ${tables.WARNINGS} WHERE guildid = $1 AND userid = $2 ORDER BY warnedat ASC`, [ message.guild.id, member.id ]);
   if (rows.length === 0) return message.channel.send(`\`\`${client.escInline(member.user.tag)} (ID: ${member.id})\`\` has \`0\` warnings! Keep up the good work.`);
 
   const str = (await Promise.all(rows.map(async r => {
