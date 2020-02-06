@@ -1,9 +1,9 @@
+import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import type { HelpObj, RowDisabledCommands } from 'ReknownBot';
-import type { Message, PermissionString, TextChannel } from 'discord.js';
+import type { GuildMessage, HelpObj, RowDisabledCommands } from 'ReknownBot';
 import { errors, tables } from '../../Constants';
 
-export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
+export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'A command to toggle.');
   const command = client.commands.aliases[args[1].toLowerCase()];
   if (!command) return client.functions.badArg(message, 1, errors.UNKNOWN_COMMNAD);
@@ -12,7 +12,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
 
   const row = await client.functions.getRow<RowDisabledCommands>(client, tables.DISABLEDCOMMANDS, {
     command: command,
-    guildid: message.guild!.id
+    guildid: message.guild.id
   });
   let bool;
   if (!args[2]) bool = !row;
@@ -22,8 +22,8 @@ export async function run (client: ReknownClient, message: Message & { channel: 
 
   if (Boolean(row) === bool) return client.functions.badArg(message, 2, 'The value is already set to that!');
 
-  if (bool) client.query(`INSERT INTO ${tables.DISABLEDCOMMANDS} (command, guildid) VALUES ($1, $2)`, [ command, message.guild!.id ]);
-  else client.query(`DELETE FROM ${tables.DISABLEDCOMMANDS} WHERE command = $1 AND guildid = $2`, [ command, message.guild!.id ]);
+  if (bool) client.query(`INSERT INTO ${tables.DISABLEDCOMMANDS} (command, guildid) VALUES ($1, $2)`, [ command, message.guild.id ]);
+  else client.query(`DELETE FROM ${tables.DISABLEDCOMMANDS} WHERE command = $1 AND guildid = $2`, [ command, message.guild.id ]);
 
   message.channel.send(`Successfully ${bool ? 'disabled' : 'enabled'} \`${command}\`.`);
 }

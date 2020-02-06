@@ -1,9 +1,9 @@
-import type { HelpObj } from 'ReknownBot';
+import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import type { Message, PermissionString, TextChannel } from 'discord.js';
+import type { GuildMessage, HelpObj } from 'ReknownBot';
 
-export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
-  const music = client.music[message.guild!.id];
+export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
+  const music = client.music[message.guild.id];
 
   if (!music || !music.player || !music.player.playing && !music.player.paused) return message.reply('I am not playing anything.');
 
@@ -13,7 +13,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
     bool = args[1].toLowerCase() === 'on';
   }
   if (music.player.paused === bool) return message.reply('The value is already set to that.');
-  if (message.guild!.voice!.channelID !== message.member!.voice.channelID) return message.reply('You must be in the same voice channel as me to run that command.');
+  if (message.guild.voice!.channelID !== message.member.voice.channelID) return message.reply('You must be in the same voice channel as me to run that command.');
 
   music.player.pause(bool);
   message.channel.send(`Successfully set the paused to \`${bool}\`.`);
