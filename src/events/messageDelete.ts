@@ -1,3 +1,4 @@
+import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import type { TextChannel } from 'discord.js';
@@ -43,9 +44,9 @@ function sendLog (client: ReknownClient, message: GuildMessage) {
   client.functions.sendLog(client, embed, message.guild);
 }
 
-export async function run (client: ReknownClient, message: GuildMessage) {
-  if (!message.guild || !message.guild.available) return;
+export async function run (client: ReknownClient, message: Message) {
+  if (!message.guild?.available) return;
 
-  delStar(client, message);
-  sendLog(client, message);
+  delStar(client, message as GuildMessage);
+  sendLog(client, message as GuildMessage);
 }
