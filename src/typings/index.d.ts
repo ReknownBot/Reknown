@@ -30,6 +30,12 @@ declare module 'ReknownBot' {
     usage: string;
   }
 
+  interface GuildMessage extends Message {
+    channel: TextChannel;
+    guild: Guild;
+    member: GuildMember;
+  }
+
   interface MusicObject {
     equalizer: number;
     looping: boolean;
