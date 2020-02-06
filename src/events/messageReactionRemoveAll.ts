@@ -5,7 +5,7 @@ import type { RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
 
 export async function run (client: ReknownClient, message: Message | PartialMessage) {
   if (message.partial) message = await message.fetch();
-  if (!message.guild || !message.guild.available) return;
+  if (!message.guild?.available) return;
   if (message.webhookID) return;
   if (!message.content && !message.attachments.find(attch => Boolean(attch.height))) return;
 

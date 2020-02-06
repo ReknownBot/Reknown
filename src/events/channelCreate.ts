@@ -1,3 +1,4 @@
+import { DMChannel } from 'discord.js';
 import type { GuildChannel } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
@@ -16,8 +17,8 @@ async function sendLog (client: ReknownClient, channel: GuildChannel) {
   client.functions.sendLog(client, embed, channel.guild);
 }
 
-export async function run (client: ReknownClient, channel: GuildChannel) {
-  if (!channel.guild.available) return;
+export async function run (client: ReknownClient, channel: DMChannel | GuildChannel) {
+  if (channel instanceof DMChannel || !channel.guild.available) return;
 
   sendLog(client, channel);
 }

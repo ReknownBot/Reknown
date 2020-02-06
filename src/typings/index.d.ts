@@ -30,6 +30,12 @@ declare module 'ReknownBot' {
     usage: string;
   }
 
+  interface GuildMessage extends Message {
+    channel: TextChannel;
+    guild: Guild;
+    member: GuildMember;
+  }
+
   interface MusicObject {
     equalizer: number;
     looping: boolean;
@@ -69,7 +75,7 @@ declare module 'ReknownBot' {
   }
 
   interface RowCooldown {
-    endsat: number;
+    endsat: string;
     userid: string;
   }
 
@@ -113,9 +119,8 @@ declare module 'ReknownBot' {
   interface RowWarnings {
     guildid: Snowflake;
     userid: Snowflake;
-    warnedat: number;
+    warnedat: string;
     warnedby: Snowflake;
-    warnid: number;
     warnreason: string;
   }
 

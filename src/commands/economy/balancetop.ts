@@ -5,7 +5,7 @@ import type { HelpObj, RowEconomy } from 'ReknownBot';
 import type { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  const { rows }: { rows: RowEconomy[] } = await client.query(`SELECT * FROM ${tables.ECONOMY} ORDER BY balance DESC LIMIT 10`);
+  const { rows } = await client.query<RowEconomy>(`SELECT * FROM ${tables.ECONOMY} ORDER BY balance DESC LIMIT 10`);
   const desc = await Promise.all(rows.map(async (r, i) => {
     const user = await client.users.fetch(r.userid).catch(() => null);
     if (!user) return client.query(`DELETE FROM ${tables.ECONOMY} WHERE userid = $1`, [ r.userid ]);

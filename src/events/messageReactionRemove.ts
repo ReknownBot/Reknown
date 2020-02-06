@@ -10,7 +10,7 @@ export async function run (client: ReknownClient, reaction: MessageReaction & { 
   if (user.bot) return;
   const { message } = reaction;
   if (message.partial) await message.fetch();
-  if (!message.guild || !message.guild.available) return;
+  if (!message.guild?.available) return;
   if (message.webhookID) return;
   if (!message.content && !message.attachments.find(attch => Boolean(attch.height))) return;
 

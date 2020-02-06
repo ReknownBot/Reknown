@@ -14,7 +14,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   const cooldown = await client.functions.getRow<RowCooldown>(client, tables.WORKCOOLDOWN, {
     userid: message.author.id
   });
-  if (cooldown && cooldown.endsat >= Date.now()) return message.reply(`This command is still on cooldown! Please wait ${client.functions.getTime(cooldown.endsat - Date.now())}.`);
+  if (cooldown && Number(cooldown.endsat) >= Date.now()) return message.reply(`This command is still on cooldown! Please wait ${client.functions.getTime(Number(cooldown.endsat) - Date.now())}.`);
   client.functions.updateRow(client, tables.WORKCOOLDOWN, {
     endsat: (Date.now() + ms('6h')).toString(),
     userid: message.author.id

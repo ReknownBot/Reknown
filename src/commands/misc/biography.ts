@@ -1,7 +1,7 @@
 import { MessageEmbed } from 'discord.js';
+import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import type { HelpObj, RowBiography } from 'ReknownBot';
-import type { Message, PermissionString, TextChannel } from 'discord.js';
+import type { GuildMessage, HelpObj, RowBiography } from 'ReknownBot';
 import { errors, tables } from '../../Constants';
 
 const allowedFields = [
@@ -10,7 +10,7 @@ const allowedFields = [
   'twitter'
 ];
 
-export async function run (client: ReknownClient, message: Message & { channel: TextChannel }, args: string[]) {
+export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
   if (args[1] && args[1].toLowerCase() === 'set') {
     if (!args[2]) return client.functions.noArg(message, 2, `a field to fill. It can be: ${allowedFields.join(', ')}.`);
     const field = args[2].toLowerCase();
@@ -28,7 +28,7 @@ export async function run (client: ReknownClient, message: Message & { channel: 
     message.channel.send(`Successfully updated your \`${field}\` to \`\`${client.escInline(value)}\`\`.`);
   } else {
     const member = args[1] ? await client.functions.parseMention(args[1], {
-      guild: message.guild!,
+      guild: message.guild,
       type: 'member'
     }) : message.member;
     if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);

@@ -2,12 +2,12 @@ import type ReknownClient from './client';
 import type { Track } from 'lavalink';
 import { embedColor } from '../config.json';
 import type { CategoryChannel, ClientUser, Guild, GuildChannel, GuildMember, Message, Role, Snowflake, User, VoiceChannel } from 'discord.js';
+import type { GuildMessage, MusicObject, ParseMentionOptions, RowChannel, RowEconomy, RowPrefix, RowToggle, RowWebhook } from 'ReknownBot';
 import { MessageEmbed, TextChannel, Util } from 'discord.js';
-import type { MusicObject, ParseMentionOptions, RowChannel, RowEconomy, RowPrefix, RowToggle, RowWebhook } from 'ReknownBot';
 import { parsedPerms, tables } from '../Constants';
 
 export class Functions {
-  public badArg (message: Message, argNum: number, desc: string): void {
+  public badArg (message: Message | GuildMessage, argNum: number, desc: string): void {
     if (message.channel instanceof TextChannel && !message.channel.permissionsFor(message.guild!.me!)!.has('EMBED_LINKS')) return void message.channel.send(`Argument **#${argNum}** was invalid. Here's what was wrong with it.\n\n**${desc}**`);
 
     const embed = new MessageEmbed()
@@ -40,7 +40,7 @@ export class Functions {
 
   public async getRow<T> (client: ReknownClient, table: string, filters: Partial<T>): Promise<T | null> {
     const query = `SELECT * FROM ${table} WHERE ${Object.keys(filters).map((rowName, i) => `${rowName} = $${i + 1}`).join(' AND ')}`;
-    const { rows } = await client.query(query, Object.values(filters));
+    const { rows } = await client.query<T>(query, Object.values(filters));
     return rows ? rows[0] : null;
   }
 
@@ -52,13 +52,13 @@ export class Functions {
     return `${h}h ${m}m ${s}s`;
   }
 
-  public noArg (message: Message, argNum: number, desc: string): void {
+  public noArg (message: Message | GuildMessage, argNum: number, desc: string): void {
     if (message.channel instanceof TextChannel && !message.channel.permissionsFor(message.guild!.me!)!.has('EMBED_LINKS')) return void message.channel.send(`Argument **#${argNum}** was missing. It is supposed to be **${desc}**`);
 
     const embed = new MessageEmbed()
       .setColor(embedColor)
       .setDescription(`Argument #${argNum} is missing. It is supposed to be **${desc}**`)
-      .setFooter(`Executed by ${message.author!.tag}`, message.author!.displayAvatarURL())
+      .setFooter(`Executed by ${message.author.tag}`, message.author.displayAvatarURL())
       .setTimestamp()
       .setTitle(`Argument #${argNum} Missing`);
 
@@ -172,7 +172,7 @@ export class Functions {
     webhook.send(embed);
   }
 
-  public sendSong (music: MusicObject, message: Message & { channel: TextChannel }, song: Track, user: ClientUser): void {
+  public sendSong (music: MusicObject, message: GuildMessage, song: Track, user: ClientUser): void {
     if (!message.channel.permissionsFor(user)!.has('EMBED_LINKS')) {
       if (music.queue.length === 0) return void message.channel.send(`**Now Playing:** ${Util.escapeMarkdown(song.info.title)} by \`${Util.escapeMarkdown(song.info.author)}\``);
       return void message.channel.send(`**Added to Queue:** ${Util.escapeMarkdown(song.info.title)} by \`${Util.escapeMarkdown(song.info.author)}\``);
@@ -182,7 +182,7 @@ export class Functions {
       .addField('Author', song.info.author)
       .addField('Duration', `${Math.round(song.info.length / 6000) / 10}m`)
       .setColor(embedColor)
-      .setFooter(`Requested by ${message.author!.tag}`, message.author!.displayAvatarURL());
+      .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
     if (music.queue.length === 0) embed.setAuthor(`Now Playing: ${song.info.title}`, undefined, song.info.uri);
     else embed.setAuthor(`Added to Queue: ${song.info.title}`, undefined, song.info.uri);
 
