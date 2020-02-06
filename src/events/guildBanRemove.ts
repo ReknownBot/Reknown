@@ -16,7 +16,6 @@ function sendLog (client: ReknownClient, guild: Guild, user: User) {
 
 export async function run (client: ReknownClient, guild: Guild, user: User | PartialUser) {
   if (!guild.available) return;
-  if (user.id === client.user!.id) return;
   if (user.partial) user = await user.fetch();
 
   sendLog(client, guild, user);
