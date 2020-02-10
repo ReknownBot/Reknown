@@ -1,3 +1,4 @@
+import type { QueryResult } from 'pg';
 import type ReknownClient from './client';
 import type { Track } from 'lavalink';
 import { embedColor } from '../config.json';
@@ -192,14 +193,14 @@ export class Functions {
     message.channel.send(embed);
   }
 
-  public async updateRow<T> (client: ReknownClient, table: string, changes: T, filters: Partial<T>): Promise<void> {
+  public async updateRow<T> (client: ReknownClient, table: string, changes: T, filters: Partial<T>): Promise<QueryResult<T>> {
     const columns = Object.keys(changes);
     const values = Object.values(changes);
     // eslint-disable-next-line no-extra-parens
     if (table === 'prefix') client.prefixes[(changes as unknown as RowPrefix).guildid] = (changes as unknown as RowPrefix).customprefix;
     const row = await client.functions.getRow<any>(client, table, filters);
-    if (row) client.query(`UPDATE ${table} SET ${columns.map((c, i) => `${c} = $${i + 1}`)} WHERE ${Object.keys(filters).map((c, i) => `${c} = $${i + columns.length + 1}`).join(' AND ')}`, [ ...values, ...Object.values(filters) ]);
-    else client.query(`INSERT INTO ${table} (${columns}) VALUES (${columns.map((c, i) => `$${i + 1}`)})`, values);
+    if (row) return client.query<T>(`UPDATE ${table} SET ${columns.map((c, i) => `${c} = $${i + 1}`)} WHERE ${Object.keys(filters).map((c, i) => `${c} = $${i + columns.length + 1}`).join(' AND ')} RETURNING *`, [ ...values, ...Object.values(filters) ]);
+    return client.query<T>(`INSERT INTO ${table} (${columns}) VALUES (${columns.map((c, i) => `$${i + 1} RETURNING *`)})`, values);
   }
 
   public uppercase (str: string): string {
