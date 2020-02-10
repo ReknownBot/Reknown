@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS levelrole (guildid TEXT, roleid TEXT, lvl INTEGER);
 CREATE TABLE IF NOT EXISTS logchannel (guildid TEXT, channelid TEXT);
 CREATE TABLE IF NOT EXISTS logwebhook (channelid TEXT, guildid TEXT, webhookid TEXT);
 CREATE TABLE IF NOT EXISTS mute (endsat TEXT, guildid TEXT, userid TEXT);
+CREATE TABLE IF NOT EXISTS muterole (guildid TEXT, roleid TEXT);
 CREATE TABLE IF NOT EXISTS prefix (customprefix TEXT, guildid TEXT);
 CREATE TABLE IF NOT EXISTS rules (guildid TEXT, rule TEXT);
 CREATE TABLE IF NOT EXISTS scores (guildid TEXT, lvl INTEGER, points INTEGER, userid TEXT);

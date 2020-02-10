@@ -61,6 +61,7 @@ export const tables = {
   LOGCHANNEL: 'logchannel',
   LOGTOGGLE: 'togglelog',
   LOGWEBHOOK: 'logwebhook',
+  MUTEROLE: 'muterole',
   MUTES: 'mute',
   PREFIX: 'prefix',
   RULES: 'rules',
