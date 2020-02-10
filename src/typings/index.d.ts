@@ -15,6 +15,7 @@ declare module 'ReknownBot' {
   interface ConfigObject {
     contributors: Snowflake[];
     embedColor: string;
+    muteColor: string;
     ownerID: Snowflake;
     prefix: string;
     suggestions: Snowflake;
@@ -76,12 +77,12 @@ declare module 'ReknownBot' {
 
   interface RowCooldown {
     endsat: string;
-    userid: string;
+    userid: Snowflake;
   }
 
   interface RowDisabledCommands {
     command: string;
-    guildid: string;
+    guildid: Snowflake;
   }
 
   interface RowEconomy {
@@ -97,13 +98,18 @@ declare module 'ReknownBot' {
   }
 
   interface RowMsg {
-    guildid: string;
+    guildid: Snowflake;
     msg: string;
+  }
+
+  interface RowMuteRole {
+    guildid: Snowflake;
+    roleid: Snowflake;
   }
 
   interface RowPrefix {
     customprefix: string;
-    guildid: string;
+    guildid: Snowflake;
   }
 
   interface RowStarboard {
