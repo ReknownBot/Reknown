@@ -7,6 +7,7 @@ import type { GuildMessage, HelpObj } from 'ReknownBot';
 const configs: { [ key: string ]: string } = {
   levelmodifier: 'The level modifier for levelling up.',
   logchannel: 'The channel to send logs to.',
+  muterole: 'The name of the role to use when muting members.',
   prefix: 'The prefix for bot commands.',
   starchannel: 'The channel to send starboard messages to.',
   togglelog: 'Toggle for the action log.',
@@ -17,6 +18,7 @@ const configs: { [ key: string ]: string } = {
 const defaultValues: { [ key: string ]: [ string, number | string | false ] } = {
   levelmodifier: [ 'modifier', 1 ],
   logchannel: [ 'channelid', '#action-log' ],
+  muterole: [ 'rolename', 'Muted' ],
   prefix: [ 'customprefix', prefix ],
   starchannel: [ 'channelid', '#starboard' ],
   togglelog: [ 'bool', false ],
@@ -33,6 +35,15 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
     const channel = client.functions.parseMention(value, { cType: 'text', guild: guild, type: 'channel' });
     if (!channel) return [ 'That channel does not exist or is not a text channel.' ];
     return channel.id;
+  },
+  muterole: (value: string, client, guild) => {
+    const role = guild.roles.find(r => r.name === value) || client.functions.parseMention(value, {
+      guild: guild,
+      type: 'role'
+    });
+    if (!role) return [ 'That role does not exist.' ];
+    if (guild.me!.roles.highest.comparePositionTo(role) <= 0) return [ 'The role must be below my highest role.' ];
+    return role.id;
   },
   prefix: (value: string) => {
     if (value.length > 15) return [ 'The value was too long to be a prefix [15 characters].' ];
