@@ -11,9 +11,9 @@ export async function run (client: ReknownClient, message: Message, args: string
   if (!regex.test(args[1])) return client.functions.badArg(message, 1, 'The provided argument was not a message URL.');
   const res = args[1].match(regex)!.slice(1);
 
-  const guild = client.guilds.get(res[0]);
+  const guild = client.guilds.cache.get(res[0]);
   if (!guild) return client.functions.badArg(message, 1, 'I am not in that server! I must be in the server to quote a message from it.');
-  const channel = guild.channels.get(res[1]);
+  const channel = guild.channels.cache.get(res[1]);
   if (!channel) return client.functions.badArg(message, 1, 'The provided channel does not exist.');
   if (!(channel instanceof TextChannel)) return client.functions.badArg(message, 1, 'The provided channel must be a text channel.');
   if (!channel.permissionsFor(client.user!)!.has([ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ])) return client.functions.noClientPerms(message, [ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ], channel);

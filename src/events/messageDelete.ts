@@ -20,7 +20,7 @@ async function delStar (client: ReknownClient, message: GuildMessage) {
   const channelRow = await client.functions.getRow<RowChannel>(client, tables.STARCHANNEL, {
     guildid: message.guild.id
   });
-  const channel = (channelRow ? message.guild.channels.get(channelRow.channelid) : message.guild.channels.find(c => c.name === 'starboard' && c.type === 'text')) as TextChannel | undefined;
+  const channel = (channelRow ? message.guild.channels.cache.get(channelRow.channelid) : message.guild.channels.cache.find(c => c.name === 'starboard' && c.type === 'text')) as TextChannel | undefined;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ])) return;
 
