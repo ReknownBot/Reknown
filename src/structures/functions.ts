@@ -40,6 +40,16 @@ export class Functions {
     return `${d}d ${h}h ${m}m ${s}s`;
   }
 
+  public async getMuteRole (client: ReknownClient, guild: Guild): Promise<Role | null> {
+    const row = await client.functions.getRow<RowMuteRole>(client, tables.MUTEROLE, {
+      guildid: guild.id
+    });
+    const role = row ? guild.roles.cache.get(row.roleid) : guild.roles.cache.find(ro => ro.name === 'Muted');
+    if (!role || guild.me!.roles.highest.comparePositionTo(role) <= 0) return null;
+
+    return role;
+  }
+
   public async getPrefix (client: ReknownClient, id: Snowflake): Promise<string> {
     if (client.prefixes[id]) return client.prefixes[id];
     const row = await client.functions.getRow<RowPrefix>(client, tables.PREFIX, {
@@ -203,16 +213,14 @@ export class Functions {
   }
 
   public async unmute (client: ReknownClient, member: GuildMember): Promise<void> {
+    client.mutes.delete(member.id);
+    client.query(`DELETE FROM ${tables.MUTES} WHERE guildid = $1`, [ member.guild.id ]);
     if (!member.guild.me!.hasPermission('MANAGE_ROLES')) return;
     await member.guild.members.fetch();
     if (!member.guild.members.cache.has(member.id)) return;
 
-    const row = await this.getRow<RowMuteRole>(client, tables.MUTEROLE, {
-      guildid: member.guild.id
-    });
-    const role = row ? member.guild.roles.cache.get(row.roleid) : member.guild.roles.cache.find(r => r.name === 'Muted');
-    if (!role || member.guild.me!.roles.highest.comparePositionTo(role) <= 0) return;
-    if (!member.roles.cache.has(role.id)) return;
+    const role = await this.getMuteRole(client, member.guild);
+    if (!role || !member.roles.cache.has(role.id)) return;
     member.roles.remove(role);
   }
 

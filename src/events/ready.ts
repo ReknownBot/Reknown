@@ -1,9 +1,9 @@
 import { Node } from 'lavalink';
 import type ReknownClient from '../structures/client';
+import type { RowMutes } from 'ReknownBot';
 import type { Snowflake } from 'discord.js';
 import ms from 'ms';
 import { tables } from '../Constants';
-import type { RowMuteRole, RowMutes } from 'ReknownBot';
 
 function invalidateGuild (arr: Snowflake[], client: ReknownClient, guildid: Snowflake) {
   arr.push(guildid);
@@ -20,19 +20,18 @@ async function muteCheck (client: ReknownClient) {
     const guild = client.guilds.cache.get(row.guildid);
     if (!guild) return invalidateGuild(invalidGuilds, client, row.guildid);
     if (!guild.me!.hasPermission('MANAGE_ROLES')) return invalidateGuild(invalidGuilds, client, guild.id);
-    const r = await client.functions.getRow<RowMuteRole>(client, tables.MUTEROLE, {
-      guildid: guild.id
-    });
-    const role = r ? guild.roles.cache.get(r.roleid) : guild.roles.cache.find(ro => ro.name === 'Muted');
-    if (!role || guild.me!.roles.highest.comparePositionTo(role) <= 0) return invalidateGuild(invalidGuilds, client, guild.id);
+    const role = await client.functions.getMuteRole(client, guild);
+    if (!role) return invalidateGuild(invalidGuilds, client, guild.id);
 
     const member = await guild.members.fetch(row.userid).catch(() => null);
     if (!member) return client.query(`DELETE FROM ${tables.MUTES} WHERE guildid = $1`, [ row.guildid ]);
     if (!member.roles.cache.has(role.id)) return client.query(`DELETE FROM ${tables.MUTES} WHERE guildid = $1`, [ row.guildid ]);
 
     const duration = Number(row.endsat) - Date.now();
-    if (Number(row.endsat) <= Date.now()) member.roles.remove(role);
-    else if (duration < ms('20d')) setTimeout(client.functions.unmute.bind(client.functions), duration, member);
+    if (Number(row.endsat) <= Date.now()) {
+      member.roles.remove(role);
+      client.query(`DELETE FROM ${tables.MUTES} WHERE guildid = $1`, [ row.guildid ]);
+    } else if (duration < ms('20d')) client.mutes.set(member.id, setTimeout(client.functions.unmute.bind(client.functions), duration, member));
   });
 }
 
