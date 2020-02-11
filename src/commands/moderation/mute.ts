@@ -3,7 +3,7 @@ import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import ms from 'ms';
 import type { GuildMessage, HelpObj, RowMuteRole, RowMutes } from 'ReknownBot';
-import { errors, tables } from '../../Constants';
+import { errors, parsedPerms, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
   const row = await client.functions.getRow<RowMuteRole>(client, tables.MUTEROLE, {
@@ -33,7 +33,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     type: 'member'
   }).catch(() => null);
   if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
-  if (!member.manageable) return client.functions.badArg(message, 1, 'I do not have enough powers to mute that member. Please check my role position and note that owners cannot be muted.');
+  if (member.hasPermission('ADMINISTRATOR')) return client.functions.badArg(message, 1, `Members with \`${parsedPerms.ADMINISTRATOR}\` cannot be muted.`);
 
   const muteRow = await client.functions.getRow<RowMutes>(client, tables.MUTES, {
     guildid: message.guild.id,
