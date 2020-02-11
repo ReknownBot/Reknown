@@ -37,7 +37,7 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
     return channel.id;
   },
   muterole: (value: string, client, guild) => {
-    const role = guild.roles.find(r => r.name === value) || client.functions.parseMention(value, {
+    const role = guild.roles.cache.find(r => r.name === value) || client.functions.parseMention(value, {
       guild: guild,
       type: 'role'
     });
