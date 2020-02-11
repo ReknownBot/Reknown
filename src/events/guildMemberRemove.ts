@@ -26,7 +26,7 @@ async function goodbyeMsg (client: ReknownClient, member: GuildMember) {
   const channelRow = await client.functions.getRow<RowChannel>(client, tables.WELCOMECHANNEL, {
     guildid: member.guild.id
   });
-  const channel = (channelRow ? member.guild.channels.find(c => c.id === channelRow.channelid && c.type === 'text') : member.guild.channels.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
+  const channel = (channelRow ? member.guild.channels.cache.find(c => c.id === channelRow.channelid && c.type === 'text') : member.guild.channels.cache.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
 
