@@ -113,8 +113,8 @@ export class Functions {
     switch (options.type) {
       case 'member': return options.guild!.members.fetch(parsedId);
       case 'user': return options.client!.users.fetch(parsedId);
-      case 'role': return options.guild!.roles.get(parsedId);
-      case 'channel': return options.guild!.channels.find(c => c.id === parsedId && c.type === cType);
+      case 'role': return options.guild!.roles.cache.get(parsedId);
+      case 'channel': return options.guild!.channels.cache.find(c => c.id === parsedId && c.type === cType);
       default: return false;
     }
   }
@@ -152,7 +152,7 @@ export class Functions {
     const channelRow = await client.functions.getRow<RowChannel>(client, tables.LOGCHANNEL, {
       guildid: guild.id
     });
-    const channel = (channelRow ? client.channels.get(channelRow.channelid) : guild.channels.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
+    const channel = (channelRow ? client.channels.cache.get(channelRow.channelid) : guild.channels.cache.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
     if (!channel) return;
     if (!channel.permissionsFor(client.user!)!.has('MANAGE_WEBHOOKS')) return;
     const webhooks = await channel.fetchWebhooks();
