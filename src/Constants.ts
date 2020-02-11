@@ -1,4 +1,5 @@
 export const errors = {
+  ALREADY_MUTED: 'That member is already muted.',
   MEMBER_INSUFFICIENT_POSITION: 'Your role position is not high enough to do this.',
   NO_LINE_BREAKS: 'This cannot contain a line break.',
   UNKNOWN_COMMNAD: 'That command does not exist.',
