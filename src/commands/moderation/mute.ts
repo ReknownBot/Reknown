@@ -54,7 +54,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
 
   client.query(`INSERT INTO ${tables.MUTES} (endsat, guildid, userid) VALUES ($1, $2, $3)`, [ Date.now() + duration, message.guild.id, member.id ]);
   member.roles.add(role);
-  if (duration < ms('20d')) setTimeout(client.functions.unmute, duration, client, member);
+  if (duration < ms('20d')) setTimeout(client.functions.unmute.bind(client.functions), duration, client, member);
 
   message.channel.send(`Successfully muted \`\`${client.escInline(member.user.tag)}\`\` for \`${client.functions.getFullTime(duration)}\``);
 
