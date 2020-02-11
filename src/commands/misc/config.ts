@@ -41,7 +41,7 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
       guild: guild,
       type: 'role'
     });
-    if (!role) return [ 'That role does not exist.' ];
+    if (!role || role.position === 0) return [ 'That role does not exist.' ];
     if (guild.me!.roles.highest.comparePositionTo(role) <= 0) return [ 'The role must be below my highest role.' ];
     return role.id;
   },
