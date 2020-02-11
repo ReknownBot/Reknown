@@ -3,6 +3,7 @@ import CommandHandler from './commandhandler';
 import { Functions } from './functions';
 import type Node from 'lavalink';
 import { Pool } from 'pg';
+import type { Snowflake } from 'discord.js';
 import { Client, Collection, Util } from 'discord.js';
 import type { ConfigObject, MusicObject, ReknownEvent } from 'ReknownBot';
 
@@ -22,6 +23,8 @@ export default class ReknownClient extends Client {
   public functions = new Functions();
 
   public lavalink: Node | null = null;
+
+  public mutes = new Collection<Snowflake, NodeJS.Timeout>();
 
   public prefixes: { [ id: string ]: string } = {};
 
