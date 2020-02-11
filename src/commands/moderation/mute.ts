@@ -56,7 +56,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   member.roles.add(role);
   if (duration < ms('20d')) client.mutes.set(member.id, setTimeout(client.functions.unmute.bind(client.functions), duration, client, member));
 
-  message.channel.send(`Successfully muted \`\`${client.escInline(member.user.tag)}\`\` for \`${client.functions.getFullTime(duration)}\``);
+  message.channel.send(`Successfully muted \`\`${client.escInline(member.user.tag)}\`\` for \`${client.functions.getFullTime(duration)}\`.`);
 
   const embed = new MessageEmbed()
     .addField('Duration', client.functions.getFullTime(duration))
