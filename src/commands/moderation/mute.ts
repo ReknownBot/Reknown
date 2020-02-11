@@ -44,9 +44,9 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     await client.query(`DELETE FROM ${tables.MUTES} WHERE guildid = $1 AND userid = $2`, [ message.guild.id, member.id ]);
   }
 
-  const duration = args[2] ? ms(args[2]) : -1;
+  const duration = args[2] ? ms(args[2]) : 0;
   if (!duration) return client.functions.badArg(message, 2, 'The duration provided was invalid.');
-  if (duration !== -1 && duration < ms('1m')) return client.functions.badArg(message, 2, 'The duration cannot be shorter than 1 minute.');
+  if (duration !== 0 && duration < ms('1m')) return client.functions.badArg(message, 2, 'The duration cannot be shorter than 1 minute.');
   if (duration > ms('30d')) return client.functions.badArg(message, 2, 'The duration cannot be longer than 30 days.');
 
   const reason = args[3] ? args.slice(3).join(' ') : undefined;
@@ -54,7 +54,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
 
   client.query(`INSERT INTO ${tables.MUTES} (endsat, guildid, userid) VALUES ($1, $2, $3)`, [ Date.now() + duration, message.guild.id, member.id ]);
   member.roles.add(role);
-  if (duration !== -1 && duration < ms('20d')) client.mutes.set(member.id, setTimeout(client.functions.unmute.bind(client.functions), duration, client, member));
+  if (duration !== 0 && duration < ms('20d')) client.mutes.set(member.id, setTimeout(client.functions.unmute.bind(client.functions), duration, client, member));
 
   message.channel.send(`Successfully muted \`\`${client.escInline(member.user.tag)}\`\` for \`${duration === -1 ? 'Unlimited' : client.functions.getFullTime(duration)}\`.`);
 
@@ -74,7 +74,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
 export const help: HelpObj = {
   aliases: [ 'silence' ],
   category: 'Moderation',
-  desc: 'Mutes a member. Provide `-1` as the duration for infinite time.',
+  desc: 'Mutes a member. Provide `0` as the duration for infinite time.',
   togglable: true,
   usage: 'mute <Member> [Duration=0] [Reason]'
 };
