@@ -32,7 +32,7 @@ async function muteCheck (client: ReknownClient) {
 
     const duration = Number(row.endsat) - Date.now();
     if (Number(row.endsat) <= Date.now()) member.roles.remove(role);
-    else if (duration < ms('20d')) setTimeout(client.functions.unmute, duration, member);
+    else if (duration < ms('20d')) setTimeout(client.functions.unmute.bind(client.functions), duration, member);
   });
 }
 
