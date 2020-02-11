@@ -33,7 +33,7 @@ function usernameUpdate (client: ReknownClient, oldUser: User, newUser: User, gu
 }
 
 export async function run (client: ReknownClient, oldUser: User, newUser: User) {
-  client.guilds.filter(g => g.members.has(newUser.id)).forEach(g => {
+  client.guilds.cache.filter(g => g.members.cache.has(newUser.id)).forEach(g => {
     avatarUpdate(client, oldUser, newUser, g);
     usernameUpdate(client, oldUser, newUser, g);
   });

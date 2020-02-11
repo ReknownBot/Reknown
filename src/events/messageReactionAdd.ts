@@ -20,13 +20,13 @@ export async function run (client: ReknownClient, reaction: MessageReaction & { 
   if (!toggled || !toggled.bool) return;
 
   let { count } = reaction;
-  if (reaction.users.has(message.author.id)) count -= 1;
+  if (reaction.users.cache.has(message.author.id)) count -= 1;
   if (count === 0) return client.query(`DELETE FROM ${tables.STARBOARD} WHERE msgid = $1`, [ message.id ]);
 
   const channelRow = await client.functions.getRow<RowChannel>(client, tables.STARCHANNEL, {
     guildid: message.guild.id
   });
-  const channel = (channelRow ? message.guild.channels.get(channelRow.channelid) : message.guild.channels.find(c => c.name === 'starboard' && c.type === 'text')) as TextChannel | undefined;
+  const channel = (channelRow ? message.guild.channels.cache.get(channelRow.channelid) : message.guild.channels.cache.find(c => c.name === 'starboard' && c.type === 'text')) as TextChannel | undefined;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'EMBED_LINKS', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'VIEW_CHANNEL' ])) return;
 
