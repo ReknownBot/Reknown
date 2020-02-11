@@ -46,7 +46,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
 
   const duration = args[2] ? ms(args[2]) : -1;
   if (!duration) return client.functions.badArg(message, 2, 'The duration provided was invalid.');
-  if (duration < ms('1m')) return client.functions.badArg(message, 2, 'The duration cannot be shorter than 1 minute.');
+  if (duration !== -1 && duration < ms('1m')) return client.functions.badArg(message, 2, 'The duration cannot be shorter than 1 minute.');
   if (duration > ms('30d')) return client.functions.badArg(message, 2, 'The duration cannot be longer than 30 days.');
 
   const reason = args[3] ? args.slice(3).join(' ') : undefined;
