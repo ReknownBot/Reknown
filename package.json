@@ -32,7 +32,7 @@
     "btoa": "^1.2.1",
     "cowsay": "^1.4.0",
     "dateformat": "^3.0.3",
-    "discord.js": "git://github.com/RDambrosio016/discord.js.git#remove-datastores",
+    "discord.js": "github:discordjs/discord.js",
     "dotenv": "^8.2.0",
     "fs": "0.0.1-security",
     "lavalink": "^2.9.0",
