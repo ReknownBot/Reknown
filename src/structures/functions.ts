@@ -3,7 +3,7 @@ import type ReknownClient from './client';
 import type { Track } from 'lavalink';
 import { embedColor } from '../config.json';
 import type { CategoryChannel, ClientUser, Guild, GuildChannel, GuildMember, Message, Role, Snowflake, User, VoiceChannel } from 'discord.js';
-import type { GuildMessage, MusicObject, ParseMentionOptions, RowChannel, RowEconomy, RowPrefix, RowToggle, RowWebhook } from 'ReknownBot';
+import type { GuildMessage, MusicObject, ParseMentionOptions, RowChannel, RowEconomy, RowMuteRole, RowPrefix, RowToggle, RowWebhook } from 'ReknownBot';
 import { MessageEmbed, TextChannel, Util } from 'discord.js';
 import { parsedPerms, tables } from '../Constants';
 
@@ -31,6 +31,15 @@ export class Functions {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
   }
 
+  public getFullTime (timeLeft: number): string {
+    const s = Math.ceil(timeLeft / 1000 % 60);
+    const m = Math.floor(timeLeft / (1000 * 60) % 60);
+    const h = Math.floor(timeLeft / (1000 * 60 * 60) % 24);
+    const d = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+
+    return `${d}d ${h}h ${m}m ${s}s`;
+  }
+
   public async getPrefix (client: ReknownClient, id: Snowflake): Promise<string> {
     if (client.prefixes[id]) return client.prefixes[id];
     const row = await client.functions.getRow<RowPrefix>(client, tables.PREFIX, {
@@ -46,9 +55,9 @@ export class Functions {
   }
 
   public getTime (timeLeft: number): string {
-    const h = Math.floor(timeLeft / 1000 / 60 / 60 % 24);
-    const m = Math.floor(timeLeft / 1000 / 60 % 60);
-    const s = Math.floor(timeLeft / 1000 % 60);
+    const s = Math.ceil(timeLeft / 1000 % 60);
+    const m = Math.floor(timeLeft / (1000 * 60) % 60);
+    const h = Math.floor(timeLeft / (1000 * 60 * 60));
 
     return `${h}h ${m}m ${s}s`;
   }
@@ -191,6 +200,20 @@ export class Functions {
     if (thumbnail) embed.setThumbnail(thumbnail);
 
     message.channel.send(embed);
+  }
+
+  public async unmute (client: ReknownClient, member: GuildMember): Promise<void> {
+    if (!member.guild.me!.hasPermission('MANAGE_ROLES')) return;
+    await member.guild.members.fetch();
+    if (!member.guild.members.cache.has(member.id)) return;
+
+    const row = await this.getRow<RowMuteRole>(client, tables.MUTEROLE, {
+      guildid: member.guild.id
+    });
+    const role = row ? member.guild.roles.cache.get(row.roleid) : member.guild.roles.cache.find(r => r.name === 'Muted');
+    if (!role || member.guild.me!.roles.highest.comparePositionTo(role) <= 0) return;
+    if (!member.roles.cache.has(role.id)) return;
+    member.roles.remove(role);
   }
 
   public async updateRow<T> (client: ReknownClient, table: string, changes: T, filters: Partial<T>): Promise<QueryResult<T>> {

@@ -107,6 +107,12 @@ declare module 'ReknownBot' {
     roleid: Snowflake;
   }
 
+  interface RowMutes {
+    endsat: string;
+    guildid: Snowflake;
+    userid: Snowflake;
+  }
+
   interface RowPrefix {
     customprefix: string;
     guildid: Snowflake;
