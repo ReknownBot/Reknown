@@ -3,7 +3,21 @@ import type ReknownClient from '../structures/client';
 import dateformat from 'dateformat';
 import { tables } from '../Constants';
 import type { GuildMember, TextChannel } from 'discord.js';
-import type { RowChannel, RowMsg, RowToggle } from 'ReknownBot';
+import type { RowChannel, RowMsg, RowMutes, RowToggle } from 'ReknownBot';
+
+async function checkMute (client: ReknownClient, member: GuildMember) {
+  if (!member.guild.me!.hasPermission('MANAGE_ROLES')) return;
+  const row = await client.functions.getRow<RowMutes>(client, tables.MUTES, {
+    guildid: member.guild.id,
+    userid: member.id
+  });
+  if (!row) return;
+
+  const role = await client.functions.getMuteRole(client, member.guild);
+  if (!role) return;
+
+  member.roles.add(role, 'Muted');
+}
 
 function sendLog (client: ReknownClient, member: GuildMember) {
   const embed = new MessageEmbed()
@@ -48,6 +62,7 @@ export async function run (client: ReknownClient, member: GuildMember) {
   if (!member.guild.available) return;
   if (member.id === client.user!.id) return;
 
+  checkMute(client, member);
   sendLog(client, member);
   welcomeMsg(client, member);
 }
