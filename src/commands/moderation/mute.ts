@@ -39,9 +39,9 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     guildid: message.guild.id,
     userid: member.id
   });
-  if (member.roles.cache.has(role.id)) {
-    if (muteRow) await client.query(`DELETE FROM ${tables.MUTES} WHERE guildid = $1 AND userid = $2`, [ message.guild.id, member.id ]);
-    else return client.functions.badArg(message, 1, errors.ALREADY_MUTED);
+  if (muteRow) {
+    if (member.roles.cache.has(role.id)) return client.functions.badArg(message, 1, errors.ALREADY_MUTED);
+    await client.query(`DELETE FROM ${tables.MUTES} WHERE guildid = $1 AND userid = $2`, [ message.guild.id, member.id ]);
   }
 
   const duration = args[2] ? ms(args[2]) : -1;
