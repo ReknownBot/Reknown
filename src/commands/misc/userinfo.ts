@@ -23,7 +23,7 @@ export async function run (client: ReknownClient, message: Message, args: string
     .setTimestamp();
 
   const activity = user.presence.activities.find(a => a.type === 'CUSTOM_STATUS');
-  if (activity) embed.addField('Custom Status', client.escMD(activity.name), true);
+  if (activity) embed.addField('Custom Status', client.escMD(activity.state!), true);
 
   if (member) {
     await message.guild!.members.fetch();
