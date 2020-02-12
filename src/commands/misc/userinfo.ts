@@ -28,8 +28,8 @@ export async function run (client: ReknownClient, message: Message, args: string
   if (member) {
     await message.guild!.members.fetch();
     if (member.joinedAt) embed.addField('Joined at', dateformat(member.joinedAt, 'UTC:mmm d, yyyy, h:MM:ss TT Z'), true);
-    const members = message.guild!.members.cache.filter(m => Boolean(m.joinedTimestamp)).sort(({ joinedTimestamp: a }, { joinedTimestamp: b }) => b! - a!);
-    embed.addField('Joined Position', members.array().indexOf(member) + 1);
+    const members = message.guild!.members.cache.filter(m => Boolean(m.joinedTimestamp)).sort(({ joinedTimestamp: a }, { joinedTimestamp: b }) => a! - b!);
+    embed.addField('Joined Position', `#${members.array().indexOf(member) + 1}`);
   }
 
   message.channel.send(embed);
