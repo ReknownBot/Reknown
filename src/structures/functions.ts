@@ -231,7 +231,7 @@ export class Functions {
     if (table === 'prefix') client.prefixes[(changes as unknown as RowPrefix).guildid] = (changes as unknown as RowPrefix).customprefix;
     const row = await client.functions.getRow<any>(client, table, filters);
     if (row) return client.query<T>(`UPDATE ${table} SET ${columns.map((c, i) => `${c} = $${i + 1}`)} WHERE ${Object.keys(filters).map((c, i) => `${c} = $${i + columns.length + 1}`).join(' AND ')} RETURNING *`, [ ...values, ...Object.values(filters) ]);
-    return client.query<T>(`INSERT INTO ${table} (${columns}) VALUES (${columns.map((c, i) => `$${i + 1} RETURNING *`)})`, values);
+    return client.query<T>(`INSERT INTO ${table} (${columns}) VALUES (${columns.map((c, i) => `$${i + 1}`)}) RETURNING *`, values);
   }
 
   public uppercase (str: string): string {
