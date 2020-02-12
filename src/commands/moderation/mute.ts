@@ -59,6 +59,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   message.channel.send(`Successfully muted \`\`${client.escInline(member.user.tag)}\`\` for \`${duration === -1 ? 'Unlimited' : client.functions.getFullTime(duration)}\`.`);
 
   const embed = new MessageEmbed()
+    .addField('Member', `${member} [${client.escMD(member.user.tag)}] (ID: ${member.id})`)
     .addField('Duration', client.functions.getFullTime(duration))
     .addField('Reason', reason || 'None')
     .addField('Muted by', `${message.member} [${client.escMD(message.author.tag)}] (ID: ${message.author.id})`)
