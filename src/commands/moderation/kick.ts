@@ -5,7 +5,10 @@ import type { GuildMessage, HelpObj } from 'ReknownBot';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'a user to kick.');
-  const member = await client.functions.parseMention(args[1], { guild: message.guild, type: 'member' }).catch(() => null);
+  const member = await client.functions.parseMention(args[1], {
+    guild: message.guild,
+    type: 'member'
+  }).catch(() => null);
   const reason = args[2] ? args.slice(2).join(' ') : undefined;
   // eslint-disable-next-line no-extra-parens
   if ((reason?.length ?? 0) > 512) return client.functions.badArg(message, 2, 'The reason length cannot be over 512 characters.');
