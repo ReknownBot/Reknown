@@ -5,7 +5,10 @@ import type { GuildMessage, HelpObj, RowLevel } from 'ReknownBot';
 import { errors, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
-  const member = args[1] ? await client.functions.parseMention(args[1], { guild: message.guild, type: 'member' }).catch(() => null) : message.member;
+  const member = args[1] ? await client.functions.parseMention(args[1], {
+    guild: message.guild,
+    type: 'member'
+  }).catch(() => null) : message.member;
   if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
 
   const row = await client.functions.getRow<RowLevel>(client, tables.LEVELS, {

@@ -32,7 +32,11 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
     return value;
   },
   logchannel: (value: string, client, guild) => {
-    const channel = client.functions.parseMention(value, { cType: 'text', guild: guild, type: 'channel' });
+    const channel = client.functions.parseMention(value, {
+      cType: 'text',
+      guild: guild,
+      type: 'channel'
+    });
     if (!channel) return [ 'That channel does not exist or is not a text channel.' ];
     return channel.id;
   },
@@ -50,7 +54,11 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
     return value;
   },
   starchannel: (value: string, client, guild) => {
-    const channel = client.functions.parseMention(value, { cType: 'text', guild: guild, type: 'channel' });
+    const channel = client.functions.parseMention(value, {
+      cType: 'text',
+      guild: guild,
+      type: 'channel'
+    });
     if (!channel) return [ 'That channel does not exist or is not a text channel.' ];
     return channel.id;
   },
