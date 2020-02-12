@@ -1,9 +1,9 @@
 import { Node } from 'lavalink';
 import type ReknownClient from '../structures/client';
-import type { RowMutes } from 'ReknownBot';
 import type { Snowflake } from 'discord.js';
 import ms from 'ms';
 import { tables } from '../Constants';
+import type { EmoteName, RowMutes } from 'ReknownBot';
 
 function invalidateGuild (arr: Snowflake[], client: ReknownClient, guildid: Snowflake) {
   arr.push(guildid);
@@ -41,6 +41,12 @@ export async function run (client: ReknownClient) {
     name: `${client.guilds.cache.size} Servers`,
     type: 'WATCHING'
   });
+
+  for (const emoji in client.config.emojis) {
+    if (Object.prototype.hasOwnProperty.call(client.config.emojis, emoji)) {
+      client.emotes.set(emoji as EmoteName, client.emojis.cache.get(client.config.emojis[emoji])!);
+    }
+  }
 
   client.lavalink = new Node({
     password: process.env.LAVALINK_PASS!,
