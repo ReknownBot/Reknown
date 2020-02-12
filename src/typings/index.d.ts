@@ -4,17 +4,23 @@ declare module 'ReknownBot' {
   type Client = import('../structures/client').default;
 
   type CommandCategory = 'Documentation'
-      | 'Economy'
-      | 'Fun'
-      | 'Levelling'
-      | 'Miscellaneous'
-      | 'Music'
-      | 'Moderation'
-      | 'Utility';
+    | 'Economy'
+    | 'Fun'
+    | 'Levelling'
+    | 'Miscellaneous'
+    | 'Music'
+    | 'Moderation'
+    | 'Utility';
+
+  type EmoteName = 'online'
+    | 'idle'
+    | 'dnd'
+    | 'offline';
 
   interface ConfigObject {
     contributors: Snowflake[];
     embedColor: string;
+    emojis: { [ emoji: string ]: Snowflake };
     muteColor: string;
     ownerID: Snowflake;
     prefix: string;
