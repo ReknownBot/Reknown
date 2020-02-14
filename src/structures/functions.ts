@@ -184,9 +184,13 @@ export class Functions {
         avatar: client.user!.displayAvatarURL({ size: 2048 }),
         reason: 'Reknown Logs'
       });
-      webhookRow = !webhookRow ?
-        (await client.query(`INSERT INTO ${tables.LOGWEBHOOK} (channelid, guildid, webhookid) VALUES ($1, $2, $3) RETURNING *`, [ channel.id, guild.id, webhook.id ])).rows[0] :
-        (await client.query(`UPDATE ${tables.LOGWEBHOOK} SET webhookid = $1 WHERE channelid = $2 RETURNING *`, [ webhook.id, channel.id ])).rows[0];
+      webhookRow = (await client.functions.updateRow<RowWebhook>(client, tables.LOGWEBHOOK, {
+        channelid: channel.id,
+        guildid: guild.id,
+        webhookid: webhook.id
+      }, {
+        channelid: channel.id
+      })).rows[0];
     } else webhook = webhooks.get(webhookRow.webhookid)!;
 
     webhook.send(embed);
