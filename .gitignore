@@ -1,6 +1,11 @@
 # Module
-package-lock.json
 node_modules
 
 # .env file
 .env
+
+# Lavalink
+Lavalink
+
+# Compiling
+dist
