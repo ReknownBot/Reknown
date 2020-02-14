@@ -18,7 +18,7 @@ const configs: { [ key: string ]: string } = {
 const defaultValues: { [ key: string ]: [ string, number | string | false ] } = {
   levelmodifier: [ 'modifier', 1 ],
   logchannel: [ 'channelid', '#action-log' ],
-  muterole: [ 'rolename', 'Muted' ],
+  muterole: [ 'roleid', 'Muted' ],
   prefix: [ 'customprefix', prefix ],
   starchannel: [ 'channelid', '#starboard' ],
   togglelog: [ 'bool', false ],
