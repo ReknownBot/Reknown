@@ -34,7 +34,7 @@ export async function run (client: ReknownClient, message: Message, args: string
 export const help: HelpObj = {
   aliases: [],
   category: 'Documentation',
-  desc: 'Displays documentation for Discord.JS.',
+  desc: 'Displays documentation for Discord.js',
   dm: true,
   togglable: true,
   usage: 'docs <Query> [Branch]'
