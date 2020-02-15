@@ -1,6 +1,6 @@
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
-import type { Guild, PartialUser, User } from 'discord.js';
+import type { Guild, User } from 'discord.js';
 
 function sendLog (client: ReknownClient, guild: Guild, user: User) {
   const embed = new MessageEmbed()
@@ -14,9 +14,8 @@ function sendLog (client: ReknownClient, guild: Guild, user: User) {
   client.functions.sendLog(client, embed, guild);
 }
 
-export async function run (client: ReknownClient, guild: Guild, user: User | PartialUser) {
+export async function run (client: ReknownClient, guild: Guild, user: User) {
   if (!guild.available) return;
-  if (user.partial) user = await user.fetch();
 
   sendLog(client, guild, user);
 }
