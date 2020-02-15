@@ -1,15 +1,17 @@
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import { tables } from '../Constants';
-import type { MessageReaction, PartialUser, TextChannel, User } from 'discord.js';
+import type { Message, MessageReaction, PartialUser, TextChannel, User } from 'discord.js';
 import type { RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
 
 export async function run (client: ReknownClient, reaction: MessageReaction & { count: number }, user: User | PartialUser) {
   if (reaction.partial) await reaction.fetch();
   if (user.partial) user = await user.fetch();
   if (user.bot) return;
-  const { message } = reaction;
-  if (message.partial) await message.fetch();
+  let message: Message | null;
+  if (reaction.message.partial) message = await reaction.message.fetch().catch(() => null);
+  else message = reaction.message;
+  if (!message) return;
   if (!message.guild?.available) return;
   if (message.webhookID) return;
   if (!message.content && !message.attachments.find(attch => Boolean(attch.height))) return;
