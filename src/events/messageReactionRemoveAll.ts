@@ -3,8 +3,9 @@ import { tables } from '../Constants';
 import type { Message, PartialMessage, TextChannel } from 'discord.js';
 import type { RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
 
-export async function run (client: ReknownClient, message: Message | PartialMessage) {
-  if (message.partial) message = await message.fetch();
+export async function run (client: ReknownClient, message: Message | PartialMessage | null) {
+  if (message!.partial) message = await message!.fetch().catch(() => null);
+  if (!message || message.partial) return;
   if (!message.guild?.available) return;
   if (message.webhookID) return;
   if (!message.content && !message.attachments.find(attch => Boolean(attch.height))) return;
