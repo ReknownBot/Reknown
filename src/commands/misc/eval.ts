@@ -11,7 +11,7 @@ function clean (text: string): string {
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'code to evaluate.');
-  const code = args.slice(1).join('');
+  const code = args.slice(1).join(' ');
 
   const embed = new MessageEmbed()
     .setColor(client.config.embedColor)
