@@ -42,5 +42,6 @@ export async function run (client: ReknownClient, message: Message) {
     if (!cmdInfo.help.dm) return message.reply('This command is only available in servers.');
   } else if (!message.channel.permissionsFor(message.member!)!.has(cmdInfo.memberPerms)) return client.functions.noPerms(message, cmdInfo.memberPerms, message.channel);
   else if (!message.channel.permissionsFor(client.user!)!.has(cmdInfo.permissions)) return client.functions.noClientPerms(message, cmdInfo.permissions, message.channel);
+  else if (cmdInfo.help.private && message.author.id !== client.config.ownerID) return;
   cmdInfo.run(client, message, args);
 }
