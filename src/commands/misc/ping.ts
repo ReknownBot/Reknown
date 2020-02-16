@@ -4,7 +4,7 @@ import type { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const msg = await message.channel.send(`Pong! :heartbeat: \`${Math.round(client.ws.ping * 10) / 10}ms\``);
-  msg.edit(`${msg.content} :stopwatch: \`${Date.now() - msg.createdTimestamp}ms\``);
+  msg.edit(`${msg.content} :stopwatch: \`${msg.createdTimestamp - message.createdTimestamp}ms\``);
 }
 
 export const help: HelpObj = {
