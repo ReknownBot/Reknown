@@ -1,11 +1,11 @@
 import type ReknownClient from '../structures/client';
 import { tables } from '../Constants';
-import type { Message, PartialMessage, TextChannel } from 'discord.js';
+import type { Message, TextChannel } from 'discord.js';
 import type { RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
 
-export async function run (client: ReknownClient, message: Message | PartialMessage | null) {
+export async function run (client: ReknownClient, message: Message | null) {
   if (message!.partial) message = await message!.fetch().catch(() => null);
-  if (!message || message.partial) return;
+  if (!message) return;
   if (!message.guild?.available) return;
   if (message.webhookID) return;
   if (!message.content && !message.attachments.find(attch => Boolean(attch.height))) return;
