@@ -18,7 +18,7 @@ export async function run (client: ReknownClient, message: Message, args: string
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp();
   try {
-    let res: string | object = await eval(`(async() => {${code}})();`);
+    let res: string | object = await eval(`(async() => {${code}})().catch(e => e);`);
     if (typeof res !== 'string') res = inspect(res);
     if (clean(res).length > 2040) res = res.slice(0, 2040);
 
