@@ -8,7 +8,6 @@ const cooldowns = new Set();
 
 export async function run (client: ReknownClient, message: Message) {
   if (message.author.bot || message.guild && !message.guild.available) return;
-  if (message.webhookID) return;
 
   const prefix = message.guild ? await client.functions.getPrefix(client, message.guild.id) : client.config.prefix;
   const regexp = new RegExp(`^<@!?${message.client.user!.id}> `);
