@@ -9,7 +9,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   const user = args[1] ? await client.functions.parseMention(args[1], {
     client: client,
     type: 'user'
-  }).then(() => null) : message.author;
+  }).catch(() => null) : message.author;
   if (!user) return client.functions.badArg(message, 1, errors.UNKNOWN_USER);
   const member = await message.guild?.members.fetch(user).catch(() => null);
 
