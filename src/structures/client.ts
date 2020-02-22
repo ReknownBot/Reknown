@@ -29,7 +29,7 @@ export default class ReknownClient extends Client {
 
   public lavalink: Node | null = null;
 
-  public mutes = new Collection<Snowflake, NodeJS.Timeout>();
+  public mutes = new Collection<Snowflake, number>();
 
   public prefixes: { [ id: string ]: string } = {};
 
