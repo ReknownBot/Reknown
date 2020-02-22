@@ -22,6 +22,7 @@ declare module 'ReknownBot' {
     embedColor: string;
     emojis: { [ emoji: string ]: Snowflake };
     muteColor: string;
+    officialClient: Snowflake;
     ownerID: Snowflake;
     prefix: string;
     suggestions: Snowflake;
