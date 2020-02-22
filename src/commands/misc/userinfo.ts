@@ -22,8 +22,14 @@ export async function run (client: ReknownClient, message: Message, args: string
     .setThumbnail(user.displayAvatarURL({ size: 512 }))
     .setTimestamp();
 
-  const activity = user.presence.activities.find(a => a.type === 'CUSTOM_STATUS');
-  if (activity) embed.addField('Custom Status', client.escMD(activity.state!), true);
+  for (const activity of user.presence.activities) {
+    if (activity.type === 'CUSTOM_STATUS' && activity.state) embed.addField('Custom Status', client.escMD(activity.state), true);
+    else {
+      const field = embed.fields.find(f => f.name === 'Activity');
+      if (field) embed.spliceField(embed.fields.indexOf(field), 1, field.name, `${field.value}\n- \`\`${client.escInline(activity.name)}\`\``, true);
+      else embed.addField('Activity', `- \`\`${client.escInline(activity.name)}\`\``, true);
+    }
+  }
 
   if (member) {
     await message.guild!.members.fetch();
