@@ -1,9 +1,14 @@
+import DBL from 'dblapi.js';
 import { Node } from 'lavalink';
 import type ReknownClient from '../structures/client';
 import type { Snowflake } from 'discord.js';
 import ms from 'ms';
 import { tables } from '../Constants';
 import type { EmoteName, RowMutes } from 'ReknownBot';
+
+function initDBL (client: ReknownClient) {
+  if (client.user!.id === client.config.officialClient) client.dbl = new DBL(process.env.DBL_API_KEY!, client);
+}
 
 function invalidateGuild (arr: Snowflake[], client: ReknownClient, guildid: Snowflake) {
   arr.push(guildid);
@@ -57,5 +62,6 @@ export async function run (client: ReknownClient) {
     },
   });
 
+  initDBL(client);
   muteCheck(client);
 }

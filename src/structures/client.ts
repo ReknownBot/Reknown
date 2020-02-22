@@ -1,5 +1,6 @@
 import * as config from '../config.json';
 import CommandHandler from './commandhandler';
+import DBL from 'dblapi.js';
 import { Functions } from './functions';
 import type Node from 'lavalink';
 import { Pool } from 'pg';
@@ -13,6 +14,8 @@ export default class ReknownClient extends Client {
   public commands = new CommandHandler();
 
   public config: ConfigObject = config;
+
+  public dbl: DBL | null = null;
 
   public emotes = new Collection<EmoteName, GuildEmoji>();
 
