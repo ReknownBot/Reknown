@@ -8,7 +8,8 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (amt < 1 || amt > 100) return client.functions.badArg(message, 1, 'The amount must be from 1-100.');
 
   if (amt === 100) await message.delete();
-  message.channel.bulkDelete(amt === 100 ? amt : amt + 1, true);
+  // Channel got deleted or bot does not have access to it
+  message.channel.bulkDelete(amt === 100 ? amt : amt + 1, true).catch(() => null);
 }
 
 export const help: HelpObj = {
