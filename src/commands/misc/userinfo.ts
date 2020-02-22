@@ -19,7 +19,7 @@ export async function run (client: ReknownClient, message: Message, args: string
     .addField('Status', `${client.emotes.get(user.presence.status)} ${user.presence.status}`, true)
     .setColor(client.config.embedColor)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
-    .setThumbnail(message.author.displayAvatarURL({ size: 512 }))
+    .setThumbnail(user.displayAvatarURL({ size: 512 }))
     .setTimestamp();
 
   const activity = user.presence.activities.find(a => a.type === 'CUSTOM_STATUS');
