@@ -1,8 +1,8 @@
 import { DMChannel } from 'discord.js';
-import type { Message } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import type { RowDisabledCommands } from 'ReknownBot';
 import { tables } from '../Constants';
+import type { Message, TextChannel } from 'discord.js';
 
 const cooldowns = new Set();
 
@@ -22,9 +22,11 @@ export async function run (client: ReknownClient, message: Message) {
   if (!Object.keys(client.commands.aliases).includes(cmd)) return;
 
   if (message.guild) {
-    if (cooldowns.has(message.guild.id)) return message.reply('This server is still on command cooldown! Please try again.');
+    // eslint-disable-next-line no-extra-parens
+    if (!(message.channel as TextChannel).permissionsFor(client.user!)!.has([ 'SEND_MESSAGES' ])) return;
+    if (cooldowns.has(message.guild.id)) return;
     cooldowns.add(message.guild.id);
-    setTimeout(() => cooldowns.delete(message.guild!.id), 150);
+    setTimeout(() => cooldowns.delete(message.guild!.id), 75);
   }
 
   cmd = client.commands.aliases[cmd];
