@@ -6,8 +6,16 @@ function nameUpdate (client: ReknownClient, oldRole: Role, newRole: Role) {
   if (oldRole.name === newRole.name) return;
 
   const embed = new MessageEmbed()
-    .addField('Old Name', client.escMD(oldRole.name))
-    .addField('New Name', client.escMD(newRole.name))
+    .addFields([
+      {
+        name: 'Old Name',
+        value: client.escMD(oldRole.name)
+      },
+      {
+        name: 'New Name',
+        value: client.escMD(newRole.name)
+      }
+    ])
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${newRole.id}`)
     .setTimestamp()
@@ -23,7 +31,7 @@ function permissionUpdate (client: ReknownClient, oldRole: Role, newRole: Role) 
   const removedPerms = newRole.permissions.missing(oldRole.permissions, false);
 
   const embed = new MessageEmbed()
-    .addField('Role', newRole.toString())
+    .addFields([ { name: 'Role', value: newRole.toString() } ])
     .setColor(client.config.embedColor)
     .setDescription(`${addedPerms.map(perm => `+ \`\`${perm}\`\``).join('\n')}\n${removedPerms.map(perm => `- \`\`${perm}\`\``).join('\n')}`)
     .setFooter(`ID: ${newRole.id}`)

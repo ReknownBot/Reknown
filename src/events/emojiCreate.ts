@@ -4,8 +4,16 @@ import type ReknownClient from '../structures/client';
 
 async function sendLog (client: ReknownClient, emoji: GuildEmoji) {
   const embed = new MessageEmbed()
-    .addField('Emoji Name', client.escMD(emoji.name))
-    .addField('Animated', emoji.animated ? 'Yes' : 'No')
+    .addFields([
+      {
+        name: 'Emoji Name',
+        value: client.escMD(emoji.name)
+      },
+      {
+        name: 'Animated',
+        value: emoji.animated ? 'Yes' : 'No'
+      }
+    ])
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${emoji.id}`)
     .setThumbnail(emoji.url)

@@ -43,11 +43,33 @@ export async function run (client: ReknownClient, message: Message, args: string
       const { player } = hypixelJson;
       const level = player.networkExp < 0 ? 1 : Math.floor(1 + REVERSE_PQ_PREFIX + Math.sqrt(REVERSE_CONST + GROWTH_DIVIDES_2 * player.networkExp));
       const embed = new MessageEmbed()
-        .addField('Network XP', `${client.functions.formatNum(player.networkExp || 0)} (Level: ${client.functions.formatNum(level)})`, true)
-        .addField('Karma', client.functions.formatNum(player.karma || 0), true)
-        .addField('Achievement Points', client.functions.formatNum(player.achievementPoints || 0), true)
-        .addField('Total Votes', client.functions.formatNum(player.voting ? player.voting.total : 0), true)
-        .addField('Pet Food Count', client.functions.formatNum(Object.values(player.petConsumables || { temp: 0 }).reduce((a, b) => a + b, 0)), true)
+        .addFields([
+          {
+            inline: true,
+            name: 'Network XP',
+            value: `${client.functions.formatNum(player.networkExp || 0)} (Level: ${client.functions.formatNum(level)})`
+          },
+          {
+            inline: true,
+            name: 'Karma',
+            value: client.functions.formatNum(player.karma || 0)
+          },
+          {
+            inline: true,
+            name: 'Achievement Points',
+            value: client.functions.formatNum(player.achievementPoints || 0)
+          },
+          {
+            inline: true,
+            name: 'Total Votes',
+            value: client.functions.formatNum(player.voting ? player.voting.total : 0)
+          },
+          {
+            inline: true,
+            name: 'Pet Food Count',
+            value: client.functions.formatNum(Object.values(player.petConsumables || { temp: 0 }).reduce((a, b) => a + b, 0))
+          }
+        ])
         .setColor(client.config.embedColor)
         .setAuthor(`General Stats for ${player.displayname}`, undefined, `https://hypixel.net/player/${player.displayname}`);
 

@@ -203,8 +203,16 @@ export class Functions {
     }
 
     const embed = new MessageEmbed()
-      .addField('Author', song.info.author)
-      .addField('Duration', `${Math.round(song.info.length / 6000) / 10}m`)
+      .addFields([
+        {
+          name: 'Author',
+          value: song.info.author
+        },
+        {
+          name: 'Duration',
+          value: `${Math.round(song.info.length / 6000) / 10}m`
+        }
+      ])
       .setColor(embedColor)
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL());
     if (music.queue.length === 0) embed.setAuthor(`Now Playing: ${song.info.title}`, undefined, song.info.uri);

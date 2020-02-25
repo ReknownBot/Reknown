@@ -6,9 +6,20 @@ async function sendLog (client: ReknownClient, oldChannel: GuildChannel, newChan
   if (oldChannel.name === newChannel.name) return;
 
   const embed = new MessageEmbed()
-    .addField('Old Channel Name', client.escMD(oldChannel.name))
-    .addField('New Channel Name', client.escMD(newChannel.name))
-    .addField('Channel Type', newChannel.type)
+    .addFields([
+      {
+        name: 'Old Channel Name',
+        value: client.escMD(oldChannel.name)
+      },
+      {
+        name: 'New Channel Name',
+        value: client.escMD(newChannel.name)
+      },
+      {
+        name: 'Channel Type',
+        value: newChannel.type
+      }
+    ])
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${newChannel.id}`)
     .setTimestamp()

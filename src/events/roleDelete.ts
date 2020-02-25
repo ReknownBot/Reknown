@@ -6,8 +6,16 @@ function sendLog (client: ReknownClient, role: Role) {
   const permissions = role.permissions.serialize(false);
 
   const embed = new MessageEmbed()
-    .addField('Role Name', client.escMD(role.name))
-    .addField('Permissions', `\`${Object.keys(permissions).map(perm => `${perm}: ${permissions[perm as PermissionString]}`).join('\n')}\``)
+    .addFields([
+      {
+        name: 'Role Name',
+        value: client.escMD(role.name)
+      },
+      {
+        name: 'Permissions',
+        value: `\`${Object.keys(permissions).map(perm => `${perm}: ${permissions[perm as PermissionString]}`).join('\n')}\``
+      }
+    ])
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${role.id}`)
     .setTimestamp()

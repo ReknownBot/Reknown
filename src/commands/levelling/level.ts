@@ -24,9 +24,22 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   else rank = `#${rows.indexOf(row) + 1}`;
 
   const embed = new MessageEmbed()
-    .addField('XP', `${client.functions.formatNum(points)}/${reqPoints}`, true)
-    .addField('Level', client.functions.formatNum(level), true)
-    .addField('Rank', rank)
+    .addFields([
+      {
+        inline: true,
+        name: 'XP',
+        value: `${client.functions.formatNum(points)}/${reqPoints}`
+      },
+      {
+        inline: true,
+        name: 'Level',
+        value: client.functions.formatNum(level)
+      },
+      {
+        name: 'Rank',
+        value: rank
+      }
+    ])
     .setColor(client.config.embedColor)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp()

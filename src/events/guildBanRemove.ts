@@ -4,7 +4,7 @@ import type { Guild, User } from 'discord.js';
 
 function sendLog (client: ReknownClient, guild: Guild, user: User) {
   const embed = new MessageEmbed()
-    .addField('User', user.tag)
+    .addFields([ { name: 'User', value: user.tag } ])
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${user.id}`)
     .setThumbnail(user.displayAvatarURL({ size: 512 }))
