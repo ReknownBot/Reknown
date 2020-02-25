@@ -5,14 +5,22 @@ import type ReknownClient from '../structures/client';
 
 async function sendLog (client: ReknownClient, channel: GuildChannel) {
   const embed = new MessageEmbed()
-    .addField('Channel', channel.toString())
-    .addField('Channel Type', channel.type)
+    .addFields([
+      {
+        name: 'Channel',
+        value: channel.toString()
+      },
+      {
+        name: 'Channel Type',
+        value: channel.type
+      }
+    ])
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${channel.id}`)
     .setTimestamp()
     .setTitle('Channel Created');
 
-  if (channel.parent) embed.addField('Category', client.escMD(channel.parent.name));
+  if (channel.parent) embed.addFields([ { name: 'Category', value: client.escMD(channel.parent.name) } ]);
 
   client.functions.sendLog(client, embed, channel.guild);
 }

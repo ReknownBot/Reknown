@@ -32,9 +32,20 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   message.channel.send(`Successfully unmuted \`\`${client.escInline(member.user.tag)}\`\`.`);
 
   const embed = new MessageEmbed()
-    .addField('Member', `${member} [${client.escMD(member.user.tag)}] (ID: ${member.id})`)
-    .addField('Reason', reason || 'None')
-    .addField('Unmuted by', `${message.member} [${client.escMD(message.author.tag)}] (ID: ${message.author.id})`)
+    .addFields([
+      {
+        name: 'Member',
+        value: `${member} [${client.escMD(member.user.tag)}] (ID: ${member.id})`
+      },
+      {
+        name: 'Reason',
+        value: reason || 'None'
+      },
+      {
+        name: 'Unmuted by',
+        value: `${message.member} [${client.escMD(message.author.tag)}] (ID: ${message.author.id})`
+      }
+    ])
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${member.id}`)
     .setThumbnail(member.user.displayAvatarURL({ size: 512 }))

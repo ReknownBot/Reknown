@@ -20,7 +20,7 @@ export async function run (client: ReknownClient, message: Message, args: string
       const info = client.commands.get(cmd)!.help;
       const field = embed.fields.find(f => f.name === info.category);
       if (field) embed.fields[embed.fields.indexOf(field)].value += `\n- \`${prefix + cmd}\``;
-      else embed.addField(info.category, `- \`${prefix + cmd}\``, true);
+      else embed.addFields([ { inline: true, name: info.category, value: `- \`${prefix + cmd}\`` } ]);
     });
 
     return message.channel.send(embed);
@@ -32,14 +32,28 @@ export async function run (client: ReknownClient, message: Message, args: string
   const cmd = client.commands.get(client.commands.aliases[query]);
   if (cmd) {
     const embed = new MessageEmbed()
-      .addField('Usage', prefix + cmd.help.usage, true)
-      .addField('Category', cmd.help.category, true)
-      .addField('Usable in DMs', cmd.help.dm ? 'Yes' : 'No', true)
+      .addFields([
+        {
+          inline: true,
+          name: 'Usage',
+          value: prefix + cmd.help.usage
+        },
+        {
+          inline: true,
+          name: 'Category',
+          value: cmd.help.category
+        },
+        {
+          inline: true,
+          name: 'Usable in DMs',
+          value: cmd.help.dm ? 'Yes' : 'No'
+        }
+      ])
       .setColor(client.config.embedColor)
       .setDescription(cmd.help.desc)
       .setFooter('[Arg] = Optional | <Arg> = Required', message.author.displayAvatarURL())
       .setTitle(`${prefix + query} Command Information`);
-    if (cmd.help.aliases.length !== 0) embed.addField('Aliases', cmd.help.aliases.map(alias => `\`${prefix + alias}\``).join(', '), true);
+    if (cmd.help.aliases.length !== 0) embed.addFields([ { inline: true, name: 'Aliases', value: cmd.help.aliases.map(alias => `\`${prefix + alias}\``).join(', ') } ]);
 
     return message.channel.send(embed);
   }

@@ -6,7 +6,7 @@ function avatarUpdate (client: ReknownClient, oldUser: User, newUser: User, guil
   if (oldUser.displayAvatarURL() === newUser.displayAvatarURL()) return;
 
   const embed = new MessageEmbed()
-    .addField('User', `${newUser} [${client.escMD(newUser.tag)}] (ID: ${newUser.id})`)
+    .addFields([ { name: 'User', value: `${newUser} [${client.escMD(newUser.tag)}] (ID: ${newUser.id})` } ])
     .setColor(client.config.embedColor)
     .setDescription(`[Old Avatar](${oldUser.displayAvatarURL()}) => [New Avatar](${newUser.displayAvatarURL()})`)
     .setFooter(`ID: ${newUser.id} | Tip: The larger one is the new one!`)

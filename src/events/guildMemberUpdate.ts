@@ -7,9 +7,22 @@ function nickUpdate (client: ReknownClient, oldMember: GuildMember, newMember: G
   if (oldMember.displayName === newMember.displayName) return;
 
   const embed = new MessageEmbed()
-    .addField('Member', `${newMember} [${client.escMD(newMember.user.tag)}] (ID: ${newMember.id})`)
-    .addField('Old Nickname', oldMember.displayName, true)
-    .addField('New Nickname', newMember.displayName, true)
+    .addFields([
+      {
+        name: 'Member',
+        value: `${newMember} [${client.escMD(newMember.user.tag)}] (ID: ${newMember.id})`
+      },
+      {
+        inline: true,
+        name: 'Old Nickname',
+        value: oldMember.displayName
+      },
+      {
+        inline: true,
+        name: 'New Nickname',
+        value: newMember.displayName
+      }
+    ])
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${newMember.id}`)
     .setThumbnail(newMember.user.displayAvatarURL({ size: 512 }))
@@ -36,8 +49,16 @@ function roleUpdate (client: ReknownClient, oldMember: GuildMember, newMember: G
   removeMute(client, newMember, removedRoles);
 
   const embed = new MessageEmbed()
-    .addField('Member', `${newMember} [${client.escMD(newMember.user.tag)}] (ID: ${newMember.id})`)
-    .addField('Roles Changed', `${addedRoles.map(r => `+ \`\`${client.escInline(r.name)}\`\``).join('\n')}\n${removedRoles.map(r => `- \`\`${client.escInline(r.name)}\`\``).join('\n')}`)
+    .addFields([
+      {
+        name: 'Member',
+        value: `${newMember} [${client.escMD(newMember.user.tag)}] (ID: ${newMember.id})`
+      },
+      {
+        name: 'Roles Changed',
+        value: `${addedRoles.map(r => `+ \`\`${client.escInline(r.name)}\`\``).join('\n')}\n${removedRoles.map(r => `- \`\`${client.escInline(r.name)}\`\``).join('\n')}`
+      }
+    ])
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${newMember.id}`)
     .setThumbnail(newMember.user.displayAvatarURL({ size: 512 }))

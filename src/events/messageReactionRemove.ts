@@ -37,9 +37,22 @@ export async function run (client: ReknownClient, reaction: MessageReaction & { 
   });
 
   const embed = new MessageEmbed()
-    .addField('Author', `${message.author} (${message.author.id})`, true)
-    .addField('Channel', `${channel} (${channel.id})`, true)
-    .addField('Direct Link', `[Click](${message.url})`)
+    .addFields([
+      {
+        inline: true,
+        name: 'Author',
+        value: `${message.author} (${message.author.id})`
+      },
+      {
+        inline: true,
+        name: 'Channel',
+        value: `${channel} (${channel.id})`
+      },
+      {
+        name: 'Direct Link',
+        value: `[Click](${message.url})`
+      }
+    ])
     .setColor(client.config.embedColor)
     .setDescription(message.content)
     .setFooter(`\u2B50${client.functions.formatNum(count)} | ID: ${message.id}`)

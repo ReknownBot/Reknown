@@ -45,9 +45,9 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
       .setTimestamp()
       .setTitle(`${member.user.tag}'s Biography`);
 
-    if (row.email) embed.addField('Email', row.email, true);
+    if (row.email) embed.addFields([ { inline: true, name: 'Email', value: row.email } ]);
     if (row.summary) embed.setDescription(row.summary);
-    if (row.twitter) embed.addField('Twitter', row.twitter);
+    if (row.twitter) embed.addFields([ { inline: true, name: 'Twitter', value: row.twitter } ]);
 
     message.channel.send(embed);
   }

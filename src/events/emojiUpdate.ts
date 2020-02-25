@@ -6,9 +6,20 @@ async function sendLog (client: ReknownClient, oldEmoji: GuildEmoji, newEmoji: G
   if (oldEmoji.name === newEmoji.name) return;
 
   const embed = new MessageEmbed()
-    .addField('Old Emoji Name', client.escMD(oldEmoji.name))
-    .addField('New Emoji Name', client.escMD(newEmoji.name))
-    .addField('Animated', newEmoji.animated ? 'Yes' : 'No')
+    .addFields([
+      {
+        name: 'Old Emoji Name',
+        value: client.escMD(oldEmoji.name)
+      },
+      {
+        name: 'New Emoji Name',
+        value: client.escMD(newEmoji.name)
+      },
+      {
+        name: 'Animated',
+        value: newEmoji.animated ? 'Yes' : 'No'
+      }
+    ])
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${newEmoji.id}`)
     .setThumbnail(newEmoji.url)

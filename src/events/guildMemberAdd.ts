@@ -21,8 +21,16 @@ async function checkMute (client: ReknownClient, member: GuildMember) {
 
 function sendLog (client: ReknownClient, member: GuildMember) {
   const embed = new MessageEmbed()
-    .addField('User', `${member} [${client.escMD(member.user.tag)}] (ID: ${member.id})`)
-    .addField('Created at', dateformat(member.user.createdAt, 'mmmm d, yyyy @ HH:MM:ss UTC'))
+    .addFields([
+      {
+        name: 'User',
+        value: `${member} [${client.escMD(member.user.tag)}] (ID: ${member.id})`
+      },
+      {
+        name: 'Created at',
+        value: dateformat(member.user.createdAt, 'mmmm d, yyyy @ HH:MM:ss UTC')
+      }
+    ])
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${member.id}`)
     .setTimestamp()
