@@ -1,9 +1,9 @@
-import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import type { TextChannel } from 'discord.js';
 import { tables } from '../Constants';
 import type { GuildMessage, RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
+import type { Message, PartialMessage } from 'discord.js';
 
 async function delStar (client: ReknownClient, message: GuildMessage) {
   const toggled = await client.functions.getRow<RowToggle>(client, tables.STARTOGGLE, {
@@ -44,7 +44,7 @@ function sendLog (client: ReknownClient, message: GuildMessage) {
   client.functions.sendLog(client, embed, message.guild);
 }
 
-export async function run (client: ReknownClient, message: Message) {
+export async function run (client: ReknownClient, message: Message | PartialMessage) {
   if (!message.guild?.available) return;
 
   delStar(client, message as GuildMessage);
