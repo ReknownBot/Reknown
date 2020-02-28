@@ -7,7 +7,7 @@ import { version } from './config.json';
 require('dotenv').config();
 
 const client = new ReknownClient({
-  disableEveryone: true,
+  disableMentions: true,
   partials: [ 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER' ],
   presence: {
     activity: {
