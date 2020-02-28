@@ -13,12 +13,9 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-    - uses: borales/actions-yarn@v2.0.0
-      with:
-        cmd: install
-    - uses: borales/actions-yarn@v2.0.0
-      with:
-        cmd: lint
-    - uses: borales/actions-yarn@v2.0.0
-      with:
-        cmd: build
+    - run: npm install -g yarn
+    - run: yarn install
+    - name: Lint
+      run: yarn lint
+    - name: Build
+      run: yarn build
