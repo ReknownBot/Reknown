@@ -26,6 +26,7 @@ declare module 'ReknownBot' {
     ownerID: Snowflake;
     prefix: string;
     suggestions: Snowflake;
+    version: string;
   }
 
   interface HelpObj {

@@ -42,10 +42,6 @@ async function muteCheck (client: ReknownClient) {
 
 export async function run (client: ReknownClient) {
   console.log(`Successfully logged in as ${client.user!.tag} (${client.user!.id}).`);
-  client.user!.setActivity({
-    name: `${client.guilds.cache.size} Servers`,
-    type: 'WATCHING'
-  });
 
   for (const emoji in client.config.emojis) {
     if (Object.prototype.hasOwnProperty.call(client.config.emojis, emoji)) {

@@ -2,12 +2,19 @@
 
 import ReknownClient from './structures/client';
 import { readdirSync } from 'fs';
+import { version } from './config.json';
 
 require('dotenv').config();
 
 const client = new ReknownClient({
   disableEveryone: true,
-  partials: [ 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER' ]
+  partials: [ 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER' ],
+  presence: {
+    activity: {
+      name: `on ${version}`,
+      type: 'PLAYING'
+    }
+  }
 });
 
 const eventList = readdirSync('./dist/events');
