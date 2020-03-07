@@ -7,13 +7,13 @@ import type { RowChannel, RowMsg, RowToggle } from 'ReknownBot';
 
 function sendLog (client: ReknownClient, member: GuildMember | PartialGuildMember) {
   const embed = new MessageEmbed()
-    .addFields([ { name: 'User', value: `${member} [${client.escMD(member.user!.tag)}] (ID: ${member.id})` } ])
+    .addField('User', `${member} [${client.escMD(member.user!.tag)}] (ID: ${member.id})`)
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${member.id}`)
     .setTimestamp()
     .setTitle('Member Left');
 
-  if (member.joinedAt) embed.addFields([ { name: 'Joined at', value: dateformat(member.joinedAt, 'mmmm d, yyyy @ HH:MM:ss UTC') } ]);
+  if (member.joinedAt) embed.addField('Joined at', dateformat(member.joinedAt, 'mmmm d, yyyy @ HH:MM:ss UTC'));
 
   client.functions.sendLog(client, embed, member.guild!);
 }

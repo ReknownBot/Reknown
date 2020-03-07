@@ -37,19 +37,19 @@ export async function run (client: ReknownClient, message: Message, args: string
     .setTimestamp();
 
   for (const activity of user.presence.activities) {
-    if (activity.type === 'CUSTOM_STATUS' && activity.state) embed.addFields([ { inline: true, name: 'Custom Status', value: client.escMD(activity.state) } ]);
+    if (activity.type === 'CUSTOM_STATUS' && activity.state) embed.addField('Custom Status', client.escMD(activity.state), true);
     else {
       const field = embed.fields.find(f => f.name === 'Activity');
       if (field) embed.spliceFields(embed.fields.indexOf(field), 1, [ { inline: true, name: field.name, value: `${field.value}\n- \`\`${client.escInline(activity.name)}\`\`` } ]);
-      else embed.addFields([ { inline: true, name: 'Activity', value: `- \`\`${client.escInline(activity.name)}\`\`` } ]);
+      else embed.addField('Activity', `- \`\`${client.escInline(activity.name)}\`\``, true);
     }
   }
 
   if (member) {
     await message.guild!.members.fetch();
-    if (member.joinedAt) embed.addFields([ { inline: true, name: 'Joined at', value: dateformat(member.joinedAt, 'UTC:mmm d, yyyy, h:MM:ss TT Z') } ]);
+    if (member.joinedAt) embed.addField('Joined at', dateformat(member.joinedAt, 'UTC:mmm d, yyyy, h:MM:ss TT Z'), true);
     const members = message.guild!.members.cache.filter(m => Boolean(m.joinedTimestamp)).sort(({ joinedTimestamp: a }, { joinedTimestamp: b }) => a! - b!);
-    embed.addFields([ { name: 'Joined Position', value: `#${members.array().indexOf(member) + 1}` } ]);
+    embed.addField('Joined Position', `#${members.array().indexOf(member) + 1}`);
   }
 
   message.channel.send(embed);

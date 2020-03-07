@@ -4,7 +4,7 @@ import type { Guild, User } from 'discord.js';
 
 async function sendLog (client: ReknownClient, guild: Guild, user: User) {
   const embed = new MessageEmbed()
-    .addFields([ { name: 'User', value: user.tag } ])
+    .addField('User', user.tag)
     .setColor(client.config.embedColor)
     .setFooter(`ID: ${user.id}`)
     .setThumbnail(user.displayAvatarURL({ size: 512 }))
@@ -14,7 +14,7 @@ async function sendLog (client: ReknownClient, guild: Guild, user: User) {
   if (guild.me!.hasPermission('BAN_MEMBERS')) {
     const bans = await guild.fetchBans();
     const ban = bans.find(b => b.user.id === user.id)!;
-    if (ban.reason) embed.addFields([ { name: 'Reason', value: ban.reason } ]);
+    if (ban.reason) embed.addField('Reason', ban.reason);
   }
 
   client.functions.sendLog(client, embed, guild);

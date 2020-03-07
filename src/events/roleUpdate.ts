@@ -31,7 +31,7 @@ function permissionUpdate (client: ReknownClient, oldRole: Role, newRole: Role) 
   const removedPerms = newRole.permissions.missing(oldRole.permissions, false);
 
   const embed = new MessageEmbed()
-    .addFields([ { name: 'Role', value: newRole.toString() } ])
+    .addField('Role', newRole.toString())
     .setColor(client.config.embedColor)
     .setDescription(`${addedPerms.map(perm => `+ \`\`${perm}\`\``).join('\n')}\n${removedPerms.map(perm => `- \`\`${perm}\`\``).join('\n')}`)
     .setFooter(`ID: ${newRole.id}`)

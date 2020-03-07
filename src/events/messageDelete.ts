@@ -32,7 +32,7 @@ function sendLog (client: ReknownClient, message: GuildMessage) {
   if (!message.content && !message.attachments.find(attch => Boolean(attch.height))) return;
 
   const embed = new MessageEmbed()
-    .addFields([ { name: 'Author', value: `${message.author} [${client.escMD(message.author.tag)}] (ID: ${message.author.id})` } ])
+    .addField('Author', `${message.author} [${client.escMD(message.author.tag)}] (ID: ${message.author.id})`)
     .setColor(client.config.embedColor)
     .setDescription(message.content)
     .setFooter(`ID: ${message.id}`)

@@ -20,7 +20,7 @@ export async function run (client: ReknownClient, message: Message, args: string
       const info = client.commands.get(cmd)!.help;
       const field = embed.fields.find(f => f.name === info.category);
       if (field) embed.fields[embed.fields.indexOf(field)].value += `\n- \`${prefix + cmd}\``;
-      else embed.addFields([ { inline: true, name: info.category, value: `- \`${prefix + cmd}\`` } ]);
+      else embed.addField(info.category, `- \`${prefix + cmd}\``, true);
     });
 
     return message.channel.send(embed);
@@ -53,7 +53,7 @@ export async function run (client: ReknownClient, message: Message, args: string
       .setDescription(cmd.help.desc)
       .setFooter('[Arg] = Optional | <Arg> = Required', message.author.displayAvatarURL())
       .setTitle(`${prefix + query} Command Information`);
-    if (cmd.help.aliases.length !== 0) embed.addFields([ { inline: true, name: 'Aliases', value: cmd.help.aliases.map(alias => `\`${prefix + alias}\``).join(', ') } ]);
+    if (cmd.help.aliases.length !== 0) embed.addField('Aliases', cmd.help.aliases.map(alias => `\`${prefix + alias}\``).join(', '), true);
 
     return message.channel.send(embed);
   }
