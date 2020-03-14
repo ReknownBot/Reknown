@@ -66,7 +66,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
       },
       {
         name: 'Duration',
-        value: client.functions.getFullTime(duration)
+        value: duration === 0 ? client.functions.getFullTime(duration) : 'Unlimited'
       },
       {
         name: 'Reason',
