@@ -9,7 +9,7 @@ import { parsedPerms, tables } from '../Constants';
 
 export class Functions {
   public badArg (message: Message | GuildMessage, argNum: number, desc: string): void {
-    if (message.channel instanceof TextChannel && !message.channel.permissionsFor(message.guild!.me!)!.has('EMBED_LINKS')) return void message.channel.send(`Argument **#${argNum}** was invalid. Here's what was wrong with it.\n\n**${desc}**`);
+    if (message.channel.type === 'text' && !message.channel.permissionsFor(message.guild!.me!)!.has('EMBED_LINKS')) return void message.channel.send(`Argument **#${argNum}** was invalid. Here's what was wrong with it.\n\n**${desc}**`);
 
     const embed = new MessageEmbed()
       .setColor(embedColor)
@@ -73,7 +73,7 @@ export class Functions {
   }
 
   public noArg (message: Message | GuildMessage, argNum: number, desc: string): void {
-    if (message.channel instanceof TextChannel && !message.channel.permissionsFor(message.guild!.me!)!.has('EMBED_LINKS')) return void message.channel.send(`Argument **#${argNum}** was missing. It is supposed to be **${desc}**`);
+    if (message.channel.type === 'text' && !message.channel.permissionsFor(message.guild!.me!)!.has('EMBED_LINKS')) return void message.channel.send(`Argument **#${argNum}** was missing. It is supposed to be **${desc}**`);
 
     const embed = new MessageEmbed()
       .setColor(embedColor)
