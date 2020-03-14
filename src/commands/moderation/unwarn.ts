@@ -27,7 +27,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   const row = rows[num - 1];
   client.query(`DELETE FROM ${tables.WARNINGS} WHERE guildid = $1 AND userid = $2 AND warnedat = $3`, [ message.guild.id, member.id, row.warnedat ]);
 
-  message.channel.send(`Successfully removed warning #${num} (Reason: \`\`${client.escInline(row.warnreason)}\`\`) from ${client.escMD(member.user.tag)}.`);
+  message.channel.send(`Successfully removed warning #${num} (Reason: \`\`${client.escInline(row.warnreason || 'None')}\`\`) from ${client.escMD(member.user.tag)}.`);
 }
 
 export const help: HelpObj = {

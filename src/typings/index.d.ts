@@ -141,7 +141,7 @@ declare module 'ReknownBot' {
     userid: Snowflake;
     warnedat: string;
     warnedby: Snowflake;
-    warnreason: string;
+    warnreason: string?;
   }
 
   interface RowWebhook {
