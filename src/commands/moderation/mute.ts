@@ -45,7 +45,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   }
 
   const duration = args[2] ? ms(args[2]) : 0;
-  if (!duration) return client.functions.badArg(message, 2, 'The duration provided was invalid.');
+  if (typeof duration === 'undefined') return client.functions.badArg(message, 2, 'The duration provided was invalid.');
   if (duration !== 0 && duration < ms('1m')) return client.functions.badArg(message, 2, 'The duration cannot be shorter than 1 minute.');
   if (duration > ms('30d')) return client.functions.badArg(message, 2, 'The duration cannot be longer than 30 days.');
 
@@ -56,7 +56,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   member.roles.add(role);
   if (duration !== 0 && duration < ms('20d')) client.mutes.set(member.id, setTimeout(client.functions.unmute.bind(client.functions), duration, client, member));
 
-  message.channel.send(`Successfully muted \`\`${client.escInline(member.user.tag)}\`\` for \`${duration === -1 ? 'Unlimited' : client.functions.getFullTime(duration)}\`.`);
+  message.channel.send(`Successfully muted \`\`${client.escInline(member.user.tag)}\`\` for \`${duration === 0 ? 'Unlimited' : client.functions.getFullTime(duration)}\`.`);
 
   const embed = new MessageEmbed()
     .addFields([
