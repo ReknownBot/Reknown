@@ -423,9 +423,9 @@ delayed-stream@~1.0.0:
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
 
 "discord.js@github:discordjs/discord.js":
-  version "12.0.1"
-  uid f38733778732039e541bab4e74e1a1dfcd056923
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/f38733778732039e541bab4e74e1a1dfcd056923"
+  version "12.0.2"
+  uid "69d69f25b964b6a2bb13bd086696abec17782ca3"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/69d69f25b964b6a2bb13bd086696abec17782ca3"
   dependencies:
     "@discordjs/collection" "^0.1.5"
     abort-controller "^3.0.0"

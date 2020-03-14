@@ -26,7 +26,7 @@ async function sendLog (client: ReknownClient, channel: GuildChannel) {
 }
 
 export async function run (client: ReknownClient, channel: DMChannel | GuildChannel) {
-  if (channel instanceof DMChannel || !channel.guild.available) return;
+  if (channel.type === 'dm' || !channel.guild.available) return;
 
   sendLog(client, channel);
 }
