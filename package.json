@@ -1,6 +1,6 @@
 {
   "name": "reknown",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "A Discord bot with created with Discord.JS (master branch).",
   "main": "dist/index.js",
   "scripts": {
