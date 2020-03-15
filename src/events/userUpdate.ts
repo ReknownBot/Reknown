@@ -23,7 +23,7 @@ function usernameUpdate (client: ReknownClient, oldUser: User, newUser: User, gu
 
   const embed = new MessageEmbed()
     .setColor(client.config.embedColor)
-    .setDescription(`\`\`${client.escInline(oldUser.username)}\`\` => \`\`${client.escInline(newUser.username)}\`\``)
+    .setDescription(`\`\`${client.escInline(oldUser.tag)}\`\` => \`\`${client.escInline(newUser.tag)}\`\``)
     .setFooter(`ID: ${newUser.id}`)
     .setThumbnail(newUser.displayAvatarURL({ size: 512 }))
     .setTimestamp()
