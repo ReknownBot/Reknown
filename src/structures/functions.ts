@@ -2,7 +2,7 @@ import type { QueryResult } from 'pg';
 import type ReknownClient from './client';
 import type { Track } from 'lavalink';
 import { embedColor } from '../config.json';
-import type { CategoryChannel, ClientUser, Guild, GuildChannel, GuildMember, Message, Role, Snowflake, User, VoiceChannel } from 'discord.js';
+import type { CategoryChannel, ClientUser, Guild, GuildChannel, GuildMember, Message, PermissionString, Role, Snowflake, User, VoiceChannel } from 'discord.js';
 import type { GuildMessage, MusicObject, ParseMentionOptions, RowChannel, RowEconomy, RowMuteRole, RowPrefix, RowToggle, RowWebhook } from 'ReknownBot';
 import { MessageEmbed, TextChannel, Util } from 'discord.js';
 import { parsedPerms, tables } from '../Constants';
@@ -85,13 +85,13 @@ export class Functions {
     message.channel.send(embed);
   }
 
-  public noClientPerms (message: Message, perms: (keyof typeof parsedPerms)[], channel?: GuildChannel): void {
+  public noClientPerms (message: Message, perms: PermissionString[], channel?: GuildChannel): void {
     const formatted = perms.map(p => `\`${parsedPerms[p as keyof typeof parsedPerms]}\``).join('\n');
     if (channel) return void message.channel.send(`I do not have the required permissions in ${channel.type === 'text' ? channel : `**${channel.name}**`}.\nThe permissions are:\n\n${formatted}`);
     message.channel.send(`I do not have the required permissions.\nThe permissions are:\n\n${formatted}`);
   }
 
-  public noPerms (message: Message, perms: (keyof typeof parsedPerms)[], channel?: GuildChannel): void {
+  public noPerms (message: Message, perms: PermissionString[], channel?: GuildChannel): void {
     const formatted = perms.map(p => `\`${parsedPerms[p as keyof typeof parsedPerms]}\``).join('\n');
     if (channel) return void message.channel.send(`You do not have the required permissions in ${channel.type === 'text' ? channel : `**${Util.escapeMarkdown(channel.name)}**`}.\nThe permissions are:\n\n${formatted}`);
     message.channel.send(`You do not have the required permissions.\nThe permissions are:\n\n${formatted}`);
