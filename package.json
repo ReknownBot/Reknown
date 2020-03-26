@@ -45,6 +45,8 @@
     "string-math": "^1.2.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-angular": "^8.3.4",
     "@types/atob": "^2.1.2",
     "@types/btoa": "^1.2.3",
     "@types/dateformat": "^3.0.1",
@@ -57,9 +59,44 @@
     "@typescript-eslint/parser": "^2.24.0",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.1",
+    "husky": "^4.2.3",
     "typescript": "^3.8.3"
   },
   "optionalDependencies": {
     "erlpack": "^0.1.3"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-angular"
+    ],
+    "rules": {
+      "scope-case": [
+        2,
+        "always",
+        "pascal-case"
+      ],
+      "type-enum": [
+        2,
+        "always",
+        [
+          "chore",
+          "build",
+          "ci",
+          "docs",
+          "feat",
+          "fix",
+          "perf",
+          "refactor",
+          "revert",
+          "style",
+          "test"
+        ]
+      ]
+    }
   }
 }
