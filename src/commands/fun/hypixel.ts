@@ -1,6 +1,5 @@
 import type { HelpObj } from 'ReknownBot';
 import { MessageEmbed } from 'discord.js';
-import type { Player } from 'Hypixel-API';
 import type ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
 import { stringify } from 'querystring';
@@ -36,7 +35,7 @@ export async function run (client: ReknownClient, message: Message, args: string
         key: process.env.HYPIXEL_KEY,
         uuid: uuid
       });
-      const hypixelJson: { success: boolean; player: Player } = await fetch(`${hypixelEndpoint}/player?${queries}`).then(res => res.json());
+      const hypixelJson: { success: boolean; player: any } = await fetch(`${hypixelEndpoint}/player?${queries}`).then(res => res.json());
       ratelimit += 1;
       setTimeout(() => ratelimit -= 1, 60000);
       if (!hypixelJson.success) return client.functions.badArg(message, 2, 'That player has not joined the server yet, or the request has failed.');
@@ -67,7 +66,7 @@ export async function run (client: ReknownClient, message: Message, args: string
           {
             inline: true,
             name: 'Pet Food Count',
-            value: client.functions.formatNum(Object.values(player.petConsumables || { temp: 0 }).reduce((a, b) => a + b, 0))
+            value: client.functions.formatNum(Object.values(player.petConsumables as number || { temp: 0 }).reduce((a, b) => a + b, 0))
           }
         ])
         .setColor(client.config.embedColor)
