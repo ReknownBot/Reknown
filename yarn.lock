@@ -1421,10 +1421,10 @@ jsonparse@^1.2.0:
   resolved "https://registry.yarnpkg.com/jsonparse/-/jsonparse-1.3.1.tgz#3f4dae4a91fac315f71062f8521cc239f1366280"
   integrity sha1-P02uSpH6wxX3EGL4UhzCOfE2YoA=
 
-lavalink@^2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/lavalink/-/lavalink-2.9.0.tgz#2166f93e6550293344a3aaae1d4ccf341c3169d8"
-  integrity sha512-L+GvRgy4KN1HoMYqTTO8IpGlxA0ZxU6jFVqL8MhKv4wwY89v90MUtlSmTGV1Ue3pkkPDXQjTBuie8P2Pgr3TDA==
+lavalink@^2.10.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/lavalink/-/lavalink-2.10.0.tgz#c2ce02926fc5e957252b407eb4f87dd67dd32378"
+  integrity sha512-3fgyzeHm98rL+S8lMsJKL3pIOkYNVGWLBdkm6U5Sk2KWHGKgKZnmLXWIyvVD3Yqrz4PzER0MWtEk3LknQ4VjCw==
   dependencies:
     backoff "^2.5.0"
     ws "^6.0.0"
