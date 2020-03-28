@@ -261,24 +261,21 @@ export class Functions {
     member.roles.remove(role);
   }
 
-  public async updateRow<T>(client: ReknownClient, table: string, changes: T, filters: Partial<T>): Promise<QueryResult<T>> {
+  public updateRow<T>(client: ReknownClient, table: string, changes: T, filters: Partial<T>): Promise<QueryResult<T>> {
     const columns = Object.keys(changes);
     const values = Object.values(changes);
     if (table === 'prefix') {
       client.prefixes[(changes as unknown as ColumnTypes['PREFIX']).guildid] = (changes as unknown as ColumnTypes['PREFIX']).customprefix;
     }
 
-    const row = await client.functions.getRow<any>(client, table, filters);
-    if (row) {
-      return client.query<T>(`
-        UPDATE ${table} 
-        SET ${columns.map((c, i) => `${c} = $${i + 1}`)}
-        WHERE ${Object.keys(filters).map((c, i) => `${c} = $${i + columns.length + 1}`).join(' AND ')}
-        RETURNING *
-        `, [ ...values, ...Object.values(filters) ]);
-    }
-
-    return client.query<T>(`INSERT INTO ${table} (${columns}) VALUES (${columns.map((c, i) => `$${i + 1}`)}) RETURNING *`, values);
+    let i = 0;
+    return client.query<T>(`
+      INSERT INTO ${table} (${columns})
+      VALUES (${columns.map(c => (i += 1, `$${i + 1}`))})
+      ON CONFLICT (${Object.keys(filters)}) DO UPDATE
+        SET ${columns.map(c => (i += 1, `${c} = $${i + 1}`))}
+      RETURNING *
+    `, [ ...values, ...Object.values(filters) ]);
   }
 
   public uppercase (str: string): string {
