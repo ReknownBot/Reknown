@@ -7,7 +7,11 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   await message.guild.members.fetch();
 
   const member = message.guild.members.cache.filter(m => !m.user.bot).random();
-  message.channel.send(`Successfully randomly fetched **${client.escMD(member.user.tag)}**!`);
+  message.channel.send(`Successfully randomly fetched ${member} **(${client.escMD(member.user.tag)})**!`, {
+    allowedMentions: {
+      parse: []
+    }
+  });
 }
 
 export const help: HelpObj = {
