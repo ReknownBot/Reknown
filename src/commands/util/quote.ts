@@ -1,8 +1,8 @@
 import type { HelpObj } from '../../structures/commandhandler';
-import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
+import type { CategoryChannel, Message, TextChannel, VoiceChannel } from 'discord.js';
 
 const regex = /(?:discordapp.com\/channels)\/(?:(\d{17,19})\/(\d{17,19})\/(\d{17,19}))/;
 
@@ -13,7 +13,7 @@ export async function run (client: ReknownClient, message: Message, args: string
 
   const guild = client.guilds.cache.get(res[0]);
   if (!guild) return client.functions.badArg(message, 1, 'I am not in that server! I must be in the server to quote a message from it.');
-  const channel = guild.channels.cache.get(res[1]);
+  const channel = guild.channels.cache.get(res[1]) as CategoryChannel | VoiceChannel | TextChannel | undefined;
   if (!channel) return client.functions.badArg(message, 1, 'The provided channel does not exist.');
   if (channel.type !== 'text') return client.functions.badArg(message, 1, 'The provided channel must be a text channel.');
   if (!channel.permissionsFor(client.user!)!.has([ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ])) return client.functions.noClientPerms(message, [ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ], channel);
