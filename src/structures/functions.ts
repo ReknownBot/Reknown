@@ -271,9 +271,9 @@ export class Functions {
     let i = 0;
     return client.query<T>(`
       INSERT INTO ${table} (${columns})
-      VALUES (${columns.map(c => (i += 1, `$${i + 1}`))})
+      VALUES (${columns.map(c => (i += 1, `$${i}`))})
       ON CONFLICT (${Object.keys(filters)}) DO UPDATE
-        SET ${columns.map(c => (i += 1, `${c} = $${i + 1}`))}
+        SET ${columns.map(c => (i += 1, `${c} = $${i}`))}
       RETURNING *
     `, [ ...values, ...Object.values(filters) ]);
   }
