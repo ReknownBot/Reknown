@@ -210,7 +210,7 @@ export class Functions {
         guildid: guild.id,
         webhookid: webhook.id
       }, {
-        channelid: channel.id
+        guildid: guild.id
       })).rows[0];
     } else webhook = webhooks.get(webhookRow.webhookid)!;
 
