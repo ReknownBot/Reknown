@@ -1,6 +1,32 @@
 import { Collection } from 'discord.js';
 import { readdirSync } from 'fs';
-import type { CommandCategory, ReknownCommand } from 'ReknownBot';
+import type { Client, Message, PermissionString } from 'discord.js';
+
+type CommandCategory = 'Documentation'
+  | 'Economy'
+  | 'Fun'
+  | 'Levelling'
+  | 'Miscellaneous'
+  | 'Music'
+  | 'Moderation'
+  | 'Utility';
+
+export interface HelpObj {
+  aliases: string[];
+  category: CommandCategory;
+  desc: string;
+  dm?: true;
+  private?: boolean;
+  togglable: boolean;
+  usage: string;
+}
+
+interface ReknownCommand {
+  help: HelpObj;
+  memberPerms: PermissionString[];
+  permissions: PermissionString[];
+  run: (client: Client, message: Message, args: string[]) => void;
+}
 
 export default class CommandHandler extends Collection<string, ReknownCommand> {
   public constructor () {

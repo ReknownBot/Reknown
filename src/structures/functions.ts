@@ -1,11 +1,20 @@
+import type ColumnTypes from '../typings/ColumnTypes';
+import type { GuildMessage } from '../Constants';
+import type { MusicObject } from './client';
 import type { QueryResult } from 'pg';
 import type ReknownClient from './client';
 import type { Track } from 'lavalink';
 import { embedColor } from '../config.json';
 import type { CategoryChannel, ClientUser, Guild, GuildChannel, GuildMember, Message, PermissionString, Role, Snowflake, User, VoiceChannel } from 'discord.js';
-import type { GuildMessage, MusicObject, ParseMentionOptions, RowChannel, RowEconomy, RowMuteRole, RowPrefix, RowToggle, RowWebhook } from 'ReknownBot';
-import { MessageEmbed, TextChannel, Util } from 'discord.js';
+import { Client, MessageEmbed, TextChannel, Util } from 'discord.js';
 import { parsedPerms, tables } from '../Constants';
+
+interface ParseMentionOptions {
+  client?: Client;
+  cType?: 'text' | 'voice' | 'category';
+  guild?: Guild;
+  type: 'member' | 'user' | 'role' | 'channel';
+}
 
 export class Functions {
   public badArg (message: Message | GuildMessage, argNum: number, desc: string): void {
@@ -44,7 +53,7 @@ export class Functions {
   }
 
   public async getMuteRole (client: ReknownClient, guild: Guild): Promise<Role | null> {
-    const row = await client.functions.getRow<RowMuteRole>(client, tables.MUTEROLE, {
+    const row = await client.functions.getRow<ColumnTypes['MUTEROLE']>(client, tables.MUTEROLE, {
       guildid: guild.id
     });
     const role = row ? guild.roles.cache.get(row.roleid) : guild.roles.cache.find(ro => ro.name === 'Muted');
@@ -55,7 +64,7 @@ export class Functions {
 
   public async getPrefix (client: ReknownClient, id: Snowflake): Promise<string> {
     if (client.prefixes[id]) return client.prefixes[id];
-    const row = await client.functions.getRow<RowPrefix>(client, tables.PREFIX, {
+    const row = await client.functions.getRow<ColumnTypes['PREFIX']>(client, tables.PREFIX, {
       guildid: id
     });
     return client.prefixes[id] = row ? row.customprefix : client.config.prefix;
@@ -168,17 +177,17 @@ export class Functions {
     });
   }
 
-  public async register (client: ReknownClient, userid: Snowflake): Promise<RowEconomy> {
+  public async register (client: ReknownClient, userid: Snowflake): Promise<ColumnTypes['ECONOMY']> {
     return (await client.query(`INSERT INTO ${tables.ECONOMY} (balance, userid) VALUES ($1, $2) RETURNING *`, [ 0, userid ])).rows[0];
   }
 
   public async sendLog (client: ReknownClient, embed: MessageEmbed, guild: Guild) {
-    const toggledRow = await client.functions.getRow<RowToggle>(client, tables.LOGTOGGLE, {
+    const toggledRow = await client.functions.getRow<ColumnTypes['TOGGLE']>(client, tables.LOGTOGGLE, {
       guildid: guild.id
     });
     if (!toggledRow || !toggledRow.bool) return;
 
-    const channelRow = await client.functions.getRow<RowChannel>(client, tables.LOGCHANNEL, {
+    const channelRow = await client.functions.getRow<ColumnTypes['CHANNEL']>(client, tables.LOGCHANNEL, {
       guildid: guild.id
     });
     const channel = (channelRow ?
@@ -187,7 +196,7 @@ export class Functions {
     if (!channel) return;
     if (!channel.permissionsFor(client.user!)!.has('MANAGE_WEBHOOKS')) return;
     const webhooks = await channel.fetchWebhooks();
-    let webhookRow = await client.functions.getRow<RowWebhook>(client, tables.LOGWEBHOOK, {
+    let webhookRow = await client.functions.getRow<ColumnTypes['WEBHOOK']>(client, tables.LOGWEBHOOK, {
       channelid: channel.id
     });
     let webhook;
@@ -196,7 +205,7 @@ export class Functions {
         avatar: client.user!.displayAvatarURL({ size: 2048 }),
         reason: 'Reknown Logs'
       });
-      webhookRow = (await client.functions.updateRow<RowWebhook>(client, tables.LOGWEBHOOK, {
+      webhookRow = (await client.functions.updateRow<ColumnTypes['WEBHOOK']>(client, tables.LOGWEBHOOK, {
         channelid: channel.id,
         guildid: guild.id,
         webhookid: webhook.id
@@ -256,7 +265,7 @@ export class Functions {
     const columns = Object.keys(changes);
     const values = Object.values(changes);
     if (table === 'prefix') {
-      client.prefixes[(changes as unknown as RowPrefix).guildid] = (changes as unknown as RowPrefix).customprefix;
+      client.prefixes[(changes as unknown as ColumnTypes['PREFIX']).guildid] = (changes as unknown as ColumnTypes['PREFIX']).customprefix;
     }
 
     const row = await client.functions.getRow<any>(client, table, filters);

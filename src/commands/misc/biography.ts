@@ -1,7 +1,9 @@
+import type ColumnTypes from '../../typings/ColumnTypes';
+import type { GuildMessage } from '../../Constants';
+import type { HelpObj } from '../../structures/commandhandler';
 import { MessageEmbed } from 'discord.js';
 import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import type { GuildMessage, HelpObj, RowBiography } from 'ReknownBot';
 import { errors, tables } from '../../Constants';
 
 const allowedFields = [
@@ -35,7 +37,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
       message.member;
     if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
 
-    const row = await client.functions.getRow<RowBiography>(client, tables.BIOGRAPHY, {
+    const row = await client.functions.getRow<ColumnTypes['BIOGRAPHY']>(client, tables.BIOGRAPHY, {
       userid: member.id
     });
     if (!row) return client.functions.badArg(message, 1, 'The member provided did not provide any information about themselves.');

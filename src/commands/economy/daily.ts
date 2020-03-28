@@ -1,16 +1,17 @@
+import type ColumnTypes from '../../typings/ColumnTypes';
+import type { HelpObj } from '../../structures/commandhandler';
 import type ReknownClient from '../../structures/client';
 import ms from 'ms';
 import { tables } from '../../Constants';
-import type { HelpObj, RowCooldown, RowEconomy } from 'ReknownBot';
 import type { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  let registered = await client.functions.getRow<RowEconomy>(client, tables.ECONOMY, {
+  let registered = await client.functions.getRow<ColumnTypes['ECONOMY']>(client, tables.ECONOMY, {
     userid: message.author.id
   });
   if (!registered) registered = await client.functions.register(client, message.author.id);
 
-  const cooldown = await client.functions.getRow<RowCooldown>(client, tables.DAILYCOOLDOWN, {
+  const cooldown = await client.functions.getRow<ColumnTypes['COOLDOWN']>(client, tables.DAILYCOOLDOWN, {
     userid: message.author.id
   });
   if (cooldown && Number(cooldown.endsat) >= Date.now()) return message.reply(`This command is still on cooldown! Please wait ${client.functions.getTime(Number(cooldown.endsat) - Date.now())}.`);

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires, global-require */
 
-import { ClientEvents } from 'discord.js';
+import type { ClientEvents } from 'discord.js';
 import ReknownClient from './structures/client';
 import { readdirSync } from 'fs';
 import { version } from './config.json';

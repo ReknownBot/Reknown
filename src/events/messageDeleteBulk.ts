@@ -1,23 +1,24 @@
+import type ColumnTypes from '../typings/ColumnTypes';
+import type { GuildMessage } from '../Constants';
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import type { TextChannel } from 'discord.js';
 import { tables } from '../Constants';
 import type { Collection, Snowflake } from 'discord.js';
-import type { GuildMessage, RowChannel, RowStarboard, RowToggle } from 'ReknownBot';
 
 async function delStar (client: ReknownClient, message: GuildMessage) {
-  const toggled = await client.functions.getRow<RowToggle>(client, tables.STARTOGGLE, {
+  const toggled = await client.functions.getRow<ColumnTypes['TOGGLE']>(client, tables.STARTOGGLE, {
     guildid: message.guild.id
   });
   if (!toggled || !toggled.bool) return;
 
-  const msgRow = await client.functions.getRow<RowStarboard>(client, tables.STARBOARD, {
+  const msgRow = await client.functions.getRow<ColumnTypes['STARBOARD']>(client, tables.STARBOARD, {
     msgid: message.id
   });
   if (!msgRow) return;
   client.query(`DELETE FROM ${tables.STARBOARD} WHERE msgid = $1`, [ message.id ]);
 
-  const channelRow = await client.functions.getRow<RowChannel>(client, tables.STARCHANNEL, {
+  const channelRow = await client.functions.getRow<ColumnTypes['CHANNEL']>(client, tables.STARCHANNEL, {
     guildid: message.guild.id
   });
   const channel = (channelRow ? message.guild.channels.cache.get(channelRow.channelid) : message.guild.channels.cache.find(c => c.name === 'starboard' && c.type === 'text')) as TextChannel | undefined;

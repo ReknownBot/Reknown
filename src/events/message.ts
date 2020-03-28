@@ -1,6 +1,6 @@
+import type ColumnTypes from '../typings/ColumnTypes';
 import type { Message } from 'discord.js';
 import type ReknownClient from '../structures/client';
-import type { RowDisabledCommands } from 'ReknownBot';
 import { tables } from '../Constants';
 
 const cooldowns = new Set();
@@ -29,7 +29,7 @@ export async function run (client: ReknownClient, message: Message) {
 
   cmd = client.commands.aliases[cmd];
   if (message.guild) {
-    const disabled = await client.functions.getRow<RowDisabledCommands>(client, tables.DISABLEDCOMMANDS, {
+    const disabled = await client.functions.getRow<ColumnTypes['DISABLEDCOMMANDS']>(client, tables.DISABLEDCOMMANDS, {
       command: cmd,
       guildid: message.guild.id
     });

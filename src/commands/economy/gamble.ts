@@ -1,10 +1,11 @@
+import type ColumnTypes from '../../typings/ColumnTypes';
+import type { HelpObj } from '../../structures/commandhandler';
 import type ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import type { HelpObj, RowEconomy } from 'ReknownBot';
 import type { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  let row = await client.functions.getRow<RowEconomy>(client, tables.ECONOMY, {
+  let row = await client.functions.getRow<ColumnTypes['ECONOMY']>(client, tables.ECONOMY, {
     userid: message.author.id
   });
   if (!row) row = await client.functions.register(client, message.author.id);
@@ -15,7 +16,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   if (amt > row.balance) return client.functions.badArg(message, 1, 'You do not have enough money to gamble that amount.');
 
   const won = Math.random() < 0.5;
-  client.functions.updateRow<RowEconomy>(client, tables.ECONOMY, {
+  client.functions.updateRow<ColumnTypes['ECONOMY']>(client, tables.ECONOMY, {
     balance: won ? row.balance + amt : row.balance - amt,
     userid: message.author.id
   }, {

@@ -1,9 +1,9 @@
+import type ColumnTypes from '../typings/ColumnTypes';
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import dateformat from 'dateformat';
 import { tables } from '../Constants';
 import type { GuildMember, PartialGuildMember, TextChannel } from 'discord.js';
-import type { RowChannel, RowMsg, RowToggle } from 'ReknownBot';
 
 function sendLog (client: ReknownClient, member: GuildMember | PartialGuildMember) {
   const embed = new MessageEmbed()
@@ -19,12 +19,12 @@ function sendLog (client: ReknownClient, member: GuildMember | PartialGuildMembe
 }
 
 async function goodbyeMsg (client: ReknownClient, member: GuildMember | PartialGuildMember) {
-  const toggledRow = await client.functions.getRow<RowToggle>(client, tables.WELCOMETOGGLE, {
+  const toggledRow = await client.functions.getRow<ColumnTypes['TOGGLE']>(client, tables.WELCOMETOGGLE, {
     guildid: member.guild.id
   });
   if (!toggledRow || !toggledRow.bool) return;
 
-  const channelRow = await client.functions.getRow<RowChannel>(client, tables.WELCOMECHANNEL, {
+  const channelRow = await client.functions.getRow<ColumnTypes['CHANNEL']>(client, tables.WELCOMECHANNEL, {
     guildid: member.guild.id
   });
   const channel = (channelRow ?
@@ -33,7 +33,7 @@ async function goodbyeMsg (client: ReknownClient, member: GuildMember | PartialG
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
 
-  const msgRow = await client.functions.getRow<RowMsg>(client, tables.GOODBYEMSG, {
+  const msgRow = await client.functions.getRow<ColumnTypes['MSG']>(client, tables.GOODBYEMSG, {
     guildid: member.guild.id
   });
   const msg: string = msgRow ? msgRow.msg : '<User> has left **<Server>**. There are <MemberCount> members now.';

@@ -1,4 +1,4 @@
-import type { HelpObj } from 'ReknownBot';
+import type { HelpObj } from '../../structures/commandhandler';
 import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import type { PermissionString } from 'discord.js';

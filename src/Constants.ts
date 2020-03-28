@@ -1,3 +1,11 @@
+import type { Guild, GuildMember, Message, TextChannel } from 'discord.js';
+
+export interface GuildMessage extends Message {
+  channel: TextChannel;
+  guild: Guild;
+  member: GuildMember;
+}
+
 export const errors = {
   ALREADY_MUTED: 'That member is already muted.',
   MEMBER_INSUFFICIENT_POSITION: 'Your role position is not high enough to do this.',

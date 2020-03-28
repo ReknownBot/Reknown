@@ -1,12 +1,14 @@
+import type ColumnTypes from '../../typings/ColumnTypes';
+import type { GuildMessage } from '../../Constants';
+import type { HelpObj } from '../../structures/commandhandler';
 import { MessageEmbed } from 'discord.js';
 import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import ms from 'ms';
-import type { GuildMessage, HelpObj, RowMuteRole, RowMutes } from 'ReknownBot';
 import { errors, parsedPerms, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
-  const row = await client.functions.getRow<RowMuteRole>(client, tables.MUTEROLE, {
+  const row = await client.functions.getRow<ColumnTypes['MUTEROLE']>(client, tables.MUTEROLE, {
     guildid: message.guild.id
   });
   let role = row ? message.guild.roles.cache.get(row.roleid) : message.guild.roles.cache.find(r => r.name === 'Muted');
@@ -18,7 +20,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
         permissions: message.guild.roles.everyone!.permissions.remove([ 'ADD_REACTIONS', 'SEND_MESSAGES', 'SPEAK' ])
       }
     });
-    client.functions.updateRow<RowMuteRole>(client, tables.MUTEROLE, {
+    client.functions.updateRow<ColumnTypes['MUTEROLE']>(client, tables.MUTEROLE, {
       guildid: message.guild.id,
       roleid: role.id
     }, {
@@ -36,7 +38,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
   if (member.hasPermission('ADMINISTRATOR')) return client.functions.badArg(message, 1, `Members with \`${parsedPerms.ADMINISTRATOR}\` cannot be muted.`);
 
-  const muteRow = await client.functions.getRow<RowMutes>(client, tables.MUTES, {
+  const muteRow = await client.functions.getRow<ColumnTypes['MUTES']>(client, tables.MUTES, {
     guildid: message.guild.id,
     userid: member.id
   });

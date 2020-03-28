@@ -1,7 +1,9 @@
+import type ColumnTypes from '../../typings/ColumnTypes';
+import type { GuildMessage } from '../../Constants';
+import type { HelpObj } from '../../structures/commandhandler';
 import { MessageEmbed } from 'discord.js';
 import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import type { GuildMessage, HelpObj, RowLevel } from 'ReknownBot';
 import { errors, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
@@ -13,14 +15,14 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     message.member;
   if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
 
-  const row = await client.functions.getRow<RowLevel>(client, tables.LEVELS, {
+  const row = await client.functions.getRow<ColumnTypes['LEVEL']>(client, tables.LEVELS, {
     userid: member.id,
     guildid: message.guild.id
   });
   const points = row ? row.points : 0;
   const level = row ? row.level : 0;
   const reqPoints = client.functions.formatNum(Math.pow((level + 1) / 0.2, 2));
-  const { rows } = await client.query<RowLevel>(`SELECT * FROM ${tables.LEVELS} WHERE guildid = $1 ORDER BY points DESC`, [ message.guild.id ]);
+  const { rows } = await client.query<ColumnTypes['LEVEL']>(`SELECT * FROM ${tables.LEVELS} WHERE guildid = $1 ORDER BY points DESC`, [ message.guild.id ]);
   let rank: string;
   if (!row) rank = 'N/A';
   else rank = `#${rows.indexOf(row) + 1}`;

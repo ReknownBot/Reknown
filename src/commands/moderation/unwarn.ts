@@ -1,6 +1,8 @@
+import type ColumnTypes from '../../typings/ColumnTypes';
+import type { GuildMessage } from '../../Constants';
+import type { HelpObj } from '../../structures/commandhandler';
 import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import type { GuildMessage, HelpObj, RowWarnings } from 'ReknownBot';
 import { errors, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
@@ -20,7 +22,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (isNaN(num)) return client.functions.badArg(message, 2, 'The warning number provided was not a number.');
   if (num < 1) return client.functions.badArg(message, 2, 'The warning number cannot be lower than 1.');
 
-  const { rows } = await client.query<RowWarnings>(`SELECT * FROM ${tables.WARNINGS} WHERE guildid = $1 AND userid = $2 ORDER BY warnedat ASC`, [ message.guild.id, member.id ]);
+  const { rows } = await client.query<ColumnTypes['WARNINGS']>(`SELECT * FROM ${tables.WARNINGS} WHERE guildid = $1 AND userid = $2 ORDER BY warnedat ASC`, [ message.guild.id, member.id ]);
   if (rows.length === 0) return client.functions.badArg(message, 1, 'That member does not have any warnings.');
   if (rows.length < num) return client.functions.badArg(message, 2, 'The warning number provided is out of range.');
 

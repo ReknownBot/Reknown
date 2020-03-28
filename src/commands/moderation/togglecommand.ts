@@ -1,6 +1,8 @@
+import type ColumnTypes from '../../typings/ColumnTypes';
+import type { GuildMessage } from '../../Constants';
+import type { HelpObj } from '../../structures/commandhandler';
 import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import type { GuildMessage, HelpObj, RowDisabledCommands } from 'ReknownBot';
 import { errors, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
@@ -10,7 +12,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   const cmdInfo = client.commands.get(command)!;
   if (!cmdInfo.help.togglable) return client.functions.badArg(message, 1, 'You cannot toggle this command.');
 
-  const row = await client.functions.getRow<RowDisabledCommands>(client, tables.DISABLEDCOMMANDS, {
+  const row = await client.functions.getRow<ColumnTypes['DISABLEDCOMMANDS']>(client, tables.DISABLEDCOMMANDS, {
     command: command,
     guildid: message.guild.id
   });

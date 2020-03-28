@@ -1,4 +1,4 @@
-import type { HelpObj } from 'ReknownBot';
+import type { HelpObj } from '../../structures/commandhandler';
 import type ReknownClient from '../../structures/client';
 import { think } from 'cowsay';
 import type { Message, PermissionString } from 'discord.js';

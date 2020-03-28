@@ -1,7 +1,8 @@
 import type { EqualizerBand } from 'lavalink';
+import type { GuildMessage } from '../../Constants';
+import type { HelpObj } from '../../structures/commandhandler';
 import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import type { GuildMessage, HelpObj } from 'ReknownBot';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
   const music = client.music[message.guild.id];

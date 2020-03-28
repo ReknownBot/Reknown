@@ -1,11 +1,13 @@
+import type ColumnTypes from '../../typings/ColumnTypes';
+import type { GuildMessage } from '../../Constants';
+import type { HelpObj } from '../../structures/commandhandler';
 import { MessageEmbed } from 'discord.js';
 import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import type { GuildMessage, HelpObj, RowLevel } from 'ReknownBot';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
-  const { rows } = await client.query<RowLevel>(`SELECT * FROM ${tables.LEVELS} WHERE guildid = $1 ORDER BY points DESC`, [ message.guild.id ]);
+  const { rows } = await client.query<ColumnTypes['LEVEL']>(`SELECT * FROM ${tables.LEVELS} WHERE guildid = $1 ORDER BY points DESC`, [ message.guild.id ]);
   if (rows.length === 0) return message.reply('There was no levelling data found for this server.');
 
   const users = rows.map(async (r, i) => {

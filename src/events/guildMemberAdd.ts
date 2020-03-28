@@ -1,13 +1,13 @@
+import type ColumnTypes from '../typings/ColumnTypes';
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import dateformat from 'dateformat';
 import { tables } from '../Constants';
 import type { GuildMember, TextChannel } from 'discord.js';
-import type { RowChannel, RowMsg, RowMutes, RowToggle } from 'ReknownBot';
 
 async function checkMute (client: ReknownClient, member: GuildMember) {
   if (!member.guild.me!.hasPermission('MANAGE_ROLES')) return;
-  const row = await client.functions.getRow<RowMutes>(client, tables.MUTES, {
+  const row = await client.functions.getRow<ColumnTypes['MUTES']>(client, tables.MUTES, {
     guildid: member.guild.id,
     userid: member.id
   });
@@ -40,12 +40,12 @@ function sendLog (client: ReknownClient, member: GuildMember) {
 }
 
 async function welcomeMsg (client: ReknownClient, member: GuildMember) {
-  const toggledRow = await client.functions.getRow<RowToggle>(client, tables.WELCOMETOGGLE, {
+  const toggledRow = await client.functions.getRow<ColumnTypes['TOGGLE']>(client, tables.WELCOMETOGGLE, {
     guildid: member.guild.id
   });
   if (!toggledRow || !toggledRow.bool) return;
 
-  const channelRow = await client.functions.getRow<RowChannel>(client, tables.WELCOMECHANNEL, {
+  const channelRow = await client.functions.getRow<ColumnTypes['CHANNEL']>(client, tables.WELCOMECHANNEL, {
     guildid: member.guild.id
   });
   const channel = (channelRow ?
@@ -54,7 +54,7 @@ async function welcomeMsg (client: ReknownClient, member: GuildMember) {
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
 
-  const msgRow = await client.functions.getRow<RowMsg>(client, tables.WELCOMEMSG, {
+  const msgRow = await client.functions.getRow<ColumnTypes['MSG']>(client, tables.WELCOMEMSG, {
     guildid: member.guild.id
   });
   const msg: string = msgRow ? msgRow.msg : '<User>, Welcome to **<Server>**! There are <MemberCount> members now.';

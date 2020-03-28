@@ -5,8 +5,37 @@ import { Functions } from './functions';
 import type Node from 'lavalink';
 import { Pool } from 'pg';
 import { Client, Collection, Util } from 'discord.js';
-import type { ConfigObject, EmoteName, MusicObject, ReknownEvent } from 'ReknownBot';
 import type { GuildEmoji, Snowflake } from 'discord.js';
+import type { Player, Track } from 'lavalink';
+
+interface ConfigObject {
+  contributors: Snowflake[];
+  embedColor: string;
+  emojis: { [ emoji: string ]: Snowflake };
+  muteColor: string;
+  officialClient: Snowflake;
+  ownerID: Snowflake;
+  prefix: string;
+  suggestions: Snowflake;
+  version: string;
+}
+
+export type EmoteName = 'online'
+  | 'idle'
+  | 'dnd'
+  | 'offline';
+
+export interface MusicObject {
+  equalizer: number;
+  looping: boolean;
+  player?: Player;
+  queue: Track[];
+  volume: number;
+}
+
+export interface ReknownEvent {
+  run: (...args: any) => void;
+}
 
 const pool = new Pool();
 

@@ -1,8 +1,9 @@
+import type { GuildMessage } from '../../Constants';
+import type { HelpObj } from '../../structures/commandhandler';
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import { prefix } from '../../config.json';
 import type { Guild, PermissionString } from 'discord.js';
-import type { GuildMessage, HelpObj } from 'ReknownBot';
 
 const configs: { [ key: string ]: string } = {
   levelmodifier: 'The level modifier for levelling up.',

@@ -1,10 +1,11 @@
+import type ColumnTypes from '../typings/ColumnTypes';
 import DBL from 'dblapi.js';
+import type { EmoteName } from '../structures/client';
 import { Node } from 'lavalink';
 import type ReknownClient from '../structures/client';
 import type { Snowflake } from 'discord.js';
 import ms from 'ms';
 import { tables } from '../Constants';
-import type { EmoteName, RowMutes } from 'ReknownBot';
 
 function initDBL (client: ReknownClient) {
   if (client.user!.id === client.config.officialClient) client.dbl = new DBL(process.env.DBL_API_KEY!, client);
@@ -16,7 +17,7 @@ function invalidateGuild (arr: Snowflake[], client: ReknownClient, guildid: Snow
 }
 
 async function muteCheck (client: ReknownClient) {
-  const { rows } = await client.query<RowMutes>(`SELECT * FROM ${tables.MUTES}`);
+  const { rows } = await client.query<ColumnTypes['MUTES']>(`SELECT * FROM ${tables.MUTES}`);
 
   const invalidGuilds: Snowflake[] = [];
   rows.forEach(async row => {

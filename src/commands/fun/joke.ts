@@ -1,4 +1,4 @@
-import type { HelpObj } from 'ReknownBot';
+import type { HelpObj } from '../../structures/commandhandler';
 import type ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
 import type { Message, PermissionString } from 'discord.js';

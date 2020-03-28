@@ -1,4 +1,4 @@
-import type { HelpObj } from 'ReknownBot';
+import type { HelpObj } from '../../structures/commandhandler';
 import { MessageEmbed } from 'discord.js';
 import ReknownClient from '../../structures/client';
 import dateformat from 'dateformat';
