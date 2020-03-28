@@ -5,10 +5,12 @@ import { errors } from '../../Constants';
 import type { Message, PermissionString } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  const user = args[1] ? message.author : await client.functions.parseMention(args[1], {
-    client: client,
-    type: 'user'
-  }).catch(() => null);
+  const user = args[1] ?
+    message.author :
+    await client.functions.parseMention(args[1], {
+      client: client,
+      type: 'user'
+    }).catch(() => null);
   if (!user) return client.functions.badArg(message, 1, errors.UNKNOWN_USER);
 
   const embed = new MessageEmbed()

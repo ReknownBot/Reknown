@@ -11,7 +11,7 @@ interface DogResult {
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const json: DogResult = await fetch('https://dog.ceo/api/breeds/image/random').then(res => res.json());
-  if (!json || json.status !== 'success') return message.reply('Seems like the API is down, please try again later. If this problem persists, let us know in our Discord server.');
+  if (json.status !== 'success') return message.reply('Seems like the API is down, please try again later. If this problem persists, let us know in our Discord server.');
 
   const embed = new MessageEmbed()
     .setColor(client.config.embedColor)

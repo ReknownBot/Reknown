@@ -19,8 +19,8 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (!args[1]) return client.functions.noArg(message, 1, 'a query to search for.');
   const res = await client.lavalink!.load(`ytsearch:${args.slice(1).join(' ')}`);
   if (res.loadType === 'LOAD_FAILED') return message.reply('Something went wrong while fetching the song. Please try again later.');
+  if (res.tracks.length === 0) return client.functions.badArg(message, 1, 'I did not find a song with that query.');
   const song = res.tracks[0];
-  if (!song) return client.functions.badArg(message, 1, 'I did not find a song with that query.');
   if (music.queue.some(s => s.track === song.track)) return client.functions.badArg(message, 1, 'That song is already in the queue.');
   if (music.queue.length >= 15) return client.functions.badArg(message, 1, 'The queue is full! You cannot go over 15 songs at a time.');
 

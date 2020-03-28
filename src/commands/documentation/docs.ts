@@ -17,9 +17,12 @@ const sources = [
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const q = args[1];
-  let branch = args[2] || 'stable';
+  let branch = args[2] || 'stable'; // eslint-disable-line @typescript-eslint/no-unnecessary-condition
   if (!q) return client.functions.noArg(message, 1, 'a query to search for.');
-  if (!sources.includes(branch.toLowerCase())) return client.functions.badArg(message, 2, `The source provided was invalid. It can be ${sources.join(', ')}.`);
+  if (!sources.includes(branch.toLowerCase())) {
+    return client.functions.badArg(message, 2, `The source provided was invalid. It can be ${sources.join(', ')}.`);
+  }
+
   branch = branch.toLowerCase();
   if (branch === '11.5-dev') branch = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${branch}.json`;
 

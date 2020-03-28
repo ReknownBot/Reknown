@@ -16,7 +16,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== message.guild.ownerID) return client.functions.badArg(message, 1, errors.MEMBER_INSUFFICIENT_POSITION);
 
   const reason = args[2] ? args.slice(2).join(' ') : null;
-  // eslint-disable-next-line no-extra-parens
+  // eslint-disable-next-line @typescript-eslint/no-extra-parens
   if ((reason?.length ?? 0) > 100) return client.functions.badArg(message, 2, 'The reason cannot be above 100 characters.');
   if (reason?.includes('\n')) return client.functions.badArg(message, 2, errors.NO_LINE_BREAKS);
 

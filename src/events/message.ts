@@ -1,7 +1,7 @@
+import type { Message } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import type { RowDisabledCommands } from 'ReknownBot';
 import { tables } from '../Constants';
-import type { Message, TextChannel } from 'discord.js';
 
 const cooldowns = new Set();
 
@@ -20,9 +20,8 @@ export async function run (client: ReknownClient, message: Message) {
   let cmd = args[0];
   if (!Object.keys(client.commands.aliases).includes(cmd)) return;
 
-  if (message.guild) {
-    // eslint-disable-next-line no-extra-parens
-    if (!(message.channel as TextChannel).permissionsFor(client.user!)!.has([ 'SEND_MESSAGES' ])) return;
+  if (message.guild && message.channel.type === 'text') {
+    if (!message.channel.permissionsFor(client.user!)!.has([ 'SEND_MESSAGES' ])) return;
     if (cooldowns.has(message.guild.id)) return;
     cooldowns.add(message.guild.id);
     setTimeout(() => cooldowns.delete(message.guild!.id), 75);

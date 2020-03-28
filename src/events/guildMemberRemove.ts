@@ -15,30 +15,32 @@ function sendLog (client: ReknownClient, member: GuildMember | PartialGuildMembe
 
   if (member.joinedAt) embed.addField('Joined at', dateformat(member.joinedAt, 'mmmm d, yyyy @ HH:MM:ss UTC'));
 
-  client.functions.sendLog(client, embed, member.guild!);
+  client.functions.sendLog(client, embed, member.guild);
 }
 
 async function goodbyeMsg (client: ReknownClient, member: GuildMember | PartialGuildMember) {
   const toggledRow = await client.functions.getRow<RowToggle>(client, tables.WELCOMETOGGLE, {
-    guildid: member.guild!.id
+    guildid: member.guild.id
   });
   if (!toggledRow || !toggledRow.bool) return;
 
   const channelRow = await client.functions.getRow<RowChannel>(client, tables.WELCOMECHANNEL, {
-    guildid: member.guild!.id
+    guildid: member.guild.id
   });
-  const channel = (channelRow ? member.guild!.channels.cache.find(c => c.id === channelRow.channelid && c.type === 'text') : member.guild!.channels.cache.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
+  const channel = (channelRow ?
+    member.guild.channels.cache.find(c => c.id === channelRow.channelid && c.type === 'text') :
+    member.guild.channels.cache.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel | undefined;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
 
   const msgRow = await client.functions.getRow<RowMsg>(client, tables.GOODBYEMSG, {
-    guildid: member.guild!.id
+    guildid: member.guild.id
   });
   const msg: string = msgRow ? msgRow.msg : '<User> has left **<Server>**. There are <MemberCount> members now.';
 
   const embed = new MessageEmbed()
     .setColor(client.config.embedColor)
-    .setDescription(msg.replace(/<MemberCount>/g, member.guild!.memberCount.toString()).replace(/<Server>/g, member.guild!.name).replace(/<User>/g, member.user!.toString()))
+    .setDescription(msg.replace(/<MemberCount>/g, member.guild.memberCount.toString()).replace(/<Server>/g, member.guild.name).replace(/<User>/g, member.user!.toString()))
     .setFooter(`ID: ${member.id}`)
     .setThumbnail(member.user!.displayAvatarURL({ size: 512 }))
     .setTimestamp();
@@ -46,7 +48,7 @@ async function goodbyeMsg (client: ReknownClient, member: GuildMember | PartialG
 }
 
 export async function run (client: ReknownClient, member: GuildMember | PartialGuildMember) {
-  if (!member.guild!.available) return;
+  if (!member.guild.available) return;
   if (member.id === client.user!.id) return;
 
   sendLog(client, member);

@@ -35,5 +35,5 @@ export default class ReknownClient extends Client {
 
   public query = pool.query.bind(pool);
 
-  public music: { [ id: string ]: MusicObject } = {};
+  public music: { [ id: string ]: MusicObject | undefined } = {};
 }

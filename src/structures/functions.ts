@@ -9,7 +9,10 @@ import { parsedPerms, tables } from '../Constants';
 
 export class Functions {
   public badArg (message: Message | GuildMessage, argNum: number, desc: string): void {
-    if (message.channel.type === 'text' && !message.channel.permissionsFor(message.guild!.me!)!.has('EMBED_LINKS')) return void message.channel.send(`Argument **#${argNum}** was invalid. Here's what was wrong with it.\n\n**${desc}**`);
+    if (message.channel.type === 'text' && !message.channel.permissionsFor(message.guild!.me!)!.has('EMBED_LINKS')) {
+      message.channel.send(`Argument **#${argNum}** was invalid. Here's what was wrong with it.\n\n**${desc}**`);
+      return;
+    }
 
     const embed = new MessageEmbed()
       .setColor(embedColor)
@@ -61,7 +64,7 @@ export class Functions {
   public async getRow<T> (client: ReknownClient, table: string, filters: Partial<T>): Promise<T | null> {
     const query = `SELECT * FROM ${table} WHERE ${Object.keys(filters).map((rowName, i) => `${rowName} = $${i + 1}`).join(' AND ')}`;
     const { rows } = await client.query<T>(query, Object.values(filters));
-    return rows ? rows[0] : null;
+    return rows.length < 0 ? rows[0] : null;
   }
 
   public getTime (timeLeft: number): string {
@@ -73,7 +76,10 @@ export class Functions {
   }
 
   public noArg (message: Message | GuildMessage, argNum: number, desc: string): void {
-    if (message.channel.type === 'text' && !message.channel.permissionsFor(message.guild!.me!)!.has('EMBED_LINKS')) return void message.channel.send(`Argument **#${argNum}** was missing. It is supposed to be **${desc}**`);
+    if (message.channel.type === 'text' && !message.channel.permissionsFor(message.guild!.me!)!.has('EMBED_LINKS')) {
+      message.channel.send(`Argument **#${argNum}** was missing. It is supposed to be **${desc}**`);
+      return;
+    }
 
     const embed = new MessageEmbed()
       .setColor(embedColor)
@@ -93,7 +99,11 @@ export class Functions {
 
   public noPerms (message: Message, perms: PermissionString[], channel?: GuildChannel): void {
     const formatted = perms.map(p => `\`${parsedPerms[p as keyof typeof parsedPerms]}\``).join('\n');
-    if (channel) return void message.channel.send(`You do not have the required permissions in ${channel.type === 'text' ? channel : `**${Util.escapeMarkdown(channel.name)}**`}.\nThe permissions are:\n\n${formatted}`);
+    if (channel) {
+      message.channel.send(`You do not have the required permissions in ${channel.type === 'text' ? channel : `**${Util.escapeMarkdown(channel.name)}**`}.\nThe permissions are:\n\n${formatted}`);
+      return;
+    }
+
     message.channel.send(`You do not have the required permissions.\nThe permissions are:\n\n${formatted}`);
   }
 
@@ -171,7 +181,9 @@ export class Functions {
     const channelRow = await client.functions.getRow<RowChannel>(client, tables.LOGCHANNEL, {
       guildid: guild.id
     });
-    const channel = (channelRow ? client.channels.cache.get(channelRow.channelid) : guild.channels.cache.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel;
+    const channel = (channelRow ?
+      client.channels.cache.get(channelRow.channelid) :
+      guild.channels.cache.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel | undefined;
     if (!channel) return;
     if (!channel.permissionsFor(client.user!)!.has('MANAGE_WEBHOOKS')) return;
     const webhooks = await channel.fetchWebhooks();
@@ -198,8 +210,10 @@ export class Functions {
 
   public sendSong (music: MusicObject, message: GuildMessage, song: Track, user: ClientUser): void {
     if (!message.channel.permissionsFor(user)!.has('EMBED_LINKS')) {
-      if (music.queue.length === 0) return void message.channel.send(`**Now Playing:** ${Util.escapeMarkdown(song.info.title)} by \`${Util.escapeMarkdown(song.info.author)}\``);
-      return void message.channel.send(`**Added to Queue:** ${Util.escapeMarkdown(song.info.title)} by \`${Util.escapeMarkdown(song.info.author)}\``);
+      if (music.queue.length === 0) message.channel.send(`**Now Playing:** ${Util.escapeMarkdown(song.info.title)} by \`${Util.escapeMarkdown(song.info.author)}\``);
+      else message.channel.send(`**Added to Queue:** ${Util.escapeMarkdown(song.info.title)} by \`${Util.escapeMarkdown(song.info.author)}\``);
+
+      return;
     }
 
     const embed = new MessageEmbed()
@@ -218,7 +232,9 @@ export class Functions {
     if (music.queue.length === 0) embed.setAuthor(`Now Playing: ${song.info.title}`, undefined, song.info.uri);
     else embed.setAuthor(`Added to Queue: ${song.info.title}`, undefined, song.info.uri);
 
-    const thumbnail = song.info.uri.includes('youtube') ? `https://i.ytimg.com/vi/${song.info.identifier}/hqdefault.jpg` : null;
+    const thumbnail = song.info.uri.includes('youtube') ?
+      `https://i.ytimg.com/vi/${song.info.identifier}/hqdefault.jpg` :
+      null;
     if (thumbnail) embed.setThumbnail(thumbnail);
 
     message.channel.send(embed);
@@ -236,13 +252,23 @@ export class Functions {
     member.roles.remove(role);
   }
 
-  public async updateRow<T> (client: ReknownClient, table: string, changes: T, filters: Partial<T>): Promise<QueryResult<T>> {
+  public async updateRow<T>(client: ReknownClient, table: string, changes: T, filters: Partial<T>): Promise<QueryResult<T>> {
     const columns = Object.keys(changes);
     const values = Object.values(changes);
-    // eslint-disable-next-line no-extra-parens
-    if (table === 'prefix') client.prefixes[(changes as unknown as RowPrefix).guildid] = (changes as unknown as RowPrefix).customprefix;
+    if (table === 'prefix') {
+      client.prefixes[(changes as unknown as RowPrefix).guildid] = (changes as unknown as RowPrefix).customprefix;
+    }
+
     const row = await client.functions.getRow<any>(client, table, filters);
-    if (row) return client.query<T>(`UPDATE ${table} SET ${columns.map((c, i) => `${c} = $${i + 1}`)} WHERE ${Object.keys(filters).map((c, i) => `${c} = $${i + columns.length + 1}`).join(' AND ')} RETURNING *`, [ ...values, ...Object.values(filters) ]);
+    if (row) {
+      return client.query<T>(`
+        UPDATE ${table} 
+        SET ${columns.map((c, i) => `${c} = $${i + 1}`)}
+        WHERE ${Object.keys(filters).map((c, i) => `${c} = $${i + columns.length + 1}`).join(' AND ')}
+        RETURNING *
+        `, [ ...values, ...Object.values(filters) ]);
+    }
+
     return client.query<T>(`INSERT INTO ${table} (${columns}) VALUES (${columns.map((c, i) => `$${i + 1}`)}) RETURNING *`, values);
   }
 

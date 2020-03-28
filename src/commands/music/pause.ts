@@ -12,6 +12,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     if (![ 'on', 'off' ].includes(args[1].toLowerCase())) return client.functions.badArg(message, 1, 'The argument must be `on`, `off`, or `auto`.');
     bool = args[1].toLowerCase() === 'on';
   }
+
   if (music.player.paused === bool) return message.reply('The value is already set to that.');
   if (message.guild.voice!.channelID !== message.member.voice.channelID) return message.reply('You must be in the same voice channel as me to run that command.');
 

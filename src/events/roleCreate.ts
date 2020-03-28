@@ -21,7 +21,7 @@ function sendLog (client: ReknownClient, role: Role) {
     .setTimestamp()
     .setTitle('Role Created');
 
-  client.functions.sendLog(client, embed, role.guild!);
+  client.functions.sendLog(client, embed, role.guild);
 }
 
 export async function run (client: ReknownClient, role: Role) {

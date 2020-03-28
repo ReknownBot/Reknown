@@ -6,10 +6,12 @@ import type { GuildMessage, HelpObj, RowWarnings } from 'ReknownBot';
 import { MessageEmbed, Util } from 'discord.js';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
-  const member = args[1] ? await client.functions.parseMention(args[1], {
-    guild: message.guild,
-    type: 'member'
-  }).catch(() => null) : message.member;
+  const member = args[1] ?
+    await client.functions.parseMention(args[1], {
+      guild: message.guild,
+      type: 'member'
+    }).catch(() => null) :
+    message.member;
   if (!member) return client.functions.badArg(message, 1, 'The member provided does not exist.');
   if (member.user.bot) return client.functions.badArg(message, 1, 'Bots do not get any warnings.');
 

@@ -62,7 +62,7 @@ export async function run (client: ReknownClient, reaction: MessageReaction & { 
 
   if (msgRow) {
     const newMessage = await channel.messages.fetch(msgRow.editid).catch(() => null);
-    if (newMessage && !newMessage.partial) {
+    if (newMessage) {
       if (count === 0) return newMessage.delete();
       return newMessage.edit(embed);
     }

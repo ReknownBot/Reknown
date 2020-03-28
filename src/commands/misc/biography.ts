@@ -27,10 +27,12 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     });
     message.channel.send(`Successfully updated your \`${field}\` to \`\`${client.escInline(value)}\`\`.`);
   } else {
-    const member = args[1] ? await client.functions.parseMention(args[1], {
-      guild: message.guild,
-      type: 'member'
-    }) : message.member;
+    const member = args[1] ?
+      await client.functions.parseMention(args[1], {
+        guild: message.guild,
+        type: 'member'
+      }) :
+      message.member;
     if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
 
     const row = await client.functions.getRow<RowBiography>(client, tables.BIOGRAPHY, {

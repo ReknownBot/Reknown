@@ -25,6 +25,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
       guildid: message.guild.id
     });
   }
+
   if (message.guild.me!.roles.highest.comparePositionTo(role) <= 0) return message.reply(`My highest role has to be higher than the \`\`${client.escInline(role.name)}\`\` role.`);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'a member to mute.');

@@ -53,7 +53,7 @@ function sendLog (client: ReknownClient, messages: Collection<Snowflake, GuildMe
 }
 
 export async function run (client: ReknownClient, messages: Collection<Snowflake, GuildMessage>) {
-  if (!messages.first()!.guild?.available) return;
+  if (!messages.first()!.guild.available) return;
 
   for (const [ , message ] of messages) {
     delStar(client, message);
