@@ -73,7 +73,7 @@ export class Functions {
   public async getRow<T> (client: ReknownClient, table: string, filters: Partial<T>): Promise<T | null> {
     const query = `SELECT * FROM ${table} WHERE ${Object.keys(filters).map((rowName, i) => `${rowName} = $${i + 1}`).join(' AND ')}`;
     const { rows } = await client.query<T>(query, Object.values(filters));
-    return rows.length < 0 ? rows[0] : null;
+    return rows.length > 0 ? rows[0] : null;
   }
 
   public getTime (timeLeft: number): string {
