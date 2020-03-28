@@ -268,14 +268,13 @@ export class Functions {
       client.prefixes[(changes as unknown as ColumnTypes['PREFIX']).guildid] = (changes as unknown as ColumnTypes['PREFIX']).customprefix;
     }
 
-    let i = 0;
     return client.query<T>(`
       INSERT INTO ${table} (${columns})
-      VALUES (${columns.map(c => (i += 1, `$${i}`))})
+      VALUES (${columns.map((c, i) => `$${i + 1}`)})
       ON CONFLICT (${Object.keys(filters)}) DO UPDATE
-        SET ${columns.map(c => (i += 1, `${c} = $${i}`))}
+        SET ${columns.map((c, i) => `${c} = $${i + 1}`)}
       RETURNING *
-    `, [ ...values, ...Object.values(filters) ]);
+    `, values);
   }
 
   public uppercase (str: string): string {
