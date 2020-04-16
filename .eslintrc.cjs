@@ -40,6 +40,7 @@ module.exports = exports = {
 
         "@typescript-eslint/class-literal-property-style": [ ERROR, "getters" ],
         "@typescript-eslint/explicit-function-return-type": OFF,
+        "@typescript-eslint/method-signature-style": ERROR,
         "@typescript-eslint/no-dupe-class-members": ERROR,
         "@typescript-eslint/no-explicit-any": OFF,
         "@typescript-eslint/no-extra-parens": ERROR,
