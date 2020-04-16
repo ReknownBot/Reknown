@@ -49,6 +49,7 @@ module.exports = exports = {
         "@typescript-eslint/no-unnecessary-type-arguments": ERROR,
         "@typescript-eslint/no-unnecessary-type-assertion": ERROR,
         "@typescript-eslint/no-unused-vars": [ ERROR, { args: "none" }],
+        "@typescript-eslint/prefer-reduce-type-parameter": ERROR,
         "@typescript-eslint/quotes": [ ERROR, 'single', { avoidEscape: false } ],
 
         "import/no-commonjs": [ ERROR, { allowRequire: true } ]
