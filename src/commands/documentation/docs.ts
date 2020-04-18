@@ -5,23 +5,10 @@ import fetch from 'node-fetch';
 import { stringify } from 'querystring';
 import type { Message, PermissionString } from 'discord.js';
 
-const sources = [
-  'stable',
-  'master',
-  'rpc',
-  'commando',
-  'akairo',
-  'akairo-master',
-  '11.5-dev'
-];
-
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const q = args[1];
-  let branch = args[2] || 'stable'; // eslint-disable-line @typescript-eslint/no-unnecessary-condition
+  let branch = args[2] || 'stable';
   if (!q) return client.functions.noArg(message, 1, 'a query to search for.');
-  if (!sources.includes(branch.toLowerCase())) {
-    return client.functions.badArg(message, 2, `The source provided was invalid. It can be ${sources.join(', ')}.`);
-  }
 
   branch = branch.toLowerCase();
   if (branch === '11.5-dev') branch = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${branch}.json`;
@@ -29,6 +16,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   const qstring = stringify({ q: q, src: branch });
   const raw = await fetch(`https://djsdocs.sorta.moe/v2/embed?${qstring}`).then(res => res.json());
   if (!raw) return client.functions.badArg(message, 1, 'I did not find anything with that query.');
+  if (raw.message === 'Couldn\'t find/parse given source.') return client.functions.badArg(message, 2, 'The source provided was invalid.');
 
   const embed = new MessageEmbed(raw);
   message.channel.send({ embed: embed });
