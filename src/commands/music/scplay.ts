@@ -2,6 +2,7 @@ import type { GuildMessage } from '../../Constants';
 import type { HelpObj } from '../../structures/commandhandler';
 import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
+import ms from 'ms';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
   let music = client.music[message.guild.id];
@@ -23,10 +24,11 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (res === null || res.loadType === 'LOAD_FAILED') return message.reply('Something went wrong while fetching the song. Please try again later.');
   if (res.tracks.length === 0) return client.functions.badArg(message, 1, 'I did not find a song with that query.');
   const song = res.tracks[0];
-  if (music.queue.includes(song)) return client.functions.badArg(message, 1, 'That song is already in the queue.');
-  if (music.queue.length > 15) return client.functions.badArg(message, 1, 'The queue is full! You cannot go over 15 songs at a time.');
+  if (music.queue.some(s => s.track === song.track)) return client.functions.badArg(message, 1, 'That song is already in the queue.');
+  if (music.queue.length >= 15) return client.functions.badArg(message, 1, 'The queue is full! You cannot go over 15 songs at a time.');
+  if (song.info.length > ms('3h')) return client.functions.badArg(message, 1, 'The song cannot be longer than 3 hours.');
 
-  if (!music.player) music.player = await client.lavacord!.join({ guild: message.guild.id, channel: vc.id, node: '1' });
+  music.player = await client.lavacord!.join({ guild: message.guild.id, channel: vc.id, node: '1' });
 
   client.functions.sendSong(music, message, song, client.user!);
   client.functions.playMusic(client, message.guild, music, song);
