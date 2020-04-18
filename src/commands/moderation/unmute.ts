@@ -7,9 +7,10 @@ import type ReknownClient from '../../structures/client';
 import { errors, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
-  const row = await client.functions.getRow<ColumnTypes['MUTEROLE']>(client, tables.MUTEROLE, {
-    guildid: message.guild.id
-  });
+  const [ row ] = await client.sql<ColumnTypes['MUTEROLE']>`
+    SELECT * FROM ${client.sql(tables.MUTEROLE)}
+      WHERE guildid = ${message.guild.id}
+  `;
   const role = row ? message.guild.roles.cache.get(row.roleid) : message.guild.roles.cache.find(r => r.name === 'Muted');
   if (!role) return message.reply('I did not find the mute role.');
   if (message.guild.me!.roles.highest.comparePositionTo(role) <= 0) return message.reply(`My highest role has to be higher than the \`\`${client.escInline(role.name)}\`\` role.`);
@@ -21,10 +22,11 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   }).catch(() => null);
   if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
 
-  const muteRow = await client.functions.getRow<ColumnTypes['MUTES']>(client, tables.MUTES, {
-    guildid: message.guild.id,
-    userid: member.id
-  });
+  const [ muteRow ] = await client.sql<ColumnTypes['MUTES']>`
+    SELECT * FROM ${client.sql(tables.MUTES)}
+      WHERE guildid = ${message.guild.id}
+        AND userid = ${member.id}
+  `;
   if (!muteRow) return client.functions.badArg(message, 1, 'The member provided is not muted.');
 
   const reason = args[2] ? args.slice(2).join(' ') : undefined;

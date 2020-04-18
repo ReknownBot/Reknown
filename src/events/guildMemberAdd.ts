@@ -7,10 +7,11 @@ import type { GuildMember, TextChannel } from 'discord.js';
 
 async function checkMute (client: ReknownClient, member: GuildMember) {
   if (!member.guild.me!.hasPermission('MANAGE_ROLES')) return;
-  const row = await client.functions.getRow<ColumnTypes['MUTES']>(client, tables.MUTES, {
-    guildid: member.guild.id,
-    userid: member.id
-  });
+  const [ row ] = await client.sql<ColumnTypes['MUTES']>`
+    SELECT * FROM ${client.sql(tables.MUTES)}
+      WHERE guildid = ${member.guild.id}
+        AND userid = ${member.id}
+  `;
   if (!row) return;
 
   const role = await client.functions.getMuteRole(client, member.guild);
@@ -40,23 +41,26 @@ function sendLog (client: ReknownClient, member: GuildMember) {
 }
 
 async function welcomeMsg (client: ReknownClient, member: GuildMember) {
-  const toggledRow = await client.functions.getRow<ColumnTypes['TOGGLE']>(client, tables.WELCOMETOGGLE, {
-    guildid: member.guild.id
-  });
+  const [ toggledRow ] = await client.sql<ColumnTypes['TOGGLE']>`
+    SELECT * FROM ${client.sql(tables.WELCOMETOGGLE)}
+      WHERE guildid = ${member.guild.id}
+  `;
   if (!toggledRow || !toggledRow.bool) return;
 
-  const channelRow = await client.functions.getRow<ColumnTypes['CHANNEL']>(client, tables.WELCOMECHANNEL, {
-    guildid: member.guild.id
-  });
+  const [ channelRow ] = await client.sql<ColumnTypes['CHANNEL']>`
+    SELECT * FROM ${client.sql(tables.WELCOMECHANNEL)}
+      WHERE guildid = ${member.guild.id}
+  `;
   const channel = (channelRow ?
     member.guild.channels.cache.find(c => c.id === channelRow.channelid && c.type === 'text') :
     member.guild.channels.cache.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel | undefined;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
 
-  const msgRow = await client.functions.getRow<ColumnTypes['MSG']>(client, tables.WELCOMEMSG, {
-    guildid: member.guild.id
-  });
+  const [ msgRow ] = await client.sql<ColumnTypes['MSG']>`
+    SELECT * FROM ${client.sql(tables.WELCOMEMSG)}
+      WHERE guildid = ${member.guild.id}
+  `;
   const msg: string = msgRow ? msgRow.msg : '<User>, Welcome to **<Server>**! There are <MemberCount> members now.';
 
   const embed = new MessageEmbed()

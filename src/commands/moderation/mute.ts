@@ -8,9 +8,10 @@ import ms from 'ms';
 import { errors, parsedPerms, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
-  const row = await client.functions.getRow<ColumnTypes['MUTEROLE']>(client, tables.MUTEROLE, {
-    guildid: message.guild.id
-  });
+  const [ row ] = await client.sql<ColumnTypes['MUTEROLE']>`
+    SELECT * FROM ${client.sql(tables.MUTEROLE)}
+      WHERE guildid = ${message.guild.id}
+  `;
   let role = row ? message.guild.roles.cache.get(row.roleid) : message.guild.roles.cache.find(r => r.name === 'Muted');
   if (!role) {
     role = await message.guild.roles.create({
@@ -20,12 +21,16 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
         permissions: message.guild.roles.everyone!.permissions.remove([ 'ADD_REACTIONS', 'SEND_MESSAGES', 'SPEAK' ])
       }
     });
-    client.functions.updateRow<ColumnTypes['MUTEROLE']>(client, tables.MUTEROLE, {
+
+    const columns = {
       guildid: message.guild.id,
       roleid: role.id
-    }, {
-      guildid: message.guild.id
-    });
+    };
+    client.sql<ColumnTypes['MUTEROLE']>`
+      INSERT INTO ${client.sql(tables.MUTEROLE)} ${client.sql(columns)}
+        ON CONFLICT (guildid) DO UPDATE
+          SET ${client.sql(columns)}
+    `;
   }
 
   if (message.guild.me!.roles.highest.comparePositionTo(role) <= 0) return message.reply(`My highest role has to be higher than the \`\`${client.escInline(role.name)}\`\` role.`);
@@ -38,13 +43,14 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
   if (member.hasPermission('ADMINISTRATOR')) return client.functions.badArg(message, 1, `Members with \`${parsedPerms.ADMINISTRATOR}\` cannot be muted.`);
 
-  const muteRow = await client.functions.getRow<ColumnTypes['MUTES']>(client, tables.MUTES, {
-    guildid: message.guild.id,
-    userid: member.id
-  });
+  const [ muteRow ] = await client.sql<ColumnTypes['MUTES']>`
+    SELECT * FROM ${client.sql(tables.MUTES)}
+      WHERE guildid = ${message.guild.id}
+        AND userid = ${member.id}
+  `;
   if (muteRow) {
     if (member.roles.cache.has(role.id)) return client.functions.badArg(message, 1, errors.ALREADY_MUTED);
-    await client.query(`DELETE FROM ${tables.MUTES} WHERE guildid = $1 AND userid = $2`, [ message.guild.id, member.id ]);
+    await client.sql`DELETE FROM ${client.sql(tables.MUTES)} WHERE guildid = ${message.guild.id} AND userid = ${member.id}`;
   }
 
   const duration = args[2] ? ms(args[2]) : 0;
@@ -55,7 +61,11 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   const reason = args[3] ? args.slice(3).join(' ') : undefined;
   if (reason?.includes('\n')) return client.functions.badArg(message, 2, errors.NO_LINE_BREAKS);
 
-  client.query(`INSERT INTO ${tables.MUTES} (endsat, guildid, userid) VALUES ($1, $2, $3)`, [ Date.now() + duration, message.guild.id, member.id ]);
+  client.sql`INSERT INTO ${client.sql(tables.MUTES)} ${client.sql({
+    endsat: Date.now() + duration,
+    guildid: message.guild.id,
+    userid: member.id
+  })}`;
   member.roles.add(role);
   if (duration !== 0 && duration < ms('20d')) client.mutes.set(member.id, setTimeout(client.functions.unmute.bind(client.functions), duration, client, member));
 

@@ -5,8 +5,6 @@ import ReknownClient from './structures/client';
 import { readdirSync } from 'fs';
 import { version } from './config.json';
 
-require('dotenv').config();
-
 const client = new ReknownClient({
   disableMentions: 'everyone',
   partials: [ 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER' ],

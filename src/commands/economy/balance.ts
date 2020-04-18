@@ -13,9 +13,10 @@ export async function run (client: ReknownClient, message: Message, args: string
     message.author;
   if (!user) return client.functions.badArg(message, 1, errors.UNKNOWN_USER);
 
-  const row = await client.functions.getRow<ColumnTypes['ECONOMY']>(client, tables.ECONOMY, {
-    userid: user.id
-  });
+  const [ row ] = await client.sql<ColumnTypes['ECONOMY']>`
+    SELECT * FROM ${client.sql(tables.ECONOMY)}
+      WHERE userid = ${user.id}
+  `;
   if (!row || row.balance === 0) return message.reply('That user does not have a registered account or has no money.');
 
   message.channel.send(`${user.tag} has **$${row.balance}**.`);

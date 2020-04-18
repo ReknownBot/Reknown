@@ -91,9 +91,10 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
 
   const table = args[1].toLowerCase();
   if (!Object.keys(configs).includes(table)) return client.functions.badArg(message, 1, 'That configuration value does not exist.');
-  const row = await client.functions.getRow<any>(client, table, {
-    guildid: message.guild.id
-  });
+  const [ row ] = await client.sql<any>`
+    SELECT * FROM ${client.sql(table)}
+      WHERE guildid = ${message.guild.id}
+  `;
 
   if (!args[2]) {
     const value: number | string | boolean = row ? row[Object.keys(row).find(r => r !== 'guildid')!] : defaultValues[table][1];
@@ -108,9 +109,11 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
 
   const newRow: { [ key: string ]: any } = { guildid: message.guild.id };
   newRow[defaultValues[table][0]] = value;
-  client.functions.updateRow(client, table, newRow, {
-    guildid: message.guild.id
-  });
+  client.sql`
+    INSERT INTO ${client.sql(table)} ${client.sql(newRow)}
+      ON CONFLICT (guildid) DO UPDATE
+        SET ${client.sql(newRow)}
+  `;
 
   message.channel.send(`Successfully updated \`${table}\` to \`\`${client.escInline(value.toString())}\`\`.`);
 }

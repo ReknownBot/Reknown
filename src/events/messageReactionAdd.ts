@@ -13,18 +13,20 @@ export async function run (client: ReknownClient, reaction: MessageReaction & { 
   if (message.webhookID) return;
   if (!message.content && !message.attachments.find(attch => Boolean(attch.height))) return;
 
-  const toggled = await client.functions.getRow<ColumnTypes['TOGGLE']>(client, tables.STARTOGGLE, {
-    guildid: message.guild.id
-  });
+  const [ toggled ] = await client.sql<ColumnTypes['TOGGLE']>`
+    SELECT * FROM ${client.sql(tables.STARTOGGLE)}
+      WHERE guildid = ${message.guild.id}
+  `;
   if (!toggled || !toggled.bool) return;
 
   let { count } = reaction;
   if (reaction.users.cache.has(message.author.id)) count -= 1;
-  if (count === 0) return client.query(`DELETE FROM ${tables.STARBOARD} WHERE msgid = $1`, [ message.id ]);
+  if (count === 0) return client.sql`DELETE FROM ${client.sql(tables.STARBOARD)} WHERE msgid = ${message.id}`;
 
-  const channelRow = await client.functions.getRow<ColumnTypes['CHANNEL']>(client, tables.STARCHANNEL, {
-    guildid: message.guild.id
-  });
+  const [ channelRow ] = await client.sql<ColumnTypes['CHANNEL']>`
+    SELECT * FROM ${client.sql(tables.STARCHANNEL)}
+      WHERE guildid = ${message.guild.id}
+  `;
   const channel = (channelRow ? message.guild.channels.cache.get(channelRow.channelid) : message.guild.channels.cache.find(c => c.name === 'starboard' && c.type === 'text')) as TextChannel | undefined;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'EMBED_LINKS', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'VIEW_CHANNEL' ])) return;
@@ -32,9 +34,10 @@ export async function run (client: ReknownClient, reaction: MessageReaction & { 
   const emoji = reaction.emoji.name;
   if (emoji !== '\u2B50') return;
 
-  const msgRow = await client.functions.getRow<ColumnTypes['STARBOARD']>(client, tables.STARBOARD, {
-    msgid: message.id
-  });
+  const [ msgRow ] = await client.sql<ColumnTypes['STARBOARD']>`
+    SELECT * FROM ${client.sql(tables.STARBOARD)}
+      WHERE msgid = ${message.id}
+  `;
 
   const embed = new MessageEmbed()
     .addFields([
@@ -66,10 +69,14 @@ export async function run (client: ReknownClient, reaction: MessageReaction & { 
   }
 
   const msg = await channel.send(embed);
-  client.functions.updateRow(client, tables.STARBOARD, {
+
+  const columns = {
     editid: msg.id,
     msgid: message.id
-  }, {
-    msgid: message.id
-  });
+  };
+  client.sql`
+    INSERT INTO ${client.sql(tables.STARBOARD)} ${client.sql(columns)}
+      ON CONFLICT (msgid) DO UPDATE
+        SET ${client.sql(columns)}
+  `;
 }

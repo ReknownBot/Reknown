@@ -7,20 +7,23 @@ import { tables } from '../Constants';
 import type { Message, PartialMessage } from 'discord.js';
 
 async function delStar (client: ReknownClient, message: GuildMessage) {
-  const toggled = await client.functions.getRow<ColumnTypes['TOGGLE']>(client, tables.STARTOGGLE, {
-    guildid: message.guild.id
-  });
+  const [ toggled ] = await client.sql<ColumnTypes['TOGGLE']>`
+    SELECT * FROM ${client.sql(tables.STARTOGGLE)}
+      WHERE guildid = ${message.guild.id}
+  `;
   if (!toggled || !toggled.bool) return;
 
-  const msgRow = await client.functions.getRow<ColumnTypes['STARBOARD']>(client, tables.STARBOARD, {
-    msgid: message.id
-  });
+  const [ msgRow ] = await client.sql<ColumnTypes['STARBOARD']>`
+    SELECT * FROM ${client.sql(tables.STARBOARD)}
+      WHERE msgid = ${message.id}
+  `;
   if (!msgRow) return;
-  client.query(`DELETE FROM ${tables.STARBOARD} WHERE msgid = $1`, [ message.id ]);
+  client.sql`DELETE FROM ${client.sql(tables.STARBOARD)} WHERE msgid = ${message.id}`;
 
-  const channelRow = await client.functions.getRow<ColumnTypes['CHANNEL']>(client, tables.STARCHANNEL, {
-    guildid: message.guild.id
-  });
+  const [ channelRow ] = await client.sql<ColumnTypes['CHANNEL']>`
+    SELECT * FROM ${client.sql(tables.STARCHANNEL)}
+      WHERE guildid = ${message.guild.id}
+  `;
   const channel = (channelRow ? message.guild.channels.cache.get(channelRow.channelid) : message.guild.channels.cache.find(c => c.name === 'starboard' && c.type === 'text')) as TextChannel | undefined;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'READ_MESSAGE_HISTORY', 'VIEW_CHANNEL' ])) return;

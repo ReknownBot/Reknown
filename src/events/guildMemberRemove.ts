@@ -19,23 +19,26 @@ function sendLog (client: ReknownClient, member: GuildMember | PartialGuildMembe
 }
 
 async function goodbyeMsg (client: ReknownClient, member: GuildMember | PartialGuildMember) {
-  const toggledRow = await client.functions.getRow<ColumnTypes['TOGGLE']>(client, tables.WELCOMETOGGLE, {
-    guildid: member.guild.id
-  });
+  const [ toggledRow ] = await client.sql<ColumnTypes['TOGGLE']>`
+    SELECT * FROM ${client.sql(tables.WELCOMETOGGLE)}
+      WHERE guildid = ${member.guild.id}
+  `;
   if (!toggledRow || !toggledRow.bool) return;
 
-  const channelRow = await client.functions.getRow<ColumnTypes['CHANNEL']>(client, tables.WELCOMECHANNEL, {
-    guildid: member.guild.id
-  });
+  const [ channelRow ] = await client.sql<ColumnTypes['CHANNEL']>`
+    SELECT * FROM ${client.sql(tables.WELCOMECHANNEL)}
+      WHERE guildid = ${member.guild.id}
+  `;
   const channel = (channelRow ?
     member.guild.channels.cache.find(c => c.id === channelRow.channelid && c.type === 'text') :
     member.guild.channels.cache.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel | undefined;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
 
-  const msgRow = await client.functions.getRow<ColumnTypes['MSG']>(client, tables.GOODBYEMSG, {
-    guildid: member.guild.id
-  });
+  const [ msgRow ] = await client.sql<ColumnTypes['MSG']>`
+    SELECT * FROM ${client.sql(tables.GOODBYEMSG)}
+      WHERE guildid = ${member.guild.id}
+  `;
   const msg: string = msgRow ? msgRow.msg : '<User> has left **<Server>**. There are <MemberCount> members now.';
 
   const embed = new MessageEmbed()

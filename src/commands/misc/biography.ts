@@ -21,12 +21,15 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     if (!args[3]) return client.functions.noArg(message, 3, 'a value for the field.');
     const value = args.slice(3).join(' ');
 
-    client.functions.updateRow(client, tables.BIOGRAPHY, {
+    const columns = {
       [field]: value,
       userid: message.author.id
-    }, {
-      userid: message.author.id
-    });
+    };
+    client.sql`
+      INSERT INTO ${client.sql(tables.BIOGRAPHY)} ${client.sql(columns)}
+        ON CONFLICT (userid) DO UPDATE
+          SET ${client.sql(columns)}
+    `;
     message.channel.send(`Successfully updated your \`${field}\` to \`\`${client.escInline(value)}\`\`.`);
   } else {
     const member = args[1] ?
@@ -37,9 +40,10 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
       message.member;
     if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
 
-    const row = await client.functions.getRow<ColumnTypes['BIOGRAPHY']>(client, tables.BIOGRAPHY, {
-      userid: member.id
-    });
+    const [ row ] = await client.sql<ColumnTypes['BIOGRAPHY']>`
+      SELECT * FROM ${client.sql(tables.BIOGRAPHY)}
+        WHERE userid = ${member.id}
+    `;
     if (!row) return client.functions.badArg(message, 1, 'The member provided did not provide any information about themselves.');
 
     const embed = new MessageEmbed()

@@ -1,7 +1,6 @@
 import type ColumnTypes from '../typings/ColumnTypes';
 import type { GuildMessage } from '../Constants';
 import type { MusicObject } from './client';
-import type { QueryResult } from 'pg';
 import type ReknownClient from './client';
 import type { Track } from 'lavalink';
 import { embedColor } from '../config.json';
@@ -53,9 +52,10 @@ export class Functions {
   }
 
   public async getMuteRole (client: ReknownClient, guild: Guild): Promise<Role | null> {
-    const row = await client.functions.getRow<ColumnTypes['MUTEROLE']>(client, tables.MUTEROLE, {
-      guildid: guild.id
-    });
+    const [ row ] = await client.sql<ColumnTypes['MUTEROLE']>`
+      SELECT * FROM ${client.sql(tables.MUTEROLE)}
+        WHERE guildid = ${guild.id}
+    `;
     const role = row ? guild.roles.cache.get(row.roleid) : guild.roles.cache.find(ro => ro.name === 'Muted');
     if (!role || guild.me!.roles.highest.comparePositionTo(role) <= 0) return null;
 
@@ -64,16 +64,11 @@ export class Functions {
 
   public async getPrefix (client: ReknownClient, id: Snowflake): Promise<string> {
     if (client.prefixes[id]) return client.prefixes[id];
-    const row = await client.functions.getRow<ColumnTypes['PREFIX']>(client, tables.PREFIX, {
-      guildid: id
-    });
+    const [ row ] = await client.sql<ColumnTypes['PREFIX']>`
+      SELECT * FROM ${client.sql(tables.PREFIX)}
+        WHERE guildid = ${id}
+    `;
     return client.prefixes[id] = row ? row.customprefix : client.config.prefix;
-  }
-
-  public async getRow<T> (client: ReknownClient, table: string, filters: Partial<T>): Promise<T | null> {
-    const query = `SELECT * FROM ${table} WHERE ${Object.keys(filters).map((rowName, i) => `${rowName} = $${i + 1}`).join(' AND ')}`;
-    const { rows } = await client.query<T>(query, Object.values(filters));
-    return rows.length > 0 ? rows[0] : null;
   }
 
   public getTime (timeLeft: number): string {
@@ -178,40 +173,51 @@ export class Functions {
   }
 
   public async register (client: ReknownClient, userid: Snowflake): Promise<ColumnTypes['ECONOMY']> {
-    return (await client.query(`INSERT INTO ${tables.ECONOMY} (balance, userid) VALUES ($1, $2) RETURNING *`, [ 0, userid ])).rows[0];
+    return (await client.sql<ColumnTypes['ECONOMY']>`INSERT INTO ${client.sql(tables.ECONOMY)} ${client.sql({
+      balance: 0,
+      userid: userid
+    })} RETURNING *`)[0];
   }
 
   public async sendLog (client: ReknownClient, embed: MessageEmbed, guild: Guild) {
-    const toggledRow = await client.functions.getRow<ColumnTypes['TOGGLE']>(client, tables.LOGTOGGLE, {
-      guildid: guild.id
-    });
+    const [ toggledRow ] = await client.sql<ColumnTypes['TOGGLE']>`
+      SELECT * FROM ${client.sql(tables.LOGTOGGLE)}
+        WHERE guildid = ${guild.id}
+    `;
     if (!toggledRow || !toggledRow.bool) return;
 
-    const channelRow = await client.functions.getRow<ColumnTypes['CHANNEL']>(client, tables.LOGCHANNEL, {
-      guildid: guild.id
-    });
+    const [ channelRow ] = await client.sql<ColumnTypes['CHANNEL']>`
+      SELECT * FROM ${client.sql(tables.LOGCHANNEL)}
+        WHERE guildid = ${guild.id}
+    `;
     const channel = (channelRow ?
       client.channels.cache.get(channelRow.channelid) :
       guild.channels.cache.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel | undefined;
     if (!channel) return;
     if (!channel.permissionsFor(client.user!)!.has('MANAGE_WEBHOOKS')) return;
     const webhooks = await channel.fetchWebhooks();
-    let webhookRow = await client.functions.getRow<ColumnTypes['WEBHOOK']>(client, tables.LOGWEBHOOK, {
-      channelid: channel.id
-    });
+    let [ webhookRow ] = await client.sql<ColumnTypes['WEBHOOK']>`
+      SELECT * FROM ${client.sql(tables.LOGWEBHOOK)}
+        WHERE channelid = ${channel.id}
+    `;
     let webhook;
     if (!webhookRow || !webhooks.has(webhookRow.webhookid)) {
       webhook = await channel.createWebhook('Reknown Logs', {
         avatar: client.user!.displayAvatarURL({ size: 2048 }),
         reason: 'Reknown Logs'
       });
-      webhookRow = (await client.functions.updateRow<ColumnTypes['WEBHOOK']>(client, tables.LOGWEBHOOK, {
+
+      const columns = {
         channelid: channel.id,
         guildid: guild.id,
         webhookid: webhook.id
-      }, {
-        guildid: guild.id
-      })).rows[0];
+      };
+      [ webhookRow ] = await client.sql<ColumnTypes['WEBHOOK']>`
+        INSERT INTO ${client.sql(tables.LOGWEBHOOK)} ${client.sql(columns)}
+          ON CONFLICT (guildid) DO UPDATE
+            SET ${client.sql(columns)}
+        RETURNING *
+      `;
     } else webhook = webhooks.get(webhookRow.webhookid)!;
 
     webhook.send(embed);
@@ -251,7 +257,7 @@ export class Functions {
 
   public async unmute (client: ReknownClient, member: GuildMember): Promise<void> {
     client.mutes.delete(member.id);
-    client.query(`DELETE FROM ${tables.MUTES} WHERE guildid = $1`, [ member.guild.id ]);
+    client.sql`DELETE FROM ${client.sql(tables.MUTES)} WHERE guildid = ${member.guild.id}`;
     if (!member.guild.me!.hasPermission('MANAGE_ROLES')) return;
     await member.guild.members.fetch();
     if (!member.guild.members.cache.has(member.id)) return;
@@ -259,22 +265,6 @@ export class Functions {
     const role = await this.getMuteRole(client, member.guild);
     if (!role || !member.roles.cache.has(role.id)) return;
     member.roles.remove(role);
-  }
-
-  public updateRow<T>(client: ReknownClient, table: string, changes: T, filters: Partial<T>): Promise<QueryResult<T>> {
-    const columns = Object.keys(changes);
-    const values = Object.values(changes);
-    if (table === 'prefix') {
-      client.prefixes[(changes as unknown as ColumnTypes['PREFIX']).guildid] = (changes as unknown as ColumnTypes['PREFIX']).customprefix;
-    }
-
-    return client.query<T>(`
-      INSERT INTO ${table} (${columns})
-      VALUES (${columns.map((c, i) => `$${i + 1}`)})
-      ON CONFLICT (${Object.keys(filters)}) DO UPDATE
-        SET ${columns.map((c, i) => `${c} = $${i + 1}`)}
-      RETURNING *
-    `, values);
   }
 
   public uppercase (str: string): string {

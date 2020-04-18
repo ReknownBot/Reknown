@@ -38,7 +38,7 @@ async function removeMute (client: ReknownClient, member: GuildMember, roles: Co
   if (roles.has(role.id) && client.mutes.has(member.id)) {
     clearTimeout(client.mutes.get(member.id)!);
     client.mutes.delete(member.id);
-    client.query(`DELETE FROM ${tables.MUTES} WHERE guildid = $1`, [ member.guild.id ]);
+    client.sql`DELETE FROM ${client.sql(tables.MUTES)} WHERE guildid = ${member.guild.id}`;
   }
 }
 

@@ -12,10 +12,11 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   const cmdInfo = client.commands.get(command)!;
   if (!cmdInfo.help.togglable) return client.functions.badArg(message, 1, 'You cannot toggle this command.');
 
-  const row = await client.functions.getRow<ColumnTypes['DISABLEDCOMMANDS']>(client, tables.DISABLEDCOMMANDS, {
-    command: command,
-    guildid: message.guild.id
-  });
+  const [ row ] = await client.sql<ColumnTypes['DISABLEDCOMMANDS']>`
+    SELECT * FROM ${client.sql(tables.DISABLEDCOMMANDS)}
+      WHERE command = ${command}
+        AND guildid = ${message.guild.id}
+  `;
   let bool;
   if (!args[2]) bool = !row;
   else if (args[2].toLowerCase() === 'enable') bool = false;
@@ -24,8 +25,12 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
 
   if (Boolean(row) === bool) return client.functions.badArg(message, 2, 'The value is already set to that!');
 
-  if (bool) client.query(`INSERT INTO ${tables.DISABLEDCOMMANDS} (command, guildid) VALUES ($1, $2)`, [ command, message.guild.id ]);
-  else client.query(`DELETE FROM ${tables.DISABLEDCOMMANDS} WHERE command = $1 AND guildid = $2`, [ command, message.guild.id ]);
+  if (bool) {
+    client.sql`INSERT INTO ${client.sql(tables.DISABLEDCOMMANDS)} ${client.sql({
+      command: command,
+      guildid: message.guild.id
+    })}`;
+  } else client.sql`DELETE FROM ${client.sql(tables.DISABLEDCOMMANDS)} WHERE command = ${command} AND guildid = ${message.guild.id}`;
 
   message.channel.send(`Successfully ${bool ? 'disabled' : 'enabled'} \`${command}\`.`);
 }

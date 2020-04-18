@@ -21,8 +21,8 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (isNaN(page)) return client.functions.badArg(message, 2, 'The page provided was not a number.');
   if (page < 1) return client.functions.badArg(message, 2, 'The page provided is lower than one.');
 
-  const { rows } = await client.query<ColumnTypes['WARNINGS']>(`SELECT * FROM ${tables.WARNINGS} WHERE guildid = $1 AND userid = $2 ORDER BY warnedat ASC`, [ message.guild.id, member.id ]);
-  if (rows.length === 0) return message.channel.send(`\`\`${client.escInline(member.user.tag)} (ID: ${member.id})\`\` has \`0\` warnings! Keep up the good work.`);
+  const rows = await client.sql<ColumnTypes['WARNINGS']>`SELECT * FROM ${client.sql(tables.WARNINGS)} WHERE guildid = ${message.guild.id} AND userid = ${member.id} ORDER BY warnedat ASC`;
+  if (rows.count === 0) return message.channel.send(`\`\`${client.escInline(member.user.tag)} (ID: ${member.id})\`\` has \`0\` warnings! Keep up the good work.`);
 
   const str = (await Promise.all(rows.map(async r => {
     const by = await client.users.fetch(r.warnedby);

@@ -3,10 +3,13 @@ import CommandHandler from './commandhandler';
 import DBL from 'dblapi.js';
 import { Functions } from './functions';
 import type Node from 'lavalink';
-import { Pool } from 'pg';
+import Postgres from 'postgres';
+import { config as configure } from 'dotenv';
 import { Client, Collection, Util } from 'discord.js';
 import type { GuildEmoji, Snowflake } from 'discord.js';
 import type { Player, Track } from 'lavalink';
+
+configure();
 
 interface ConfigObject {
   contributors: Snowflake[];
@@ -37,7 +40,13 @@ export interface ReknownEvent {
   run: (...args: any) => void;
 }
 
-const pool = new Pool();
+const pg = Postgres({
+  db: process.env.PGDATABASE,
+  host: process.env.PGHOST,
+  port: parseInt(process.env.PGPORT!),
+  username: process.env.PGUSER,
+  password: process.env.PGPASSWORD
+});
 
 export default class ReknownClient extends Client {
   public commands = new CommandHandler();
@@ -62,7 +71,7 @@ export default class ReknownClient extends Client {
 
   public prefixes: { [ id: string ]: string } = {};
 
-  public query = pool.query.bind(pool);
-
   public music: { [ id: string ]: MusicObject | undefined } = {};
+
+  public sql = pg;
 }

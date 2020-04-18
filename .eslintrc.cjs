@@ -45,7 +45,6 @@ module.exports = exports = {
         "@typescript-eslint/no-explicit-any": OFF,
         "@typescript-eslint/no-extra-parens": ERROR,
         "@typescript-eslint/no-non-null-assertion": OFF,
-        "@typescript-eslint/no-unnecessary-condition": [ ERROR, { checkArrayPredicates: true, ignoreRhs: true }],
         "@typescript-eslint/no-unnecessary-type-arguments": ERROR,
         "@typescript-eslint/no-unnecessary-type-assertion": ERROR,
         "@typescript-eslint/no-unused-vars": [ ERROR, { args: "none" }],

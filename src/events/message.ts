@@ -29,10 +29,11 @@ export async function run (client: ReknownClient, message: Message) {
 
   cmd = client.commands.aliases[cmd];
   if (message.guild) {
-    const disabled = await client.functions.getRow<ColumnTypes['DISABLEDCOMMANDS']>(client, tables.DISABLEDCOMMANDS, {
-      command: cmd,
-      guildid: message.guild.id
-    });
+    const [ disabled ] = await client.sql<ColumnTypes['DISABLEDCOMMANDS']>`
+      SELECT * FROM ${client.sql(tables.DISABLEDCOMMANDS)}
+        WHERE command = ${cmd}
+          AND guildid = ${message.guild.id}
+    `;
     if (disabled) return;
   }
 

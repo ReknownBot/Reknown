@@ -21,7 +21,13 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if ((reason?.length ?? 0) > 100) return client.functions.badArg(message, 2, 'The reason cannot be above 100 characters.');
   if (reason?.includes('\n')) return client.functions.badArg(message, 2, errors.NO_LINE_BREAKS);
 
-  client.query(`INSERT INTO ${tables.WARNINGS} (guildid, userid, warnedat, warnedby, warnreason) VALUES ($1, $2, $3, $4, $5)`, [ message.guild.id, member.id, Date.now(), message.author.id, reason ]);
+  client.sql`INSERT INTO ${client.sql(tables.WARNINGS)} ${client.sql({
+    guildid: message.guild.id,
+    userid: member.id,
+    warnedat: Date.now(),
+    warnedby: message.author.id,
+    warnreason: reason
+  })}`;
   message.channel.send(`Successfully warned \`\`${client.escInline(member.user.tag)}\`\` for \`\`${client.escInline(reason || 'None')}\`\`.`);
 }
 

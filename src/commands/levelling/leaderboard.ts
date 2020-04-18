@@ -7,8 +7,8 @@ import type ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
-  const { rows } = await client.query<ColumnTypes['LEVEL']>(`SELECT * FROM ${tables.LEVELS} WHERE guildid = $1 ORDER BY points DESC`, [ message.guild.id ]);
-  if (rows.length === 0) return message.reply('There was no levelling data found for this server.');
+  const rows = await client.sql<ColumnTypes['LEVEL']>`SELECT * FROM ${client.sql(tables.LEVELS)} WHERE guildid = ${message.guild.id} ORDER BY points DESC`;
+  if (rows.count === 0) return message.reply('There was no levelling data found for this server.');
 
   const users = rows.map(async (r, i) => {
     const user = await client.users.fetch(r.userid);

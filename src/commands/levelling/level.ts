@@ -15,14 +15,15 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     message.member;
   if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
 
-  const row = await client.functions.getRow<ColumnTypes['LEVEL']>(client, tables.LEVELS, {
-    userid: member.id,
-    guildid: message.guild.id
-  });
+  const [ row ] = await client.sql<ColumnTypes['LEVEL']>`
+    SELECT * FROM ${client.sql(tables.LEVELS)}
+      WHERE guildid = ${message.guild.id}
+        AND userid = ${member.id}
+  `;
   const points = row ? row.points : 0;
   const level = row ? row.level : 0;
   const reqPoints = client.functions.formatNum(Math.pow((level + 1) / 0.2, 2));
-  const { rows } = await client.query<ColumnTypes['LEVEL']>(`SELECT * FROM ${tables.LEVELS} WHERE guildid = $1 ORDER BY points DESC`, [ message.guild.id ]);
+  const rows = await client.sql<ColumnTypes['LEVEL']>`SELECT * FROM ${client.sql(tables.LEVELS)} WHERE guildid = ${message.guild.id} ORDER BY points DESC`;
   let rank: string;
   if (!row) rank = 'N/A';
   else rank = `#${rows.indexOf(row) + 1}`;
