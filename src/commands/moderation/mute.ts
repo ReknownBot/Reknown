@@ -18,7 +18,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
       data: {
         color: client.config.muteColor,
         name: 'Muted',
-        permissions: message.guild.roles.everyone!.permissions.remove([ 'ADD_REACTIONS', 'SEND_MESSAGES', 'SPEAK' ])
+        permissions: message.guild.roles.everyone.permissions.remove([ 'ADD_REACTIONS', 'SEND_MESSAGES', 'SPEAK' ])
       }
     });
 
