@@ -188,6 +188,8 @@ export class Functions {
       if (music.queue.length > 0) return setTimeout(this.playMusic.bind(this), 500, client, guild, music, music.queue[0], true);
       setTimeout(client.functions.endSession, 800, client, music);
     });
+
+    music.player!.once('error', () => client.functions.endSession(client, music));
   }
 
   public async register (client: ReknownClient, userid: Snowflake): Promise<ColumnTypes['ECONOMY']> {
