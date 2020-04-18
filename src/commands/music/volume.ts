@@ -15,7 +15,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (isNaN(volume)) return client.functions.badArg(message, 1, 'The provided volume was not a number.');
   if (volume < 1 || volume > 300) return client.functions.badArg(message, 1, 'The allowed range for a volume is 1-300.');
 
-  music.player.setVolume(volume);
+  music.player.volume(volume);
   music.volume = volume;
   message.channel.send(`Successfully set the volume to **${volume}**.`);
 }

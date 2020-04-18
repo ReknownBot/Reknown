@@ -1,7 +1,7 @@
 import type ColumnTypes from '../typings/ColumnTypes';
 import DBL from 'dblapi.js';
 import type { EmoteName } from '../structures/client';
-import { Node } from 'lavalink';
+import { Manager } from 'lavacord';
 import type ReknownClient from '../structures/client';
 import type { Snowflake } from 'discord.js';
 import ms from 'ms';
@@ -50,14 +50,20 @@ export async function run (client: ReknownClient) {
     }
   }
 
-  client.lavalink = new Node({
-    password: process.env.LAVALINK_PASS!,
-    userID: client.user!.id,
-    host: 'localhost:2333',
-    send: function (guild, packet) {
-      if (client.guilds.cache.has(guild)) return client.ws.shards.first()!.send(packet);
+  const nodes = [{ id: '1', host: 'localhost', port: 2333, password: process.env.LAVALINK_PASS! }];
+
+  client.lavacord = new Manager(nodes, {
+    user: client.user!.id,
+    shards: client.options.shardCount || 1,
+    send: function (packet) {
+      const guild = client.guilds.cache.get(packet.d.guild_id);
+      if (guild) return client.ws.shards.get(guild.shardID)!.send(packet);
     },
   });
+
+  await client.lavacord.connect();
+
+  client.lavacord.on('error', err => console.error(err));
 
   initDBL(client);
   muteCheck(client);

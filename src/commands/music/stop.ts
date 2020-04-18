@@ -9,7 +9,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (!music || !music.player || !music.player.playing) return message.reply('I am not playing anything!');
   if (message.guild.voice!.channelID !== message.member.voice.channelID) return message.reply('You must be in the same voice channel as me to run that command.');
 
-  client.functions.endSession(music);
+  client.functions.endSession(client, music);
   message.channel.send('Successfully stopped the music and left the voice channel.');
 }
 

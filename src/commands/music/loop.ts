@@ -7,6 +7,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   let music = client.music[message.guild.id];
   if (!music) music = client.music[message.guild.id] = {
     equalizer: 0,
+    id: message.guild.id,
     looping: false,
     player: undefined,
     queue: [],

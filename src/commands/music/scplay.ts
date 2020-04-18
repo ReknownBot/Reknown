@@ -7,6 +7,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   let music = client.music[message.guild.id];
   if (!music) music = client.music[message.guild.id] = {
     equalizer: 0,
+    id: message.guild.id,
     looping: false,
     player: undefined,
     queue: [],
@@ -18,15 +19,14 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (!vc.permissionsFor(client.user!)!.has([ 'CONNECT', 'SPEAK' ])) return client.functions.noClientPerms(message, [ 'CONNECT', 'SPEAK' ], vc);
 
   if (!args[1]) return client.functions.noArg(message, 1, 'a query to search for.');
-  const res = await client.lavalink!.load(`scsearch:${args.slice(1).join(' ')}`);
-  if (res.loadType === 'LOAD_FAILED') return message.reply('Something went wrong while fetching the song. Please try again later.');
+  const res = await client.functions.getSongs(client, `scsearch:${args.slice(1).join(' ')}`);
+  if (res === null || res.loadType === 'LOAD_FAILED') return message.reply('Something went wrong while fetching the song. Please try again later.');
   if (res.tracks.length === 0) return client.functions.badArg(message, 1, 'I did not find a song with that query.');
   const song = res.tracks[0];
   if (music.queue.includes(song)) return client.functions.badArg(message, 1, 'That song is already in the queue.');
   if (music.queue.length > 15) return client.functions.badArg(message, 1, 'The queue is full! You cannot go over 15 songs at a time.');
 
-  if (!music.player) music.player = client.lavalink!.players.get(message.guild.id);
-  if (!music.player.playing) await music.player.join(vc.id);
+  if (!music.player) music.player = await client.lavacord!.join({ guild: message.guild.id, channel: vc.id, node: '1' });
 
   client.functions.sendSong(music, message, song, client.user!);
   client.functions.playMusic(client, message.guild, music, song);

@@ -2,12 +2,11 @@ import * as config from '../config.json';
 import CommandHandler from './commandhandler';
 import DBL from 'dblapi.js';
 import { Functions } from './functions';
-import type Node from 'lavalink';
 import Postgres from 'postgres';
 import { config as configure } from 'dotenv';
 import { Client, Collection, Util } from 'discord.js';
 import type { GuildEmoji, Snowflake } from 'discord.js';
-import type { Player, Track } from 'lavalink';
+import type { Manager, Player, TrackData } from 'lavacord';
 
 configure();
 
@@ -30,9 +29,10 @@ export type EmoteName = 'online'
 
 export interface MusicObject {
   equalizer: number;
+  id: Snowflake;
   looping: boolean;
   player?: Player;
-  queue: Track[];
+  queue: TrackData[];
   volume: number;
 }
 
@@ -65,7 +65,7 @@ export default class ReknownClient extends Client {
 
   public functions = new Functions();
 
-  public lavalink: Node | null = null;
+  public lavacord: Manager | null = null;
 
   public mutes = new Collection<Snowflake, NodeJS.Timeout>();
 

@@ -2,10 +2,12 @@ import type ColumnTypes from '../typings/ColumnTypes';
 import type { GuildMessage } from '../Constants';
 import type { MusicObject } from './client';
 import type ReknownClient from './client';
-import type { Track } from 'lavalink';
+import { URLSearchParams } from 'url';
 import { embedColor } from '../config.json';
+import fetch from 'node-fetch';
 import type { CategoryChannel, ClientUser, Guild, GuildChannel, GuildMember, Message, PermissionString, Role, Snowflake, User, VoiceChannel } from 'discord.js';
 import { Client, MessageEmbed, TextChannel, Util } from 'discord.js';
+import type { TrackData, TrackResponse } from 'lavacord';
 import { parsedPerms, tables } from '../Constants';
 
 interface ParseMentionOptions {
@@ -32,9 +34,9 @@ export class Functions {
     message.channel.send(embed);
   }
 
-  public endSession (music: MusicObject): void {
+  public endSession (client: ReknownClient, music: MusicObject): void {
     music.queue = [];
-    music.player!.leave();
+    client.lavacord!.leave(music.id);
     music.player!.stop();
   }
 
@@ -69,6 +71,22 @@ export class Functions {
         WHERE guildid = ${id}
     `;
     return client.prefixes[id] = row ? row.customprefix : client.config.prefix;
+  }
+
+  public async getSongs (client: ReknownClient, search: string): Promise<TrackResponse | null> {
+    const node = client.lavacord!.idealNodes[0];
+
+    const params = new URLSearchParams();
+    params.append('identifier', search);
+
+    try {
+      const res = await fetch(`http://${node.host}:${node.port}/loadtracks?${params}`, { headers: { Authorization: node.password } });
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
   }
 
   public getTime (timeLeft: number): string {
@@ -152,23 +170,23 @@ export class Functions {
     }
   }
 
-  public async playMusic (client: ReknownClient, guild: Guild, music: MusicObject, song: Track, ended?: boolean): Promise<void> {
+  public async playMusic (client: ReknownClient, guild: Guild, music: MusicObject, song: TrackData, ended?: boolean): Promise<void> {
     if (!ended) {
       music.queue.push(song);
       if (music.queue.length > 1) return;
     }
 
     await music.player!.play(song.track);
-    music.player!.setVolume(music.volume);
+    music.player!.volume(music.volume);
 
-    music.player!.once('event', async d => {
+    music.player!.once('end', async d => {
       if (d.reason === 'REPLACED') return;
-      if (!guild.voice || !guild.voice.channel) return client.functions.endSession(music);
+      if (!guild.voice || !guild.voice.connection) return client.functions.endSession(client, music);
       if (music.looping && music.queue.length > 0) music.queue.push(music.queue.shift()!);
       else music.queue.shift();
 
       if (music.queue.length > 0) return setTimeout(this.playMusic.bind(this), 500, client, guild, music, music.queue[0], true);
-      setTimeout(client.functions.endSession, 800, music);
+      setTimeout(client.functions.endSession, 800, client, music);
     });
   }
 
@@ -223,7 +241,7 @@ export class Functions {
     webhook.send(embed);
   }
 
-  public sendSong (music: MusicObject, message: GuildMessage, song: Track, user: ClientUser): void {
+  public sendSong (music: MusicObject, message: GuildMessage, song: TrackData, user: ClientUser): void {
     if (!message.channel.permissionsFor(user)!.has('EMBED_LINKS')) {
       if (music.queue.length === 0) message.channel.send(`**Now Playing:** ${Util.escapeMarkdown(song.info.title)} by \`${Util.escapeMarkdown(song.info.author)}\``);
       else message.channel.send(`**Added to Queue:** ${Util.escapeMarkdown(song.info.title)} by \`${Util.escapeMarkdown(song.info.author)}\``);
