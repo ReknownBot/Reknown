@@ -181,7 +181,7 @@ export class Functions {
 
     music.player!.once('end', async d => {
       if (d.reason === 'REPLACED') return;
-      if (!guild.voice || !guild.voice.connection) return client.functions.endSession(client, music);
+      if (!guild.voice || !guild.voice.channelID) return client.functions.endSession(client, music);
       if (music.looping && music.queue.length > 0) music.queue.push(music.queue.shift()!);
       else music.queue.shift();
 
