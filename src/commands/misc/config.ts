@@ -11,9 +11,11 @@ const configs: { [ key: string ]: string } = {
   muterole: 'The name of the role to use when muting members.',
   prefix: 'The prefix for bot commands.',
   starchannel: 'The channel to send starboard messages to.',
+  togglelevel: 'Toggle for the levelling system.',
   togglelog: 'Toggle for the action log.',
   togglestar: 'Toggle for starboard messages.',
-  togglewelcome: 'Toggle for welcoming messages.'
+  togglewelcome: 'Toggle for welcoming messages.',
+  welcomechannel: 'The channel to send welcoming and goodbye messages to.'
 };
 
 const defaultValues: { [ key: string ]: [ string, number | string | false ] } = {
@@ -22,9 +24,11 @@ const defaultValues: { [ key: string ]: [ string, number | string | false ] } = 
   muterole: [ 'roleid', 'Muted' ],
   prefix: [ 'customprefix', prefix ],
   starchannel: [ 'channelid', '#starboard' ],
+  togglelevel: [ 'bool', false ],
   togglelog: [ 'bool', false ],
   togglestar: [ 'bool', false ],
-  togglewelcome: [ 'bool', false ]
+  togglewelcome: [ 'bool', false ],
+  welcomechannel: [ 'channelid', '#welcome' ]
 };
 
 const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Guild) => any } = {
@@ -63,6 +67,10 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
     if (!channel) return [ 'That channel does not exist or is not a text channel.' ];
     return channel.id;
   },
+  togglelevel: (value: string) => {
+    if (![ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
+    return value === 'true';
+  },
   togglelog: (value: string) => {
     if (![ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
     return value === 'true';
@@ -74,6 +82,15 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
   togglewelcome: (value: string) => {
     if (![ 'true', 'false' ].includes(value.toString())) return [ 'The value needs to be either `true` or `false`.' ];
     return value === 'true';
+  },
+  welcomechannel: (value: string, client, guild) => {
+    const channel = client.functions.parseMention(value, {
+      cType: 'text',
+      guild: guild,
+      type: 'channel'
+    });
+    if (!channel) return [ 'That channel does not exist or is not a text channel.' ];
+    return channel.id;
   }
 };
 
