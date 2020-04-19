@@ -54,6 +54,8 @@ export async function run (client: ReknownClient, member: GuildMember | PartialG
   if (!member.guild.available) return;
   if (member.id === client.user!.id) return;
 
+  if (!member.user || member.user.partial) member.user = await client.users.fetch(member.id);
+
   sendLog(client, member);
   goodbyeMsg(client, member);
 }
