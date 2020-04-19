@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS cmdnotfound (bool BOOLEAN, guildid TEXT, UNIQUE(guild
 CREATE TABLE IF NOT EXISTS cooldownmsg (bool BOOLEAN, guildid TEXT, UNIQUE(guildid));
 CREATE TABLE IF NOT EXISTS daily (endsat BIGINT, userid TEXT, UNIQUE(userid));
 CREATE TABLE IF NOT EXISTS deleteinvite (bool BOOLEAN, guildid TEXT, UNIQUE(guildid));
-CREATE TABLE IF NOT EXISTS disabledcommands (command TEXT, guildid TEXT, UNIQUE(guildid));
+CREATE TABLE IF NOT EXISTS disabledcommands (command TEXT, guildid TEXT);
 CREATE TABLE IF NOT EXISTS economy (balance INTEGER, userid TEXT, UNIQUE(userid));
 CREATE TABLE IF NOT EXISTS gblacklist (memberid TEXT, reason TEXT, UNIQUE(memberid));
 CREATE TABLE IF NOT EXISTS guildtag (guildid TEXT, tagcontent TEXT, tagname TEXT, UNIQUE(guildid, tagname));
