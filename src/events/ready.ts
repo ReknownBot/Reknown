@@ -66,8 +66,8 @@ export async function run (client: ReknownClient) {
   client.lavacord.on('error', err => console.error(err));
 
   client.ws
-    .on('VOICE_SERVER_UPDATE', client.lavacord.voiceServerUpdate)
-    .on('VOICE_STATE_UPDATE', client.lavacord.voiceStateUpdate);
+    .on('VOICE_SERVER_UPDATE', client.lavacord.voiceServerUpdate.bind(client.lavacord))
+    .on('VOICE_STATE_UPDATE', client.lavacord.voiceStateUpdate.bind(client.lavacord));
 
   initDBL(client);
   muteCheck(client);
