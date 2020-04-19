@@ -53,7 +53,7 @@ async function welcomeMsg (client: ReknownClient, member: GuildMember) {
   `;
   const channel = (channelRow ?
     member.guild.channels.cache.find(c => c.id === channelRow.channelid && c.type === 'text') :
-    member.guild.channels.cache.find(c => c.name === 'action-log' && c.type === 'text')) as TextChannel | undefined;
+    member.guild.channels.cache.find(c => c.name === 'welcome' && c.type === 'text')) as TextChannel | undefined;
   if (!channel) return;
   if (!channel.permissionsFor(client.user!)!.has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
 
