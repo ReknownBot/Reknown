@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS goodbyemsg (guildid TEXT, msg TEXT, UNIQUE(guildid));
 CREATE TABLE IF NOT EXISTS levelblock (bool BOOLEAN, channelid TEXT, UNIQUE(channelid));
 CREATE TABLE IF NOT EXISTS levelmodifier (guildid TEXT, modifier SMALLINT, UNIQUE(guildid));
 CREATE TABLE IF NOT EXISTS levelmsg (bool BOOLEAN, guildid TEXT, UNIQUE(guildid));
-CREATE TABLE IF NOT EXISTS levelrole (guildid TEXT, lvl INTEGER, roleid TEXT, UNIQUE(roleid), UNIQUE(guildid, roleid));
+CREATE TABLE IF NOT EXISTS levelrole (guildid TEXT, lvl INTEGER, roleid TEXT, UNIQUE(roleid), UNIQUE(guildid));
 CREATE TABLE IF NOT EXISTS logchannel (channelid TEXT, guildid TEXT, UNIQUE(channelid), UNIQUE(guildid));
 CREATE TABLE IF NOT EXISTS logwebhook (channelid TEXT, guildid TEXT, webhookid TEXT, UNIQUE(channelid), UNIQUE(guildid), UNIQUE(webhookid));
 CREATE TABLE IF NOT EXISTS mute (endsat BIGINT, guildid TEXT, userid TEXT, UNIQUE(guildid, userid));
