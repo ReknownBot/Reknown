@@ -37,7 +37,7 @@
     "fs": "0.0.1-security",
     "lavacord": "^1.1.7",
     "mathjs": "^6.6.4",
-    "moment": "^2.24.0",
+    "moment": "^2.25.1",
     "ms": "^2.1.2",
     "node-fetch": "^2.6.0",
     "postgres": "Minigugus/postgres#feature/typescript",
