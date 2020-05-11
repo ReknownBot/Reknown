@@ -1884,7 +1884,8 @@ please-upgrade-node@^3.2.0:
 
 postgres@Minigugus/postgres#feature/typescript:
   version "1.0.2"
-  resolved "https://codeload.github.com/Minigugus/postgres/tar.gz/0db879a79c3a445b2b67d57f97370c711dd4010c"
+  uid "23cf209ebeeabf955fa0631069f7168b00c442a3"
+  resolved "https://codeload.github.com/Minigugus/postgres/tar.gz/23cf209ebeeabf955fa0631069f7168b00c442a3"
 
 prelude-ls@~1.1.2:
   version "1.1.2"
