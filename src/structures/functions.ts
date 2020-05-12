@@ -37,6 +37,8 @@ export class Functions {
   public endSession (client: ReknownClient, music: MusicObject): void {
     music.queue = [];
     client.lavacord!.leave(music.id);
+    if (music.player!.listenerCount('error')) music.player!.removeAllListeners('error');
+    if (music.player!.listenerCount('end')) music.player!.removeAllListeners('end');
     music.player!.stop();
   }
 
