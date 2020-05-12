@@ -36,7 +36,7 @@
     "dotenv": "^8.2.0",
     "fs": "0.0.1-security",
     "lavacord": "^1.1.7",
-    "mathjs": "^6.6.4",
+    "mathjs": "^7.0.0",
     "moment": "^2.25.3",
     "ms": "^2.1.2",
     "node-fetch": "^2.6.0",
