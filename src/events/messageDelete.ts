@@ -50,6 +50,7 @@ function sendLog (client: ReknownClient, message: GuildMessage) {
 
 export async function run (client: ReknownClient, message: Message | PartialMessage) {
   if (!message.guild?.available) return;
+  if (message.webhookID) return;
 
   delStar(client, message as GuildMessage);
   sendLog(client, message as GuildMessage);
