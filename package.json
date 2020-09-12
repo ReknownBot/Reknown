@@ -39,7 +39,7 @@
     "mathjs": "^6.6.4",
     "moment": "^2.24.0",
     "ms": "^2.1.2",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "postgres": "Minigugus/postgres#feature/typescript",
     "querystring": "^0.2.0",
     "string-math": "^1.2.1"
