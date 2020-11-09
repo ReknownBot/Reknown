@@ -2205,10 +2205,10 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-string-math@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/string-math/-/string-math-1.2.1.tgz#3abe7ce4225ee14f8ddf10037e7a44ab2aa79c1c"
-  integrity sha512-r5ouWjy+qzWW4UsKSa8Annd5w6n1Z+7LyN3NySTW5UDBG9oeM3aq2+IL7yy+XkCpQIaEK8AcDyIdwI2B2td5Aw==
+string-math@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/string-math/-/string-math-1.2.2.tgz#c6a9362fac81476092f6f920e5379df00313c1e3"
+  integrity sha512-rfRZpMZbIy+0pepaW8iDCR+iW+GONxyi0jXfdyW4MgpFATH/Vlz+d3vt8UMu/a1RjA9xiejBDFayvTXzs/ROTw==
 
 string-width@^3.0.0:
   version "3.1.0"
