@@ -7,10 +7,10 @@ If you manage to find a bug or unexpected behaviour, please let us know in our [
 
 ## Contributors
 ```yml
-xnq:
-  new developer.
 Jyguy:
-  previous developer.
+  primary developer.
+xnq:
+  secondary developer.
 Dr_Ari_Gami:
   hosting help and fuzzy strings stuff. also a huge help in website development and lavalink setup.
 ProMinecrafterJacob:
