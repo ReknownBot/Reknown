@@ -7,12 +7,12 @@ If you manage to find a bug or unexpected behaviour, please let us know in our [
 
 ## Contributors
 ```yml
-Dr_Ari_Gami (284857002977525760):
-  Helped with hosting and fuzzy strings. Also a huge help in website development and Lavalink setup.
-
-Xenoq (661374992864509963):
-  Partial development and GFX creation.
-
-JacobTech (356604804471980032):
-  Provided a host.
+Jyguy:
+  primary developer.
+xnq:
+  secondary developer.
+Dr_Ari_Gami:
+  hosting help and fuzzy strings. also a huge help in website development and lavalink setup.
+JacobTech:
+  previously provided hosting.
 ```
