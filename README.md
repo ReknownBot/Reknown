@@ -13,6 +13,6 @@ xnq:
   secondary developer.
 Dr_Ari_Gami:
   hosting help and fuzzy strings. also a huge help in website development and lavalink setup.
-ProMinecrafterJacob:
+JacobTech:
   previously provided hosting.
 ```
