@@ -166,10 +166,10 @@
   resolved "https://registry.yarnpkg.com/@commitlint/types/-/types-11.0.0.tgz#719cf05fcc1abb6533610a2e0f5dd1e61eac14fe"
   integrity sha512-VoNqai1vR5anRF5Tuh/+SWDFk7xi7oMwHrHrbm1BprYXjB2RJsWLhUrStMssDxEl5lW/z3EUdg8RvH/IUBccSQ==
 
-"@discordjs/collection@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@discordjs/collection/-/collection-0.1.5.tgz#1781c620b4c88d619bd0373a1548e5a6025e3d3a"
-  integrity sha512-CU1q0UXQUpFNzNB7gufgoisDHP7n+T3tkqTsp3MNUkVJ5+hS3BCvME8uCXAUFlz+6T2FbTCu75A+yQ7HMKqRKw==
+"@discordjs/collection@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@discordjs/collection/-/collection-0.1.6.tgz#9e9a7637f4e4e0688fd8b2b5c63133c91607682c"
+  integrity sha512-utRNxnd9kSS2qhyivo9lMlt5qgAUasH2gb7BEOn6p0efFh24gjGomHzWKMAPn2hEReOPQZCJaRKoURwRotKucQ==
 
 "@discordjs/form-data@^3.0.1":
   version "3.0.1"
@@ -716,18 +716,17 @@ delayed-stream@~1.0.0:
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
 
 "discord.js@github:discordjs/discord.js":
-  version "12.2.0"
-  uid "153a030c1fc04fd2a144108680dbf7bb1d5b9cc9"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/153a030c1fc04fd2a144108680dbf7bb1d5b9cc9"
+  version "12.5.0"
+  uid d744e51c1bdb4c7a26c0faeea1f2f45baaf5fd3c
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/d744e51c1bdb4c7a26c0faeea1f2f45baaf5fd3c"
   dependencies:
-    "@discordjs/collection" "^0.1.5"
+    "@discordjs/collection" "^0.1.6"
     "@discordjs/form-data" "^3.0.1"
     abort-controller "^3.0.0"
-    node-fetch "^2.6.0"
-    prism-media "^1.2.0"
-    setimmediate "^1.0.5"
+    node-fetch "^2.6.1"
+    prism-media "^1.2.2"
     tweetnacl "^1.0.3"
-    ws "^7.2.1"
+    ws "^7.3.1"
 
 doctrine@1.5.0:
   version "1.5.0"
@@ -1899,10 +1898,10 @@ prelude-ls@~1.1.2:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
-prism-media@^1.2.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-1.2.1.tgz#168f323712bcaacb1d70ae613bf9d9dc44cf43d4"
-  integrity sha512-R3EbKwJiYlTvGwcG1DpUt+06DsxOGS5W4AMEHT7oVOjG93MjpdhGX1whHyjnqknylLMupKAsKMEXcTNRbPe6Vw==
+prism-media@^1.2.2:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-1.2.7.tgz#697c9630e2a473a5dfab19c71eba398a083c2bf0"
+  integrity sha512-thS1z3L6BDmf724sqLC73bHGjSYArFTYHa7cqInyS3EdDNTHKgDCXy7l+IhRvlnX7aFNiUb8jJcC+R8ezxwgMA==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -2125,11 +2124,6 @@ set-blocking@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
   integrity sha1-BF+XgtARrppoA93TgrJDkrPYkPc=
-
-setimmediate@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/setimmediate/-/setimmediate-1.0.5.tgz#290cbb232e306942d7d7ea9b83732ab7856f8285"
-  integrity sha1-KQy7Iy4waULX1+qbg3Mqt4VvgoU=
 
 shebang-command@^1.2.0:
   version "1.2.0"
@@ -2505,10 +2499,10 @@ write@1.0.3:
   dependencies:
     mkdirp "^0.5.1"
 
-ws@^7.2.1, ws@^7.3.0:
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.3.1.tgz#d0547bf67f7ce4f12a72dfe31262c68d7dc551c8"
-  integrity sha512-D3RuNkynyHmEJIpD2qrgVkc9DQ23OrN/moAwZX4L8DfvszsJxpjQuUq3LMx6HoYji9fbIOBY18XWBsAux1ZZUA==
+ws@^7.3.0, ws@^7.3.1:
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.3.tgz#1f9643de34a543b8edb124bdcbc457ae55a6e5cd"
+  integrity sha512-hr6vCR76GsossIRsr8OLR9acVVm1jyfEWvhbNjtgPOrfvAlKzvyeg/P6r8RuDjRyrcQoPQT7K0DGEPc7Ae6jzA==
 
 xtend@~4.0.1:
   version "4.0.2"
