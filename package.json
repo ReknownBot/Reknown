@@ -45,7 +45,7 @@
     "string-math": "^1.2.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
+    "@commitlint/cli": "^12.1.1",
     "@commitlint/config-angular": "^12.1.1",
     "@types/atob": "^2.1.2",
     "@types/btoa": "^1.2.3",
