@@ -41,7 +41,7 @@
     "ms": "^2.1.2",
     "node-fetch": "^2.6.1",
     "postgres": "Minigugus/postgres#feature/typescript",
-    "querystring": "^0.2.0",
+    "querystring": "^0.2.1",
     "string-math": "^1.2.2"
   },
   "devDependencies": {
