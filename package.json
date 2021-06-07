@@ -50,7 +50,7 @@
     "@types/atob": "^2.1.2",
     "@types/btoa": "^1.2.3",
     "@types/dateformat": "^3.0.1",
-    "@types/mathjs": "^6.0.5",
+    "@types/mathjs": "^9.4.2",
     "@types/ms": "^0.7.31",
     "@types/node": "^15.0.1",
     "@types/node-fetch": "^2.5.10",
