@@ -52,7 +52,7 @@
     "@types/dateformat": "^3.0.1",
     "@types/mathjs": "^6.0.5",
     "@types/ms": "^0.7.31",
-    "@types/node": "^15.0.1",
+    "@types/node": "^16.4.3",
     "@types/node-fetch": "^2.5.10",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
