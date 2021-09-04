@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/Jyguy/Reknown#readme",
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=16.0.0"
   },
   "dependencies": {
     "atob": "^2.1.2",
