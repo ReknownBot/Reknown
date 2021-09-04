@@ -33,7 +33,7 @@
     "dateformat": "^3.0.3",
     "dblapi.js": "^2.4.0",
     "discord.js": "github:discordjs/discord.js",
-    "dotenv": "^8.2.0",
+    "dotenv": "^10.0.0",
     "fs": "0.0.1-security",
     "lavacord": "^1.1.9",
     "mathjs": "^7.0.0",
@@ -45,7 +45,7 @@
     "string-math": "^1.2.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^12.1.1",
+    "@commitlint/cli": "^13.1.0",
     "@commitlint/config-angular": "^12.1.1",
     "@types/atob": "^2.1.2",
     "@types/btoa": "^1.2.3",
