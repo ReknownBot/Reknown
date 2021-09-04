@@ -31,7 +31,7 @@
     "btoa": "^1.2.1",
     "cowsay": "^1.4.0",
     "dateformat": "^3.0.3",
-    "dblapi.js": "^2.4.0",
+    "dblapi.js": "^2.4.1",
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^10.0.0",
     "fs": "0.0.1-security",
