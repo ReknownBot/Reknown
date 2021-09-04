@@ -11,4 +11,3 @@ updates:
   labels:
   - dependencies
   versioning-strategy: increase
-  ignore: []
