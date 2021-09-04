@@ -1,7 +1,7 @@
 import type ColumnTypes from '../../typings/ColumnTypes';
 import type { HelpObj } from '../../structures/commandhandler';
 import type ReknownClient from '../../structures/client';
-import type { Message, PermissionString } from 'discord.js';
+import type { Message, PermissionResolvable } from 'discord.js';
 import { errors, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
@@ -13,13 +13,13 @@ export async function run (client: ReknownClient, message: Message, args: string
     : message.author;
   if (!user) return client.functions.badArg(message, 1, errors.UNKNOWN_USER);
 
-  const [ row ] = await client.sql<ColumnTypes['ECONOMY']>`
+  const [ row ] = await client.sql<ColumnTypes['ECONOMY'][]>`
     SELECT * FROM ${client.sql(tables.ECONOMY)}
       WHERE userid = ${user.id}
   `;
   if (!row || row.balance === 0) return message.reply('That user does not have a registered account or has no money.');
 
-  message.channel.send(`${user.tag} has **$${row.balance}**.`);
+  message.reply(`${user.tag} has **$${row.balance}**.`);
 }
 
 export const help: HelpObj = {
@@ -31,6 +31,6 @@ export const help: HelpObj = {
   usage: 'balance [User]'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [];
+export const permissions: PermissionResolvable[] = [];

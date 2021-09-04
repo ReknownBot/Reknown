@@ -1,9 +1,9 @@
-import type { GuildEmoji } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
-
+import type { ColorResolvable, GuildEmoji } from 'discord.js';
 
 async function sendLog (client: ReknownClient, emoji: GuildEmoji) {
+  if (emoji.name == null) return;
   const embed = new MessageEmbed()
     .addFields([
       {
@@ -15,7 +15,7 @@ async function sendLog (client: ReknownClient, emoji: GuildEmoji) {
         value: emoji.animated ? 'Yes' : 'No'
       }
     ])
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`ID: ${emoji.id}`)
     .setThumbnail(emoji.url)
     .setTimestamp()

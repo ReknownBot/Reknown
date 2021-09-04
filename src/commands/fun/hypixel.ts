@@ -1,9 +1,9 @@
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
+import type { Message } from 'discord.js';
 import type ReknownClient from '../../structures/client';
+import { URLSearchParams } from 'url';
 import fetch from 'node-fetch';
-import { stringify } from 'querystring';
-import type { Message, PermissionString } from 'discord.js';
+import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 interface UUIDJson {
   id: string;
@@ -27,15 +27,14 @@ export async function run (client: ReknownClient, message: Message, args: string
   switch (args[1].toLowerCase()) {
     case 'player': {
       const uuidRes = await fetch(`${minecraftEndpoint}/users/profiles/minecraft/${args[2]}`);
-      const uuidJson: UUIDJson | null = await uuidRes.json().catch(() => null);
+      const uuidJson = await uuidRes.json().catch(() => null) as UUIDJson | null;
       if (!uuidJson) return client.functions.badArg(message, 1, 'That Minecraft player does not exist.');
       const uuid = uuidJson.id;
 
-      const queries = stringify({
-        key: process.env.HYPIXEL_KEY,
-        uuid: uuid
-      });
-      const hypixelJson: { success: boolean; player: any } = await fetch(`${hypixelEndpoint}/player?${queries}`).then(res => res.json());
+      const qstring = new URLSearchParams();
+      qstring.append('key', process.env.HYPIXEL_KEY!);
+      qstring.append('uuid', uuid);
+      const hypixelJson = await fetch(`${hypixelEndpoint}/player?${qstring}`).then(res => res.json()) as { success: boolean; player: any };
       ratelimit += 1;
       setTimeout(() => ratelimit -= 1, 60000);
       if (!hypixelJson.success) return client.functions.badArg(message, 2, 'That player has not joined the server yet, or the request has failed.');
@@ -69,10 +68,10 @@ export async function run (client: ReknownClient, message: Message, args: string
             value: client.functions.formatNum(Object.values(player.petConsumables as number || { temp: 0 }).reduce((a, b) => a + b, 0))
           }
         ])
-        .setColor(client.config.embedColor)
+        .setColor(client.config.embedColor as ColorResolvable)
         .setAuthor(`General Stats for ${player.displayname}`, undefined, `https://hypixel.net/player/${player.displayname}`);
 
-      message.channel.send(embed);
+      message.reply({ embeds: [ embed ] });
       break;
     }
 
@@ -89,8 +88,8 @@ export const help: HelpObj = {
   usage: 'hypixel <"player"> <In-Game Name>'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

@@ -1,7 +1,7 @@
-import { DMChannel } from 'discord.js';
 import type { GuildChannel } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
+import { ColorResolvable, DMChannel } from 'discord.js';
 
 async function sendLog (client: ReknownClient, channel: GuildChannel) {
   const embed = new MessageEmbed()
@@ -15,7 +15,7 @@ async function sendLog (client: ReknownClient, channel: GuildChannel) {
         value: channel.type
       }
     ])
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`ID: ${channel.id}`)
     .setTimestamp()
     .setTitle('Channel Deleted');
@@ -26,7 +26,7 @@ async function sendLog (client: ReknownClient, channel: GuildChannel) {
 }
 
 export async function run (client: ReknownClient, channel: DMChannel | GuildChannel) {
-  if (channel.type === 'dm' || !channel.guild.available) return;
+  if (channel.type === 'DM' || !channel.guild.available) return;
 
   sendLog(client, channel);
 }

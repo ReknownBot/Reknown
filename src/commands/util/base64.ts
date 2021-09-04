@@ -1,9 +1,9 @@
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
+import type { Message } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import atob from 'atob';
 import btoa from 'btoa';
-import type { Message, PermissionString } from 'discord.js';
+import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const method = args[1] ? args[1].toLowerCase() : null;
@@ -18,13 +18,13 @@ export async function run (client: ReknownClient, message: Message, args: string
   if (result.length > 2048) return client.functions.badArg(message, 2, 'The output was longer than 2048 characters, which is more than a message can hold. Please shorten the input.');
 
   const embed = new MessageEmbed()
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setDescription(client.escMD(result))
     .setFooter(`Successfully ${method}d! | Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp()
     .setTitle('Output');
 
-  message.channel.send(embed);
+  message.reply({ embeds: [ embed ] });
 }
 
 export const help: HelpObj = {
@@ -36,8 +36,8 @@ export const help: HelpObj = {
   usage: 'base64 <"decode"/"encode"> <Input>'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

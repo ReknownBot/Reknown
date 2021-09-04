@@ -1,5 +1,5 @@
-import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
+import { ColorResolvable, MessageEmbed } from 'discord.js';
 import type { Guild, User } from 'discord.js';
 
 function avatarUpdate (client: ReknownClient, oldUser: User, newUser: User, guild: Guild) {
@@ -7,7 +7,7 @@ function avatarUpdate (client: ReknownClient, oldUser: User, newUser: User, guil
 
   const embed = new MessageEmbed()
     .addField('User', `${newUser} [${client.escMD(newUser.tag)}] (ID: ${newUser.id})`)
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setDescription(`[Old Avatar](${oldUser.displayAvatarURL()}) => [New Avatar](${newUser.displayAvatarURL()})`)
     .setFooter(`ID: ${newUser.id} | Tip: The larger one is the new one!`)
     .setImage(newUser.displayAvatarURL())
@@ -22,7 +22,7 @@ function usernameUpdate (client: ReknownClient, oldUser: User, newUser: User, gu
   if (oldUser.username === newUser.username) return;
 
   const embed = new MessageEmbed()
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setDescription(`\`\`${client.escInline(oldUser.tag)}\`\` => \`\`${client.escInline(newUser.tag)}\`\``)
     .setFooter(`ID: ${newUser.id}`)
     .setThumbnail(newUser.displayAvatarURL({ size: 512 }))

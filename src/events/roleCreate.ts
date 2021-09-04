@@ -1,5 +1,5 @@
 import type ReknownClient from '../structures/client';
-import type { Role } from 'discord.js';
+import type { ColorResolvable, Role } from 'discord.js';
 import { MessageEmbed, PermissionString } from 'discord.js';
 
 function sendLog (client: ReknownClient, role: Role) {
@@ -16,7 +16,7 @@ function sendLog (client: ReknownClient, role: Role) {
         value: `\`${Object.keys(permissions).map(perm => `${perm}: ${permissions[perm as PermissionString]}`).join('\n')}\``
       }
     ])
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`ID: ${role.id}`)
     .setTimestamp()
     .setTitle('Role Created');

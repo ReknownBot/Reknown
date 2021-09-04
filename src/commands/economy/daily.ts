@@ -3,16 +3,16 @@ import type { HelpObj } from '../../structures/commandhandler';
 import type ReknownClient from '../../structures/client';
 import ms from 'ms';
 import { tables } from '../../Constants';
-import type { Message, PermissionString } from 'discord.js';
+import type { Message, PermissionResolvable } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  let [ registered ] = await client.sql<ColumnTypes['ECONOMY']>`
+  let [ registered ] = await client.sql<ColumnTypes['ECONOMY'][]>`
     SELECT * FROM ${client.sql(tables.ECONOMY)}
       WHERE userid = ${message.author.id}
   `;
   if (!registered) registered = await client.functions.register(client, message.author.id);
 
-  const [ cooldown ] = await client.sql<ColumnTypes['COOLDOWN']>`
+  const [ cooldown ] = await client.sql<ColumnTypes['COOLDOWN'][]>`
     SELECT * FROM ${client.sql(tables.DAILYCOOLDOWN)}
       WHERE userid = ${message.author.id}
   `;
@@ -40,7 +40,7 @@ export async function run (client: ReknownClient, message: Message, args: string
         SET ${client.sql(columns1)}
   `;
 
-  message.channel.send(`You earned **$${amt}** from daily rewards.`);
+  message.reply(`You earned **$${amt}** from daily rewards.`);
 }
 
 export const help: HelpObj = {
@@ -52,6 +52,6 @@ export const help: HelpObj = {
   usage: 'daily'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [];
+export const permissions: PermissionResolvable[] = [];

@@ -1,17 +1,17 @@
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
+import type { Message } from 'discord.js';
 import type ReknownClient from '../../structures/client';
-import type { Message, PermissionString } from 'discord.js';
+import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const prefix = message.guild ? await client.functions.getPrefix(client, message.guild.id) : client.config.prefix;
   if (!args[1]) {
-    let commands = client.commands.keyArray();
+    let commands = [...client.commands.keys()];
 
     if (message.author.id !== client.config.ownerID) commands = commands.filter(c => !client.commands.get(c)!.help.private);
 
     const embed = new MessageEmbed()
-      .setColor(client.config.embedColor)
+      .setColor(client.config.embedColor as ColorResolvable)
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
       .setTimestamp()
       .setAuthor('Commands List', undefined, 'https://reknown.xyz/commands');
@@ -23,7 +23,7 @@ export async function run (client: ReknownClient, message: Message, args: string
       else embed.addField(info.category, `- \`${prefix + cmd}\``, true);
     });
 
-    return message.channel.send(embed);
+    return message.reply({ embeds: [ embed ] });
   }
 
   const query = args.slice(1).join(' ').toLowerCase();
@@ -49,25 +49,25 @@ export async function run (client: ReknownClient, message: Message, args: string
           value: cmd.help.dm ? 'Yes' : 'No'
         }
       ])
-      .setColor(client.config.embedColor)
+      .setColor(client.config.embedColor as ColorResolvable)
       .setDescription(cmd.help.desc)
       .setFooter('[Arg] = Optional | <Arg> = Required', message.author.displayAvatarURL())
       .setTitle(`${prefix + query} Command Information`);
     if (cmd.help.aliases.length !== 0) embed.addField('Aliases', cmd.help.aliases.map(alias => `\`${prefix + alias}\``).join(', '), true);
 
-    return message.channel.send(embed);
+    return message.reply({ embeds: [ embed ] });
   }
 
   const category = client.commands.categories.find(c => c.toLowerCase() === query);
-  const cCommands = client.commands.keyArray().filter(c => client.commands.get(c)!.help.category.toLowerCase() === query);
+  const cCommands = [...client.commands.keys()].filter(c => client.commands.get(c)!.help.category.toLowerCase() === query);
   const embed = new MessageEmbed()
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setDescription(cCommands.map(c => `- \`${prefix + c}\``).join('\n'))
     .setFooter(`${cCommands.length} Category Commands | Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp()
     .setTitle(`${category} Category Information`);
 
-  message.channel.send(embed);
+  message.reply({ embeds: [ embed ] });
 }
 
 export const help: HelpObj = {
@@ -79,8 +79,8 @@ export const help: HelpObj = {
   usage: 'help [Command or Category]'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

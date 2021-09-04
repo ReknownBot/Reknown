@@ -1,19 +1,19 @@
 import type ColumnTypes from '../../typings/ColumnTypes';
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
+import type { Message } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import ms from 'ms';
 import { tables } from '../../Constants';
-import type { Message, PermissionString } from 'discord.js';
+import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  let [ registered ] = await client.sql<ColumnTypes['ECONOMY']>`
+  let [ registered ] = await client.sql<ColumnTypes['ECONOMY'][]>`
     SELECT * FROM ${client.sql(tables.ECONOMY)}
       WHERE userid = ${message.author.id}
   `;
   if (!registered) registered = await client.functions.register(client, message.author.id);
 
-  const [ cooldown ] = await client.sql<ColumnTypes['COOLDOWN']>`
+  const [ cooldown ] = await client.sql<ColumnTypes['COOLDOWN'][]>`
     SELECT * FROM ${client.sql(tables.WORKCOOLDOWN)}
       WHERE userid = ${message.author.id}
   `;
@@ -45,12 +45,12 @@ export async function run (client: ReknownClient, message: Message, args: string
 
   const embed = new MessageEmbed()
     .setTitle('You finished working!')
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setDescription(`You earned **$${amt}**.`)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp();
 
-  message.channel.send(embed);
+  message.reply({ embeds: [ embed ] });
 }
 
 export const help: HelpObj = {
@@ -62,8 +62,8 @@ export const help: HelpObj = {
   usage: 'work'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

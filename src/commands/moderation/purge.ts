@@ -1,7 +1,7 @@
 import type { GuildMessage } from '../../Constants';
 import type { HelpObj } from '../../structures/commandhandler';
-import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
+import { PermissionResolvable, Permissions } from 'discord.js';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'an amount to purge.');
@@ -21,11 +21,11 @@ export const help: HelpObj = {
   usage: 'purge <Amount>'
 };
 
-export const memberPerms: PermissionString[] = [
-  'MANAGE_MESSAGES'
+export const memberPerms: PermissionResolvable[] = [
+  Permissions.FLAGS.MANAGE_MESSAGES
 ];
 
-export const permissions: PermissionString[] = [
-  'MANAGE_MESSAGES',
-  'READ_MESSAGE_HISTORY'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.MANAGE_MESSAGES,
+  Permissions.FLAGS.READ_MESSAGE_HISTORY
 ];

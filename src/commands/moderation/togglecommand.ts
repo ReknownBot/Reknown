@@ -1,8 +1,8 @@
 import type ColumnTypes from '../../typings/ColumnTypes';
 import type { GuildMessage } from '../../Constants';
 import type { HelpObj } from '../../structures/commandhandler';
-import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
+import { PermissionResolvable, Permissions } from 'discord.js';
 import { errors, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
@@ -12,7 +12,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   const cmdInfo = client.commands.get(command)!;
   if (!cmdInfo.help.togglable) return client.functions.badArg(message, 1, 'You cannot toggle this command.');
 
-  const [ row ] = await client.sql<ColumnTypes['DISABLEDCOMMANDS']>`
+  const [ row ] = await client.sql<ColumnTypes['DISABLEDCOMMANDS'][]>`
     SELECT * FROM ${client.sql(tables.DISABLEDCOMMANDS)}
       WHERE command = ${command}
         AND guildid = ${message.guild.id}
@@ -32,7 +32,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     })}`;
   } else client.sql`DELETE FROM ${client.sql(tables.DISABLEDCOMMANDS)} WHERE command = ${command} AND guildid = ${message.guild.id}`;
 
-  message.channel.send(`Successfully ${bool ? 'disabled' : 'enabled'} \`${command}\`.`);
+  message.reply(`Successfully ${bool ? 'disabled' : 'enabled'} \`${command}\`.`);
 }
 
 export const help: HelpObj = {
@@ -43,8 +43,8 @@ export const help: HelpObj = {
   usage: 'togglecommand <Command> ["enable"/"disable"]'
 };
 
-export const memberPerms: PermissionString[] = [
-  'ADMINISTRATOR'
+export const memberPerms: PermissionResolvable[] = [
+  Permissions.FLAGS.ADMINISTRATOR
 ];
 
-export const permissions: PermissionString[] = [];
+export const permissions: PermissionResolvable[] = [];

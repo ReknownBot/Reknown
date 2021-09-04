@@ -1,32 +1,29 @@
 import type ColumnTypes from '../../typings/ColumnTypes';
 import type { GuildMessage } from '../../Constants';
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
-import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import ms from 'ms';
+import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 import { errors, parsedPerms, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
-  const [ row ] = await client.sql<ColumnTypes['MUTEROLE']>`
+  const [ row ] = await client.sql<ColumnTypes['MUTEROLE'][]>`
     SELECT * FROM ${client.sql(tables.MUTEROLE)}
       WHERE guildid = ${message.guild.id}
   `;
   let role = row ? message.guild.roles.cache.get(row.roleid) : message.guild.roles.cache.find(r => r.name === 'Muted');
   if (!role) {
     role = await message.guild.roles.create({
-      data: {
-        color: client.config.muteColor,
-        name: 'Muted',
-        permissions: message.guild.roles.everyone.permissions.remove([ 'ADD_REACTIONS', 'SEND_MESSAGES', 'SPEAK' ])
-      }
+      color: client.config.muteColor as ColorResolvable,
+      name: 'Muted',
+      permissions: message.guild.roles.everyone.permissions.remove([ 'ADD_REACTIONS', 'SEND_MESSAGES', 'SPEAK' ])
     });
 
     const columns = {
       guildid: message.guild.id,
       roleid: role.id
     };
-    client.sql<ColumnTypes['MUTEROLE']>`
+    client.sql<ColumnTypes['MUTEROLE'][]>`
       INSERT INTO ${client.sql(tables.MUTEROLE)} ${client.sql(columns)}
         ON CONFLICT (guildid) DO UPDATE
           SET ${client.sql(columns)}
@@ -41,9 +38,9 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     type: 'member'
   }).catch(() => null);
   if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
-  if (member.hasPermission('ADMINISTRATOR')) return client.functions.badArg(message, 1, `Members with \`${parsedPerms.ADMINISTRATOR}\` cannot be muted.`);
+  if (member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return client.functions.badArg(message, 1, `Members with \`${parsedPerms.ADMINISTRATOR}\` cannot be muted.`);
 
-  const [ muteRow ] = await client.sql<ColumnTypes['MUTES']>`
+  const [ muteRow ] = await client.sql<ColumnTypes['MUTES'][]>`
     SELECT * FROM ${client.sql(tables.MUTES)}
       WHERE guildid = ${message.guild.id}
         AND userid = ${member.id}
@@ -69,7 +66,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   member.roles.add(role);
   if (duration !== 0 && duration < ms('20d')) client.mutes.set(member.id, setTimeout(client.functions.unmute.bind(client.functions), duration, client, member));
 
-  message.channel.send(`Successfully muted \`\`${client.escInline(member.user.tag)}\`\` for \`${duration === 0 ? 'Unlimited' : client.functions.getFullTime(duration)}\`.`);
+  message.reply(`Successfully muted \`\`${client.escInline(member.user.tag)}\`\` for \`${duration === 0 ? 'Unlimited' : client.functions.getFullTime(duration)}\`.`);
 
   const embed = new MessageEmbed()
     .addFields([
@@ -90,7 +87,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
         value: `${message.member} [${client.escMD(message.author.tag)}] (ID: ${message.author.id})`
       }
     ])
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`ID: ${member.id}`)
     .setThumbnail(member.user.displayAvatarURL({ size: 512 }))
     .setTimestamp()
@@ -107,11 +104,11 @@ export const help: HelpObj = {
   usage: 'mute <Member> [Duration=0] [Reason]'
 };
 
-export const memberPerms: PermissionString[] = [
-  'KICK_MEMBERS',
-  'MANAGE_ROLES'
+export const memberPerms: PermissionResolvable[] = [
+  Permissions.FLAGS.KICK_MEMBERS,
+  Permissions.FLAGS.MANAGE_ROLES
 ];
 
-export const permissions: PermissionString[] = [
-  'MANAGE_ROLES'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.MANAGE_ROLES
 ];

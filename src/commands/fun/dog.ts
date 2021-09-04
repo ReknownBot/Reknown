@@ -1,8 +1,8 @@
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
+import type { Message } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
-import type { Message, PermissionString } from 'discord.js';
+import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 interface DogResult {
   message: string;
@@ -10,16 +10,16 @@ interface DogResult {
 }
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  const json: DogResult = await fetch('https://dog.ceo/api/breeds/image/random').then(res => res.json());
+  const json = await fetch('https://dog.ceo/api/breeds/image/random').then(res => res.json()) as DogResult;
   if (json.status !== 'success') return message.reply('Seems like the API is down, please try again later. If this problem persists, let us know in our Discord server.');
 
   const embed = new MessageEmbed()
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`Requested by ${message.author.tag} | Powered by https://dog.ceo/dog-api`, message.author.displayAvatarURL())
     .setImage(json.message)
     .setTitle('Doggo!');
 
-  message.channel.send(embed);
+  message.reply({ embeds: [ embed ] });
 }
 
 export const help: HelpObj = {
@@ -31,8 +31,8 @@ export const help: HelpObj = {
   usage: 'dog'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

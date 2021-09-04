@@ -1,10 +1,10 @@
 import type ColumnTypes from '../../typings/ColumnTypes';
 import type { GuildMessage } from '../../Constants';
 import type { HelpObj } from '../../structures/commandhandler';
-import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import dateformat from 'dateformat';
 import { tables } from '../../Constants';
+import { ColorResolvable, PermissionResolvable, Permissions } from 'discord.js';
 import { MessageEmbed, Util } from 'discord.js';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
@@ -21,8 +21,8 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (isNaN(page)) return client.functions.badArg(message, 2, 'The page provided was not a number.');
   if (page < 1) return client.functions.badArg(message, 2, 'The page provided is lower than one.');
 
-  const rows = await client.sql<ColumnTypes['WARNINGS']>`SELECT * FROM ${client.sql(tables.WARNINGS)} WHERE guildid = ${message.guild.id} AND userid = ${member.id} ORDER BY warnedat ASC`;
-  if (rows.count === 0) return message.channel.send(`\`\`${client.escInline(member.user.tag)} (ID: ${member.id})\`\` has \`0\` warnings! Keep up the good work.`);
+  const rows = await client.sql<ColumnTypes['WARNINGS'][]>`SELECT * FROM ${client.sql(tables.WARNINGS)} WHERE guildid = ${message.guild.id} AND userid = ${member.id} ORDER BY warnedat ASC`;
+  if (rows.count === 0) return message.reply(`\`\`${client.escInline(member.user.tag)} (ID: ${member.id})\`\` has \`0\` warnings! Keep up the good work.`);
 
   const str = (await Promise.all(rows.map(async r => {
     const by = await client.users.fetch(r.warnedby);
@@ -32,13 +32,13 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (pages.length < page) return client.functions.badArg(message, 2, 'The page provided is out of range.');
 
   const embed = new MessageEmbed()
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setDescription(pages[page - 1])
     .setFooter(`Page ${page} of ${pages.length} | Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setThumbnail(member.user.displayAvatarURL({ dynamic: true, format: 'jpg', size: 1024 }))
     .setTitle(`Warnings of ${member.user.tag}`);
 
-  message.channel.send(embed);
+  message.reply({ embeds: [ embed ] });
 }
 
 export const help: HelpObj = {
@@ -49,8 +49,8 @@ export const help: HelpObj = {
   usage: 'warnings [Member] [Page=1]'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

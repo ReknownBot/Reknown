@@ -2,10 +2,10 @@ import type ColumnTypes from '../../typings/ColumnTypes';
 import type { HelpObj } from '../../structures/commandhandler';
 import type ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
-import type { Message, PermissionString } from 'discord.js';
+import { Message, PermissionResolvable, Permissions } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  let [ row ] = await client.sql<ColumnTypes['ECONOMY']>`
+  let [ row ] = await client.sql<ColumnTypes['ECONOMY'][]>`
     SELECT * FROM ${client.sql(tables.ECONOMY)}
       WHERE userid = ${message.author.id}
   `;
@@ -22,12 +22,12 @@ export async function run (client: ReknownClient, message: Message, args: string
     balance: won ? row.balance + amt : row.balance - amt,
     userid: message.author.id
   };
-  client.sql<ColumnTypes['ECONOMY']>`
+  client.sql<ColumnTypes['ECONOMY'][]>`
     INSERT INTO ${client.sql(tables.ECONOMY)} ${client.sql(columns)}
       ON CONFLICT (userid) DO UPDATE
         SET ${client.sql(columns)}
   `;
-  message.channel.send(won ? `**Success!** You have received **$${amt}**.` : `**Failure! $${amt}** has been taken from your balance.`);
+  message.reply(won ? `**Success!** You have received **$${amt}**.` : `**Failure! $${amt}** has been taken from your balance.`);
 }
 
 export const help: HelpObj = {
@@ -39,8 +39,8 @@ export const help: HelpObj = {
   usage: 'gamble <Amount>'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

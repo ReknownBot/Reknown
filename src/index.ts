@@ -1,18 +1,22 @@
 /* eslint-disable @typescript-eslint/no-var-requires, global-require */
 
-import type { ClientEvents } from 'discord.js';
 import ReknownClient from './structures/client';
 import { readdirSync } from 'fs';
 import { version } from './config.json';
+import { ClientEvents, Constants, Intents } from 'discord.js';
 
 const client = new ReknownClient({
-  disableMentions: 'everyone',
-  partials: [ 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER' ],
+  allowedMentions: {
+    parse: [ 'roles', 'users' ]
+  },
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_BANS, Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Intents.FLAGS.GUILD_WEBHOOKS,
+    Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
+  partials: [ Constants.PartialTypes.GUILD_MEMBER, Constants.PartialTypes.MESSAGE, Constants.PartialTypes.REACTION, Constants.PartialTypes.USER ],
   presence: {
-    activity: {
+    activities: [{
       name: `on ${version}`,
       type: 'PLAYING'
-    }
+    }]
   }
 });
 

@@ -1,7 +1,7 @@
-import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import { tables } from '../Constants';
 import type { Collection, GuildMember, Role, Snowflake } from 'discord.js';
+import { ColorResolvable, MessageEmbed } from 'discord.js';
 
 function nickUpdate (client: ReknownClient, oldMember: GuildMember, newMember: GuildMember) {
   if (oldMember.displayName === newMember.displayName) return;
@@ -23,7 +23,7 @@ function nickUpdate (client: ReknownClient, oldMember: GuildMember, newMember: G
         value: newMember.displayName
       }
     ])
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`ID: ${newMember.id}`)
     .setThumbnail(newMember.user.displayAvatarURL({ size: 512 }))
     .setTimestamp()
@@ -59,7 +59,7 @@ function roleUpdate (client: ReknownClient, oldMember: GuildMember, newMember: G
         value: `${addedRoles.map(r => `+ \`\`${client.escInline(r.name)}\`\``).join('\n')}\n${removedRoles.map(r => `- \`\`${client.escInline(r.name)}\`\``).join('\n')}`
       }
     ])
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`ID: ${newMember.id}`)
     .setThumbnail(newMember.user.displayAvatarURL({ size: 512 }))
     .setTimestamp()

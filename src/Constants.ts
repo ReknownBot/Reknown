@@ -1,4 +1,6 @@
-import type { Guild, GuildMember, Message, TextChannel } from 'discord.js';
+import type { Guild, GuildMember, Message, TextChannel, ThreadChannel } from 'discord.js';
+
+export type GuildTextChannel = TextChannel | ThreadChannel;
 
 export interface GuildMessage extends Message {
   channel: TextChannel;

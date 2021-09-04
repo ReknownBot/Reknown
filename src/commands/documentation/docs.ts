@@ -1,9 +1,9 @@
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
+import type { Message } from 'discord.js';
 import type ReknownClient from '../../structures/client';
+import { URLSearchParams } from 'url';
 import fetch from 'node-fetch';
-import { stringify } from 'querystring';
-import type { Message, PermissionString } from 'discord.js';
+import { MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const q = args[1];
@@ -13,13 +13,15 @@ export async function run (client: ReknownClient, message: Message, args: string
   source = source.toLowerCase();
   if (source === '11.5-dev') source = `https://raw.githubusercontent.com/discordjs/discord.js/docs/${source}.json`;
 
-  const qstring = stringify({ q: q, src: source });
-  const raw = await fetch(`https://djsdocs.sorta.moe/v2/embed?${qstring}`).then(res => res.json());
+  const qstring = new URLSearchParams();
+  qstring.append('q', q);
+  qstring.append('src', source);
+  const raw: any = await fetch(`https://djsdocs.sorta.moe/v2/embed?${qstring}`).then(res => res.json());
   if (!raw) return client.functions.badArg(message, 1, 'I did not find anything with that query.');
   if (raw.message === 'Couldn\'t find/parse given source.') return client.functions.badArg(message, 2, 'The source provided was invalid.');
 
   const embed = new MessageEmbed(raw);
-  message.channel.send({ embed: embed });
+  message.reply({ embeds: [ embed ] });
 }
 
 export const help: HelpObj = {
@@ -31,8 +33,8 @@ export const help: HelpObj = {
   usage: 'docs <Query> [Source]'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

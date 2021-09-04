@@ -1,5 +1,5 @@
-import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
+import { ColorResolvable, MessageEmbed } from 'discord.js';
 import type { Message, PartialMessage } from 'discord.js';
 
 function sendLog (client: ReknownClient, oldMessage: Message, newMessage: Message) {
@@ -28,7 +28,7 @@ function sendLog (client: ReknownClient, oldMessage: Message, newMessage: Messag
         value: newMessage.content.length > 1024 ? `${newMessage.content.slice(0, 1021)}...` : newMessage.content
       }
     ])
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`ID: ${newMessage.id}`)
     .setTimestamp()
     .setTitle('Message Edited');

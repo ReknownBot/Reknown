@@ -1,11 +1,9 @@
 # Module
-node_modules
+/node_modules
+yarn-error.log
 
 # .env file
 .env
 
-# Lavalink
-Lavalink
-
 # Compiling
-dist
+/dist

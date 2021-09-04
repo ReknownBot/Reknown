@@ -1,7 +1,7 @@
 import type { HelpObj } from '../../structures/commandhandler';
 import type ReknownClient from '../../structures/client';
 import fetch from 'node-fetch';
-import type { Message, PermissionString } from 'discord.js';
+import type { Message, PermissionResolvable } from 'discord.js';
 
 interface JokeResult {
   id: string;
@@ -10,12 +10,12 @@ interface JokeResult {
 }
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  const json: JokeResult = await fetch('https://icanhazdadjoke.com/', { headers: {
+  const json = await fetch('https://icanhazdadjoke.com/', { headers: {
     Accept: 'application/json'
-  } }).then(res => res.json());
+  } }).then(res => res.json()) as JokeResult;
   if (!json.joke) return message.reply('Seems like the joke API is unavailable, please try again later.');
 
-  message.channel.send(json.joke);
+  message.reply(json.joke);
 }
 
 export const help: HelpObj = {
@@ -27,6 +27,6 @@ export const help: HelpObj = {
   usage: 'joke'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [];
+export const permissions: PermissionResolvable[] = [];

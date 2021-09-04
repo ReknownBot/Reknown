@@ -1,13 +1,13 @@
 import type { HelpObj } from '../../structures/commandhandler';
 import type ReknownClient from '../../structures/client';
 import { say } from 'cowsay';
-import type { Message, PermissionString } from 'discord.js';
+import type { Message, PermissionResolvable } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'a message for a cow to say.');
   const msg = args.slice(1).join(' ');
 
-  message.channel.send(`\`\`\`${say({ text: msg })}\`\`\``);
+  message.reply(`\`\`\`${say({ text: msg })}\`\`\``);
 }
 
 export const help: HelpObj = {
@@ -19,6 +19,6 @@ export const help: HelpObj = {
   usage: 'cowsay <Message>'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [];
+export const permissions: PermissionResolvable[] = [];

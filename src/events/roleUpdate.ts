@@ -1,6 +1,6 @@
-import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import type { Role } from 'discord.js';
+import { ColorResolvable, MessageEmbed } from 'discord.js';
 
 function nameUpdate (client: ReknownClient, oldRole: Role, newRole: Role) {
   if (oldRole.name === newRole.name) return;
@@ -16,7 +16,7 @@ function nameUpdate (client: ReknownClient, oldRole: Role, newRole: Role) {
         value: client.escMD(newRole.name)
       }
     ])
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`ID: ${newRole.id}`)
     .setTimestamp()
     .setTitle('Role Name Changed');
@@ -32,7 +32,7 @@ function permissionUpdate (client: ReknownClient, oldRole: Role, newRole: Role) 
 
   const embed = new MessageEmbed()
     .addField('Role', newRole.toString())
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setDescription(`${addedPerms.map(perm => `+ \`\`${perm}\`\``).join('\n')}\n${removedPerms.map(perm => `- \`\`${perm}\`\``).join('\n')}`)
     .setFooter(`ID: ${newRole.id}`)
     .setTimestamp()

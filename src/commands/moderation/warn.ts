@@ -1,7 +1,7 @@
 import type { GuildMessage } from '../../Constants';
 import type { HelpObj } from '../../structures/commandhandler';
-import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
+import { PermissionResolvable, Permissions } from 'discord.js';
 import { errors, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
@@ -13,8 +13,8 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
   if (member.user.bot) return client.functions.badArg(message, 1, 'You cannot warn a bot.');
   if (member.id === message.author.id) return client.functions.badArg(message, 1, 'You cannot warn yourself.');
-  if (member.id === message.guild.ownerID) return client.functions.badArg(message, 1, 'The member provided is the owner.');
-  if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== message.guild.ownerID) return client.functions.badArg(message, 1, errors.MEMBER_INSUFFICIENT_POSITION);
+  if (member.id === message.guild.ownerId) return client.functions.badArg(message, 1, 'The member provided is the owner.');
+  if (member.roles.highest.position >= message.member.roles.highest.position && message.author.id !== message.guild.ownerId) return client.functions.badArg(message, 1, errors.MEMBER_INSUFFICIENT_POSITION);
 
   const reason = args[2] ? args.slice(2).join(' ') : null;
   // eslint-disable-next-line @typescript-eslint/no-extra-parens
@@ -28,7 +28,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     warnedby: message.author.id,
     warnreason: reason
   })}`;
-  message.channel.send(`Successfully warned \`\`${client.escInline(member.user.tag)}\`\` for \`\`${client.escInline(reason || 'None')}\`\`.`);
+  message.reply(`Successfully warned \`\`${client.escInline(member.user.tag)}\`\` for \`\`${client.escInline(reason || 'None')}\`\`.`);
 }
 
 export const help: HelpObj = {
@@ -39,8 +39,8 @@ export const help: HelpObj = {
   usage: 'warn <Member> [Reason]'
 };
 
-export const memberPerms: PermissionString[] = [
-  'KICK_MEMBERS'
+export const memberPerms: PermissionResolvable[] = [
+  Permissions.FLAGS.KICK_MEMBERS
 ];
 
-export const permissions: PermissionString[] = [];
+export const permissions: PermissionResolvable[] = [];

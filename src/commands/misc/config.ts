@@ -1,9 +1,9 @@
+import type { Guild } from 'discord.js';
 import type { GuildMessage } from '../../Constants';
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import { prefix } from '../../config.json';
-import type { Guild, PermissionString } from 'discord.js';
+import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 const configs: { [ key: string ]: string } = {
   levelmodifier: 'The level modifier for levelling up.',
@@ -38,7 +38,7 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
   },
   logchannel: (value: string, client, guild) => {
     const channel = client.functions.parseMention(value, {
-      cType: 'text',
+      cType: 'GUILD_TEXT',
       guild: guild,
       type: 'channel'
     });
@@ -60,7 +60,7 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
   },
   starchannel: (value: string, client, guild) => {
     const channel = client.functions.parseMention(value, {
-      cType: 'text',
+      cType: 'GUILD_TEXT',
       guild: guild,
       type: 'channel'
     });
@@ -85,7 +85,7 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
   },
   welcomechannel: (value: string, client, guild) => {
     const channel = client.functions.parseMention(value, {
-      cType: 'text',
+      cType: 'GUILD_TEXT',
       guild: guild,
       type: 'channel'
     });
@@ -97,13 +97,13 @@ const filters: { [ key: string ]: (value: any, client: ReknownClient, guild: Gui
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
   if (!args[1]) {
     const embed = new MessageEmbed()
-      .setColor(client.config.embedColor)
+      .setColor(client.config.embedColor as ColorResolvable)
       .setDescription(Object.keys(configs).map(name => `\`${name}\` - ${configs[name]}`).join('\n'))
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
       .setTimestamp()
       .setTitle('Configuration Values');
 
-    return message.channel.send(embed);
+    return message.reply({ embeds: [ embed ] });
   }
 
   const table = args[1].toLowerCase();
@@ -116,7 +116,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (!args[2]) {
     const value: number | string | boolean = row ? row[Object.keys(row).find(r => r !== 'guildid')!] : defaultValues[table][1];
 
-    return message.channel.send(`Current value for \`${table}\` is \`\`${client.escInline(value.toString())}\`\`.`);
+    return message.reply(`Current value for \`${table}\` is \`\`${client.escInline(value.toString())}\`\`.`);
   }
 
   let value = args.slice(2).join(' ');
@@ -132,7 +132,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
         SET ${client.sql(newRow)}
   `;
 
-  message.channel.send(`Successfully updated \`${table}\` to \`\`${client.escInline(value.toString())}\`\`.`);
+  message.reply(`Successfully updated \`${table}\` to \`\`${client.escInline(value.toString())}\`\`.`);
 }
 
 export const help: HelpObj = {
@@ -143,10 +143,10 @@ export const help: HelpObj = {
   usage: 'config [Configuration] [Value]'
 };
 
-export const memberPerms: PermissionString[] = [
-  'ADMINISTRATOR'
+export const memberPerms: PermissionResolvable[] = [
+  Permissions.FLAGS.ADMINISTRATOR
 ];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

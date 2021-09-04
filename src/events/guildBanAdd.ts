@@ -1,18 +1,18 @@
-import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
+import { ColorResolvable, MessageEmbed, Permissions } from 'discord.js';
 import type { Guild, User } from 'discord.js';
 
 async function sendLog (client: ReknownClient, guild: Guild, user: User) {
   const embed = new MessageEmbed()
     .addField('User', user.tag)
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`ID: ${user.id}`)
     .setThumbnail(user.displayAvatarURL({ size: 512 }))
     .setTimestamp()
     .setTitle('Member Banned');
 
-  if (guild.me!.hasPermission('BAN_MEMBERS')) {
-    const bans = await guild.fetchBans();
+  if (guild.me!.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
+    const bans = await guild.bans.fetch();
     const ban = bans.find(b => b.user.id === user.id)!;
     if (ban.reason) embed.addField('Reason', ban.reason);
   }

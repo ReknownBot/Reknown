@@ -1,7 +1,7 @@
 import type ColumnTypes from '../typings/ColumnTypes';
-import type { Message } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import { tables } from '../Constants';
+import { Message, Permissions } from 'discord.js';
 
 const cooldowns = new Set();
 
@@ -20,8 +20,8 @@ export async function run (client: ReknownClient, message: Message) {
   let cmd = args[0];
   if (!Object.keys(client.commands.aliases).includes(cmd)) return;
 
-  if (message.guild && message.channel.type === 'text') {
-    if (!message.channel.permissionsFor(client.user!)!.has([ 'SEND_MESSAGES' ])) return;
+  if (message.guild && message.channel.type === 'GUILD_TEXT') {
+    if (!message.channel.permissionsFor(client.user!)!.has([ Permissions.FLAGS.SEND_MESSAGES ])) return;
     if (cooldowns.has(message.guild.id)) return;
     cooldowns.add(message.guild.id);
     setTimeout(() => cooldowns.delete(message.guild!.id), 75);
@@ -29,7 +29,7 @@ export async function run (client: ReknownClient, message: Message) {
 
   cmd = client.commands.aliases[cmd];
   if (message.guild) {
-    const [ disabled ] = await client.sql<ColumnTypes['DISABLEDCOMMANDS']>`
+    const [ disabled ] = await client.sql<ColumnTypes['DISABLEDCOMMANDS'][]>`
       SELECT * FROM ${client.sql(tables.DISABLEDCOMMANDS)}
         WHERE command = ${cmd}
           AND guildid = ${message.guild.id}
@@ -38,7 +38,7 @@ export async function run (client: ReknownClient, message: Message) {
   }
 
   const cmdInfo = client.commands.get(cmd)!;
-  if (message.channel.type === 'dm') {
+  if (message.channel.type === 'DM') {
     if (!cmdInfo.help.dm) return message.reply('This command is only available in servers.');
   } else if (!message.channel.permissionsFor(message.member!)!.has(cmdInfo.memberPerms)) return client.functions.noPerms(message, cmdInfo.memberPerms, message.channel);
   else if (!message.channel.permissionsFor(client.user!)!.has(cmdInfo.permissions)) return client.functions.noClientPerms(message, cmdInfo.permissions, message.channel);

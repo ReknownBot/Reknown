@@ -1,9 +1,8 @@
 import type ColumnTypes from '../../typings/ColumnTypes';
 import type { GuildMessage } from '../../Constants';
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
-import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
+import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 import { errors, tables } from '../../Constants';
 
 const allowedFields = [
@@ -30,7 +29,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
         ON CONFLICT (userid) DO UPDATE
           SET ${client.sql(columns)}
     `;
-    message.channel.send(`Successfully updated your \`${field}\` to \`\`${client.escInline(value)}\`\`.`);
+    message.reply(`Successfully updated your \`${field}\` to \`\`${client.escInline(value)}\`\`.`);
   } else {
     const member = args[1] ?
       await client.functions.parseMention(args[1], {
@@ -40,14 +39,14 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
       message.member;
     if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
 
-    const [ row ] = await client.sql<ColumnTypes['BIOGRAPHY']>`
+    const [ row ] = await client.sql<ColumnTypes['BIOGRAPHY'][]>`
       SELECT * FROM ${client.sql(tables.BIOGRAPHY)}
         WHERE userid = ${member.id}
     `;
     if (!row) return client.functions.badArg(message, 1, 'The member provided did not provide any information about themselves.');
 
     const embed = new MessageEmbed()
-      .setColor(client.config.embedColor)
+      .setColor(client.config.embedColor as ColorResolvable)
       .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
       .setThumbnail(member.user.displayAvatarURL({ size: 512 }))
       .setTimestamp()
@@ -57,7 +56,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     if (row.summary) embed.setDescription(row.summary);
     if (row.twitter) embed.addField('Twitter', row.twitter, true);
 
-    message.channel.send(embed);
+    message.reply({ embeds: [ embed ] });
   }
 }
 
@@ -69,8 +68,8 @@ export const help: HelpObj = {
   usage: 'biography [Member]\nbiography set <Field> <Value>'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

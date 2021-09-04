@@ -1,13 +1,12 @@
 import type ColumnTypes from '../../typings/ColumnTypes';
 import type { GuildMessage } from '../../Constants';
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
-import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
+import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 import { errors, tables } from '../../Constants';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
-  const [ row ] = await client.sql<ColumnTypes['MUTEROLE']>`
+  const [ row ] = await client.sql<ColumnTypes['MUTEROLE'][]>`
     SELECT * FROM ${client.sql(tables.MUTEROLE)}
       WHERE guildid = ${message.guild.id}
   `;
@@ -22,7 +21,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   }).catch(() => null);
   if (!member) return client.functions.badArg(message, 1, errors.UNKNOWN_MEMBER);
 
-  const [ muteRow ] = await client.sql<ColumnTypes['MUTES']>`
+  const [ muteRow ] = await client.sql<ColumnTypes['MUTES'][]>`
     SELECT * FROM ${client.sql(tables.MUTES)}
       WHERE guildid = ${message.guild.id}
         AND userid = ${member.id}
@@ -33,7 +32,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   if (reason?.includes('\n')) return client.functions.badArg(message, 2, errors.NO_LINE_BREAKS);
 
   client.functions.unmute(client, member);
-  message.channel.send(`Successfully unmuted \`\`${client.escInline(member.user.tag)}\`\`.`);
+  message.reply(`Successfully unmuted \`\`${client.escInline(member.user.tag)}\`\`.`);
 
   const embed = new MessageEmbed()
     .addFields([
@@ -50,7 +49,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
         value: `${message.member} [${client.escMD(message.author.tag)}] (ID: ${message.author.id})`
       }
     ])
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`ID: ${member.id}`)
     .setThumbnail(member.user.displayAvatarURL({ size: 512 }))
     .setTimestamp()
@@ -67,11 +66,11 @@ export const help: HelpObj = {
   usage: 'unmute <Member> [Reason]'
 };
 
-export const memberPerms: PermissionString[] = [
-  'KICK_MEMBERS',
-  'MANAGE_ROLES'
+export const memberPerms: PermissionResolvable[] = [
+  Permissions.FLAGS.KICK_MEMBERS,
+  Permissions.FLAGS.MANAGE_ROLES
 ];
 
-export const permissions: PermissionString[] = [
-  'MANAGE_ROLES'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.MANAGE_ROLES
 ];

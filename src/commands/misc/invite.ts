@@ -1,9 +1,9 @@
 import type { HelpObj } from '../../structures/commandhandler';
 import type ReknownClient from '../../structures/client';
-import type { Message, PermissionString } from 'discord.js';
+import type { Message, PermissionResolvable } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
-  message.channel.send('**Add Reknown to your Server**: <https://reknown.xyz/invite>');
+  message.reply('**Add Reknown to your Server**: <https://reknown.xyz/invite>');
 }
 
 export const help: HelpObj = {
@@ -15,6 +15,6 @@ export const help: HelpObj = {
   usage: 'invite'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [];
+export const permissions: PermissionResolvable[] = [];

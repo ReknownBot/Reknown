@@ -1,5 +1,5 @@
-import type { GuildChannel } from 'discord.js';
 import type ReknownClient from '../structures/client';
+import type { ColorResolvable, GuildChannel } from 'discord.js';
 import { DMChannel, MessageEmbed } from 'discord.js';
 
 async function sendLog (client: ReknownClient, oldChannel: GuildChannel, newChannel: GuildChannel) {
@@ -20,7 +20,7 @@ async function sendLog (client: ReknownClient, oldChannel: GuildChannel, newChan
         value: newChannel.type
       }
     ])
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`ID: ${newChannel.id}`)
     .setTimestamp()
     .setTitle('Channel Name Updated');
@@ -29,7 +29,7 @@ async function sendLog (client: ReknownClient, oldChannel: GuildChannel, newChan
 }
 
 export async function run (client: ReknownClient, oldChannel: DMChannel | GuildChannel, newChannel: DMChannel | GuildChannel) {
-  if (oldChannel.type === 'dm' || newChannel.type === 'dm') return;
+  if (oldChannel.type === 'DM' || newChannel.type === 'DM') return;
   if (!newChannel.guild.available) return;
 
   sendLog(client, oldChannel, newChannel);

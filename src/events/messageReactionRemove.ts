@@ -1,7 +1,7 @@
 import type ColumnTypes from '../typings/ColumnTypes';
-import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import { tables } from '../Constants';
+import { ColorResolvable, MessageEmbed, Permissions } from 'discord.js';
 import type { MessageReaction, PartialUser, TextChannel, User } from 'discord.js';
 
 export async function run (client: ReknownClient, reaction: MessageReaction & { count: number }, user: User | PartialUser) {
@@ -10,31 +10,31 @@ export async function run (client: ReknownClient, reaction: MessageReaction & { 
   if (user.bot) return;
   const message = reaction.message;
   if (!message.guild?.available) return;
-  if (message.webhookID) return;
+  if (message.webhookId) return;
   if (!message.content && !message.attachments.find(attch => Boolean(attch.height))) return;
 
-  const [ toggled ] = await client.sql<ColumnTypes['TOGGLE']>`
+  const [ toggled ] = await client.sql<ColumnTypes['TOGGLE'][]>`
     SELECT * FROM ${client.sql(tables.STARTOGGLE)}
       WHERE guildid = ${message.guild.id}
   `;
   if (!toggled || !toggled.bool) return;
 
   let { count } = reaction;
-  if (count > 0 && reaction.users.cache.has(message.author.id)) count -= 1;
+  if (count > 0 && reaction.users.cache.has(message.author!.id)) count -= 1;
   if (count === 0) client.sql`DELETE FROM ${client.sql(tables.STARBOARD)} WHERE msgid = ${message.id}`;
 
-  const [ channelRow ] = await client.sql<ColumnTypes['CHANNEL']>`
+  const [ channelRow ] = await client.sql<ColumnTypes['CHANNEL'][]>`
     SELECT * FROM ${client.sql(tables.STARCHANNEL)}
       WHERE guildid = ${message.guild.id}
   `;
-  const channel = (channelRow ? message.guild.channels.cache.get(channelRow.channelid) : message.guild.channels.cache.find(c => c.name === 'starboard' && c.type === 'text')) as TextChannel | undefined;
+  const channel = (channelRow ? message.guild.channels.cache.get(channelRow.channelid) : message.guild.channels.cache.find(c => c.name === 'starboard' && c.type === 'GUILD_TEXT')) as TextChannel | undefined;
   if (!channel) return;
-  if (!channel.permissionsFor(client.user!)!.has([ 'EMBED_LINKS', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'VIEW_CHANNEL' ])) return;
+  if (!channel.permissionsFor(client.user!)!.has([ Permissions.FLAGS.EMBED_LINKS, Permissions.FLAGS.READ_MESSAGE_HISTORY, Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.VIEW_CHANNEL ])) return;
 
   const emoji = reaction.emoji.name;
   if (emoji !== '\u2B50') return;
 
-  const [ msgRow ] = await client.sql<ColumnTypes['STARBOARD']>`
+  const [ msgRow ] = await client.sql<ColumnTypes['STARBOARD'][]>`
     SELECT * FROM ${client.sql(tables.STARBOARD)}
       WHERE msgid = ${message.id}
   `;
@@ -44,7 +44,7 @@ export async function run (client: ReknownClient, reaction: MessageReaction & { 
       {
         inline: true,
         name: 'Author',
-        value: `${message.author} (${message.author.id})`
+        value: `${message.author} (${message.author!.id})`
       },
       {
         inline: true,
@@ -56,8 +56,8 @@ export async function run (client: ReknownClient, reaction: MessageReaction & { 
         value: `[Click](${message.url})`
       }
     ])
-    .setColor(client.config.embedColor)
-    .setDescription(message.content)
+    .setColor(client.config.embedColor as ColorResolvable)
+    .setDescription(message.content || '')
     .setFooter(`\u2B50${client.functions.formatNum(count)} | ID: ${message.id}`)
     .setTimestamp();
   const img = message.attachments.find(attachment => Boolean(attachment.height));
@@ -67,12 +67,12 @@ export async function run (client: ReknownClient, reaction: MessageReaction & { 
     const newMessage = await channel.messages.fetch(msgRow.editid).catch(() => null);
     if (newMessage) {
       if (count === 0) return newMessage.delete();
-      return newMessage.edit(embed);
+      return newMessage.edit({ embeds: [ embed ] });
     }
   }
 
   if (count === 0) return;
-  const msg = await channel.send(embed);
+  const msg = await channel.send({ embeds: [ embed ] });
 
   const columns = {
     editid: msg.id,

@@ -1,13 +1,13 @@
 import type ColumnTypes from '../typings/ColumnTypes';
-import { MessageEmbed } from 'discord.js';
 import type ReknownClient from '../structures/client';
 import dateformat from 'dateformat';
 import { tables } from '../Constants';
+import { ColorResolvable, MessageEmbed, Permissions } from 'discord.js';
 import type { GuildMember, TextChannel } from 'discord.js';
 
 async function checkMute (client: ReknownClient, member: GuildMember) {
-  if (!member.guild.me!.hasPermission('MANAGE_ROLES')) return;
-  const [ row ] = await client.sql<ColumnTypes['MUTES']>`
+  if (!member.guild.me!.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) return;
+  const [ row ] = await client.sql<ColumnTypes['MUTES'][]>`
     SELECT * FROM ${client.sql(tables.MUTES)}
       WHERE guildid = ${member.guild.id}
         AND userid = ${member.id}
@@ -32,7 +32,7 @@ function sendLog (client: ReknownClient, member: GuildMember) {
         value: dateformat(member.user.createdAt, 'mmmm d, yyyy @ HH:MM:ss UTC')
       }
     ])
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`ID: ${member.id}`)
     .setTimestamp()
     .setTitle('Member Joined');
@@ -41,35 +41,35 @@ function sendLog (client: ReknownClient, member: GuildMember) {
 }
 
 async function welcomeMsg (client: ReknownClient, member: GuildMember) {
-  const [ toggledRow ] = await client.sql<ColumnTypes['TOGGLE']>`
+  const [ toggledRow ] = await client.sql<ColumnTypes['TOGGLE'][]>`
     SELECT * FROM ${client.sql(tables.WELCOMETOGGLE)}
       WHERE guildid = ${member.guild.id}
   `;
   if (!toggledRow || !toggledRow.bool) return;
 
-  const [ channelRow ] = await client.sql<ColumnTypes['CHANNEL']>`
+  const [ channelRow ] = await client.sql<ColumnTypes['CHANNEL'][]>`
     SELECT * FROM ${client.sql(tables.WELCOMECHANNEL)}
       WHERE guildid = ${member.guild.id}
   `;
   const channel = (channelRow ?
-    member.guild.channels.cache.find(c => c.id === channelRow.channelid && c.type === 'text') :
-    member.guild.channels.cache.find(c => c.name === 'welcome' && c.type === 'text')) as TextChannel | undefined;
+    member.guild.channels.cache.find(c => c.id === channelRow.channelid && c.type === 'GUILD_TEXT') :
+    member.guild.channels.cache.find(c => c.name === 'welcome' && c.type === 'GUILD_TEXT')) as TextChannel | undefined;
   if (!channel) return;
-  if (!channel.permissionsFor(client.user!)!.has([ 'VIEW_CHANNEL', 'SEND_MESSAGES', 'EMBED_LINKS' ])) return;
+  if (!channel.permissionsFor(client.user!)!.has([ Permissions.FLAGS.VIEW_CHANNEL, Permissions.FLAGS.SEND_MESSAGES, Permissions.FLAGS.EMBED_LINKS ])) return;
 
-  const [ msgRow ] = await client.sql<ColumnTypes['MSG']>`
+  const [ msgRow ] = await client.sql<ColumnTypes['MSG'][]>`
     SELECT * FROM ${client.sql(tables.WELCOMEMSG)}
       WHERE guildid = ${member.guild.id}
   `;
   const msg: string = msgRow ? msgRow.msg : '<User>, Welcome to **<Server>**! There are <MemberCount> members now.';
 
   const embed = new MessageEmbed()
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setDescription(msg.replace(/<MemberCount>/g, member.guild.memberCount.toString()).replace(/<Server>/g, member.guild.name).replace(/<User>/g, member.toString()))
     .setFooter(`ID: ${member.id}`)
     .setThumbnail(member.user.displayAvatarURL({ size: 512 }))
     .setTimestamp();
-  channel.send(embed);
+  channel.send({ embeds: [ embed ] });
 }
 
 export async function run (client: ReknownClient, member: GuildMember) {

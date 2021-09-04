@@ -1,13 +1,14 @@
 import type { GuildMessage } from '../../Constants';
 import type { HelpObj } from '../../structures/commandhandler';
-import type { PermissionString } from 'discord.js';
+import type { PermissionResolvable } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
   await message.guild.members.fetch();
 
   const member = message.guild.members.cache.filter(m => !m.user.bot).random();
-  message.channel.send(`Successfully randomly fetched ${member} **(${client.escMD(member.user.tag)})**!`, {
+  message.reply({
+    content: `Successfully randomly fetched ${member} **(${client.escMD(member.user.tag)})**!`,
     allowedMentions: {
       parse: []
     }
@@ -22,6 +23,6 @@ export const help: HelpObj = {
   usage: 'someone'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [];
+export const permissions: PermissionResolvable[] = [];

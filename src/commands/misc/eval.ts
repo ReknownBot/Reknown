@@ -1,8 +1,8 @@
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
+import type { Message } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import { inspect } from 'util';
-import type { Message, PermissionString } from 'discord.js';
+import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 function clean (text: string): string {
   if (typeof text === 'string') return text.replace(/`/g, '`\u200b').replace(/@/g, '@\u200b');
@@ -14,22 +14,22 @@ export async function run (client: ReknownClient, message: Message, args: string
   const code = args.slice(1).join(' ');
 
   const embed = new MessageEmbed()
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp();
   try {
-    let res: string | object = await eval(`(async() => {${code}})();`);
+    let res = await eval(`(async() => {${code}})();`);
     if (typeof res !== 'string') res = inspect(res);
     if (clean(res).length > 2040) res = res.slice(0, 2040);
 
     embed.setDescription(`\`\`\`\n${clean(res)}\n\`\`\``)
       .setTitle('SUCCESS');
-  } catch (e) {
+  } catch (e: any) {
     embed.setDescription(`\`\`\`xl\n${clean(e)}\n\`\`\``)
       .setTitle('ERROR');
   }
 
-  message.channel.send(embed);
+  message.reply({ embeds: [ embed ] });
 }
 
 export const help: HelpObj = {
@@ -42,8 +42,8 @@ export const help: HelpObj = {
   usage: 'eval <Code>'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

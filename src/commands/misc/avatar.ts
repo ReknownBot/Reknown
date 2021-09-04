@@ -1,8 +1,8 @@
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
+import type { Message } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import { errors } from '../../Constants';
-import type { Message, PermissionString } from 'discord.js';
+import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const user = args[1]
@@ -14,13 +14,13 @@ export async function run (client: ReknownClient, message: Message, args: string
   if (!user) return client.functions.badArg(message, 1, errors.UNKNOWN_USER);
 
   const embed = new MessageEmbed()
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setImage(user.displayAvatarURL({ dynamic: true, format: 'jpg', size: 2048 }))
     .setTimestamp()
     .setTitle(`${user.id === message.author.id ? 'Your' : `${user.tag}'s`} Avatar`);
 
-  message.channel.send(embed);
+  message.reply({ embeds: [ embed ] });
 }
 
 export const help: HelpObj = {
@@ -32,8 +32,8 @@ export const help: HelpObj = {
   usage: 'avatar [User]'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

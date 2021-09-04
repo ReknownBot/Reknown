@@ -1,13 +1,12 @@
 import type ColumnTypes from '../../typings/ColumnTypes';
 import type { GuildMessage } from '../../Constants';
 import type { HelpObj } from '../../structures/commandhandler';
-import { MessageEmbed } from 'discord.js';
-import type { PermissionString } from 'discord.js';
 import type ReknownClient from '../../structures/client';
 import { tables } from '../../Constants';
+import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
-  const rows = await client.sql<ColumnTypes['LEVEL']>`SELECT * FROM ${client.sql(tables.LEVELS)} WHERE guildid = ${message.guild.id} ORDER BY points DESC`;
+  const rows = await client.sql<ColumnTypes['LEVEL'][]>`SELECT * FROM ${client.sql(tables.LEVELS)} WHERE guildid = ${message.guild.id} ORDER BY points DESC`;
   if (rows.count === 0) return message.reply('There was no levelling data found for this server.');
 
   const users = rows.map(async (r, i) => {
@@ -22,13 +21,13 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
   const desc = (await Promise.all(users)).join('\n');
 
   const embed = new MessageEmbed()
-    .setColor(client.config.embedColor)
+    .setColor(client.config.embedColor as ColorResolvable)
     .setDescription(desc)
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp()
     .setTitle(`Levelling Leaderboard for ${message.guild.name}`);
 
-  message.channel.send(embed);
+  message.reply({ embeds: [ embed ] });
 }
 
 export const help: HelpObj = {
@@ -39,8 +38,8 @@ export const help: HelpObj = {
   usage: 'leaderboard'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [
-  'EMBED_LINKS'
+export const permissions: PermissionResolvable[] = [
+  Permissions.FLAGS.EMBED_LINKS
 ];

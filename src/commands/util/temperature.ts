@@ -1,6 +1,6 @@
 import type { HelpObj } from '../../structures/commandhandler';
 import type ReknownClient from '../../structures/client';
-import type { Message, PermissionString } from 'discord.js';
+import type { Message, PermissionResolvable } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'either "f" or "c" to convert to.');
@@ -13,7 +13,7 @@ export async function run (client: ReknownClient, message: Message, args: string
 
   const newVal = convertTo === 'f' ? val * (9 / 5) + 32 : (val - 32) * (5 / 9);
 
-  message.channel.send(`The result is **${newVal}** degrees ${convertTo === 'f' ? 'fahrenheit' : 'celsius'}.`);
+  message.reply(`The result is **${newVal}** degrees ${convertTo === 'f' ? 'fahrenheit' : 'celsius'}.`);
 }
 
 export const help: HelpObj = {
@@ -25,6 +25,6 @@ export const help: HelpObj = {
   usage: 'temperature <"f"/"c"> <Input>'
 };
 
-export const memberPerms: PermissionString[] = [];
+export const memberPerms: PermissionResolvable[] = [];
 
-export const permissions: PermissionString[] = [];
+export const permissions: PermissionResolvable[] = [];

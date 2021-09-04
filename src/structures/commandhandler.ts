@@ -1,13 +1,12 @@
-import { Collection } from 'discord.js';
 import { readdirSync } from 'fs';
-import type { Client, Message, PermissionString } from 'discord.js';
+import type { Client, Message } from 'discord.js';
+import { Collection, PermissionResolvable } from 'discord.js';
 
 type CommandCategory = 'Documentation'
   | 'Economy'
   | 'Fun'
   | 'Levelling'
   | 'Miscellaneous'
-  | 'Music'
   | 'Moderation'
   | 'Utility';
 
@@ -23,8 +22,8 @@ export interface HelpObj {
 
 interface ReknownCommand {
   help: HelpObj;
-  memberPerms: PermissionString[];
-  permissions: PermissionString[];
+  memberPerms: PermissionResolvable[];
+  permissions: PermissionResolvable[];
   run: (client: Client, message: Message, args: string[]) => void;
 }
 
