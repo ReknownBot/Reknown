@@ -3,7 +3,7 @@
 
 Reknown is a bot programmed in [Discord.js](https://discord.js.org/#/), with starboard, leveling, and more. Reknown is full of commands, with a customizable prefix, and more. The default prefix is `?`.
 
-If you manage to find a bug or unexpected behaviour, please let us know in our [Discord Server](https://discord.gg/n45fq9K/) or in our [GitHub issue tracker](https://github.com/Jyguy/Reknown/issues).
+If you manage to find a bug or unexpected behaviour, please let us know in our [Discord Server](https://discord.gg/n45fq9K) or in our [GitHub issue tracker](https://github.com/Jyguy/Reknown/issues).
 
 ## Contributors
 ```yml
