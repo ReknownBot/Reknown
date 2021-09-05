@@ -29,7 +29,7 @@
   "dependencies": {
     "atob": "^2.1.2",
     "btoa": "^1.2.1",
-    "cowsay": "^1.4.0",
+    "cowsay": "^1.5.0",
     "dateformat": "^3.0.3",
     "discord.js": "^13.2.0-dev.1630756979.08edc0b",
     "dotenv": "^10.0.0",
