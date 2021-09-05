@@ -27,6 +27,7 @@ module.exports = exports = {
     ],
 
     "rules": {
+        "indent": [ ERROR, 2, { SwitchCase: 1 } ],
         "max-len": [ ERROR, 210 ],
         "multiline-ternary": [ ERROR, "always-multiline" ],
         "no-dupe-class-members": OFF,
@@ -51,6 +52,7 @@ module.exports = exports = {
         "@typescript-eslint/no-unused-vars": [ ERROR, { args: "none" }],
         "@typescript-eslint/prefer-reduce-type-parameter": ERROR,
         "@typescript-eslint/quotes": [ ERROR, 'single', { avoidEscape: false } ],
+        "@typescript-eslint/semi": ERROR,
 
         "import/no-commonjs": [ ERROR, { allowRequire: true } ]
     }
