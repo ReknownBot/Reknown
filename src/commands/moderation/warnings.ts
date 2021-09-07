@@ -1,7 +1,7 @@
 import type ColumnTypes from '../../typings/ColumnTypes';
 import type { GuildMessage } from '../../Constants';
-import type { HelpObj } from '../../structures/commandhandler';
-import type ReknownClient from '../../structures/client';
+import type { HelpObj } from '../../structures/CommandHandler';
+import type ReknownClient from '../../structures/Client';
 import dateformat from 'dateformat';
 import { tables } from '../../Constants';
 import { ColorResolvable, PermissionResolvable, Permissions } from 'discord.js';
@@ -38,7 +38,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     .setThumbnail(member.user.displayAvatarURL({ dynamic: true, format: 'jpg', size: 1024 }))
     .setTitle(`Warnings of ${member.user.tag}`);
 
-  message.reply({ embeds: [ embed ] });
+  message.reply({ embeds: [ embed ]});
 }
 
 export const help: HelpObj = {

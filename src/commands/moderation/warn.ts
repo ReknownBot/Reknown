@@ -1,6 +1,6 @@
 import type { GuildMessage } from '../../Constants';
-import type { HelpObj } from '../../structures/commandhandler';
-import type ReknownClient from '../../structures/client';
+import type { HelpObj } from '../../structures/CommandHandler';
+import type ReknownClient from '../../structures/Client';
 import { PermissionResolvable, Permissions } from 'discord.js';
 import { errors, tables } from '../../Constants';
 

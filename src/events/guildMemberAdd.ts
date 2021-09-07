@@ -1,5 +1,5 @@
 import type ColumnTypes from '../typings/ColumnTypes';
-import type ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/Client';
 import dateformat from 'dateformat';
 import { tables } from '../Constants';
 import { ColorResolvable, MessageEmbed, Permissions } from 'discord.js';
@@ -69,7 +69,7 @@ async function welcomeMsg (client: ReknownClient, member: GuildMember) {
     .setFooter(`ID: ${member.id}`)
     .setThumbnail(member.user.displayAvatarURL({ size: 512 }))
     .setTimestamp();
-  channel.send({ embeds: [ embed ] });
+  channel.send({ embeds: [ embed ]});
 }
 
 export async function run (client: ReknownClient, member: GuildMember) {

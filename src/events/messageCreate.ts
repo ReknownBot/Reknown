@@ -1,5 +1,5 @@
 import type ColumnTypes from '../typings/ColumnTypes';
-import type ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/Client';
 import { tables } from '../Constants';
 import { Message, Permissions } from 'discord.js';
 

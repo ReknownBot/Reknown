@@ -1,6 +1,6 @@
 import type { GuildChannel } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
-import type ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/Client';
 import { ColorResolvable, DMChannel } from 'discord.js';
 
 async function sendLog (client: ReknownClient, channel: GuildChannel) {

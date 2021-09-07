@@ -1,6 +1,6 @@
-import type { HelpObj } from '../../structures/commandhandler';
+import type { HelpObj } from '../../structures/CommandHandler';
 import type { Message } from 'discord.js';
-import type ReknownClient from '../../structures/client';
+import type ReknownClient from '../../structures/Client';
 import { URLSearchParams } from 'url';
 import fetch from 'node-fetch';
 import { MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
@@ -21,7 +21,7 @@ export async function run (client: ReknownClient, message: Message, args: string
   if (raw.message === 'Couldn\'t find/parse given source.') return client.functions.badArg(message, 2, 'The source provided was invalid.');
 
   const embed = new MessageEmbed(raw);
-  message.reply({ embeds: [ embed ] });
+  message.reply({ embeds: [ embed ]});
 }
 
 export const help: HelpObj = {

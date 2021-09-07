@@ -1,7 +1,7 @@
 import type ColumnTypes from '../../typings/ColumnTypes';
 import type { GuildMessage } from '../../Constants';
-import type { HelpObj } from '../../structures/commandhandler';
-import type ReknownClient from '../../structures/client';
+import type { HelpObj } from '../../structures/CommandHandler';
+import type ReknownClient from '../../structures/Client';
 import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 import { errors, tables } from '../../Constants';
 
@@ -49,7 +49,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     .setTimestamp()
     .setTitle(`${message.member === member ? 'Your' : `${member.user.tag}'s`} Levelling Information`);
 
-  message.reply({ embeds: [ embed ] });
+  message.reply({ embeds: [ embed ]});
 }
 
 export const help: HelpObj = {

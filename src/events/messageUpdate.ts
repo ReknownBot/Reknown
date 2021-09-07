@@ -1,4 +1,4 @@
-import type ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/Client';
 import { ColorResolvable, MessageEmbed } from 'discord.js';
 import type { Message, PartialMessage } from 'discord.js';
 

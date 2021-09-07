@@ -1,4 +1,4 @@
-import type ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/Client';
 import { ColorResolvable, MessageEmbed, Permissions } from 'discord.js';
 import type { Guild, User } from 'discord.js';
 

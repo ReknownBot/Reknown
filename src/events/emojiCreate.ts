@@ -1,9 +1,9 @@
 import { MessageEmbed } from 'discord.js';
-import type ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/Client';
 import type { ColorResolvable, GuildEmoji } from 'discord.js';
 
 async function sendLog (client: ReknownClient, emoji: GuildEmoji) {
-  if (emoji.name == null) return;
+  if (emoji.name === null) return;
   const embed = new MessageEmbed()
     .addFields([
       {

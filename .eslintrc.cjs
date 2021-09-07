@@ -27,10 +27,13 @@ module.exports = exports = {
     ],
 
     "rules": {
-        "indent": [ ERROR, 2, { SwitchCase: 1 } ],
+        "array-bracket-spacing": [ ERROR, "always", { "singleValue": true, "objectsInArrays": false, arraysInArrays: false }],
+        "eqeqeq": ERROR,
+        "indent": [ ERROR, 2, { SwitchCase: 1 }],
         "max-len": [ ERROR, 210 ],
         "multiline-ternary": [ ERROR, "always-multiline" ],
         "no-dupe-class-members": OFF,
+        "object-curly-spacing": [ ERROR, "always", { arraysInObjects: false, objectsInObjects: false }],
         "padding-line-between-statements": [ ERROR, { blankLine: "always", prev: "block-like", next: "*" }],
         "sort-imports": [ ERROR, {
             "ignoreCase": false,
@@ -51,7 +54,7 @@ module.exports = exports = {
         "@typescript-eslint/no-unnecessary-type-assertion": ERROR,
         "@typescript-eslint/no-unused-vars": [ ERROR, { args: "none" }],
         "@typescript-eslint/prefer-reduce-type-parameter": ERROR,
-        "@typescript-eslint/quotes": [ ERROR, 'single', { avoidEscape: false } ],
+        "@typescript-eslint/quotes": [ ERROR, 'single', { avoidEscape: false }],
         "@typescript-eslint/semi": ERROR,
 
         "import/no-commonjs": [ ERROR, { allowRequire: true } ]

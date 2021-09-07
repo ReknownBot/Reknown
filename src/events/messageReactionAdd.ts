@@ -1,5 +1,5 @@
 import type ColumnTypes from '../typings/ColumnTypes';
-import type ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/Client';
 import { tables } from '../Constants';
 import { ColorResolvable, MessageEmbed, Permissions } from 'discord.js';
 import type { MessageReaction, PartialUser, TextChannel, User } from 'discord.js';
@@ -65,10 +65,10 @@ export async function run (client: ReknownClient, reaction: MessageReaction & { 
 
   if (msgRow) {
     const newMessage = await channel.messages.fetch(msgRow.editid).catch(() => null);
-    if (newMessage) return newMessage.edit({ embeds: [ embed ] });
+    if (newMessage) return newMessage.edit({ embeds: [ embed ]});
   }
 
-  const msg = await channel.send({ embeds: [ embed ] });
+  const msg = await channel.send({ embeds: [ embed ]});
 
   const columns = {
     editid: msg.id,

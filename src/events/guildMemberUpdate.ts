@@ -1,4 +1,4 @@
-import type ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/Client';
 import { tables } from '../Constants';
 import type { Collection, GuildMember, Role, Snowflake } from 'discord.js';
 import { ColorResolvable, MessageEmbed } from 'discord.js';

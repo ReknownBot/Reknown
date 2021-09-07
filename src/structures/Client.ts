@@ -1,6 +1,6 @@
 import * as config from '../config.json';
-import CommandHandler from './commandhandler';
-import { Functions } from './functions';
+import CommandHandler from './CommandHandler';
+import { Functions } from './Functions';
 import Postgres from 'postgres';
 import { config as configure } from 'dotenv';
 import { Client, Collection, Util } from 'discord.js';

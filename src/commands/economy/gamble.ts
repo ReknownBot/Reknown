@@ -1,6 +1,6 @@
 import type ColumnTypes from '../../typings/ColumnTypes';
-import type { HelpObj } from '../../structures/commandhandler';
-import type ReknownClient from '../../structures/client';
+import type { HelpObj } from '../../structures/CommandHandler';
+import type ReknownClient from '../../structures/Client';
 import { tables } from '../../Constants';
 import { Message, PermissionResolvable, Permissions } from 'discord.js';
 

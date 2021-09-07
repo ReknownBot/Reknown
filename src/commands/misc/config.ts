@@ -1,7 +1,7 @@
 import type { Guild } from 'discord.js';
 import type { GuildMessage } from '../../Constants';
-import type { HelpObj } from '../../structures/commandhandler';
-import type ReknownClient from '../../structures/client';
+import type { HelpObj } from '../../structures/CommandHandler';
+import type ReknownClient from '../../structures/Client';
 import { prefix } from '../../config.json';
 import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
@@ -103,7 +103,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
       .setTimestamp()
       .setTitle('Configuration Values');
 
-    return message.reply({ embeds: [ embed ] });
+    return message.reply({ embeds: [ embed ]});
   }
 
   const table = args[1].toLowerCase();

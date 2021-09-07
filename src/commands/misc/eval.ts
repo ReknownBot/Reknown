@@ -1,12 +1,11 @@
-import type { HelpObj } from '../../structures/commandhandler';
+import type { HelpObj } from '../../structures/CommandHandler';
 import type { Message } from 'discord.js';
-import type ReknownClient from '../../structures/client';
+import type ReknownClient from '../../structures/Client';
 import { inspect } from 'util';
 import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 function clean (text: string): string {
-  if (typeof text === 'string') return text.replace(/`/g, '`\u200b').replace(/@/g, '@\u200b');
-  return text;
+  return text.replace(/`/g, '`\u200b').replace(/@/g, '@\u200b');
 }
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
@@ -29,7 +28,7 @@ export async function run (client: ReknownClient, message: Message, args: string
       .setTitle('ERROR');
   }
 
-  message.reply({ embeds: [ embed ] });
+  message.reply({ embeds: [ embed ]});
 }
 
 export const help: HelpObj = {

@@ -1,6 +1,6 @@
-import type { HelpObj } from '../../structures/commandhandler';
+import type { HelpObj } from '../../structures/CommandHandler';
 import type { Message } from 'discord.js';
-import type ReknownClient from '../../structures/client';
+import type ReknownClient from '../../structures/Client';
 import { URLSearchParams } from 'url';
 import fetch from 'node-fetch';
 import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
@@ -71,7 +71,7 @@ export async function run (client: ReknownClient, message: Message, args: string
         .setColor(client.config.embedColor as ColorResolvable)
         .setAuthor(`General Stats for ${player.displayname}`, undefined, `https://hypixel.net/player/${player.displayname}`);
 
-      message.reply({ embeds: [ embed ] });
+      message.reply({ embeds: [ embed ]});
       break;
     }
 

@@ -1,6 +1,6 @@
-import type { HelpObj } from '../../structures/commandhandler';
+import type { HelpObj } from '../../structures/CommandHandler';
 import type { Message } from 'discord.js';
-import type ReknownClient from '../../structures/client';
+import type ReknownClient from '../../structures/Client';
 import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 function text2Binary (str: string): string {
@@ -57,7 +57,7 @@ export async function run (client: ReknownClient, message: Message, args: string
     .setTimestamp()
     .setTitle('Output');
 
-  message.reply({ embeds: [ embed ] });
+  message.reply({ embeds: [ embed ]});
 }
 
 export const help: HelpObj = {

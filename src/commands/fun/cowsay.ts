@@ -1,5 +1,5 @@
-import type { HelpObj } from '../../structures/commandhandler';
-import type ReknownClient from '../../structures/client';
+import type { HelpObj } from '../../structures/CommandHandler';
+import type ReknownClient from '../../structures/Client';
 import { say } from 'cowsay';
 import type { Message, PermissionResolvable } from 'discord.js';
 

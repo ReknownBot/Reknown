@@ -1,7 +1,7 @@
 import { AutoPoster } from 'topgg-autoposter';
 import type ColumnTypes from '../typings/ColumnTypes';
-import type { EmoteName } from '../structures/client';
-import type ReknownClient from '../structures/client';
+import type { EmoteName } from '../structures/Client';
+import type ReknownClient from '../structures/Client';
 import ms from 'ms';
 import { tables } from '../Constants';
 import { Permissions, Snowflake } from 'discord.js';

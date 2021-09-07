@@ -1,5 +1,5 @@
-import type { HelpObj } from '../../structures/commandhandler';
-import ReknownClient from '../../structures/client';
+import type { HelpObj } from '../../structures/CommandHandler';
+import ReknownClient from '../../structures/Client';
 import dateformat from 'dateformat';
 import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 import { GuildMessage, errors } from '../../Constants';
@@ -31,7 +31,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     .setThumbnail(member.user.displayAvatarURL({ size: 512 }))
     .setTimestamp();
 
-  if (member.presence != null) {
+  if (member.presence !== null) {
     embed.addFields({
       inline: true,
       name: 'Status',
@@ -41,7 +41,7 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
       if (activity.type === 'CUSTOM' && activity.state) embed.addField('Custom Status', client.escMD(activity.state), true);
       else {
         const field = embed.fields.find(f => f.name === 'Activity');
-        if (field) embed.spliceFields(embed.fields.indexOf(field), 1, [ { inline: true, name: field.name, value: `${field.value}\n- \`\`${client.escInline(activity.name)}\`\`` } ]);
+        if (field) embed.spliceFields(embed.fields.indexOf(field), 1, [{ inline: true, name: field.name, value: `${field.value}\n- \`\`${client.escInline(activity.name)}\`\`` }]);
         else embed.addField('Activity', `- \`\`${client.escInline(activity.name)}\`\``, true);
       }
     }
@@ -51,10 +51,10 @@ export async function run (client: ReknownClient, message: GuildMessage, args: s
     await message.guild.members.fetch();
     if (member.joinedAt) embed.addField('Joined at', dateformat(member.joinedAt, 'UTC:mmm d, yyyy, h:MM:ss TT Z'), true);
     const members = message.guild.members.cache.filter(m => Boolean(m.joinedTimestamp)).sort(({ joinedTimestamp: a }, { joinedTimestamp: b }) => a! - b!);
-    embed.addField('Joined Position', `#${[...members.values()].indexOf(member) + 1}`);
+    embed.addField('Joined Position', `#${[ ...members.values() ].indexOf(member) + 1}`);
   }
 
-  message.reply({ embeds: [ embed ] });
+  message.reply({ embeds: [ embed ]});
 }
 
 export const help: HelpObj = {

@@ -1,7 +1,7 @@
 import type ColumnTypes from '../../typings/ColumnTypes';
-import type { HelpObj } from '../../structures/commandhandler';
+import type { HelpObj } from '../../structures/CommandHandler';
 import type { Message } from 'discord.js';
-import type ReknownClient from '../../structures/client';
+import type ReknownClient from '../../structures/Client';
 import ms from 'ms';
 import { tables } from '../../Constants';
 import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
@@ -50,7 +50,7 @@ export async function run (client: ReknownClient, message: Message, args: string
     .setFooter(`Requested by ${message.author.tag}`, message.author.displayAvatarURL())
     .setTimestamp();
 
-  message.reply({ embeds: [ embed ] });
+  message.reply({ embeds: [ embed ]});
 }
 
 export const help: HelpObj = {

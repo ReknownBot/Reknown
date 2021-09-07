@@ -1,7 +1,7 @@
 import type { GuildMessage } from '../../Constants';
-import type { HelpObj } from '../../structures/commandhandler';
+import type { HelpObj } from '../../structures/CommandHandler';
 import type { PermissionResolvable } from 'discord.js';
-import type ReknownClient from '../../structures/client';
+import type ReknownClient from '../../structures/Client';
 
 export async function run (client: ReknownClient, message: GuildMessage, args: string[]) {
   await message.guild.members.fetch();

@@ -1,12 +1,12 @@
-import type { HelpObj } from '../../structures/commandhandler';
+import type { HelpObj } from '../../structures/CommandHandler';
 import type { Message } from 'discord.js';
-import type ReknownClient from '../../structures/client';
+import type ReknownClient from '../../structures/Client';
 import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const prefix = message.guild ? await client.functions.getPrefix(client, message.guild.id) : client.config.prefix;
   if (!args[1]) {
-    let commands = [...client.commands.keys()];
+    let commands = [ ...client.commands.keys() ];
 
     if (message.author.id !== client.config.ownerID) commands = commands.filter(c => !client.commands.get(c)!.help.private);
 
@@ -23,7 +23,7 @@ export async function run (client: ReknownClient, message: Message, args: string
       else embed.addField(info.category, `- \`${prefix + cmd}\``, true);
     });
 
-    return message.reply({ embeds: [ embed ] });
+    return message.reply({ embeds: [ embed ]});
   }
 
   const query = args.slice(1).join(' ').toLowerCase();
@@ -55,11 +55,11 @@ export async function run (client: ReknownClient, message: Message, args: string
       .setTitle(`${prefix + query} Command Information`);
     if (cmd.help.aliases.length !== 0) embed.addField('Aliases', cmd.help.aliases.map(alias => `\`${prefix + alias}\``).join(', '), true);
 
-    return message.reply({ embeds: [ embed ] });
+    return message.reply({ embeds: [ embed ]});
   }
 
   const category = client.commands.categories.find(c => c.toLowerCase() === query);
-  const cCommands = [...client.commands.keys()].filter(c => client.commands.get(c)!.help.category.toLowerCase() === query);
+  const cCommands = [ ...client.commands.keys() ].filter(c => client.commands.get(c)!.help.category.toLowerCase() === query);
   const embed = new MessageEmbed()
     .setColor(client.config.embedColor as ColorResolvable)
     .setDescription(cCommands.map(c => `- \`${prefix + c}\``).join('\n'))
@@ -67,7 +67,7 @@ export async function run (client: ReknownClient, message: Message, args: string
     .setTimestamp()
     .setTitle(`${category} Category Information`);
 
-  message.reply({ embeds: [ embed ] });
+  message.reply({ embeds: [ embed ]});
 }
 
 export const help: HelpObj = {

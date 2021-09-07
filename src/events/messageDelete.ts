@@ -1,6 +1,6 @@
 import type ColumnTypes from '../typings/ColumnTypes';
 import type { GuildMessage } from '../Constants';
-import type ReknownClient from '../structures/client';
+import type ReknownClient from '../structures/Client';
 import type { TextChannel } from 'discord.js';
 import { tables } from '../Constants';
 import { ColorResolvable, MessageEmbed, Permissions } from 'discord.js';

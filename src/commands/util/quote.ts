@@ -1,9 +1,9 @@
-import type { HelpObj } from '../../structures/commandhandler';
-import type ReknownClient from '../../structures/client';
+import type { HelpObj } from '../../structures/CommandHandler';
+import type ReknownClient from '../../structures/Client';
 import type { CategoryChannel, Message, TextChannel, VoiceChannel } from 'discord.js';
 import { ColorResolvable, MessageEmbed, PermissionResolvable, Permissions } from 'discord.js';
 
-const regex = /(?:discordapp.com\/channels)\/(?:(\d{17,19})\/(\d{17,19})\/(\d{17,19}))/;
+const regex = /discordapp.com\/channels\/(\d{17,19})\/(\d{17,19})\/(\d{17,19})/;
 
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   if (!args[1]) return client.functions.noArg(message, 1, 'a message URL to quote.');
@@ -38,7 +38,7 @@ export async function run (client: ReknownClient, message: Message, args: string
     .setTimestamp()
     .setTitle('Successfully quoted message!');
 
-  message.reply({ embeds: [ embed ] });
+  message.reply({ embeds: [ embed ]});
 }
 
 export const help: HelpObj = {

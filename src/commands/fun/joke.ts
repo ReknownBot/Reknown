@@ -1,5 +1,5 @@
-import type { HelpObj } from '../../structures/commandhandler';
-import type ReknownClient from '../../structures/client';
+import type { HelpObj } from '../../structures/CommandHandler';
+import type ReknownClient from '../../structures/Client';
 import fetch from 'node-fetch';
 import type { Message, PermissionResolvable } from 'discord.js';
 
@@ -12,7 +12,7 @@ interface JokeResult {
 export async function run (client: ReknownClient, message: Message, args: string[]) {
   const json = await fetch('https://icanhazdadjoke.com/', { headers: {
     Accept: 'application/json'
-  } }).then(res => res.json()) as JokeResult;
+  }}).then(res => res.json()) as JokeResult;
   if (!json.joke) return message.reply('Seems like the joke API is unavailable, please try again later.');
 
   message.reply(json.joke);

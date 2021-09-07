@@ -1,6 +1,6 @@
 import type ColumnTypes from '../typings/ColumnTypes';
 import type { GuildMessage } from '../Constants';
-import type ReknownClient from './client';
+import type ReknownClient from './Client';
 import { embedColor } from '../config.json';
 import { CategoryChannel, ColorResolvable, Guild, GuildChannel, GuildMember, Message, PermissionResolvable, Permissions, Role, Snowflake, ThreadChannel, User, VoiceChannel } from 'discord.js';
 import { Client, MessageEmbed, TextChannel, Util } from 'discord.js';
@@ -27,7 +27,7 @@ export class Functions {
       .setTimestamp()
       .setTitle(`Argument #${argNum} Incorrect`);
 
-    message.reply({ embeds: [ embed ] });
+    message.reply({ embeds: [ embed ]});
   }
 
   public formatNum (num: number): string {
@@ -72,7 +72,7 @@ export class Functions {
   }
 
   public noArg (message: Message | GuildMessage, argNum: number, desc: string): void {
-    if ((message.channel.type == 'GUILD_TEXT' || message.channel.isThread()) && !message.channel.permissionsFor(message.guild!.me!)!.has(Permissions.FLAGS.EMBED_LINKS)) {
+    if ((message.channel.type === 'GUILD_TEXT' || message.channel.isThread()) && !message.channel.permissionsFor(message.guild!.me!)!.has(Permissions.FLAGS.EMBED_LINKS)) {
       message.reply(`Argument **#${argNum}** was missing. It is supposed to be **${desc}**`);
       return;
     }
@@ -84,7 +84,7 @@ export class Functions {
       .setTimestamp()
       .setTitle(`Argument #${argNum} Missing`);
 
-    message.reply({ embeds: [ embed ] });
+    message.reply({ embeds: [ embed ]});
   }
 
   public noClientPerms (message: Message, perms: PermissionResolvable[], channel?: GuildChannel | ThreadChannel): void {
@@ -173,7 +173,7 @@ export class Functions {
     if (!channel) return;
     if (!channel.permissionsFor(client.user!)!.has(Permissions.FLAGS.MANAGE_WEBHOOKS)) return;
     const webhooks = await channel.fetchWebhooks();
-    let [ webhookRow ] = await client.sql<ColumnTypes['WEBHOOK'][]>`
+    const [ webhookRow ] = await client.sql<ColumnTypes['WEBHOOK'][]>`
       SELECT * FROM ${client.sql(tables.LOGWEBHOOK)}
         WHERE channelid = ${channel.id}
     `;
@@ -189,15 +189,14 @@ export class Functions {
         guildid: guild.id,
         webhookid: webhook.id
       };
-      [ webhookRow ] = await client.sql<ColumnTypes['WEBHOOK'][]>`
+      client.sql<ColumnTypes['WEBHOOK'][]>`
         INSERT INTO ${client.sql(tables.LOGWEBHOOK)} ${client.sql(columns)}
           ON CONFLICT (guildid) DO UPDATE
             SET ${client.sql(columns)}
-        RETURNING *
       `;
     } else webhook = webhooks.get(webhookRow.webhookid)!;
 
-    webhook.send({ embeds: [ embed ] });
+    webhook.send({ embeds: [ embed ]});
   }
 
   public async unmute (client: ReknownClient, member: GuildMember): Promise<void> {
