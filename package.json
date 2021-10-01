@@ -50,7 +50,7 @@
     "@types/ms": "^0.7.31",
     "@types/node": "^16.7.10",
     "@types/node-fetch": "^2.5.12",
-    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.30.0",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.24.2",
