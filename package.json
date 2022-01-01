@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
-    "@commitlint/config-angular": "^13.1.0",
+    "@commitlint/config-angular": "^16.0.0",
     "@types/atob": "^2.1.2",
     "@types/btoa": "^1.2.3",
     "@types/dateformat": "^3.0.1",
