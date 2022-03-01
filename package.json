@@ -33,7 +33,7 @@
     "dateformat": "^4.5.1",
     "discord.js": "^13.2.0-dev.1630756979.08edc0b",
     "dotenv": "^10.0.0",
-    "mathjs": "^9.4.4",
+    "mathjs": "^10.2.0",
     "moment": "^2.29.1",
     "ms": "^2.1.3",
     "node-fetch": "2.6.1",
